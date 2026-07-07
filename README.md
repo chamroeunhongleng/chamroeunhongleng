@@ -1,4 +1,4 @@
-# Hongleng Chamroeun
+# Chamroeun Hongleng
 
 Co-founder at **CHNAI LAB**, a small Cambodia-based product lab building Khmer-first AI. Currently pursuing a dual degree in Information Technology Management at the American University of Phnom Penh and Computer Science at Fort Hays State University.
 
