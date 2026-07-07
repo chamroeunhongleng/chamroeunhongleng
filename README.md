@@ -1,24 +1,37 @@
 # Hongleng Chamroeun
 
-ITM @ AUPP & CS @ Fort Hays State · Co-founder & AI/ML lead @ CHNAI LAB · Currently learning applied ML & agentic systems 🇰🇭
+Co-founder and AI/ML lead at **CHNAI LAB**, a Cambodia-based product lab building Khmer-first AI systems. Currently pursuing a dual degree in Information Technology Management at the American University of Phnom Penh and Computer Science at Fort Hays State University.
+
+My focus is applied AI for the Khmer language and Cambodian context — speech recognition, retrieval systems, and agentic interfaces that work in real conditions rather than English-only demos. I am not a software engineer by identity; I am an ML practitioner who ships products with the help of a strong engineering team.
+
 ## Focus Areas
 
-- **Khmer-first product engineering.** Designing software for Cambodian users with local language support, clear UX, and workflows grounded in field research.
-- **Agritech coordination systems.** Farmer-buyer coordination, documented crop lots, cooperative order management, and market access for smallholders.
-- **Applied ML and retrieval systems.** Speech recognition, embeddings, agentic flows, structured knowledge systems, and evaluation pipelines for production use.
+- **Khmer speech and language modeling.** Fine-tuning ASR models on Khmer audio, evaluating with CER over WER, and building the data pipelines needed to reach production quality.
+- **Applied ML for underserved sectors.** Forecasting, coordination, and credit-scoring groundwork for agriculture, informal commerce, and community operations.
+- **Retrieval and agentic systems.** Structured knowledge, embeddings, evaluation pipelines, and agent flows built on Claude and open models.
+- **AI product strategy.** Scoping AI features to what actually works, sizing markets honestly, and validating with real users before scale.
+- **Field research and data collection.** Farmer interviews, on-the-ground validation, and dataset design for low-resource Khmer contexts.
 
 ## Selected Work
 
-- **Chomkar** — Agritech coordination platform linking smallholder farmers in Kampong Cham to institutional buyers via district hubs. Runner-up, Turing Hackathon Cycle 10.
-- **Kaskor ASR** — Khmer speech recognition model fine-tuned on ~86,000 audio samples, powering voice-first order intake within Chomkar.
+- **Kaskor ASR** — Khmer speech recognition model fine-tuned on ~86,000 audio samples using Whisper. Powers voice-first order intake within Chomkar.
+- **Chomkar** — Agritech coordination platform linking smallholder farmers in Kampong Cham to institutional buyers. Runner-up, Turing Hackathon Cycle 10. I led the ML roadmap and field validation.
+- **The AI Layer (CL-00)** — Shared AI/ML infrastructure and evaluation layer underpinning all CHNAI LAB initiatives.
+- **Warden (SAT Digital)** — Khmer-first Telegram moderation tool. I contributed the moderation model design and evaluation approach.
 
-## Technical Stack
+## Currently Learning
 
-Python, PyTorch, Hugging Face, Whisper, Claude API, TypeScript, React, Next.js, Supabase, PostgreSQL, Cloudflare AI Gateway, and Cloudflare Pages.
+- Applied ML engineering: data pipelines, training loops, evaluation, and monitoring
+- Khmer NLP: embeddings, tokenization for low-resource languages, and domain-specific fine-tuning
+- Production ML systems: agentic flows, retrieval architecture, and cost-aware inference
+
+## Tools I Work With
+
+Python, PyTorch, Hugging Face, Whisper, Claude API, Cloudflare AI Gateway, Supabase, and PostgreSQL. I collaborate with engineers who own the frontend and infrastructure stacks.
 
 ## Principles
 
-I operate with strict claim discipline — outputs are described accurately, features are scoped to what is actually shipped, and validation precedes scale. I favor honest documentation, clear product flows, and infrastructure decisions that hold up under real usage rather than demo conditions.
+I operate with strict claim discipline — outputs are described accurately, features are scoped to what is actually shipped, and validation precedes scale. I prefer honest documentation, clear product flows, and infrastructure decisions that hold up under real usage rather than demo conditions.
 
 ## Contact
 
