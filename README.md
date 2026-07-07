@@ -1,9 +1,6 @@
 # Hongleng Chamroeun
 
-Co-founder and AI/ML lead at **CHNAI LAB**, a Cambodia-based product lab building Khmer-first AI systems. Currently pursuing a dual degree in Information Technology Management at the American University of Phnom Penh and Computer Science at Fort Hays State University.
-
-My work focuses on making modern AI usable in Khmer — across speech, agentic interfaces, and applied machine learning for underserved sectors such as agriculture and community infrastructure.
-
+ITM @ AUPP & CS @ Fort Hays State · Co-founder & AI/ML lead @ CHNAI LAB · Currently learning applied ML & agentic systems 🇰🇭
 ## Focus Areas
 
 - **Khmer-first product engineering.** Designing software for Cambodian users with local language support, clear UX, and workflows grounded in field research.
