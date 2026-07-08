@@ -30,6 +30,5 @@ I try to hold to strict claim discipline — describing outputs accurately, scop
 ## Contact
 
 - Portfolio: [chamroeunhongleng.me](https://chamroeunhongleng.me)
-- Email: chamroeunhongleng825@gmail.com
 - Organization: [@CHNAI-LAB](https://github.com/CHNAI-LAB)
 - From Kampong Cham, based in Phnom Penh
