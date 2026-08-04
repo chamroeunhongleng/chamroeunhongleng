@@ -1,0 +1,69 @@
+{
+  "name": "Chamroeun Hongleng",
+  "monogram": "HL",
+  "preferredName": "Hongleng",
+  "headline": "Building intelligent systems with technical depth, business understanding, and responsible governance.",
+  "identity": "Dual-degree student — Information Technology Management at AUPP and Computer Science at Fort Hays State — building with CHNAI LAB in Phnom Penh, Cambodia.",
+  "intro": [
+    "I am exploring the intersection of artificial intelligence, machine learning, software, and business. I want to understand not only how intelligent systems are built, but also how contracts, policies, risks, and business decisions shape how those systems should be designed and used.",
+    "My long-term aspiration is to build practical AI products that are technically sound, useful to real people, commercially valuable, and responsibly governed."
+  ],
+  "location": {
+    "text": "Phnom Penh, Cambodia",
+    "evidence": "Public evidence"
+  },
+  "availability": "Open to applied-ML research, internships, product collaborations, and governance learning opportunities.",
+  "links": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/chamroeunhongleng",
+      "kind": "profile",
+      "evidence": "Public evidence"
+    },
+    {
+      "label": "CHNAI LAB",
+      "url": "https://github.com/CHNAI-LAB",
+      "kind": "profile",
+      "evidence": "Public evidence"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/chamroeun-hongleng-73b249375",
+      "kind": "profile",
+      "evidence": "Owner confirmed"
+    },
+    {
+      "label": "X",
+      "url": "https://x.com/hongleng_dev",
+      "kind": "profile",
+      "evidence": "Owner confirmed"
+    }
+  ],
+  "proofPoints": [
+    {
+      "text": "Built a complete Khmer speech-recognition fine-tuning pipeline on Whisper-small — data preparation, training, evaluation, export, and an installable CLI, all public.",
+      "evidence": "Repository evidence",
+      "link": "https://github.com/chamroeunhongleng/kaskor-asr"
+    },
+    {
+      "text": "Best self-reported checkpoint: 17.48% character error rate on the project's own evaluation split. Weights and audio are not yet published, so the number is not externally reproducible.",
+      "evidence": "Repository evidence",
+      "link": "https://github.com/chamroeunhongleng/kaskor-asr"
+    },
+    {
+      "text": "Designed a deterministic farm-lot decision engine with 62 unit tests, CI, and bilingual Khmer/English audit reports — running on synthetic data by design.",
+      "evidence": "Repository evidence",
+      "link": "https://github.com/chamroeunhongleng/chomkar-decision-grid"
+    },
+    {
+      "text": "Top 2 placement, Turing Hackathon Cycle 10 (Market Access for Farmers track), with the Chomkar OrderLoop concept.",
+      "evidence": "Owner confirmed"
+    },
+    {
+      "text": "Studying Information Technology Management at AUPP and Computer Science at Fort Hays State University while working with contracts, terms, and policy questions through international business studies.",
+      "evidence": "Public evidence",
+      "link": "https://github.com/chamroeunhongleng"
+    }
+  ],
+  "aiWorkingStyle": "I work AI-natively: AI tools (primarily Claude) support my research, drafting, and implementation, while decisions, evidence labels, and anything that ships stay under human review — mine."
+}

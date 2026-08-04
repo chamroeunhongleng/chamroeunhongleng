@@ -1,0 +1,106 @@
+/*
+ * Design tokens — the only place colors, spacing, and type sizes are
+ * defined. Components consume tokens; they never hardcode values.
+ *
+ * Identity: "ink on warm paper" — editorial, typography-led. Light is the
+ * default register (fits the governance/business positioning); dark is a
+ * first-class alternate, toggled via data-theme on <html>.
+ *
+ * Contrast contract (checked in review): body text pairs >= 4.5:1,
+ * large text and UI accents >= 3:1, in both themes.
+ */
+
+:root {
+  /* Color — light ("warm paper") */
+  --color-bg: #faf7f2;
+  --color-surface: #ffffff;
+  --color-surface-sunken: #f2eee6;
+  --color-border: #e4dfd6;
+  --color-border-strong: #c9c2b4;
+  --color-text: #1c1b22; /* ~15.6:1 on bg */
+  --color-text-muted: #5a5750; /* ~6.4:1 on bg */
+  --color-text-faint: #77726a; /* ~4.6:1 on bg — still AA for normal text */
+  --color-accent: #4338ca; /* deep indigo, ~7.2:1 on bg */
+  --color-accent-hover: #3730a3;
+  --color-accent-contrast: #ffffff;
+  --color-accent-tint: rgba(67, 56, 202, 0.08);
+  --color-accent-2: #a14d28; /* terracotta, ~5.9:1 on bg */
+  --color-focus: #4338ca;
+  --color-warn: #8a5a00;
+  --color-positive: #196c43;
+  --color-danger: #a02c2c;
+
+  /* Type */
+  --font-display: 'Fraunces Variable', georgia, 'Times New Roman', serif;
+  --font-body: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Code', consolas, monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+  --text-xl: clamp(1.25rem, 1.1rem + 0.6vw, 1.5rem);
+  --text-2xl: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+  --text-3xl: clamp(1.9rem, 1.5rem + 1.8vw, 2.75rem);
+  --text-4xl: clamp(2.4rem, 1.8rem + 2.8vw, 3.6rem);
+
+  --leading-tight: 1.15;
+  --leading-snug: 1.35;
+  --leading-normal: 1.6;
+  --leading-relaxed: 1.75;
+  --tracking-wide: 0.12em;
+
+  /* Space — 4px base */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 2.5rem;
+  --space-8: 3rem;
+  --space-10: 4rem;
+  --space-12: 5rem;
+  --section-gap: clamp(4rem, 9vw, 6.5rem);
+
+  /* Layout */
+  --container-max: 72rem;
+  --prose-max: 65ch;
+  /* Breakpoint conventions (custom properties don't work in media queries):
+     wide 1040px, narrow 760px. Keep media queries on those two values. */
+
+  /* Shape & elevation */
+  --radius-s: 6px;
+  --radius-m: 10px;
+  --radius-l: 16px;
+  --shadow-1: 0 1px 2px rgba(38, 33, 22, 0.06), 0 2px 8px rgba(38, 33, 22, 0.05);
+  --shadow-2: 0 2px 4px rgba(38, 33, 22, 0.07), 0 10px 28px rgba(38, 33, 22, 0.09);
+
+  /* Motion */
+  --duration-fast: 150ms;
+  --duration-base: 220ms;
+  --ease-out: cubic-bezier(0.2, 0, 0, 1);
+}
+
+:root[data-theme='dark'] {
+  --color-bg: #131318;
+  --color-surface: #1c1c24;
+  --color-surface-sunken: #0e0e12;
+  --color-border: #2e2e3a;
+  --color-border-strong: #474758;
+  --color-text: #edeae3; /* warm off-white, ~14:1 */
+  --color-text-muted: #a5a199; /* ~7:1 */
+  --color-text-faint: #8b867c; /* ~4.9:1 */
+  --color-accent: #a5b0ff; /* ~8.5:1 on bg */
+  --color-accent-hover: #c0c8ff;
+  --color-accent-contrast: #131318;
+  --color-accent-tint: rgba(165, 176, 255, 0.1);
+  --color-accent-2: #e0a183;
+  --color-focus: #a5b0ff;
+  --color-warn: #e3b341;
+  --color-positive: #6fcf97;
+  --color-danger: #ef8f8f;
+
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-2: 0 2px 4px rgba(0, 0, 0, 0.35), 0 10px 28px rgba(0, 0, 0, 0.4);
+}

@@ -1,0 +1,24 @@
+{
+  "principles": [
+    {
+      "title": "Deterministic core, AI shell",
+      "text": "Code owns calculations, invariants, and permissions. AI helps research, explain, draft, and review — it does not invent the numbers."
+    },
+    {
+      "title": "Claims need evidence",
+      "text": "Every important claim on this site carries a label: repository evidence, public evidence, owner confirmed, demo, planned, or private. Released, prototyped, and planned work are different claims."
+    },
+    {
+      "title": "Humans approve consequences",
+      "text": "Models can recommend; people remain accountable. Deployment, money, contracts, privacy, and public claims always pass through a human decision."
+    },
+    {
+      "title": "Design for real context",
+      "text": "Low-resource Khmer data, field operations, connectivity, and user trust are product constraints — not edge cases to patch later."
+    },
+    {
+      "title": "Small testable systems first",
+      "text": "Validate the riskiest assumption with the smallest working system before building the architecture the idea might one day deserve."
+    }
+  ]
+}

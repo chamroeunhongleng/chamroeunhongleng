@@ -1,0 +1,115 @@
+{
+  "groups": [
+    {
+      "id": "current",
+      "title": "Current roles",
+      "layout": "timeline",
+      "entries": [
+        {
+          "organization": "CHNAI LAB",
+          "role": "Technology strategy & business",
+          "period": "2026 — present",
+          "current": true,
+          "summary": "Contributing product direction, applied-ML planning, field validation, and evidence standards across Cambodia-first product experiments in a student-run studio.",
+          "contributions": [
+            {
+              "text": "CHNAI LAB is a real, public student-run product studio with a published governance model (agent workflow, security policy, contribution rules).",
+              "evidence": "Public evidence",
+              "link": "https://github.com/CHNAI-LAB"
+            },
+            {
+              "text": "My role and specific responsibilities inside the studio are stated by me, not yet documented publicly.",
+              "evidence": "Owner confirmed"
+            }
+          ],
+          "links": [
+            {
+              "label": "CHNAI LAB on GitHub",
+              "url": "https://github.com/CHNAI-LAB",
+              "kind": "profile",
+              "evidence": "Public evidence"
+            }
+          ]
+        },
+        {
+          "organization": "Angkor Byte",
+          "role": "Product Growth & Technical Content Trainee",
+          "period": "2026 — present",
+          "current": true,
+          "summary": "Creating English/Khmer technical content and demos about AI-assisted development workflows, debugging, refactoring, and developer productivity.",
+          "contributions": [
+            {
+              "text": "Role and scope stated by me; no public listing verifies this position yet.",
+              "evidence": "Owner confirmed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "competitions",
+      "title": "Competitions",
+      "layout": "rows",
+      "entries": [
+        {
+          "organization": "Turing Hackathon Cycle 10 (Techo Startup Center)",
+          "role": "Top 2 — Market Access for Farmers track",
+          "period": "2026",
+          "current": false,
+          "summary": "Placed Top 2 with the Chomkar OrderLoop concept: coordinating buyer demand and smallholder farmer commitments into one documented pre-harvest lot.",
+          "contributions": [
+            {
+              "text": "The hackathon is a real national program run by Techo Startup Center / Startup Cambodia.",
+              "evidence": "Public evidence",
+              "link": "https://hackathon.techostartup.center/"
+            },
+            {
+              "text": "The Top 2 placement is stated by me; no public results page names the team. [OWNER_INPUT_REQUIRED: Provide a certificate, photo, or organizer link to upgrade this to Document evidence]",
+              "evidence": "Owner confirmed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fieldwork",
+      "title": "Field research",
+      "layout": "cards",
+      "entries": [
+        {
+          "organization": "Chomkar OrderLoop field validation",
+          "role": "Interviewer & analyst (team effort)",
+          "period": "2026",
+          "current": false,
+          "summary": "Structured interviews with bok choy farmers in Kang Meas district, Kampong Cham, to test demand-visibility and coordination assumptions before building software.",
+          "contributions": [
+            {
+              "text": "The team interviewed approximately 30 farmers; I contributed to interview design and analysis. Interview records are private.",
+              "evidence": "Owner confirmed"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "community",
+      "title": "Leadership & community",
+      "layout": "cards",
+      "entries": [
+        {
+          "organization": "[PLACEHOLDER: Organization or community name]",
+          "role": "[OWNER_INPUT_REQUIRED: Leadership, volunteer, or community roles you want listed — clubs, mentoring, events]",
+          "period": "[PLACEHOLDER: Period]",
+          "current": false,
+          "summary": "[OWNER_INPUT_REQUIRED: One or two sentences describing the role and what you contributed]",
+          "contributions": [
+            {
+              "text": "[PLACEHOLDER: A specific contribution with whatever evidence exists]",
+              "evidence": "Unverified"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

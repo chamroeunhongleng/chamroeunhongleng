@@ -1,0 +1,142 @@
+{
+  "slug": "chomkar-orderloop",
+  "name": "Chomkar OrderLoop",
+  "oneLiner": "A buyer-first coordination concept: one recurring buyer order assembled from documented smallholder commitments before harvest.",
+  "status": "Pre-pilot",
+  "deployment": "Not deployed",
+  "timeline": {
+    "start": "2026",
+    "end": null,
+    "label": "2026 — present"
+  },
+  "pillars": ["business-strategy", "software-product"],
+  "tags": ["Field research", "Product strategy", "Agritech", "Market coordination", "Khmer"],
+  "featured": true,
+  "enabled": true,
+  "demo": false,
+  "question": "Can one recurring buyer order coordinate 30–100 smallholder commitments before harvest — reliably enough to improve farmer income?",
+  "problem": "Smallholder farmers often plant without reliable demand visibility, while buyers cannot easily coordinate consistent volume and quality across many small farms. Both sides lose: farmers to price uncertainty and spoilage, buyers to unreliable supply.",
+  "targetUsers": "One recurring produce buyer, one cooperator who aggregates on the ground, and the smallholder farmers in that cooperator's network — deliberately not 'all farmers' or a marketplace.",
+  "whyItMatters": "Demand-blind planting is one of the quietest ways smallholder income evaporates. If coordination works for a single recurring order loop, it can be measured honestly; if it cannot work at that scale, a marketplace built on top of it was never going to.",
+  "exactRole": "ML roadmap, business analysis, and field validation contribution within the team.",
+  "teamContributions": "A CHNAI LAB team effort: field interviews, concept design, and the hackathon submission were collaborative. [OWNER_INPUT_REQUIRED: Name the teammates and their roles so team credit is explicit]",
+  "research": "The team ran structured interviews with bok choy farmers in Kang Meas district, Kampong Cham, focused on planting decisions, price information, and willingness to commit volumes pre-harvest. Interview records are private; the framing they produced is public in the Decision Grid repository.",
+  "validation": "Concept validation only so far: field interviews plus a hackathon placement. The pilot thesis is deliberately bounded — one recurring buyer, one cooperator, roughly 30–100 farmers — and no recurring delivery has been run yet, so order reliability and unit economics remain hypotheses.",
+  "proposedSolution": "Start from a confirmed recurring buyer requirement and work backwards: the cooperator collects farmer commitments against that order, the system documents each commitment and exception, and voice input in Khmer lowers the data-entry barrier. Software coordinates; the cooperator remains the operational anchor.",
+  "userWorkflow": [
+    "Buyer confirms a recurring order (volume, quality, cadence)",
+    "Cooperator broadcasts the requirement to the farmer network",
+    "Farmers commit volumes — by voice where typing is impractical",
+    "The system assembles a documented lot and flags shortfalls early",
+    "Delivery, exceptions, and payment timing are recorded for the next loop"
+  ],
+  "systemArchitecture": "Deliberately minimal: a coordination record system over one order loop, with the Decision Grid engine as the lot-assembly brain and Kaskor ASR as a future voice-intake layer. No marketplace infrastructure until a single loop proves out.",
+  "methods": "Buyer-first product validation, structured field interviews, bounded pilot design, and a strict rule that software features wait for operational evidence — the first pilot may prove coordination matters more than code.",
+  "businessValue": "The commercial hypothesis is concrete: better fulfillment rates and less spoilage for the buyer, earlier price certainty for farmers, and a coordination fee that only makes sense if the loop demonstrably works. None of it is claimed as proven.",
+  "contractsPolicy": "A real pilot needs simple, honest commitment terms: what a farmer commitment binds, what buyer cancellation costs, who bears spoilage risk, and how disputes settle. Drafting these terms in plain Khmer and English is part of the pilot design, not an afterthought.",
+  "dataPrivacy": "Farmer interview records and any future commitment data are personal and commercially sensitive. Interviews remain private; a pilot would need documented consent for data collection and a clear statement of who can see farmer-level information.",
+  "risks": [
+    "The pilot may show operational coordination matters more than software — and the honest response is to build less software",
+    "Farmer income, buyer retention, and spoilage improvements are hypotheses until measured",
+    "A failed pilot with real farmers has real costs for real people — bounded scope is a safety decision, not just a research one"
+  ],
+  "humanApprovalPoints": [
+    "Running the pilot at all — it involves real farmers and a real buyer",
+    "Any commitment terms shown to farmers or buyers",
+    "Any data collection about identifiable farmers",
+    "Any ML feature addition, which waits for operational data to justify it"
+  ],
+  "technicalDecisions": [
+    "Buyer-first order loop instead of a broad marketplace",
+    "The cooperator as the operational aggregation point rather than assuming every farmer manages an app",
+    "Field validation before scale claims",
+    "Voice input and Khmer ASR treated as enabling infrastructure, not the product"
+  ],
+  "completedWork": [
+    {
+      "text": "Structured field interviews with approximately 30 bok choy farmers in Kang Meas, Kampong Cham (team effort)",
+      "evidence": "Owner confirmed",
+      "workState": "Completed"
+    },
+    {
+      "text": "Concept placed Top 2 in Turing Hackathon Cycle 10, Market Access for Farmers track",
+      "evidence": "Owner confirmed",
+      "workState": "Completed"
+    },
+    {
+      "text": "Lot-assembly engine built and tested as Chomkar Decision Grid",
+      "evidence": "Repository evidence",
+      "link": "https://github.com/chamroeunhongleng/chomkar-decision-grid",
+      "workState": "Demonstrated"
+    },
+    {
+      "text": "One recurring buyer pilot with documented commitments and exceptions",
+      "evidence": "Planned",
+      "workState": "Planned"
+    }
+  ],
+  "evidence": [
+    {
+      "text": "The Turing Hackathon (Techo Startup Center / Startup Cambodia) is a real national program.",
+      "evidence": "Public evidence",
+      "link": "https://hackathon.techostartup.center/"
+    },
+    {
+      "text": "The Top 2 placement and the interview count are stated by me and the team; no public results page or published study verifies them yet. [OWNER_INPUT_REQUIRED: Certificate or organizer link would upgrade this to Document evidence]",
+      "evidence": "Owner confirmed"
+    },
+    {
+      "text": "Chomkar is publicly named as a CHNAI LAB product track (B2B agriculture coordination).",
+      "evidence": "Public evidence",
+      "link": "https://github.com/CHNAI-LAB"
+    }
+  ],
+  "results": [
+    {
+      "text": "Field research reframed the product from marketplace to single-order coordination loop — the strongest outcome so far is a smaller, more testable idea.",
+      "evidence": "Owner confirmed"
+    },
+    {
+      "text": "No pilot has run; there are no fulfillment, income, or spoilage results to report, and this page will not pretend otherwise.",
+      "evidence": "Owner confirmed"
+    }
+  ],
+  "limitations": {
+    "constraints": [
+      "A recurring delivery pilot has not yet been run, so order reliability and unit economics are unproven",
+      "Interview data is private, which limits what can be shown publicly"
+    ],
+    "tradeoffs": [
+      "Bounded pilot scope (one buyer, one cooperator) trades speed of learning against breadth of claims",
+      "Building the decision engine before the pilot risks some throwaway work if field reality contradicts the model"
+    ]
+  },
+  "lessonsLearned": [
+    "Field interviews kill more features than they inspire — and that is their value",
+    "An operationally anchored cooperator beats an app-for-everyone assumption in low-connectivity contexts",
+    "Hackathon validation is directional, not evidential; it earns a pilot, not a claim"
+  ],
+  "nextValidation": [
+    "Run one recurring buyer pilot and record every commitment and exception",
+    "Measure fulfillment rate, coordination time, spoilage, and payment timing",
+    "Decide which ML features are justified only after operational data exists"
+  ],
+  "publicLinks": [
+    {
+      "label": "Turing Hackathon",
+      "url": "https://hackathon.techostartup.center/",
+      "kind": "website",
+      "evidence": "Public evidence"
+    },
+    {
+      "label": "Decision Grid engine",
+      "url": "https://github.com/chamroeunhongleng/chomkar-decision-grid",
+      "kind": "repository",
+      "evidence": "Repository evidence"
+    }
+  ],
+  "aiAssistance": {
+    "scope": "Claude assisted with research synthesis, business analysis drafts, and pilot design documentation.",
+    "humanOwned": "Field interviews, the pilot thesis, commercial judgments, and all claims about what has and has not been validated."
+  }
+}

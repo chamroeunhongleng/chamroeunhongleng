@@ -1,0 +1,61 @@
+{
+  "pillars": [
+    {
+      "id": "ai-ml",
+      "number": "01",
+      "title": "AI & Machine Learning",
+      "summary": "How intelligent systems are actually built: data, training, evaluation, and the honest limits of what a model can do — practiced on low-resource Khmer problems where shortcuts fail fast.",
+      "topics": [
+        "Speech recognition for Khmer",
+        "Dataset design and reproducible pipelines",
+        "Evaluation and error analysis",
+        "Model limitations and responsible use"
+      ],
+      "groundedIn": "Computer Science coursework at Fort Hays State and the Kaskor ASR fine-tuning pipeline.",
+      "projects": ["kaskor-asr", "chomkar-decision-grid"]
+    },
+    {
+      "id": "software-product",
+      "number": "02",
+      "title": "Software & Product Systems",
+      "summary": "Turning models and ideas into systems people can use: applications, workflows, APIs, architecture, and the deployment discipline that keeps them dependable.",
+      "topics": [
+        "Typed, tested pipelines and CLIs",
+        "System architecture and trust boundaries",
+        "Static sites and deployment workflows",
+        "AI-native development with human review"
+      ],
+      "groundedIn": "Information Technology Management coursework at AUPP and product work with CHNAI LAB.",
+      "projects": ["chomkar-decision-grid", "ai-layer"]
+    },
+    {
+      "id": "business-strategy",
+      "number": "03",
+      "title": "Business & Strategy",
+      "summary": "Whether a system is worth building: user needs, unit economics, operations, and the market reality that decides if something useful is also commercially viable.",
+      "topics": [
+        "Field research and user validation",
+        "Business models and unit economics",
+        "Operations and coordination problems",
+        "Commercial practicality of AI products"
+      ],
+      "groundedIn": "International business studies and field validation for Chomkar OrderLoop in Kampong Cham.",
+      "projects": ["chomkar-orderloop"]
+    },
+    {
+      "id": "governance-commercial",
+      "number": "04",
+      "title": "Governance & Commercial Rules",
+      "summary": "What a system is allowed — and ought — to do: contracts, terms, policies, privacy, risk, and the human-approval points that keep consequential decisions accountable.",
+      "topics": [
+        "Contracts, terms, and policies for AI products",
+        "Data use, consent, and privacy",
+        "Risk assessment and human oversight",
+        "Responsible AI and accountability"
+      ],
+      "groundedIn": "Contracts, terms, and policy work in my international business studies, plus the human-approval patterns built into Chomkar Decision Grid and Warden.",
+      "projects": ["warden", "demo-governance-review"]
+    }
+  ],
+  "connection": "These are not four separate interests. The CS and ITM degrees build the ability to make intelligent systems; the international business studies and field research supply the commercial lens; and the contracts, terms, and policy work asks what those systems are allowed — and ought — to do. Every project on this site touches at least two pillars, on purpose."
+}

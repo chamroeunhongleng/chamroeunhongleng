@@ -1,0 +1,23 @@
+/* Motion: opacity/transform only, 150–250ms, always reducible. */
+
+.page-enter-active,
+.page-leave-active {
+  transition: opacity var(--duration-base) var(--ease-out);
+}
+
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+}
+
+/* Full reduced-motion reset — content must work without any animation. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

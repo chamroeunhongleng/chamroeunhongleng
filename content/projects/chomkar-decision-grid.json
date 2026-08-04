@@ -1,0 +1,141 @@
+{
+  "slug": "chomkar-decision-grid",
+  "name": "Chomkar Decision Grid",
+  "oneLiner": "A deterministic decision engine that assembles smallholder farm lots with auditable numbers and human-approved recommendations.",
+  "status": "Public demo",
+  "deployment": "Public demo",
+  "timeline": {
+    "start": "2026",
+    "end": null,
+    "label": "2026 — present"
+  },
+  "pillars": ["ai-ml", "software-product", "governance-commercial"],
+  "tags": ["Python", "Decision intelligence", "Unit testing", "CI", "Agritech", "Audit"],
+  "featured": true,
+  "enabled": true,
+  "demo": false,
+  "question": "Can farm-lot assembly be made fully auditable with deterministic code, designed failure cases, and human approval gates?",
+  "problem": "A buyer may need one to three tonnes of produce while individual farms declare only a few hundred kilograms each. Assembling the lot manually makes pricing, route risk, and fairness impossible to audit — and an AI that invents the numbers would be worse, not better.",
+  "targetUsers": "Agricultural cooperators and coordinators who assemble multi-farm lots against buyer orders, and — as an audience for the method — anyone designing decision systems where a model must never own the arithmetic.",
+  "whyItMatters": "Coordination failures cost smallholder farmers real income. A recommendation system for money-adjacent decisions only deserves trust if every number can be re-derived, every refusal is honest, and a human explicitly approves the outcome.",
+  "exactRole": "Framework design, the deterministic engine, the test suite, and the AI-assisted development workflow.",
+  "teamContributions": "Built within the Chomkar product direction at CHNAI LAB; the synthetic scenario design draws on the team's field research. [OWNER_INPUT_REQUIRED: Name teammates who should be credited for the Chomkar context]",
+  "research": "The volume-gap framing (farms declare 200–600 kg; buyers need 1–3 tonne lots) comes from the team's field research in Kampong Cham. The engineering question researched here: which decision-system patterns let a recommendation be audited by a non-programmer.",
+  "validation": "Validated against designed scenarios, including deliberate failure cases where the honest output is 'cannot fulfill' with a renegotiation recommendation. All data is synthetic and the repository says so plainly; no real orders, payments, or farmers run through it.",
+  "proposedSolution": "A deterministic, stdlib-only Python engine that models the workflow as Detect → Evaluate → Recommend → Act with an independent audit gate. AI explains the numbers; it never produces them. Every stage checkpoints state, and bilingual Khmer/English reports end with an explicit human-approval checklist.",
+  "userWorkflow": [
+    "Load farmer declarations and a buyer order",
+    "Evaluate feasible lot combinations with zone-normalized scoring",
+    "Rank recommendations — or refuse honestly when no lot satisfies the order",
+    "Run the independent audit that re-derives payouts, allocation limits, coverage, and the winning score",
+    "Review the bilingual report and give or withhold human approval"
+  ],
+  "systemArchitecture": "Deterministic core with an audit gate that recomputes results from raw inputs through separate code paths. Pricing invariants are enforced in three places — pricing code, unit tests, and the audit — so a regression cannot pass silently. Pipeline stages hash their inputs and resume only from changed state.",
+  "methods": "Zone-normalized (min-max) scoring for cross-province comparability, designed failure cases as first-class scenarios, invariant-based testing, and human-gated calibration where weight changes are bounded proposals requiring manual approval.",
+  "businessValue": "Demonstrates the trust architecture a real coordination product would need before touching real money: auditable pricing, honest refusal, and approval gates. The commercial hypothesis itself is tested separately under Chomkar OrderLoop.",
+  "contractsPolicy": "The engine deliberately does not authorize purchases, payments, or deliveries — recommendations are inputs to a human decision, which keeps the accountability boundary clean. A CI linter even prevents money arithmetic from appearing inside report prose.",
+  "dataPrivacy": "All bundled farmer, buyer, price, weather, and route data are synthetic. Testing the schema with real cooperator data would require redaction or documented consent first — that boundary is stated in the repository.",
+  "risks": [
+    "Provisional decision weights could be mistaken for field-calibrated ones",
+    "A polished demo could be misread as an operating platform — the status labels here exist to prevent that",
+    "Synthetic scenarios may encode assumptions real deliveries will contradict"
+  ],
+  "humanApprovalPoints": [
+    "Every lot recommendation ends in an explicit human approval checklist",
+    "Calibration changes to decision weights require manual approval of bounded proposals",
+    "Any move from synthetic to real cooperator data"
+  ],
+  "technicalDecisions": [
+    "Deterministic Python stdlib core; AI explains rather than invents the numbers",
+    "Detect → Evaluate → Recommend → Act with an independent audit gate as the workflow model",
+    "Designed failure cases so 'cannot fulfill' is a valid, tested output",
+    "Synthetic-only data with the limitation stated in the README rather than hidden"
+  ],
+  "completedWork": [
+    {
+      "text": "Deterministic engine with zone-normalized scoring and honest-refusal outputs",
+      "evidence": "Repository evidence",
+      "link": "https://github.com/chamroeunhongleng/chomkar-decision-grid",
+      "workState": "Completed"
+    },
+    {
+      "text": "62 unit tests with invariant checks, running in GitHub Actions CI",
+      "evidence": "Repository evidence",
+      "link": "https://github.com/chamroeunhongleng/chomkar-decision-grid",
+      "workState": "Tested"
+    },
+    {
+      "text": "Bilingual Khmer/English decision reports ending in a human-approval checklist",
+      "evidence": "Repository evidence",
+      "link": "https://github.com/chamroeunhongleng/chomkar-decision-grid",
+      "workState": "Completed"
+    },
+    {
+      "text": "Usability testing with non-technical cooperative officers",
+      "evidence": "Planned",
+      "workState": "Planned"
+    }
+  ],
+  "evidence": [
+    {
+      "text": "Public MIT-licensed repository with working code, tests, CI, notebooks, and a 19 KB README that documents the method and its limits.",
+      "evidence": "Repository evidence",
+      "link": "https://github.com/chamroeunhongleng/chomkar-decision-grid"
+    },
+    {
+      "text": "The repository volunteers its own boundary: 'no real Chomkar platform integration; synthetic data only' — 26 synthetic farmer declarations and 5 test orders, including designed failure cases.",
+      "evidence": "Repository evidence",
+      "link": "https://github.com/chamroeunhongleng/chomkar-decision-grid"
+    },
+    {
+      "text": "The 0%-cut pricing invariant is enforced in three independent places: pricing code, unit tests, and the audit gate.",
+      "evidence": "Repository evidence",
+      "link": "https://github.com/chamroeunhongleng/chomkar-decision-grid"
+    }
+  ],
+  "results": [
+    {
+      "text": "An end-to-end audited example runs from declarations to an approved lot recommendation, with the audit re-deriving payouts, allocation limits, order coverage, buyer-cap compliance, and the winning score.",
+      "evidence": "Repository evidence",
+      "link": "https://github.com/chamroeunhongleng/chomkar-decision-grid"
+    },
+    {
+      "text": "No real-world outcome exists yet: decision weights are provisional and unvalidated against actual delivery results.",
+      "evidence": "Repository evidence",
+      "link": "https://github.com/chamroeunhongleng/chomkar-decision-grid"
+    }
+  ],
+  "limitations": {
+    "constraints": [
+      "All bundled data are synthetic; real cooperator data requires consent and redaction work that has not happened yet",
+      "Decision weights are provisional until compared against observed spoilage and delivery outcomes"
+    ],
+    "tradeoffs": [
+      "Stdlib-only Python keeps the core auditable and dependency-free at the cost of convenience libraries",
+      "Recommend-only scope (no payments, no orders) limits immediate usefulness but keeps accountability with humans while trust is unearned"
+    ]
+  },
+  "lessonsLearned": [
+    "An audit that re-derives results through separate code paths catches classes of bugs tests alone miss",
+    "Designing failure cases first makes honest refusal a feature instead of an afterthought",
+    "Bilingual reporting is a product requirement, not a translation task — the approval checklist must be readable by the person accountable"
+  ],
+  "nextValidation": [
+    "Test the data schema with a real cooperator using redacted or consented data",
+    "Compare route-risk estimates against observed spoilage and delivery outcomes",
+    "Run usability testing with non-technical cooperative officers"
+  ],
+  "publicLinks": [
+    {
+      "label": "GitHub repository",
+      "url": "https://github.com/chamroeunhongleng/chomkar-decision-grid",
+      "kind": "repository",
+      "evidence": "Repository evidence"
+    }
+  ],
+  "aiAssistance": {
+    "scope": "Claude assisted with implementation scaffolding, test drafting, documentation, and the repository's own agent workflow.",
+    "humanOwned": "The decision model, invariants, audit design, approval gates, and all published claims."
+  },
+  "primaryLink": "https://github.com/chamroeunhongleng/chomkar-decision-grid"
+}

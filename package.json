@@ -1,0 +1,53 @@
+{
+  "name": "chamroeunhongleng-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Portfolio of Chamroeun Hongleng — exploring AI, machine learning, software, and business with responsible governance.",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "generate:production": "cross-env NUXT_PUBLIC_PORTFOLIO_MODE=production nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "typecheck": "nuxt typecheck",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "check:structure": "node --import jiti/register scripts/check-structure.ts",
+    "check:secrets": "node --import jiti/register scripts/check-secrets.ts",
+    "check:content": "node --import jiti/register scripts/check-content.ts",
+    "check:owner-content": "node --import jiti/register scripts/check-owner-content.ts",
+    "check:links": "node --import jiti/register scripts/check-links.ts",
+    "check:a11y": "node --import jiti/register scripts/check-a11y.ts",
+    "check:seo": "node --import jiti/register scripts/check-seo.ts",
+    "assets:generate": "node --import jiti/register scripts/generate-assets.ts",
+    "verify": "node --import jiti/register scripts/verify.ts"
+  },
+  "devDependencies": {
+    "@fontsource-variable/fraunces": "^5.0.0",
+    "@fontsource-variable/inter": "^5.0.0",
+    "@fontsource/ibm-plex-mono": "^5.0.0",
+    "@nuxt/eslint": "^1.0.0",
+    "@nuxtjs/sitemap": "^8.2.2",
+    "@resvg/resvg-js": "^2.6.2",
+    "@types/node": "^24.13.3",
+    "@vitejs/plugin-vue": "^6.0.0",
+    "@vue/test-utils": "^2.4.6",
+    "cross-env": "^7.0.3",
+    "eslint": "^9.30.0",
+    "happy-dom": "^15.11.6",
+    "jiti": "^2.4.2",
+    "node-html-parser": "^7.0.1",
+    "nuxt": "^4.4.8",
+    "typescript": "^5.8.0",
+    "vitest": "^3.1.0",
+    "vue": "^3.5.39",
+    "vue-router": "^5.1.0",
+    "vue-tsc": "^3.3.7",
+    "zod": "^4.0.0"
+  }
+}

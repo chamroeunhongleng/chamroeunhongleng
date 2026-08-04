@@ -1,0 +1,158 @@
+{
+  "slug": "demo-governance-review",
+  "name": "AI Governance Review — Demonstration",
+  "oneLiner": "[DEMO] A worked example of how I would review an AI product before launch: data use, terms, oversight, and risk.",
+  "status": "Research",
+  "deployment": "Not deployed",
+  "timeline": {
+    "start": "2026",
+    "end": null,
+    "label": "2026 · demonstration"
+  },
+  "pillars": ["governance-commercial"],
+  "tags": ["AI governance", "Model card", "Privacy", "Terms review", "Risk assessment"],
+  "featured": true,
+  "enabled": true,
+  "demo": true,
+  "question": "What would a rigorous but proportionate pre-launch review look like for a small AI product — and can a student produce one worth reading?",
+  "problem": "[DEMO] Small teams ship AI features without any structured look at data use, terms, oversight, or risk — not from malice, but because review frameworks are written for enterprises and read like compliance theater. The demonstration subject is 'VoiceNote KH', a fictional app that transcribes Khmer voice messages using a fine-tuned speech model.",
+  "targetUsers": "[DEMO] The review's audience: a small product team deciding whether the fictional VoiceNote KH is ready for a public beta — and what must change first.",
+  "whyItMatters": "This demonstration exists because pillar four needs to be shown, not asserted. The format — scope, evidence, findings, required changes, and an artifact — is the real content; the app under review is fictional and labeled as such throughout.",
+  "exactRole": "Author of the demonstration review, applying frameworks I am studying (model cards, data-protection basics, terms-of-service analysis) to a fictional product.",
+  "teamContributions": "None — this is an individual demonstration exercise, not a client engagement or a real audit.",
+  "research": "[DEMO] The review method draws on public model-card practice, data-minimization principles, and how consumer transcription products describe retention and consent in their terms. Sources are the kind a real review would cite; the findings apply them to a fictional app.",
+  "validation": "This is a demonstration: it validates the review format, not any real product. Nothing here has been applied to a real company, and no real product decisions rest on it.",
+  "proposedSolution": "[DEMO] A four-part review: (1) what data the product touches and why; (2) what its terms promise versus what the system does; (3) where humans approve consequential outcomes; (4) a risk register with proportionate mitigations. The deliverable is a model card the team must be able to publish honestly.",
+  "userWorkflow": [
+    "Scope the review: features, data flows, users, and jurisdictions",
+    "Trace every personal-data touchpoint against the stated purpose",
+    "Compare the drafted terms and privacy notice with actual system behavior",
+    "Map decision points to human approvals and audit records",
+    "Deliver findings as required changes, recommendations, and an honest model card"
+  ],
+  "systemArchitecture": "[DEMO] The review treats architecture as evidence: where audio is processed, where transcripts are stored, what leaves the device, and which third parties see anything. For VoiceNote KH the finding is typical of small products — the architecture is fine; the retention defaults and consent copy are not.",
+  "methods": "Structured review practice: claim → argument → evidence for every finding, severity ratings tied to user harm rather than legal exposure alone, and the discipline that a finding without a required change is just commentary.",
+  "businessValue": "[DEMO] For a real product, this review would be launch insurance: cheaper than retrofitting consent flows after a complaint, and a trust asset when users ask hard questions. As a demonstration, its value is showing I can produce the artifact.",
+  "contractsPolicy": "[DEMO] Sample findings of the demonstration: the draft terms claimed a perpetual license to voice recordings the product does not need (required change: license scoped to service delivery); the consent copy bundled transcription with model-improvement use (required change: separate opt-in).",
+  "dataPrivacy": "[DEMO] Sample findings: default retention was indefinite where the feature needs days (required change: retention schedule with user deletion); voice data crossed a border without disclosure (required change: state processing locations in plain language).",
+  "risks": [
+    "[DEMO] For the fictional product: silent misuse of voice data for model training; indefinite retention; no path for users to delete recordings; over-broad license terms",
+    "For the demonstration itself: being mistaken for legal advice or a real audit — it is neither, and says so"
+  ],
+  "humanApprovalPoints": [
+    "[DEMO] In the reviewed product: shipping any change to data use or terms; enabling model-improvement use of customer audio; responding to data-deletion requests",
+    "In a real engagement: every finding would be reviewed by someone with actual legal authority before any action"
+  ],
+  "technicalDecisions": [
+    "Review format anchored on a publishable model card, so honesty has a concrete deliverable",
+    "Findings must pair with required changes and proportionate mitigations",
+    "Severity rated by user harm, not only compliance exposure",
+    "The demonstration subject is fictional so no real company's practices are implied"
+  ],
+  "completedWork": [
+    {
+      "text": "Complete demonstration review of the fictional VoiceNote KH, including the model-card artifact on this page",
+      "evidence": "Demo only",
+      "workState": "Demonstrated"
+    },
+    {
+      "text": "The same format applied to a real CHNAI LAB product before its release",
+      "evidence": "Planned",
+      "workState": "Planned"
+    }
+  ],
+  "evidence": [
+    {
+      "text": "Everything in this case study is a demonstration built on a fictional product. It shows the review format I am practicing — it is not a real audit, and no real product or company is described.",
+      "evidence": "Demo only"
+    },
+    {
+      "text": "The governance patterns referenced here (human-approval gates, audit design) run in real code in Chomkar Decision Grid.",
+      "evidence": "Repository evidence",
+      "link": "https://github.com/chamroeunhongleng/chomkar-decision-grid"
+    }
+  ],
+  "results": [
+    {
+      "text": "The demonstration produced a complete review with findings, required changes, and a publishable model card — the artifact below is the deliverable itself, not a description of one.",
+      "evidence": "Demo only"
+    }
+  ],
+  "limitations": {
+    "constraints": [
+      "The reviewed product is fictional, so findings cannot be validated against real system behavior",
+      "I am a student of these frameworks — a real engagement would need supervision by someone with actual legal and privacy expertise"
+    ],
+    "tradeoffs": [
+      "A fictional subject removes confidentiality problems but also removes the messy details that make real reviews hard",
+      "Keeping the review proportionate for a small team means it is not an exhaustive compliance audit — by design"
+    ]
+  },
+  "lessonsLearned": [
+    "A model card forces more honesty than a policy document — you cannot write 'purpose' and 'retention' rows vaguely and still publish them",
+    "Terms-versus-behavior comparison finds more real issues than reading either alone",
+    "Review findings only matter if each one carries a required change someone can act on"
+  ],
+  "nextValidation": [
+    "Apply the same review format to a real CHNAI LAB product before its release",
+    "Have the resulting review checked by a supervising practitioner with real legal expertise",
+    "Publish the before/after: what the review changed in the shipped product"
+  ],
+  "publicLinks": [],
+  "artifact": {
+    "title": "Model card — VoiceNote KH (fictional demonstration subject)",
+    "kind": "model-card",
+    "description": "The review's deliverable: a model card the fictional team could publish honestly after making the required changes. Every row is demonstration content.",
+    "rows": [
+      {
+        "label": "Purpose",
+        "value": "Transcribe Khmer voice messages to text for the message recipient. No other use of audio without separate opt-in.",
+        "evidence": "Demo only"
+      },
+      {
+        "label": "Users",
+        "value": "Khmer-speaking adults messaging within the app; not offered to children.",
+        "evidence": "Demo only"
+      },
+      {
+        "label": "Model",
+        "value": "Fine-tuned Whisper-family speech model; quality self-reported by internal evaluation, not independently benchmarked.",
+        "evidence": "Demo only"
+      },
+      {
+        "label": "Data sources",
+        "value": "User voice messages processed at request time; training data licensed separately and documented in the data register.",
+        "evidence": "Demo only"
+      },
+      {
+        "label": "Retention",
+        "value": "Audio deleted after transcription completes; transcripts kept until the user deletes the message. No indefinite retention.",
+        "evidence": "Demo only"
+      },
+      {
+        "label": "Consent",
+        "value": "Transcription is core service consent; model-improvement use requires a separate, revocable opt-in.",
+        "evidence": "Demo only"
+      },
+      {
+        "label": "Human oversight",
+        "value": "No automated account actions from transcript content; abuse reports are reviewed by a person.",
+        "evidence": "Demo only"
+      },
+      {
+        "label": "Known limitations",
+        "value": "Accuracy degrades with noise, code-switching, and underrepresented dialects; users can always fall back to audio.",
+        "evidence": "Demo only"
+      },
+      {
+        "label": "Risk level & escalation",
+        "value": "Moderate (personal voice data). Data-deletion requests and suspected breaches escalate to a named accountable owner.",
+        "evidence": "Demo only"
+      }
+    ]
+  },
+  "aiAssistance": {
+    "scope": "Claude assisted with drafting the review structure and this case study's prose.",
+    "humanOwned": "The review judgments, severity calls, and the decision to present this as demonstration-only content."
+  }
+}

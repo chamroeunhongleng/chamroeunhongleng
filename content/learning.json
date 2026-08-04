@@ -1,0 +1,129 @@
+{
+  "intro": "I am a student across every area on this page, and this page is deliberately honest about that. It tracks what I am actively studying, what I have tested in real projects, and what remains planned — so progress is visible without pretending to expertise I have not earned yet.",
+  "disciplines": [
+    {
+      "pillar": "ai-ml",
+      "title": "AI & Machine Learning",
+      "stance": "Learning by fine-tuning and evaluating real models for Khmer, where low-resource constraints punish cargo-cult ML quickly.",
+      "currentFocus": [
+        "Speech-model fine-tuning and feature pipelines (Whisper-family models)",
+        "Evaluation design for Khmer text, where character error rate beats word error rate",
+        "Error analysis by speaker, device, and noise condition",
+        "Writing model cards that state dataset provenance and failure modes"
+      ]
+    },
+    {
+      "pillar": "software-product",
+      "title": "Software & Product Systems",
+      "stance": "Learning to ship small, typed, tested systems instead of large unproven architectures.",
+      "currentFocus": [
+        "Deterministic pipelines with unit tests and CI",
+        "Typed content architectures and schema validation",
+        "Static-site engineering, deployment workflows, and rollback thinking",
+        "AI-native development workflows with explicit human review gates"
+      ]
+    },
+    {
+      "pillar": "business-strategy",
+      "title": "Business & Strategy",
+      "stance": "Learning to test commercial assumptions in the field before writing code.",
+      "currentFocus": [
+        "International business coursework — [OWNER_INPUT_REQUIRED: List the specific courses or modules you want named]",
+        "Unit economics of agricultural coordination (spoilage, payment timing, fulfillment)",
+        "Buyer-first validation instead of marketplace-first assumptions",
+        "Reading markets where operations matter more than software"
+      ]
+    },
+    {
+      "pillar": "governance-commercial",
+      "title": "Governance & Commercial Rules",
+      "stance": "Learning how contracts, terms, and policies decide what AI systems may do — as a builder who reads the rules, not as a lawyer.",
+      "currentFocus": [
+        "Contracts and terms of service for software and AI products",
+        "Data licensing, consent, and privacy for speech datasets",
+        "Risk assessment and human-approval design patterns",
+        "How AI governance frameworks translate into product decisions"
+      ]
+    }
+  ],
+  "readingNotes": [
+    {
+      "title": "[PLACEHOLDER: First reading note]",
+      "source": "[OWNER_INPUT_REQUIRED: Books, papers, courses, or policies you want to log here — title and source]",
+      "takeaway": "[PLACEHOLDER: The one thing this changed about how you think or build]"
+    }
+  ],
+  "experiments": [
+    {
+      "title": "Khmer ASR fine-tuning",
+      "question": "Can a fully reproducible Whisper-small pipeline reach a usable Khmer character error rate with limited public data?",
+      "state": "Demonstrated",
+      "projectSlug": "kaskor-asr"
+    },
+    {
+      "title": "Auditable decision engine",
+      "question": "Can farm-lot assembly be made fully auditable with deterministic code, designed failure cases, and human approval gates?",
+      "state": "Tested",
+      "projectSlug": "chomkar-decision-grid"
+    },
+    {
+      "title": "Buyer-first coordination",
+      "question": "Can one recurring buyer order coordinate 30–100 smallholder commitments before harvest?",
+      "state": "Planned",
+      "projectSlug": "chomkar-orderloop"
+    },
+    {
+      "title": "Governance review practice",
+      "question": "Can a structured pre-launch review (data use, terms, oversight, risk) be demonstrated well enough to practice on real products?",
+      "state": "Demonstrated",
+      "projectSlug": "demo-governance-review"
+    }
+  ],
+  "roadmap": [
+    {
+      "horizon": "Now",
+      "items": [
+        {
+          "text": "Publish a model card for Kaskor ASR with dataset composition and known failure modes.",
+          "evidence": "Planned",
+          "workState": "Planned"
+        },
+        {
+          "text": "Deepen contracts and terms-of-service study through international business coursework.",
+          "evidence": "Planned",
+          "workState": "Planned"
+        }
+      ]
+    },
+    {
+      "horizon": "Next",
+      "items": [
+        {
+          "text": "Run one recurring-buyer pilot for Chomkar OrderLoop and record every commitment and exception.",
+          "evidence": "Planned",
+          "workState": "Planned"
+        },
+        {
+          "text": "Turn the demonstration governance review into a real review of one CHNAI LAB product before its release.",
+          "evidence": "Planned",
+          "workState": "Planned"
+        }
+      ]
+    },
+    {
+      "horizon": "Later",
+      "items": [
+        {
+          "text": "Publish evaluation results by speaker, province, device, and noise condition for Khmer ASR.",
+          "evidence": "Planned",
+          "workState": "Planned"
+        },
+        {
+          "text": "Write publicly about how contracts and policies shaped a real product decision I was part of.",
+          "evidence": "Planned",
+          "workState": "Planned"
+        }
+      ]
+    }
+  ]
+}

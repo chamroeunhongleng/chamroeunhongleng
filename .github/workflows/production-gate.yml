@@ -1,0 +1,56 @@
+name: Production gate
+
+# Proves the production content gate actually gates: while unresolved
+# placeholders or demo content remain, a production-mode build MUST fail.
+# Once content is production-ready, the same job proves it passes.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Determine expected gate outcome
+        id: expectation
+        run: |
+          if npm run check:owner-content -- --mode=production; then
+            echo "should_fail=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_fail=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Production build must FAIL while placeholders remain
+        if: steps.expectation.outputs.should_fail == 'true'
+        run: |
+          if npm run generate:production; then
+            echo "::error::The production gate PASSED a build that still contains placeholders or demo content. The gate is broken."
+            exit 1
+          else
+            echo "Gate correctly blocked the production build."
+          fi
+
+      - name: Production build must PASS when content is ready
+        if: steps.expectation.outputs.should_fail == 'false'
+        run: npm run generate:production

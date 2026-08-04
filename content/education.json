@@ -1,0 +1,32 @@
+{
+  "summary": "Two degree tracks run in parallel and deliberately feed different halves of the same goal: the technical programs build the ability to make intelligent systems, and the international business studies build the judgment about contracts, markets, and rules that decide how those systems should be used.",
+  "entries": [
+    {
+      "institution": "American University of Phnom Penh (AUPP)",
+      "program": "Information Technology Management",
+      "credential": "B.S. (dual-degree track)",
+      "period": "2023 — present · [OWNER_INPUT_REQUIRED: Confirm start year and expected graduation]",
+      "status": "In progress",
+      "evidence": "Public evidence",
+      "notes": "Stated on the public GitHub profile; AUPP operates an accredited dual-degree partnership with Fort Hays State University."
+    },
+    {
+      "institution": "Fort Hays State University",
+      "program": "Computer Science",
+      "credential": "B.S. (dual-degree track)",
+      "period": "2023 — present · [OWNER_INPUT_REQUIRED: Confirm start year and expected graduation]",
+      "status": "In progress",
+      "evidence": "Public evidence",
+      "notes": "Completed through the AUPP–FHSU dual-degree partnership."
+    },
+    {
+      "institution": "[OWNER_INPUT_REQUIRED: Institution offering your international business program]",
+      "program": "International Business",
+      "credential": "[OWNER_INPUT_REQUIRED: Exact credential name for the international business studies]",
+      "period": "[OWNER_INPUT_REQUIRED: Period of the international business studies]",
+      "status": "In progress",
+      "evidence": "Owner confirmed",
+      "notes": "Includes coursework and applied work on contracts, terms, policies, and commercial rules — the material behind the Governance & Commercial Rules pillar."
+    }
+  ]
+}

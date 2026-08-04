@@ -1,0 +1,59 @@
+{
+  "email": "[OWNER_INPUT_REQUIRED: Confirm the public contact email address you want published]",
+  "location": "Phnom Penh, Cambodia",
+  "responseExpectation": "[OWNER_INPUT_REQUIRED: Typical response time you can honestly promise, e.g. within a few days]",
+  "inquiryTypes": [
+    {
+      "title": "Research & internships",
+      "description": "Applied-ML research assistance, internships, or student research collaborations — especially around low-resource languages and evaluation.",
+      "subject": "Research or internship opportunity"
+    },
+    {
+      "title": "Product collaboration",
+      "description": "Building or validating a product experiment together, from field research through a small working implementation.",
+      "subject": "Product collaboration"
+    },
+    {
+      "title": "Governance & policy practice",
+      "description": "Opportunities to practice structured AI product reviews — data use, terms, oversight, and risk — under supervision of people with real expertise.",
+      "subject": "Governance review practice"
+    },
+    {
+      "title": "Something else",
+      "description": "Questions about my projects, study path, or working methods — or anything that does not fit the boxes above.",
+      "subject": "Hello from your portfolio"
+    }
+  ],
+  "boundaries": {
+    "seeking": [
+      "Applied-ML research and internships",
+      "Product collaborations with honest scope",
+      "Mentorship in ML evaluation, product strategy, or technology law",
+      "Chances to practice governance reviews on real products"
+    ],
+    "notSeeking": [
+      "Requests for legal advice — I study contracts and policy; I am not a lawyer",
+      "Senior engineering roles presented as expert consulting — I am a student and label my work accordingly"
+    ]
+  },
+  "socials": [
+    {
+      "label": "GitHub",
+      "url": "https://github.com/chamroeunhongleng",
+      "kind": "profile",
+      "evidence": "Public evidence"
+    },
+    {
+      "label": "LinkedIn",
+      "url": "https://www.linkedin.com/in/chamroeun-hongleng-73b249375",
+      "kind": "profile",
+      "evidence": "Owner confirmed"
+    },
+    {
+      "label": "X",
+      "url": "https://x.com/hongleng_dev",
+      "kind": "profile",
+      "evidence": "Owner confirmed"
+    }
+  ]
+}

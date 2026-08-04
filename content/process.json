@@ -1,0 +1,76 @@
+{
+  "intro": "How an idea earns its way to production. AI (primarily Claude) supports research, implementation, documentation, and review throughout — but the gates marked below are always human decisions.",
+  "stages": [
+    {
+      "title": "Idea",
+      "description": "Write down the problem, who has it, and the riskiest assumption.",
+      "humanGate": false
+    },
+    {
+      "title": "User & problem research",
+      "description": "Talk to real users; collect primary evidence and contradictory signals.",
+      "humanGate": false
+    },
+    {
+      "title": "Business & policy analysis",
+      "description": "Check unit economics, contracts, terms, data rules, and whether the idea is allowed to exist as imagined.",
+      "humanGate": false
+    },
+    {
+      "title": "Product specification",
+      "description": "Define success, non-goals, the MVP boundary, and stop conditions.",
+      "humanGate": false
+    },
+    {
+      "title": "Architecture",
+      "description": "Choose the simplest design that current evidence justifies.",
+      "humanGate": false
+    },
+    {
+      "title": "Small working implementation",
+      "description": "Build one vertical slice with tests and observable behavior.",
+      "humanGate": false
+    },
+    {
+      "title": "Technical evaluation",
+      "description": "Measure against a baseline; inspect failures, not just aggregates.",
+      "humanGate": false
+    },
+    {
+      "title": "Risk & governance review",
+      "description": "Review data use, privacy, terms, oversight, and failure consequences before anything public.",
+      "humanGate": true
+    },
+    {
+      "title": "Preview deployment",
+      "description": "Ship to a preview environment that cannot hurt anyone.",
+      "humanGate": false
+    },
+    {
+      "title": "Human verification",
+      "description": "A person walks the preview, checks the claims, and signs off — or sends it back.",
+      "humanGate": true
+    },
+    {
+      "title": "Production release",
+      "description": "Deploy with rollback ready. Never automatic.",
+      "humanGate": true
+    },
+    {
+      "title": "Monitoring & learning",
+      "description": "Compare outcomes with hypotheses; feed what actually happened into the next decision.",
+      "humanGate": false
+    }
+  ],
+  "humanControls": [
+    "Important product decisions",
+    "Production deployment",
+    "Contracts and commercial commitments",
+    "Legal interpretation",
+    "Privacy decisions",
+    "Security changes",
+    "Financial decisions",
+    "Final public claims"
+  ],
+  "aiSupport": "Claude may support research, implementation, documentation, and review at every stage. It never owns a gate."
+}

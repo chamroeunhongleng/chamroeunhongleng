@@ -1,0 +1,21 @@
+# Dependencies
+node_modules
+
+# Nuxt build output
+.nuxt
+.output
+dist
+
+# Environment — never commit secrets. Only .env.example is tracked.
+.env
+.env.*
+!.env.example
+
+# Logs and OS noise
+*.log
+.DS_Store
+Thumbs.db
+
+# Deploy/tooling state
+.vercel
+coverage

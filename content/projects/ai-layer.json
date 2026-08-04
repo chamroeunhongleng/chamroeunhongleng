@@ -1,0 +1,113 @@
+{
+  "slug": "ai-layer",
+  "name": "The AI Layer",
+  "oneLiner": "Early shared model, retrieval, and evaluation infrastructure intended to keep CHNAI LAB products consistent and reviewable.",
+  "status": "Research",
+  "deployment": "Not deployed",
+  "timeline": {
+    "start": "2026",
+    "end": null,
+    "label": "2026 — present"
+  },
+  "pillars": ["software-product", "ai-ml"],
+  "tags": ["Claude API", "Evaluation", "Retrieval", "Infrastructure", "Model routing"],
+  "featured": false,
+  "enabled": true,
+  "demo": false,
+  "question": "Can one shared AI layer keep evaluation, cost control, and safety boundaries consistent across several small products?",
+  "problem": "When every product builds its own AI integration, evaluation logic, cost controls, and safety boundaries drift apart. Small teams pay that drift twice: duplicated work now, inconsistent behavior later.",
+  "targetUsers": "CHNAI LAB product teams — internal infrastructure, not a public product.",
+  "whyItMatters": "Shared infrastructure is where governance becomes real: one place to enforce evaluation contracts, spending limits, and the boundary between model output and permissioned actions, instead of hoping every product remembers.",
+  "exactRole": "AI/ML system direction and evaluation standards.",
+  "teamContributions": "Direction is mine; implementation would be shared across the studio. [OWNER_INPUT_REQUIRED: Update as the team and responsibilities become concrete]",
+  "research": "Studying how existing projects already handle evaluation and human approval (Kaskor's CER-first evaluation, Decision Grid's audit gates) to identify which patterns generalize into a shared contract rather than inventing infrastructure top-down.",
+  "validation": "None yet — this is research-stage work. The direction is documented publicly in my profile; no cross-product reliability or cost benchmark exists, and this page does not claim one.",
+  "proposedSolution": "A thin shared layer owning model access, retrieval, prompt and evaluation contracts, cost observability, and typed outputs — with product-specific business rules kept explicitly outside it.",
+  "userWorkflow": [
+    "A product team declares its model use through the shared contract",
+    "Evaluation and cost tracking come with the contract instead of being reimplemented",
+    "Model outputs return typed and bounded; consequential actions stay in product code behind human approval"
+  ],
+  "systemArchitecture": "Intended shape: evaluation and observability as first-class infrastructure; bounded tools and typed outputs over unconstrained autonomy; explicit documentation of provider, model, data, and fallback assumptions. Candidate stack (Claude API, embeddings, Cloudflare AI Gateway, Supabase/PostgreSQL) is provisional.",
+  "methods": "Extract-and-standardize rather than build-first: define one common evaluation contract, extract reusable pieces from one live project, and publish an architecture and failure-mode review before adding services.",
+  "businessValue": "Lower duplicated integration cost and reviewable AI behavior across products — valuable exactly proportional to how many products exist, which is why it stays small until they do.",
+  "contractsPolicy": "A shared layer concentrates provider terms-of-service obligations, data-processing commitments, and usage-policy compliance in one place — one of the clearest cases where reading the contracts is an engineering input.",
+  "dataPrivacy": "The layer would see every product's prompts and retrieval data, making it the natural enforcement point for data-retention rules and for keeping personal data out of model calls that do not need it.",
+  "risks": [
+    "Premature infrastructure — building a platform before enough products exist to justify it",
+    "A shared layer becomes a shared single point of failure without careful fallback design",
+    "Describing early infrastructure in production language would overstate its maturity — this page deliberately does not"
+  ],
+  "humanApprovalPoints": [
+    "Adopting the layer in any real product",
+    "Any external service or provider commitment",
+    "Any data-retention or logging decision involving user content"
+  ],
+  "technicalDecisions": [
+    "Evaluation and observability treated as first-class infrastructure rather than an afterthought",
+    "Product-specific business rules kept outside the shared model layer",
+    "Bounded tools and typed outputs preferred over unconstrained autonomous actions",
+    "Provider, model, data, and fallback assumptions documented explicitly"
+  ],
+  "completedWork": [
+    {
+      "text": "Direction and design principles documented; evaluation patterns identified from existing projects",
+      "evidence": "Owner confirmed",
+      "workState": "Completed"
+    },
+    {
+      "text": "One common evaluation contract defined and applied to a first project",
+      "evidence": "Planned",
+      "workState": "Planned"
+    }
+  ],
+  "evidence": [
+    {
+      "text": "The direction is described in my public GitHub profile as early-stage infrastructure work; no public repository exists yet.",
+      "evidence": "Public evidence",
+      "link": "https://github.com/chamroeunhongleng"
+    },
+    {
+      "text": "Design details beyond that are internal to CHNAI LAB.",
+      "evidence": "Private"
+    }
+  ],
+  "results": [
+    {
+      "text": "No measurable results exist — this is research-stage work, and calling it anything else would be exactly the kind of claim this site refuses to make.",
+      "evidence": "Owner confirmed"
+    }
+  ],
+  "limitations": {
+    "constraints": [
+      "Depends on CHNAI LAB products maturing enough to need shared infrastructure",
+      "No public artifact exists to inspect yet"
+    ],
+    "tradeoffs": [
+      "Waiting for real product needs trades infrastructure elegance for evidence — deliberately",
+      "Keeping the layer thin limits what it can enforce, in exchange for not becoming a bottleneck"
+    ]
+  },
+  "lessonsLearned": [
+    "Infrastructure earns existence from repeated product pain, not from architectural ambition",
+    "Evaluation contracts are easier to standardize than prompts — start there",
+    "The governance value of a shared layer is an argument for building it slowly and reviewably, not quickly"
+  ],
+  "nextValidation": [
+    "Define one common evaluation contract",
+    "Extract only the reusable pieces from one live project",
+    "Publish a minimal architecture and failure-mode review before adding services"
+  ],
+  "publicLinks": [
+    {
+      "label": "Direction note (GitHub profile)",
+      "url": "https://github.com/chamroeunhongleng",
+      "kind": "profile",
+      "evidence": "Public evidence"
+    }
+  ],
+  "aiAssistance": {
+    "scope": "Claude assisted with architecture research and drafting the design principles.",
+    "humanOwned": "The decision to wait for product evidence, the evaluation standards, and all maturity claims."
+  }
+}

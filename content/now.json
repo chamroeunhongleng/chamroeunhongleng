@@ -1,0 +1,25 @@
+{
+  "intro": "What is actually in motion right now — dated, so staleness is visible.",
+  "entries": [
+    {
+      "date": "2026-08",
+      "text": "Rebuilding this portfolio around four connected pillars, with evidence labels enforced by the build system itself.",
+      "evidence": "Owner confirmed"
+    },
+    {
+      "date": "2026-08",
+      "text": "Studying contracts, terms, and policy topics through international business coursework alongside the CS and ITM degrees.",
+      "evidence": "Owner confirmed"
+    },
+    {
+      "date": "2026-07",
+      "text": "Published the Kaskor ASR fine-tuning pipeline and the Chomkar Decision Grid engine as public MIT-licensed repositories.",
+      "evidence": "Repository evidence"
+    },
+    {
+      "date": "2026-07",
+      "text": "Preparing the next validation step for Chomkar OrderLoop: one recurring buyer pilot with documented commitments.",
+      "evidence": "Planned"
+    }
+  ]
+}
