@@ -64,9 +64,11 @@ Per pillar, anything to add or remove from the topics lists?
     Books, English–Khmer Mathematics Dictionary Grade 6, and a Bac II
     exponential-function solutions booklet in Khmer; CHNAI LAB imprint,
     First Editions 2026, ~980 pages total; five covers published as
-    `/images/math-books.jpg`, upgraded to Document evidence). Optional:
-    a public link (store, school, or Telegram channel) if the books are
-    distributed anywhere.
+    `/images/math-books.jpg`, upgraded to Document evidence).
+    **Public link ✓ (2026-08-04)**: all six Scholar Series production
+    PDFs are published as a GitHub release —
+    https://github.com/chamroeunhongleng/chamroeunhongleng/releases/tag/scholar-series-2026
+    — and the Journey books card links each PDF (Public evidence).
 
 ## 5 · Projects (→ `content/projects/*.json`)
 
