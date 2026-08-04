@@ -64,7 +64,7 @@
               "link": "https://hackathon.techostartup.center/"
             },
             {
-              "text": "The Top 2 placement is stated by me; no public results page names the team. [OWNER_INPUT_REQUIRED: Provide a certificate, photo, or organizer link to upgrade this to Document evidence]",
+              "text": "The Top 2 placement is stated by me; no public results page names the team.",
               "evidence": "Owner confirmed"
             }
           ]
@@ -234,24 +234,63 @@
         },
         {
           "organization": "CHNAI LAB · Phnom Penh",
-          "role": "Author — six mathematics titles",
+          "role": "Author — six mathematics titles (Scholar Series)",
           "period": "2026",
           "current": false,
-          "summary": "Wrote and self-published six mathematics titles (First Editions, 2026): bilingual English–Khmer materials for Cambodian students, from Grade 6 practice books through Bac II exam preparation — roughly 980 pages in total.",
+          "summary": "Wrote and self-published six bilingual mathematics titles as First Editions (2026) under the CHNAI LAB imprint: matched Grade 6 and Grade 7 sets of an English–Khmer dictionary, an exercise book, and a full worked-solutions answer book — about 1,780 pages in total, written for Cambodian students who study mathematics in English.",
           "contributions": [
             {
-              "text": "Four graded workbooks: the *Grade 6 Mathematics Exercise Book* (520 original questions in six levels across twenty chapters, 197 pages) with its full worked-answer companion (227 pages), and the *Grade 7 Mathematics Exercise Book* (572 questions following the Ministry of Education textbook, 115 pages) with its answer book giving every question a full worked solution (205 pages).",
+              "text": "Grade 6 set: an *English–Khmer Mathematics Dictionary* (240 pages), a *Mathematics Exercise Book* (595 original questions in six levels across twenty chapters, 260 pages), and a *Mathematics Answer Book* with a full worked method for every question (340 pages).",
               "evidence": "Document evidence"
             },
             {
-              "text": "A bilingual *English–Khmer Mathematics Dictionary* for Grade 6 (229 pages), and a Khmer worked-solutions booklet on the exponential function written in Bac II national-exam format. The book PDFs are held privately; the five book covers are shown below.",
-              "evidence": "Document evidence"
+              "text": "Grade 7 set: an *English–Khmer Mathematics Dictionary* (488 pages), a *Mathematics Exercise Book* (572 questions in six levels, chapter by chapter, written against the Ministry of Education, Youth and Sport Grade 7 textbook, 156 pages), and a *Mathematics Answer Book* reprinting every question above its full worked solution (296 pages). All six books are free to download from the GitHub release linked below; five of the covers are shown in the photograph.",
+              "evidence": "Public evidence",
+              "link": "https://github.com/chamroeunhongleng/chamroeunhongleng/releases/tag/scholar-series-2026"
+            }
+          ],
+          "links": [
+            {
+              "label": "Grade 6 Dictionary (PDF)",
+              "url": "https://github.com/chamroeunhongleng/chamroeunhongleng/releases/download/scholar-series-2026/Grade_6_English_Khmer_Mathematics_Dictionary.pdf",
+              "kind": "docs",
+              "evidence": "Public evidence"
+            },
+            {
+              "label": "Grade 6 Exercise Book (PDF)",
+              "url": "https://github.com/chamroeunhongleng/chamroeunhongleng/releases/download/scholar-series-2026/Grade_6_Mathematics_Exercise_Book.pdf",
+              "kind": "docs",
+              "evidence": "Public evidence"
+            },
+            {
+              "label": "Grade 6 Answer Book (PDF)",
+              "url": "https://github.com/chamroeunhongleng/chamroeunhongleng/releases/download/scholar-series-2026/Grade_6_Mathematics_Answer_Book.pdf",
+              "kind": "docs",
+              "evidence": "Public evidence"
+            },
+            {
+              "label": "Grade 7 Dictionary (PDF)",
+              "url": "https://github.com/chamroeunhongleng/chamroeunhongleng/releases/download/scholar-series-2026/Grade_7_English_Khmer_Mathematics_Dictionary.pdf",
+              "kind": "docs",
+              "evidence": "Public evidence"
+            },
+            {
+              "label": "Grade 7 Exercise Book (PDF)",
+              "url": "https://github.com/chamroeunhongleng/chamroeunhongleng/releases/download/scholar-series-2026/Grade_7_Mathematics_Exercise_Book.pdf",
+              "kind": "docs",
+              "evidence": "Public evidence"
+            },
+            {
+              "label": "Grade 7 Answer Book (PDF)",
+              "url": "https://github.com/chamroeunhongleng/chamroeunhongleng/releases/download/scholar-series-2026/Grade_7_Mathematics_Answer_Book.pdf",
+              "kind": "docs",
+              "evidence": "Public evidence"
             }
           ],
           "image": {
             "src": "/images/math-books.jpg",
-            "alt": "Five book covers in a matching cream-and-navy design with an Angkor Wat watermark and bilingual English–Khmer titles: Grade 6 Mathematics Exercise Book, Grade 6 Mathematics Answer Book, English–Khmer Mathematics Dictionary, Grade 7 Mathematics Exercise Book, and Grade 7 Mathematics Answer Book — each credited to Chamroeun Hongleng, CHNAI LAB, Phnom Penh.",
-            "caption": "First Editions · 2026 — five of the six titles; the sixth is a Bac II worked-solutions booklet in Khmer.",
+            "alt": "Five book covers in a matching cream-and-navy design with an Angkor Wat watermark and bilingual English–Khmer titles: Grade 6 Mathematics Exercise Book, Grade 6 Mathematics Answer Book, Grade 6 English–Khmer Mathematics Dictionary, Grade 7 Mathematics Exercise Book, and Grade 7 Mathematics Answer Book — each credited to Chamroeun Hongleng, CHNAI LAB, Phnom Penh.",
+            "caption": "First Editions · 2026 — five of the six covers; the sixth title is the Grade 7 English–Khmer Mathematics Dictionary.",
             "demo": false
           }
         }
