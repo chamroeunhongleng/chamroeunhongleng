@@ -69,9 +69,8 @@ For each real project, who should be credited and how?
 
 ## 7 · Contact (→ `content/contact.json`) — publishing these is your decision
 
-- Public contact email (publishing any address on a public site invites spam —
-  a dedicated or alias address is worth considering rather than your personal
-  account email): ______
+- Public contact email: **chamroeunhongleng825@gmail.com** ✓ (owner-approved
+  and published 2026-08-04)
 - Honest response expectation (e.g. "usually within a few days"): ______
 - Keep LinkedIn / X / Facebook links? Any to remove: ______
 

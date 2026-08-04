@@ -138,7 +138,7 @@ async function copyEmail() {
           </div>
 
           <div v-if="emailReady" class="side-block">
-            <h2>Direct</h2>
+            <h2>Prefer email?</h2>
             <div class="direct-row">
               <a :href="`mailto:${contact.email}`" class="direct-email mono">{{ contact.email }}</a>
               <button type="button" class="copy-btn mono" @click="copyEmail">Copy</button>
