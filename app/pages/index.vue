@@ -16,8 +16,13 @@ usePageMeta({
 })
 
 // One flagship project carries the homepage; the rest are one-line rows.
-const flagship = featuredProjects[0]
-const moreProjects = featuredProjects.slice(1)
+// Prefer a flagship with a clickable live site — recruiters reach the real
+// product in one click.
+const flagship
+  = featuredProjects.find((p) =>
+    p.publicLinks.some((l) => l.kind === 'demo' || l.kind === 'website')
+  ) ?? featuredProjects[0]
+const moreProjects = featuredProjects.filter((p) => p !== flagship)
 const topEvidence = profile.proofPoints.slice(0, 3)
 </script>
 

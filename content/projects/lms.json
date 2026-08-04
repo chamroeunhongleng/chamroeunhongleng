@@ -1,82 +1,127 @@
 {
   "slug": "lms",
-  "name": "LMS [OWNER_INPUT_REQUIRED: Exact product name]",
-  "oneLiner": "[OWNER_INPUT_REQUIRED: One sentence — what the LMS does and for whom]",
+  "name": "LMS — Bilingual Learning Management System",
+  "oneLiner": "A bilingual (English/Khmer) learning management system for course delivery, assessment, communication, and academic analytics.",
   "status": "Prototype",
-  "deployment": "Not deployed",
+  "deployment": "Public demo",
   "timeline": {
     "start": "2026",
     "end": null,
-    "label": "[OWNER_INPUT_REQUIRED: Timeline]"
+    "label": "2026 — present"
   },
-  "pillars": ["software-product"],
-  "tags": ["LMS", "Web application"],
+  "pillars": ["software-product", "business-strategy"],
+  "tags": ["Next.js", "TypeScript", "Education", "Bilingual", "Khmer", "Product design"],
   "featured": true,
-  "enabled": false,
+  "enabled": true,
   "demo": false,
-  "question": "[OWNER_INPUT_REQUIRED: What does this project test or prove?]",
-  "problem": "[OWNER_INPUT_REQUIRED: The problem the LMS solves — who struggles with what today]",
-  "targetUsers": "[OWNER_INPUT_REQUIRED: Who uses it — students, teachers, schools?]",
-  "whyItMatters": "[OWNER_INPUT_REQUIRED: Why this problem matters in your context]",
-  "exactRole": "[OWNER_INPUT_REQUIRED: Exactly what you built — solo or team, which parts are yours]",
+  "question": "Can one bilingual workspace make course delivery, assessment, and student support calm enough for schools and training teams in Cambodia?",
+  "problem": "Teaching operations are scattered across chat apps, spreadsheets, and paper: course plans in one place, assignments in another, grades in a third, and student communication everywhere. For bilingual institutions, most off-the-shelf tools also assume English-only users.",
+  "targetUsers": "Schools, universities, and training teams — with distinct role experiences for teachers, students, and administrators, in English and Khmer.",
+  "whyItMatters": "Academic operations software shapes how teachers spend their time. A workspace designed for the bilingual reality of Cambodian institutions lowers the barrier for schools that current LMS products treat as an afterthought.",
+  "exactRole": "[OWNER_INPUT_REQUIRED: Your exact role — solo build or team, and which parts are yours]",
   "teamContributions": "[OWNER_INPUT_REQUIRED: Teammates and their parts, or 'Independent project']",
-  "research": "[OWNER_INPUT_REQUIRED: What you researched or learned from before building]",
-  "validation": "[OWNER_INPUT_REQUIRED: Has anyone real used it? Testing done?]",
-  "proposedSolution": "[OWNER_INPUT_REQUIRED: How the LMS works — main features and flow]",
+  "research": "[OWNER_INPUT_REQUIRED: What you studied before building — existing LMS products, teacher interviews, school workflows?]",
+  "validation": "The product is deployed as a public walkthrough prototype and labels itself as such on its own interface. No school or training team is using it in real operations yet, and this page does not claim otherwise.",
+  "proposedSolution": "One accessible workspace covering the teaching lifecycle: plan courses, deliver lessons, assess work, message students, and track progress through academic analytics — with role-based views (teacher, student, admin) and full English/Khmer experiences.",
   "userWorkflow": [
-    "[OWNER_INPUT_REQUIRED: Step 1 of how a user moves through it]",
-    "[OWNER_INPUT_REQUIRED: Step 2]"
+    "A teacher plans a course and publishes lessons",
+    "Students receive assignments and submit work",
+    "Assessment and grades flow into per-class progress views",
+    "Messages keep student communication inside the workspace",
+    "Academic analytics summarize progress across every class"
   ],
-  "systemArchitecture": "[OWNER_INPUT_REQUIRED: Stack and structure — frontend, backend, database, hosting]",
-  "methods": "[OWNER_INPUT_REQUIRED: Notable technical methods or patterns used]",
-  "businessValue": "[OWNER_INPUT_REQUIRED: The commercial or institutional value if it succeeds]",
-  "contractsPolicy": "[OWNER_INPUT_REQUIRED: Terms, licensing, or institutional policy considerations]",
-  "dataPrivacy": "[OWNER_INPUT_REQUIRED: Student data is sensitive — what does the LMS store, and how is it protected?]",
+  "systemArchitecture": "Next.js application deployed on Vercel; the public walkthrough demonstrates the full interface with sample data. [OWNER_INPUT_REQUIRED: Backend, database, and auth details once you want them public]",
+  "methods": "Role-based interface design (teacher, student, administrator), bilingual UX as a first-class requirement rather than a translation pass, and accessibility by default — responsive, keyboard-friendly, mobile-ready.",
+  "businessValue": "The prototype includes product framing beyond the software itself — features, solutions, lifecycle, and pricing pages — treating the LMS as a commercial product exploration, not just an interface exercise. Commercial viability remains untested until real institutions pilot it.",
+  "contractsPolicy": "A real deployment would sit on institutional contracts: service agreements with schools, acceptable-use terms for students, and clear data-processing commitments. Drafting those is part of taking this beyond a prototype.",
+  "dataPrivacy": "Student records are sensitive data. The public walkthrough runs on sample data only; a real pilot would need data-minimization, retention rules, and guardian-appropriate consent before any real student information enters the system.",
   "risks": [
-    "[OWNER_INPUT_REQUIRED: Main risks — e.g. student-data exposure, grading errors]"
+    "A polished walkthrough can be mistaken for a production system — the interface labels itself a prototype to prevent exactly that",
+    "Student-data privacy failures would harm minors — which is why real data stays out until governance is designed",
+    "Grading and progress displays must be verifiably correct before any institution relies on them"
   ],
   "humanApprovalPoints": [
-    "[OWNER_INPUT_REQUIRED: Which decisions stay with teachers/admins rather than the system?]"
+    "Any pilot with a real school — and any real student data — requires a designed consent and privacy review first",
+    "Grades and academic records remain teacher-owned decisions; the system records, it does not decide",
+    "Pricing and contractual commitments require human sign-off"
   ],
   "technicalDecisions": [
-    "[OWNER_INPUT_REQUIRED: Key technical decisions and why]"
+    "Next.js with a component-driven interface for the role-based views",
+    "Bilingual English/Khmer experiences designed in from the start, not retrofitted",
+    "Public walkthrough deployment with sample data, labeled as a prototype on the interface itself",
+    "Accessible by default: responsive, keyboard-friendly, mobile-ready"
   ],
   "completedWork": [
     {
-      "text": "[OWNER_INPUT_REQUIRED: What is actually built and working]",
-      "evidence": "Unverified",
-      "workState": "Unverified"
+      "text": "Public walkthrough covering the product surface: dashboard, courses, calendar, assignments, messages, grades, analytics, and settings across teacher/student/admin roles",
+      "evidence": "Public evidence",
+      "link": "https://lms-for-education-nine.vercel.app",
+      "workState": "Demonstrated"
+    },
+    {
+      "text": "Product framing pages: features, solutions, lifecycle, pricing, and resources",
+      "evidence": "Public evidence",
+      "link": "https://lms-for-education-nine.vercel.app",
+      "workState": "Demonstrated"
+    },
+    {
+      "text": "Pilot with a real school or training team",
+      "evidence": "Planned",
+      "workState": "Planned"
     }
   ],
   "evidence": [
     {
-      "text": "[OWNER_INPUT_REQUIRED: Repository URL (public or private?) and live site URL]",
-      "evidence": "Unverified"
+      "text": "The walkthrough prototype is publicly deployed and clickable — anyone can explore the full interface.",
+      "evidence": "Public evidence",
+      "link": "https://lms-for-education-nine.vercel.app"
+    },
+    {
+      "text": "The interface labels itself a walkthrough prototype and runs on sample data — the claim discipline is built into the product page itself.",
+      "evidence": "Public evidence",
+      "link": "https://lms-for-education-nine.vercel.app"
+    },
+    {
+      "text": "The source repository is private.",
+      "evidence": "Private"
     }
   ],
   "results": [
     {
-      "text": "[OWNER_INPUT_REQUIRED: Honest current results — users, pilots, or 'not yet measured']",
-      "evidence": "Unverified"
+      "text": "A complete, deployed product walkthrough exists; no institutional usage, performance, or commercial results are claimed yet.",
+      "evidence": "Public evidence",
+      "link": "https://lms-for-education-nine.vercel.app"
     }
   ],
   "limitations": {
     "constraints": [
-      "[OWNER_INPUT_REQUIRED: What limits it today]"
+      "No real institution has piloted it, so every workflow assumption is unvalidated against actual school operations",
+      "The privacy and consent design a real pilot needs does not exist yet"
     ],
     "tradeoffs": [
-      "[OWNER_INPUT_REQUIRED: What you chose to give up and why]"
+      "Building the full product surface first (including pricing) trades early validation for a complete demonstration HR and pilot partners can actually click through",
+      "Sample data keeps the walkthrough safe but means no claim about real-data behavior can be made"
     ]
   },
   "lessonsLearned": [
-    "[OWNER_INPUT_REQUIRED: What building it taught you]"
+    "[OWNER_INPUT_REQUIRED: What building the LMS taught you — technical, product, or process]"
   ],
   "nextValidation": [
-    "[OWNER_INPUT_REQUIRED: What you would validate next]"
+    "Run one walkthrough session with a real teacher or training coordinator and record what breaks",
+    "Design the privacy, consent, and data-retention model before any real student data",
+    "Test the Khmer experience with native-speaker students and teachers"
   ],
-  "publicLinks": [],
+  "publicLinks": [
+    {
+      "label": "Live walkthrough",
+      "url": "https://lms-for-education-nine.vercel.app",
+      "kind": "website",
+      "evidence": "Public evidence"
+    }
+  ],
   "aiAssistance": {
     "scope": "[OWNER_INPUT_REQUIRED: What AI tools helped with]",
     "humanOwned": "[OWNER_INPUT_REQUIRED: What stayed fully yours]"
-  }
+  },
+  "primaryLink": "https://lms-for-education-nine.vercel.app"
 }
