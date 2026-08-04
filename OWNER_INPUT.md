@@ -48,9 +48,10 @@ Per pillar, anything to add or remove from the topics lists?
 - High-school chapter for the Journey page (school, years, story, any awards): ______
 - Leadership / volunteer / community roles to list (org, role, period, one
   sentence each — or "remove the section"): **two entries seeded 2026-08-04**
-  - **Reading club lead** (current). Still needed: club name and where it
-    runs · start month/year · one or two sentences (what it reads, who
-    joins, how often) · one concrete contribution + any link or photo.
+  - **Reading Book Club — lead** ✓ (answered 2026-08-04: began 28 July
+    2026, four members, goal is deep understanding over finishing, first
+    book *Surrounded by Idiots*). Optional upgrades: where it runs
+    (university / community / online) · a photo or public link.
   - **Author of six mathematics books**. Still needed: the six PDFs (for
     covers + Document evidence) · titles · level/audience · language ·
     when written · where they are shared.

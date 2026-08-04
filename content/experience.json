@@ -123,14 +123,14 @@
       "layout": "cards",
       "entries": [
         {
-          "organization": "[OWNER_INPUT_REQUIRED: Name of the reading club — and where it runs (university, community, online)]",
+          "organization": "Reading Book Club",
           "role": "Reading club lead",
-          "period": "[OWNER_INPUT_REQUIRED: Month/year you started leading it] — present",
+          "period": "July 2026 — present",
           "current": true,
-          "summary": "Leading a book-reading club. [OWNER_INPUT_REQUIRED: One or two sentences — what the club reads, who takes part, and how often it meets]",
+          "summary": "Leading a four-member book club built around one idea: understand each book deeply instead of just finishing it. First book: *Surrounded by Idiots* by Thomas Erikson.",
           "contributions": [
             {
-              "text": "Leadership of the club is stated by me; no public page or photo documents it yet. [OWNER_INPUT_REQUIRED: One specific contribution — sessions run, members, books covered — plus any link or photo that shows it]",
+              "text": "The club began on 28 July 2026 with four members; I lead the reading and discussion. Stated by me — no public page documents the club yet.",
               "evidence": "Owner confirmed"
             }
           ]
