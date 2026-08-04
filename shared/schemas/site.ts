@@ -35,8 +35,12 @@ export const educationSchema = z.strictObject({
     .array(
       z.strictObject({
         institution: z.string().min(1),
+        /** Field of study; rendered as "<credential> in <program>". */
         program: z.string().min(1),
+        /** Degree type spelled out formally, e.g. "Bachelor of Science". */
         credential: z.string().min(1),
+        /** Optional named major/track within the programme. */
+        specialization: z.string().min(1).optional(),
         period: z.string().min(1),
         status: z.enum(['In progress', 'Completed', 'Planned', 'Paused']),
         evidence: z.enum(EVIDENCE_LABELS),

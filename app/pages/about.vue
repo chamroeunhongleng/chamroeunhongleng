@@ -74,8 +74,13 @@ usePageMeta({
             <p class="side-summary"><MarkedText :text="education.summary" /></p>
             <ul role="list" class="education-list">
               <li v-for="entry in education.entries" :key="entry.program" class="education-entry">
-                <p class="edu-program"><MarkedText :text="entry.program" /></p>
+                <p class="edu-program">
+                  <MarkedText :text="`${entry.credential} in ${entry.program}`" />
+                </p>
                 <p class="edu-institution"><MarkedText :text="entry.institution" /></p>
+                <p v-if="entry.specialization" class="edu-specialization">
+                  <MarkedText :text="entry.specialization" />
+                </p>
                 <p class="edu-meta mono">
                   <MarkedText :text="entry.period" /> · {{ entry.status }}
                 </p>
@@ -209,6 +214,13 @@ usePageMeta({
   color: var(--color-text-muted);
 }
 
+/* Named major inside a programme — accented so it reads as a track, not
+   a second institution line. */
+.edu-specialization {
+  font-size: var(--text-sm);
+  color: var(--color-accent-2);
+}
+
 .edu-meta {
   font-size: var(--text-xs);
   color: var(--color-text-faint);
@@ -229,6 +241,12 @@ usePageMeta({
 
   .about-side {
     position: static;
+  }
+
+  /* Stacked, the aside spans the full width — the portrait must not follow it
+     up to a 950px-wide headshot on an iPad. */
+  .portrait {
+    max-width: 20rem;
   }
 }
 </style>

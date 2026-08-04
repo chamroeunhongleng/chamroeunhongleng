@@ -4,8 +4,8 @@
     {
       "institution": "American University of Phnom Penh (AUPP)",
       "program": "Information Technology Management",
-      "credential": "B.S. (dual-degree track)",
-      "period": "October 2025 — present · [OWNER_INPUT_REQUIRED: Expected graduation year]",
+      "credential": "Bachelor of Science",
+      "period": "October 2025 — present",
       "status": "In progress",
       "evidence": "Public evidence",
       "notes": "Stated on the public GitHub profile; AUPP operates an accredited dual-degree partnership with Fort Hays State University. The 20 October 2025 start date is owner-confirmed."
@@ -13,17 +13,18 @@
     {
       "institution": "Fort Hays State University",
       "program": "Computer Science",
-      "credential": "B.S. (dual-degree track)",
-      "period": "October 2025 — present · [OWNER_INPUT_REQUIRED: Expected graduation year]",
+      "credential": "Bachelor of Science",
+      "period": "October 2025 — present",
       "status": "In progress",
       "evidence": "Public evidence",
       "notes": "Completed through the AUPP–FHSU dual-degree partnership, so it runs on the same 20 October 2025 start."
     },
     {
       "institution": "Institute of Foreign Languages (IFL), Royal University of Phnom Penh",
-      "program": "English for Work Skills (English for International Business major)",
-      "credential": "B.A.",
-      "period": "January 2026 — present · [OWNER_INPUT_REQUIRED: Expected graduation year]",
+      "program": "English for Work Skills",
+      "credential": "Bachelor of Arts",
+      "specialization": "English for International Business major",
+      "period": "January 2026 — present",
       "status": "In progress",
       "evidence": "Owner confirmed",
       "notes": "IFL's Department of English runs the B.A. in English for Work Skills over four years: Years I–III are shared coursework, and students take a Year-IV major in English for International Business, Translation and Interpreting, or English for Professional Communication. Enrolment began 1 January 2026, so International Business is the declared direction rather than a finished specialisation. This is the coursework behind the Governance & Commercial Rules pillar — contracts, terms, policies, and commercial rules."
