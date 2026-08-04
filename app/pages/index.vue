@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import {
   featuredProjects,
   interests,
@@ -9,11 +9,16 @@ import {
   profile
 } from '~/data/portfolio'
 
-usePageMeta({
+useSeoMeta({
   title: 'Exploring AI, Software, and Business',
   description:
     'Chamroeun Hongleng — exploring the intersection of artificial intelligence, machine learning, software, and business, with responsible governance.'
 })
+
+// One flagship project carries the homepage; the rest are one-line rows.
+const flagship = featuredProjects[0]
+const moreProjects = featuredProjects.slice(1)
+const topEvidence = profile.proofPoints.slice(0, 3)
 </script>
 
 <template>
@@ -22,15 +27,6 @@ usePageMeta({
     <section class="hero section" aria-labelledby="hero-title">
       <div class="container hero-grid">
         <p class="eyebrow">{{ profile.name }} · {{ profile.location.text }}</p>
-        <img
-          class="hero-portrait"
-          src="/profile-photo.png"
-          width="1254"
-          height="1254"
-          alt="Portrait of Chamroeun Hongleng wearing a black suit and tie"
-          fetchpriority="high"
-          decoding="async"
-        >
         <h1 id="hero-title">Exploring AI, Software, and Business</h1>
         <p class="hero-statement">{{ profile.headline }}</p>
         <div class="hero-intro">
@@ -39,50 +35,32 @@ usePageMeta({
         <p class="hero-identity"><MarkedText :text="profile.identity" /></p>
         <div class="hero-actions">
           <NuxtLink to="/projects" class="btn btn-primary">View projects</NuxtLink>
-          <a href="#process" class="btn btn-secondary">How ideas become products</a>
+          <NuxtLink to="/about" class="btn btn-secondary">About me</NuxtLink>
         </div>
-        <p class="hero-availability mono">{{ profile.availability }}</p>
       </div>
     </section>
 
-    <!-- Four pillars, one system -->
+    <!-- Four pillars — slim band -->
     <section class="section">
       <div class="container">
-        <SectionHeading
-          eyebrow="Four pillars, one direction"
-          title="The pillars are connected on purpose"
-          :text="interests.connection"
-        />
+        <SectionHeading eyebrow="Four pillars, one direction" title="What I work across" />
         <ol class="pillar-band" role="list">
           <li v-for="pillar in interests.pillars" :key="pillar.id" class="pillar">
             <p class="pillar-number mono">{{ pillar.number }}</p>
             <h3>{{ pillar.title }}</h3>
             <p class="pillar-summary"><MarkedText :text="pillar.summary" /></p>
-            <p class="pillar-grounded"><MarkedText :text="pillar.groundedIn" /></p>
           </li>
         </ol>
-      </div>
-    </section>
-
-    <!-- Featured projects -->
-    <section class="section">
-      <div class="container">
-        <SectionHeading
-          eyebrow="Selected work"
-          title="Featured projects"
-          text="Lifecycle status and deployment reality are labeled separately — a polished prototype never reads as a shipped product here."
-        />
-        <div class="featured-grid">
-          <ProjectCard v-for="project in featuredProjects" :key="project.slug" :project="project" />
-        </div>
-        <p class="see-all"><NuxtLink to="/projects">All projects →</NuxtLink></p>
+        <p class="band-more">
+          <NuxtLink to="/about">Why these connect →</NuxtLink>
+        </p>
       </div>
     </section>
 
     <!-- Now -->
     <section id="now" class="section now-section">
       <div class="container">
-        <SectionHeading eyebrow="Now" title="What is in motion" :text="now.intro" />
+        <SectionHeading eyebrow="Now" title="What is in motion" />
         <ul class="now-feed" role="list">
           <li v-for="(entry, i) in now.entries" :key="i" class="now-entry">
             <span class="now-date mono">{{ entry.date }}</span>
@@ -93,82 +71,80 @@ usePageMeta({
       </div>
     </section>
 
-    <!-- Learning snapshot -->
+    <!-- Flagship project + compact list -->
     <section class="section">
       <div class="container">
         <SectionHeading
-          eyebrow="Learning in public"
-          title="Currently studying, honestly labeled"
-          text="A student across every pillar — progress is tracked, not performed."
+          eyebrow="Selected work"
+          title="One project in depth, the rest one line each"
         />
+        <ProjectCard v-if="flagship" :project="flagship" />
+        <ul class="project-rows" role="list">
+          <li v-for="project in moreProjects" :key="project.slug">
+            <NuxtLink :to="`/projects/${project.slug}`" class="project-row">
+              <span class="row-name"><MarkedText :text="project.name" /></span>
+              <span class="row-oneliner"><MarkedText :text="project.oneLiner" /></span>
+              <StatusBadge :status="project.status" />
+              <span class="row-arrow" aria-hidden="true">→</span>
+            </NuxtLink>
+          </li>
+        </ul>
+        <p class="band-more"><NuxtLink to="/projects">All projects →</NuxtLink></p>
+      </div>
+    </section>
+
+    <!-- Learning snapshot -->
+    <section class="section learning-section">
+      <div class="container">
+        <SectionHeading eyebrow="Learning in public" title="Currently studying" />
         <div class="learning-grid">
           <article v-for="discipline in learning.disciplines" :key="discipline.pillar" class="learning-card">
             <h3>{{ discipline.title }}</h3>
             <p><MarkedText :text="discipline.stance" /></p>
           </article>
         </div>
-        <p class="see-all"><NuxtLink to="/learning">Full learning log →</NuxtLink></p>
+        <p class="band-more"><NuxtLink to="/learning">Full learning log →</NuxtLink></p>
       </div>
     </section>
 
-    <!-- Principles -->
-    <section class="section">
+    <!-- Principles + process, compact -->
+    <section id="process" class="section">
       <div class="container">
-        <SectionHeading eyebrow="Working principles" title="Rules I build by" />
-        <div class="principles-grid">
+        <SectionHeading eyebrow="How I work" title="Rules and the road to production" />
+
+        <div class="principles-row">
           <article v-for="principle in principles.principles" :key="principle.title" class="principle">
             <h3>{{ principle.title }}</h3>
             <p>{{ principle.text }}</p>
           </article>
         </div>
+
+        <div class="process-compact">
+          <ol class="process-flow" role="list">
+            <li
+              v-for="(stage, i) in processContent.stages"
+              :key="stage.title"
+              class="process-chip"
+              :data-human-gate="stage.humanGate || undefined"
+            >
+              <span class="chip-index mono">{{ String(i + 1).padStart(2, '0') }}</span>
+              {{ stage.title }}
+            </li>
+          </ol>
+          <p class="process-legend">
+            <span class="gate-dot" aria-hidden="true" /> marked stages are always human
+            decisions — {{ processContent.humanControls.slice(0, 4).join(', ').toLowerCase() }},
+            and every final public claim. {{ processContent.aiSupport }}
+          </p>
+        </div>
       </div>
     </section>
 
-    <!-- Idea-to-production process -->
-    <section id="process" class="section process-section">
+    <!-- Selected evidence — top three -->
+    <section class="section evidence-section">
       <div class="container">
-        <SectionHeading
-          eyebrow="Idea → production"
-          title="How an idea earns its way to production"
-          :text="processContent.intro"
-        />
-        <ol class="process-list" role="list">
-          <li
-            v-for="(stage, i) in processContent.stages"
-            :key="stage.title"
-            class="process-stage"
-            :data-human-gate="stage.humanGate || undefined"
-          >
-            <span class="stage-index mono">{{ String(i + 1).padStart(2, '0') }}</span>
-            <div>
-              <h3>
-                {{ stage.title }}
-                <span v-if="stage.humanGate" class="gate-chip">Human gate</span>
-              </h3>
-              <p>{{ stage.description }}</p>
-            </div>
-          </li>
-        </ol>
-
-        <aside class="human-controls">
-          <h3>Always human decisions</h3>
-          <p class="controls-note">{{ processContent.aiSupport }}</p>
-          <ul>
-            <li v-for="control in processContent.humanControls" :key="control">{{ control }}</li>
-          </ul>
-        </aside>
-      </div>
-    </section>
-
-    <!-- Selected evidence -->
-    <section class="section">
-      <div class="container">
-        <SectionHeading
-          eyebrow="Selected evidence"
-          title="Claims with receipts"
-          text="Numbers only appear with their evidence labels. Self-reported figures say so."
-        />
-        <ClaimList :claims="profile.proofPoints" />
+        <SectionHeading eyebrow="Selected evidence" title="Claims with receipts" />
+        <ClaimList :claims="topEvidence" />
       </div>
     </section>
 
@@ -195,30 +171,9 @@ usePageMeta({
 
 .hero-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(16rem, 22rem);
-  column-gap: clamp(var(--space-8), 7vw, var(--space-12));
-  row-gap: var(--space-5);
-  align-items: start;
+  gap: var(--space-4);
   justify-items: start;
-  padding-block: var(--space-8);
-}
-
-.hero-grid > :not(.hero-portrait) {
-  grid-column: 1;
-}
-
-.hero-portrait {
-  grid-column: 2;
-  grid-row: 1 / span 7;
-  align-self: center;
-  justify-self: end;
-  width: 100%;
-  aspect-ratio: 1;
-  object-fit: cover;
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-l);
-  background: var(--color-surface-sunken);
-  box-shadow: var(--shadow-2);
+  padding-block: var(--space-7);
 }
 
 .hero-statement {
@@ -232,7 +187,7 @@ usePageMeta({
 
 .hero-intro {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-3);
 }
 
 .hero-identity {
@@ -246,14 +201,10 @@ usePageMeta({
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-3);
+  margin-top: var(--space-2);
 }
 
-.hero-availability {
-  color: var(--color-text-faint);
-  font-size: var(--text-xs);
-}
-
-/* Pillars — a connected numbered band, not four floating cards */
+/* Pillar band — slim */
 .pillar-band {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -265,14 +216,14 @@ usePageMeta({
 
 .pillar {
   display: grid;
-  gap: var(--space-3);
+  gap: var(--space-2);
   align-content: start;
-  padding: var(--space-5) var(--space-5) var(--space-5) 0;
+  padding: var(--space-4) var(--space-4) var(--space-4) 0;
 }
 
 .pillar + .pillar {
   border-inline-start: 1px solid var(--color-border);
-  padding-inline-start: var(--space-5);
+  padding-inline-start: var(--space-4);
 }
 
 .pillar-number {
@@ -281,7 +232,7 @@ usePageMeta({
 }
 
 .pillar h3 {
-  font-size: var(--text-lg);
+  font-size: var(--text-base);
 }
 
 .pillar-summary {
@@ -289,27 +240,14 @@ usePageMeta({
   color: var(--color-text-muted);
 }
 
-.pillar-grounded {
-  font-size: var(--text-xs);
-  color: var(--color-text-faint);
-  border-top: 1px dashed var(--color-border);
-  padding-top: var(--space-3);
-}
-
-/* Featured */
-.featured-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-5);
-}
-
-.see-all {
+.band-more {
   margin-top: var(--space-5);
 }
 
-.see-all a {
+.band-more a {
   font-weight: 560;
   text-decoration: none;
+  font-size: var(--text-sm);
 }
 
 /* Now */
@@ -320,7 +258,7 @@ usePageMeta({
 
 .now-feed {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-3);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -331,7 +269,7 @@ usePageMeta({
   grid-template-columns: 5.5rem 1fr auto;
   gap: var(--space-4);
   align-items: baseline;
-  padding-bottom: var(--space-4);
+  padding-bottom: var(--space-3);
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -344,24 +282,73 @@ usePageMeta({
   max-width: var(--prose-max);
 }
 
+/* Compact project rows under the flagship */
+.project-rows {
+  list-style: none;
+  margin: var(--space-5) 0 0;
+  padding: 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.project-row {
+  display: grid;
+  grid-template-columns: 14rem 1fr auto auto;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) 0;
+  border-bottom: 1px solid var(--color-border);
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+.row-name {
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+
+.row-oneliner {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row-arrow {
+  color: var(--color-accent);
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.project-row:hover .row-name {
+  color: var(--color-accent);
+}
+
+.project-row:hover .row-arrow {
+  opacity: 1;
+}
+
 /* Learning */
+.learning-section {
+  background: var(--color-surface);
+  border-block: 1px solid var(--color-border);
+}
+
 .learning-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-5);
+  gap: var(--space-4);
 }
 
 .learning-card {
   display: grid;
-  gap: var(--space-2);
-  padding: var(--space-5);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-l);
-  background: var(--color-surface);
+  gap: var(--space-1);
+  border-top: 2px solid var(--color-text);
+  padding-top: var(--space-3);
 }
 
 .learning-card h3 {
-  font-size: var(--text-lg);
+  font-size: var(--text-base);
 }
 
 .learning-card p {
@@ -369,120 +356,90 @@ usePageMeta({
   color: var(--color-text-muted);
 }
 
-/* Principles */
-.principles-grid {
+/* Principles — compact row */
+.principles-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-5);
+  gap: var(--space-4) var(--space-6);
 }
 
 .principle {
   display: grid;
-  gap: var(--space-2);
+  gap: var(--space-1);
   border-top: 2px solid var(--color-text);
   padding-top: var(--space-3);
 }
 
 .principle h3 {
-  font-size: var(--text-base);
+  font-size: var(--text-sm);
 }
 
 .principle p {
-  font-size: var(--text-sm);
+  font-size: var(--text-xs);
   color: var(--color-text-muted);
 }
 
-/* Process */
-.process-section {
-  background: var(--color-surface);
-  border-block: 1px solid var(--color-border);
+/* Process — chip flow */
+.process-compact {
+  margin-top: var(--space-7);
 }
 
-.process-list {
-  display: grid;
-  gap: 0;
+.process-flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
   list-style: none;
   margin: 0;
   padding: 0;
-  max-width: 46rem;
 }
 
-.process-stage {
-  display: grid;
-  grid-template-columns: 3rem 1fr;
-  gap: var(--space-4);
-  padding: var(--space-4) 0;
-  border-bottom: 1px solid var(--color-border);
-}
-
-.stage-index {
-  color: var(--color-text-faint);
+.process-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
   font-size: var(--text-sm);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 999px;
+  padding: 0.3em 0.9em;
+  color: var(--color-text-muted);
+  white-space: nowrap;
 }
 
-.process-stage[data-human-gate] .stage-index {
+.chip-index {
+  font-size: var(--text-xs);
+  color: var(--color-text-faint);
+}
+
+.process-chip[data-human-gate] {
+  border-color: var(--color-accent);
+  color: var(--color-text);
+}
+
+.process-chip[data-human-gate] .chip-index {
   color: var(--color-accent);
   font-weight: 600;
 }
 
-.process-stage h3 {
-  font-size: var(--text-base);
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  flex-wrap: wrap;
-}
-
-.gate-chip {
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--color-accent);
-  border: 1px solid var(--color-accent);
-  border-radius: 999px;
-  padding: 0.1em 0.6em;
-}
-
-.process-stage p {
+.process-legend {
+  margin-top: var(--space-4);
   font-size: var(--text-sm);
   color: var(--color-text-muted);
-  margin-top: var(--space-1);
+  max-width: var(--prose-max);
 }
 
-.human-controls {
-  margin-top: var(--space-7);
-  border: 1px solid var(--color-accent);
-  background: var(--color-accent-tint);
-  border-radius: var(--radius-l);
-  padding: var(--space-5);
-  max-width: 46rem;
-  display: grid;
-  gap: var(--space-3);
+.gate-dot {
+  display: inline-block;
+  width: 0.6em;
+  height: 0.6em;
+  border-radius: 50%;
+  border: 2px solid var(--color-accent);
+  vertical-align: baseline;
 }
 
-.human-controls h3 {
-  font-family: var(--font-mono);
-  font-size: var(--text-base);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-weight: 500;
-}
-
-.controls-note {
-  font-size: var(--text-sm);
-  color: var(--color-text-muted);
-}
-
-.human-controls ul {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-2) var(--space-6);
-  margin: 0;
-}
-
-.human-controls li {
-  font-size: var(--text-sm);
+/* Evidence */
+.evidence-section {
+  background: var(--color-surface);
+  border-block: 1px solid var(--color-border);
 }
 
 /* CTA */
@@ -493,15 +450,10 @@ usePageMeta({
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-l);
   background: var(--color-surface);
-  padding: var(--space-8);
+  padding: var(--space-7);
 }
 
 @media (max-width: 1040px) {
-  .hero-grid {
-    grid-template-columns: minmax(0, 1fr) minmax(14rem, 18rem);
-    column-gap: var(--space-6);
-  }
-
   .pillar-band {
     grid-template-columns: 1fr 1fr;
   }
@@ -511,28 +463,23 @@ usePageMeta({
     padding-inline-start: 0;
   }
 
-  .featured-grid,
-  .principles-grid {
+  .principles-row {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .project-row {
+    grid-template-columns: 1fr auto;
+  }
+
+  .row-oneliner {
+    display: none;
   }
 }
 
 @media (max-width: 760px) {
-  .hero-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .hero-portrait {
-    grid-column: 1;
-    grid-row: auto;
-    justify-self: start;
-    width: min(100%, 20rem);
-  }
-
   .pillar-band,
-  .featured-grid,
   .learning-grid,
-  .principles-grid {
+  .principles-row {
     grid-template-columns: 1fr;
   }
 
@@ -544,11 +491,7 @@ usePageMeta({
 
   .now-entry {
     grid-template-columns: 1fr;
-    gap: var(--space-2);
-  }
-
-  .human-controls ul {
-    grid-template-columns: 1fr;
+    gap: var(--space-1);
   }
 }
 </style>

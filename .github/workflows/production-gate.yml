@@ -6,7 +6,7 @@ name: Production gate
 
 on:
   push:
-    branches: [main]
+    branches: [main, portfolio]
   pull_request:
   workflow_dispatch:
 
