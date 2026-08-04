@@ -31,7 +31,20 @@ describe('real content through the rule engine', () => {
     const codes = new Set(findings.filter((f) => f.severity === 'error').map((f) => f.code))
     expect(codes.has('marker-owner-input-required')).toBe(true)
     expect(codes.has('demo-project-enabled')).toBe(true)
-    expect(codes.has('contact-email-missing')).toBe(true)
+  })
+
+  it('production mode: an unconfirmed contact email is a gate error', () => {
+    const withMarkerEmail: ContentBundle = {
+      ...(bundle as ContentBundle),
+      contact: {
+        ...(bundle as ContentBundle).contact,
+        email: '[OWNER_INPUT_REQUIRED: Confirm the public email]'
+      }
+    }
+    const findings = runContentRules(withMarkerEmail, 'production')
+    expect(findings.some((f) => f.code === 'contact-email-missing' && f.severity === 'error')).toBe(
+      true
+    )
   })
 })
 
