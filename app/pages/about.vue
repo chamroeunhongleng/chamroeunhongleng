@@ -74,17 +74,19 @@ usePageMeta({
             <p class="side-summary"><MarkedText :text="education.summary" /></p>
             <ul role="list" class="education-list">
               <li v-for="entry in education.entries" :key="entry.program" class="education-entry">
-                <p class="edu-program">
-                  <MarkedText :text="`${entry.credential} in ${entry.program}`" />
-                </p>
-                <p class="edu-institution"><MarkedText :text="entry.institution" /></p>
-                <p v-if="entry.specialization" class="edu-specialization">
-                  <MarkedText :text="entry.specialization" />
-                </p>
-                <p class="edu-meta mono">
-                  <MarkedText :text="entry.period" /> · {{ entry.status }}
-                </p>
-                <EvidenceLabel :evidence="entry.evidence" />
+                <InstitutionMark :institution="entry.institution" class="edu-mark" />
+                <div class="edu-body">
+                  <p class="edu-program">
+                    <MarkedText :text="`${entry.credential} in ${entry.program}`" />
+                  </p>
+                  <p class="edu-institution"><MarkedText :text="entry.institution" /></p>
+                  <p v-if="entry.specialization" class="edu-specialization">
+                    <MarkedText :text="entry.specialization" />
+                  </p>
+                  <p class="edu-meta mono">
+                    <MarkedText :text="entry.period" />
+                  </p>
+                </div>
               </li>
             </ul>
           </section>
@@ -197,12 +199,25 @@ usePageMeta({
   padding: 0;
 }
 
+/* Institution plaque beside the degree, in place of a school logo. */
 .education-entry {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-3);
+  align-items: start;
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-3);
+}
+
+.edu-mark {
+  margin-top: 0.1rem;
+}
+
+.edu-body {
   display: grid;
   gap: var(--space-1);
   justify-items: start;
-  border-top: 1px solid var(--color-border);
-  padding-top: var(--space-3);
+  min-width: 0;
 }
 
 .edu-program {
