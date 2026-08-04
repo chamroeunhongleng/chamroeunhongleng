@@ -142,6 +142,11 @@
               "evidence": "Owner confirmed"
             },
             {
+              "text": "The HKIMO silver is independently verifiable: the organizer's official 2024 Heat Round results list names Chamroeun Hongleng of Hun Sen Prey Totueng High School with a Silver Award in the Senior Secondary group.",
+              "evidence": "Public evidence",
+              "link": "https://www.hongkongimo.com/uploads/2/8/9/2/28923219/hkimo_2024_heat_round_ss.pdf"
+            },
+            {
               "text": "Part of the record is photographed below — ribbons include the Southeast Asian Mathematical Olympiad 2023, Copernicus Olympiad (Phnom Penh, 2022), and the Philippine International Math and Science Olympiad, alongside the 1st Place Award from the Angkor Mathematics Competition 2024 Global Round.",
               "evidence": "Document evidence"
             }
@@ -217,17 +222,27 @@
           ]
         },
         {
-          "organization": "[OWNER_INPUT_REQUIRED: Where the six books live — publisher, school, Telegram channel, or self-published]",
-          "role": "Author — six mathematics books",
-          "period": "[OWNER_INPUT_REQUIRED: When the books were written or published]",
+          "organization": "CHNAI LAB · Phnom Penh",
+          "role": "Author — six mathematics titles",
+          "period": "2026",
           "current": false,
-          "summary": "Wrote six mathematics books. [OWNER_INPUT_REQUIRED: Titles, level and audience (e.g. Grade 12 / Bac II students), language, and how they are shared]",
+          "summary": "Wrote and self-published six mathematics titles (First Editions, 2026): bilingual English–Khmer materials for Cambodian students, from Grade 6 practice books through Bac II exam preparation — roughly 980 pages in total.",
           "contributions": [
             {
-              "text": "The six books are stated by me for now; once the PDFs are added here, this claim upgrades to Document evidence and the covers can be shown on this page.",
-              "evidence": "Owner confirmed"
+              "text": "Four graded workbooks: the *Grade 6 Mathematics Exercise Book* (520 original questions in six levels across twenty chapters, 197 pages) with its full worked-answer companion (227 pages), and the *Grade 7 Mathematics Exercise Book* (572 questions following the Ministry of Education textbook, 115 pages) with its answer book giving every question a full worked solution (205 pages).",
+              "evidence": "Document evidence"
+            },
+            {
+              "text": "A bilingual *English–Khmer Mathematics Dictionary* for Grade 6 (229 pages), and a Khmer worked-solutions booklet on the exponential function written in Bac II national-exam format. The book PDFs are held privately; the five book covers are shown below.",
+              "evidence": "Document evidence"
             }
-          ]
+          ],
+          "image": {
+            "src": "/images/math-books.jpg",
+            "alt": "Five book covers in a matching cream-and-navy design with an Angkor Wat watermark and bilingual English–Khmer titles: Grade 6 Mathematics Exercise Book, Grade 6 Mathematics Answer Book, English–Khmer Mathematics Dictionary, Grade 7 Mathematics Exercise Book, and Grade 7 Mathematics Answer Book — each credited to Chamroeun Hongleng, CHNAI LAB, Phnom Penh.",
+            "caption": "First Editions · 2026 — five of the six titles; the sixth is a Bac II worked-solutions booklet in Khmer.",
+            "demo": false
+          }
         }
       ]
     }

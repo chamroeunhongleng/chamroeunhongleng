@@ -59,9 +59,14 @@ Per pillar, anything to add or remove from the topics lists?
     2026, four members, goal is deep understanding over finishing, first
     book *Surrounded by Idiots*). Optional upgrades: where it runs
     (university / community / online) · a photo or public link.
-  - **Author of six mathematics books**. Still needed: the six PDFs (for
-    covers + Document evidence) · titles · level/audience · language ·
-    when written · where they are shared.
+  - **Author — six mathematics titles** ✓ (answered 2026-08-04: PDFs
+    verified — Grade 6 Exercise + Answer Books, Grade 7 Exercise + Answer
+    Books, English–Khmer Mathematics Dictionary Grade 6, and a Bac II
+    exponential-function solutions booklet in Khmer; CHNAI LAB imprint,
+    First Editions 2026, ~980 pages total; five covers published as
+    `/images/math-books.jpg`, upgraded to Document evidence). Optional:
+    a public link (store, school, or Telegram channel) if the books are
+    distributed anywhere.
 
 ## 5 · Projects (→ `content/projects/*.json`)
 
