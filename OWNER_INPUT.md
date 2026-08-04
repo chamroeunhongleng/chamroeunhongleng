@@ -45,7 +45,14 @@ Per pillar, anything to add or remove from the topics lists?
 - Angkor Byte — confirm role title and start date: ______
 - **Turing Hackathon Cycle 10 Top 2** — do you have a certificate, photo, or
   organizer link? (upgrades the claim from Owner confirmed → Document evidence): ______
-- High-school chapter for the Journey page (school, years, story, any awards): ______
+- High-school chapter for the Journey page (school, years, story, any awards):
+  **✓ answered 2026-08-04** — the owner supplied the full 2022–2025 record
+  (rankings at school/district/province/national level, competition medals
+  year by year, Bac II Grade A, national runner-up, four full scholarships,
+  CIMOC 2026 volunteering). Published as the "Mathematics achievements"
+  timeline on /journey. Optional upgrades: certificates or result pages for
+  any individual medal (→ Document evidence) · a sentence on what pointed
+  you from mathematics toward technology and business.
 - Leadership / volunteer / community roles to list (org, role, period, one
   sentence each — or "remove the section"): **two entries seeded 2026-08-04**
   - **Reading Book Club — lead** ✓ (answered 2026-08-04: began 28 July

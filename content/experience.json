@@ -93,18 +93,56 @@
     },
     {
       "id": "milestones",
-      "title": "Earlier milestones",
-      "layout": "rows",
+      "title": "Mathematics achievements",
+      "layout": "timeline",
       "entries": [
         {
-          "organization": "[OWNER_INPUT_REQUIRED: Your high school — name and province]",
-          "role": "High school chapter — mathematics competitions",
-          "period": "[OWNER_INPUT_REQUIRED: Years]",
+          "organization": "Hun Sen Prey Totueng High School, Kampong Cham",
+          "role": "Grade 9 — provincial first in mathematics",
+          "period": "2022",
           "current": false,
-          "summary": "Years of mathematics olympiad competition preceded the degrees: the medal wall below spans regional and international contests. [OWNER_INPUT_REQUIRED: Add the story — which results mattered most, and what pointed you toward technology and business]",
+          "summary": "The first competitive year: ranked first in Grade 9 mathematics across both Prey Totueng District and Kampong Cham Province, selected for the national Grade 9 examination in Siem Reap, and medalled in ten national and international competitions.",
           "contributions": [
             {
-              "text": "Mathematics olympiad medal collection photographed below — ribbons include the Southeast Asian Mathematical Olympiad 2023, Copernicus Olympiad (Phnom Penh, 2022), and the Philippine International Math and Science Olympiad, alongside a 1st Place Award from the Angkor Mathematics Competition 2024 Global Round.",
+              "text": "Ranked No. 1 in Grade 9 mathematics in Prey Totueng District and across Kampong Cham Province (No. 2 at school level), and selected to sit the National Grade 9 Mathematics Examination in Siem Reap.",
+              "evidence": "Owner confirmed"
+            },
+            {
+              "text": "Gold medals at the Angkor and AMC mathematics competitions; silver at the Copernicus Mathematics Olympiad, the American Mathematics Competition, the Golden Gate American School, Westview, and National mathematics competitions; bronze at the Hong Kong International Mathematical Olympiad (HKIMO) national round — qualifying for the final round — and at the World Mathematics Olympiad (WMO).",
+              "evidence": "Owner confirmed"
+            }
+          ]
+        },
+        {
+          "organization": "Hun Sen Prey Totueng High School, Kampong Cham",
+          "role": "Grade 10 — the regional olympiad circuit",
+          "period": "2023",
+          "current": false,
+          "summary": "A year spent competing across Southeast Asia's school-olympiad circuit, alongside participation in the Asian Scholarship Programme 2023.",
+          "contributions": [
+            {
+              "text": "Gold at the Angkor Mathematics Competition; silver at the Future Intelligence Students Olympiad (FISO), the Golden Gate Mathematics Competition, and Math Kangaroo Cambodia; bronze at the Southeast Asian Mathematical Olympiad (SEAMO) and HKIMO; a merit medal at the PIMSO Mathematics Olympiad; a top-five finish in the Casio Mathematics Competition; and participation in the MOSC Mathematics Competition.",
+              "evidence": "Owner confirmed"
+            },
+            {
+              "text": "Participant, Asian Scholarship Programme 2023.",
+              "evidence": "Owner confirmed"
+            }
+          ]
+        },
+        {
+          "organization": "Hun Sen Prey Totueng High School, Kampong Cham",
+          "role": "Grade 11 — first place at Angkor and AMC",
+          "period": "2024",
+          "current": false,
+          "summary": "The strongest competition year: first place at two competitions, gold at three more, and silver or top-five results at every other contest entered.",
+          "contributions": [
+            {
+              "text": "Ranked No. 1 at both the Angkor Mathematics Competition (Global Round) and the AMC Mathematics Competition; gold at the American Mathematics Olympiad (AMO) and the MPCH and SMC competitions; silver at HKIMO, the Singapore and Asian Schools Math Olympiad (SASMO), and the Young Master Mathematics Competition; top 4 at the Youth Mathematics Olympiad (YMO); top 5 at Math Kangaroo Cambodia.",
+              "evidence": "Owner confirmed"
+            },
+            {
+              "text": "Part of the record is photographed below — ribbons include the Southeast Asian Mathematical Olympiad 2023, Copernicus Olympiad (Phnom Penh, 2022), and the Philippine International Math and Science Olympiad, alongside the 1st Place Award from the Angkor Mathematics Competition 2024 Global Round.",
               "evidence": "Document evidence"
             }
           ],
@@ -114,6 +152,36 @@
             "caption": "The medal wall: SEAMO 2023 · Copernicus Olympiad, Phnom Penh 2022 · PhIMO · AMC golds · 1st Place, Angkor Mathematics Competition 2024 Global Round.",
             "demo": false
           }
+        },
+        {
+          "organization": "Hun Sen Prey Totueng High School, Kampong Cham",
+          "role": "Grade 12 — national runner-up in mathematics",
+          "period": "2025",
+          "current": false,
+          "summary": "The final school year closed the arc: first in Grade 12 mathematics at school, district, and provincial level, national runner-up in the Ministry of Education's examination, Grade A in the Bac II — and four full scholarships.",
+          "contributions": [
+            {
+              "text": "Ranked No. 1 in Grade 12 mathematics at Hun Sen Prey Totueng High School, in Prey Chor District, and across Kampong Cham Province, then finished as national runner-up in mathematics in the national examination organized by the Ministry of Education, Youth and Sport.",
+              "evidence": "Owner confirmed"
+            },
+            {
+              "text": "Earned Grade A in the 2025 Cambodian Baccalaureate (Bac II) examination — the result the Ministry of Justice scholarship was awarded on.",
+              "evidence": "Document evidence"
+            },
+            {
+              "text": "Gold medal and a top-2 finish at the Singapore and Asian Schools Math Olympiad (SASMO); top 2 at the SMC Mathematics Competition and the American Mathematics Olympiad (AMO); top 3 at the MOSC Mathematics Competition.",
+              "evidence": "Owner confirmed"
+            },
+            {
+              "text": "Awarded four full 100% scholarships: the American University of Phnom Penh (AUPP), Paragon International University, the Institute of Foreign Languages (Royal University of Phnom Penh), and ACLEDA University of Business.",
+              "evidence": "Owner confirmed"
+            },
+            {
+              "text": "The two accepted awards — AUPP (second-place laureate in mathematics) and IFL (Ministry of Justice, four years) — are certified by documents held privately and detailed on the About page.",
+              "evidence": "Document evidence",
+              "link": "/about"
+            }
+          ]
         }
       ]
     },
@@ -122,6 +190,19 @@
       "title": "Leadership & community",
       "layout": "cards",
       "entries": [
+        {
+          "organization": "CIMOC 2026",
+          "role": "Volunteer — competition organization & examination writing",
+          "period": "2026",
+          "current": false,
+          "summary": "Back in the mathematics-competition world from the other side of the table: helping organize CIMOC 2026 and contributing to the Grade 11 examination paper.",
+          "contributions": [
+            {
+              "text": "Assisted in organizing the mathematics competition and contributed to writing and preparing the Grade 11 mathematics examination paper. Stated by me — organizer records are not public.",
+              "evidence": "Owner confirmed"
+            }
+          ]
+        },
         {
           "organization": "Reading Book Club",
           "role": "Reading club lead",
