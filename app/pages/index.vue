@@ -9,7 +9,7 @@ import {
   profile
 } from '~/data/portfolio'
 
-useSeoMeta({
+usePageMeta({
   title: 'Exploring AI, Software, and Business',
   description:
     'Chamroeun Hongleng — exploring the intersection of artificial intelligence, machine learning, software, and business, with responsible governance.'
