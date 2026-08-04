@@ -18,6 +18,12 @@ usePageMeta({
         text="Current work first, then competitions, field research, and the milestones that led here — grouped by kind, never flattened into one list where a weekend hackathon looks like a year of work."
       />
 
+      <nav class="group-nav" aria-label="Journey sections">
+        <a v-for="group in experience.groups" :key="group.id" :href="`#group-${group.id}`">
+          {{ group.title }}
+        </a>
+      </nav>
+
       <div class="groups">
         <section
           v-for="group in experience.groups"
@@ -82,12 +88,37 @@ usePageMeta({
 </template>
 
 <style scoped>
+.group-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-3);
+  margin-block-end: var(--space-8);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.group-nav a {
+  color: var(--color-text-muted);
+  text-decoration: none;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: 0.35em 0.9em;
+}
+
+.group-nav a:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
 .groups {
   display: grid;
   gap: var(--space-10);
 }
 
 .group-title {
+  scroll-margin-block-start: var(--space-8);
   font-family: var(--font-mono);
   font-size: var(--text-sm);
   text-transform: uppercase;
