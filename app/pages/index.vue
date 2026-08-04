@@ -25,18 +25,36 @@ const topEvidence = profile.proofPoints.slice(0, 3)
   <div class="home">
     <!-- Hero -->
     <section class="hero section" aria-labelledby="hero-title">
-      <div class="container hero-grid">
-        <p class="eyebrow">{{ profile.name }} · {{ profile.location.text }}</p>
-        <h1 id="hero-title">Exploring AI, Software, and Business</h1>
-        <p class="hero-statement">{{ profile.headline }}</p>
-        <div class="hero-intro">
-          <p v-for="(paragraph, i) in profile.intro" :key="i" class="lede">{{ paragraph }}</p>
+      <div class="container hero-layout">
+        <div class="hero-grid">
+          <p class="eyebrow">{{ profile.name }} · {{ profile.location.text }}</p>
+          <h1 id="hero-title">Exploring AI, Software, and Business</h1>
+          <p class="hero-statement">{{ profile.headline }}</p>
+          <div class="hero-intro">
+            <p v-for="(paragraph, i) in profile.intro" :key="i" class="lede">{{ paragraph }}</p>
+          </div>
+          <p class="hero-identity"><MarkedText :text="profile.identity" /></p>
+          <div class="hero-actions">
+            <NuxtLink to="/projects" class="btn btn-primary">View projects</NuxtLink>
+            <NuxtLink to="/about" class="btn btn-secondary">About me</NuxtLink>
+          </div>
         </div>
-        <p class="hero-identity"><MarkedText :text="profile.identity" /></p>
-        <div class="hero-actions">
-          <NuxtLink to="/projects" class="btn btn-primary">View projects</NuxtLink>
-          <NuxtLink to="/about" class="btn btn-secondary">About me</NuxtLink>
-        </div>
+
+        <figure v-if="profile.photo" class="hero-portrait">
+          <span class="portrait-backplate" aria-hidden="true" />
+          <img
+            :src="profile.photo.src"
+            :alt="profile.photo.alt"
+            class="portrait-img"
+            width="640"
+            height="640"
+            fetchpriority="high"
+          >
+          <figcaption class="portrait-plate mono">
+            <span class="plate-tick" aria-hidden="true" />
+            {{ profile.name }} · {{ profile.location.text }}
+          </figcaption>
+        </figure>
       </div>
     </section>
 
@@ -169,11 +187,65 @@ const topEvidence = profile.proofPoints.slice(0, 3)
   background: var(--color-surface);
 }
 
+.hero-layout {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-10);
+  align-items: center;
+  padding-block: var(--space-7);
+}
+
 .hero-grid {
   display: grid;
   gap: var(--space-4);
   justify-items: start;
-  padding-block: var(--space-7);
+}
+
+/* Portrait — archival plate treatment: offset indigo backplate, hairline
+   frame, mono caption plate with a terracotta tick */
+.hero-portrait {
+  position: relative;
+  margin: 0;
+  width: clamp(15rem, 24vw, 20rem);
+}
+
+.portrait-backplate {
+  position: absolute;
+  inset: 0;
+  transform: translate(var(--space-3), var(--space-3));
+  border-radius: var(--radius-l);
+  background: var(--color-accent-tint);
+  border: 1px solid var(--color-accent);
+  z-index: 0;
+}
+
+.hero-portrait .portrait-img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: var(--radius-l);
+  border: 1px solid var(--color-border-strong);
+  box-shadow: var(--shadow-2);
+}
+
+.portrait-plate {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  font-size: var(--text-xs);
+  color: var(--color-text-faint);
+}
+
+.plate-tick {
+  display: inline-block;
+  width: 1.25rem;
+  height: 2px;
+  background: var(--color-accent-2);
 }
 
 .hero-statement {
@@ -473,6 +545,18 @@ const topEvidence = profile.proofPoints.slice(0, 3)
 
   .row-oneliner {
     display: none;
+  }
+}
+
+@media (max-width: 1040px) {
+  .hero-layout {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .hero-portrait {
+    order: -1;
+    width: clamp(11rem, 40vw, 14rem);
   }
 }
 

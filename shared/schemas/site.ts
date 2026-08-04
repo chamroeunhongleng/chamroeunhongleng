@@ -76,7 +76,9 @@ export const experienceEntrySchema = z.strictObject({
   current: z.boolean(),
   summary: z.string().min(1),
   contributions: z.array(claimSchema),
-  links: z.array(linkSchema).optional()
+  links: z.array(linkSchema).optional(),
+  /** Optional photographic evidence (e.g. medals, certificates). */
+  image: imageRefSchema.optional()
 })
 export type ExperienceEntry = z.infer<typeof experienceEntrySchema>
 

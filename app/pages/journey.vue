@@ -46,6 +46,18 @@ usePageMeta({
               </header>
               <p class="entry-summary"><MarkedText :text="entry.summary" /></p>
               <ClaimList v-if="entry.contributions.length" :claims="entry.contributions" />
+              <figure v-if="entry.image" class="entry-figure">
+                <img
+                  :src="entry.image.src"
+                  :alt="entry.image.alt"
+                  loading="lazy"
+                  width="1000"
+                  height="1333"
+                >
+                <figcaption v-if="entry.image.caption" class="mono">
+                  {{ entry.image.caption }}
+                </figcaption>
+              </figure>
               <LinkStrip v-if="entry.links?.length" :links="entry.links" />
             </article>
           </div>
@@ -133,6 +145,27 @@ usePageMeta({
 
 .entry-summary {
   color: var(--color-text-muted);
+}
+
+.entry-figure {
+  margin: 0;
+  display: grid;
+  gap: var(--space-3);
+  justify-items: start;
+}
+
+.entry-figure img {
+  max-width: min(28rem, 100%);
+  height: auto;
+  border-radius: var(--radius-l);
+  border: 1px solid var(--color-border-strong);
+  box-shadow: var(--shadow-1);
+}
+
+.entry-figure figcaption {
+  font-size: var(--text-xs);
+  color: var(--color-text-faint);
+  max-width: 60ch;
 }
 
 @media (max-width: 1040px) {

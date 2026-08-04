@@ -98,16 +98,22 @@
       "entries": [
         {
           "organization": "[OWNER_INPUT_REQUIRED: Your high school — name and province]",
-          "role": "High school chapter",
+          "role": "High school chapter — mathematics competitions",
           "period": "[OWNER_INPUT_REQUIRED: Years]",
           "current": false,
-          "summary": "[OWNER_INPUT_REQUIRED: The high-school story you want told — competitions, awards, activities, and what pointed you toward technology and business]",
+          "summary": "Years of mathematics olympiad competition preceded the degrees: the medal wall below spans regional and international contests. [OWNER_INPUT_REQUIRED: Add the story — which results mattered most, and what pointed you toward technology and business]",
           "contributions": [
             {
-              "text": "[PLACEHOLDER: A verifiable milestone — a certificate or public mention upgrades this to Document or Public evidence]",
-              "evidence": "Unverified"
+              "text": "Mathematics olympiad medal collection photographed below — ribbons include the Southeast Asian Mathematical Olympiad 2023, Copernicus Olympiad (Phnom Penh, 2022), and the Philippine International Math and Science Olympiad, alongside a 1st Place Award from the Angkor Mathematics Competition 2024 Global Round.",
+              "evidence": "Document evidence"
             }
-          ]
+          ],
+          "image": {
+            "src": "/images/medals.jpg",
+            "alt": "A display of mathematics olympiad medals hanging in rows — colorful ribbons from SEAMO 2023, Copernicus Olympiad 2022, and other competitions — with a golden first-place Angkor Mathematics Competition 2024 trophy standing in front of a laptop.",
+            "caption": "The medal wall: SEAMO 2023 · Copernicus Olympiad, Phnom Penh 2022 · PhIMO · AMC golds · 1st Place, Angkor Mathematics Competition 2024 Global Round.",
+            "demo": false
+          }
         }
       ]
     },
