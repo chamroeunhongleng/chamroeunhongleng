@@ -59,5 +59,10 @@
       "link": "https://github.com/chamroeunhongleng"
     }
   ],
-  "aiWorkingStyle": "I work AI-natively: AI tools (primarily Claude) support my research, drafting, and implementation, while decisions, evidence labels, and anything that ships stay under human review — mine."
+  "aiWorkingStyle": "I work AI-natively: AI tools (primarily Claude) support my research, drafting, and implementation, while decisions, evidence labels, and anything that ships stay under human review — mine.",
+  "photo": {
+    "src": "/images/profile.jpg",
+    "alt": "Chamroeun Hongleng — head-and-shoulders portrait, facing the camera in a dark suit, white shirt, and black tie against a grey studio backdrop.",
+    "demo": false
+  }
 }
