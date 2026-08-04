@@ -123,15 +123,28 @@
       "layout": "cards",
       "entries": [
         {
-          "organization": "[PLACEHOLDER: Organization or community name]",
-          "role": "[OWNER_INPUT_REQUIRED: Leadership, volunteer, or community roles you want listed — clubs, mentoring, events]",
-          "period": "[PLACEHOLDER: Period]",
-          "current": false,
-          "summary": "[OWNER_INPUT_REQUIRED: One or two sentences describing the role and what you contributed]",
+          "organization": "[OWNER_INPUT_REQUIRED: Name of the reading club — and where it runs (university, community, online)]",
+          "role": "Reading club lead",
+          "period": "[OWNER_INPUT_REQUIRED: Month/year you started leading it] — present",
+          "current": true,
+          "summary": "Leading a book-reading club. [OWNER_INPUT_REQUIRED: One or two sentences — what the club reads, who takes part, and how often it meets]",
           "contributions": [
             {
-              "text": "[PLACEHOLDER: A specific contribution with whatever evidence exists]",
-              "evidence": "Unverified"
+              "text": "Leadership of the club is stated by me; no public page or photo documents it yet. [OWNER_INPUT_REQUIRED: One specific contribution — sessions run, members, books covered — plus any link or photo that shows it]",
+              "evidence": "Owner confirmed"
+            }
+          ]
+        },
+        {
+          "organization": "[OWNER_INPUT_REQUIRED: Where the six books live — publisher, school, Telegram channel, or self-published]",
+          "role": "Author — six mathematics books",
+          "period": "[OWNER_INPUT_REQUIRED: When the books were written or published]",
+          "current": false,
+          "summary": "Wrote six mathematics books. [OWNER_INPUT_REQUIRED: Titles, level and audience (e.g. Grade 12 / Bac II students), language, and how they are shared]",
+          "contributions": [
+            {
+              "text": "The six books are stated by me for now; once the PDFs are added here, this claim upgrades to Document evidence and the covers can be shown on this page.",
+              "evidence": "Owner confirmed"
             }
           ]
         }

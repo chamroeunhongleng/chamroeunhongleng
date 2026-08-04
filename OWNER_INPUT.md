@@ -47,7 +47,13 @@ Per pillar, anything to add or remove from the topics lists?
   organizer link? (upgrades the claim from Owner confirmed → Document evidence): ______
 - High-school chapter for the Journey page (school, years, story, any awards): ______
 - Leadership / volunteer / community roles to list (org, role, period, one
-  sentence each — or "remove the section"): ______
+  sentence each — or "remove the section"): **two entries seeded 2026-08-04**
+  - **Reading club lead** (current). Still needed: club name and where it
+    runs · start month/year · one or two sentences (what it reads, who
+    joins, how often) · one concrete contribution + any link or photo.
+  - **Author of six mathematics books**. Still needed: the six PDFs (for
+    covers + Document evidence) · titles · level/audience · language ·
+    when written · where they are shared.
 
 ## 5 · Projects (→ `content/projects/*.json`)
 
@@ -74,7 +80,8 @@ For each real project, who should be credited and how?
 
 - Public contact email: **chamroeunhongleng825@gmail.com** ✓ (owner-approved
   and published 2026-08-04)
-- Honest response expectation (e.g. "usually within a few days"): ______
+- Honest response expectation: **within a day** ✓ (answered 2026-08-04;
+  published as "Usually within a day — I check this inbox every day.")
 - Keep LinkedIn / X / Facebook links? Any to remove: ______
 
 ## 8 · Verification questions from the build research
