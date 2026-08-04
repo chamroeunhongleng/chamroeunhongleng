@@ -224,7 +224,7 @@
           "role": "Reading club lead",
           "period": "July 2026 — present",
           "current": true,
-          "summary": "Leading a four-member book club built around one idea: understand each book deeply instead of just finishing it. First book: *Surrounded by Idiots* by Thomas Erikson.",
+          "summary": "Leading a four-member book club built around one idea: understand each book deeply instead of just finishing it. First book: “Surrounded by Idiots” by Thomas Erikson.",
           "contributions": [
             {
               "text": "The club began on 28 July 2026 with four members; I lead the reading and discussion. Stated by me — no public page documents the club yet.",
@@ -240,11 +240,11 @@
           "summary": "Wrote and self-published six bilingual mathematics titles as First Editions (2026) under the CHNAI LAB imprint: matched Grade 6 and Grade 7 sets of an English–Khmer dictionary, an exercise book, and a full worked-solutions answer book — about 1,780 pages in total, written for Cambodian students who study mathematics in English.",
           "contributions": [
             {
-              "text": "Grade 6 set: an *English–Khmer Mathematics Dictionary* (240 pages), a *Mathematics Exercise Book* (595 original questions in six levels across twenty chapters, 260 pages), and a *Mathematics Answer Book* with a full worked method for every question (340 pages).",
+              "text": "Grade 6 set: an English–Khmer Mathematics Dictionary (240 pages), a Mathematics Exercise Book (595 original questions in six levels across twenty chapters, 260 pages), and a Mathematics Answer Book with a full worked method for every question (340 pages).",
               "evidence": "Document evidence"
             },
             {
-              "text": "Grade 7 set: an *English–Khmer Mathematics Dictionary* (488 pages), a *Mathematics Exercise Book* (572 questions in six levels, chapter by chapter, written against the Ministry of Education, Youth and Sport Grade 7 textbook, 156 pages), and a *Mathematics Answer Book* reprinting every question above its full worked solution (296 pages). All six books are free to download from the GitHub release linked below; five of the covers are shown in the photograph.",
+              "text": "Grade 7 set: an English–Khmer Mathematics Dictionary (488 pages), a Mathematics Exercise Book (572 questions in six levels, chapter by chapter, written against the Ministry of Education, Youth and Sport Grade 7 textbook, 156 pages), and a Mathematics Answer Book reprinting every question above its full worked solution (296 pages). All six books are free to download from the GitHub release linked below; five of the covers are shown in the photograph.",
               "evidence": "Public evidence",
               "link": "https://github.com/chamroeunhongleng/chamroeunhongleng/releases/tag/scholar-series-2026"
             }
