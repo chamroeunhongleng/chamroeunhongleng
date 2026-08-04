@@ -62,7 +62,17 @@ useSeoMeta({
           </div>
         </dl>
 
-        <LinkStrip :links="project.publicLinks" />
+        <div class="header-links">
+          <a
+            v-for="live in project.publicLinks.filter((l) => l.kind === 'demo' || l.kind === 'website')"
+            :key="live.url"
+            :href="live.url"
+            target="_blank"
+            rel="noopener"
+            class="btn btn-primary"
+          >{{ live.label }}<span aria-hidden="true"> ↗</span></a>
+          <LinkStrip :links="project.publicLinks.filter((l) => l.kind !== 'demo' && l.kind !== 'website')" />
+        </div>
       </div>
     </header>
 
@@ -278,6 +288,13 @@ useSeoMeta({
 
 .case-meta dd {
   margin: 0;
+}
+
+.header-links {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-4);
 }
 
 .case-nav {

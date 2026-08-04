@@ -55,7 +55,10 @@ For each real project, who should be credited and how?
 - Kaskor ASR — dataset sources, advisors, collaborators to name: ______
 - Chomkar Decision Grid — teammates to credit for the Chomkar context: ______
 - Chomkar OrderLoop — teammates and their roles: ______
-- Warden / SAT Digital — teammates and roles: ______
+- **LMS** (scaffolded at `content/projects/lms.json`, currently disabled) —
+  live website URL: ______ · repo URL and is it public or private: ______ ·
+  what it does and for whom: ______ · your exact role: ______ · status
+  (prototype / public demo / deployed): ______
 - The AI Layer — update team/responsibilities: ______
 - Is the "~86,000 audio samples" figure right, and can any public artifact
   support it? ______

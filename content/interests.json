@@ -53,8 +53,8 @@
         "Risk assessment and human oversight",
         "Responsible AI and accountability"
       ],
-      "groundedIn": "Contracts, terms, and policy work in my international business studies, plus the human-approval patterns built into Chomkar Decision Grid and Warden.",
-      "projects": ["warden", "demo-governance-review"]
+      "groundedIn": "Contracts, terms, and policy work in my international business studies, plus the human-approval and audit patterns built into Chomkar Decision Grid.",
+      "projects": ["chomkar-decision-grid", "demo-governance-review"]
     }
   ],
   "connection": "These are not four separate interests. The CS and ITM degrees build the ability to make intelligent systems; the international business studies and field research supply the commercial lens; and the contracts, terms, and policy work asks what those systems are allowed — and ought — to do. Every project on this site touches at least two pillars, on purpose."

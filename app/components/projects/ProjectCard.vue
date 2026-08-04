@@ -17,6 +17,11 @@ const pillarNames = computed(() =>
   props.project.pillars.map((p) => PILLAR_TITLES[p]).join(' · ')
 )
 const proof = computed(() => props.project.evidence[0])
+// A clickable live product/demo link, surfaced so recruiters reach the real
+// thing in one click (sits above the stretched card link).
+const liveLink = computed(() =>
+  props.project.publicLinks.find((l) => l.kind === 'demo' || l.kind === 'website')
+)
 </script>
 
 <template>
@@ -44,7 +49,16 @@ const proof = computed(() => props.project.evidence[0])
 
     <div class="card-bottom">
       <TagList :tags="project.tags" :max="4" />
-      <span class="card-action" aria-hidden="true">Case study →</span>
+      <span class="card-actions">
+        <a
+          v-if="liveLink"
+          :href="liveLink.url"
+          target="_blank"
+          rel="noopener"
+          class="live-link"
+        >Visit site<span aria-hidden="true"> ↗</span></a>
+        <span class="card-action" aria-hidden="true">Case study →</span>
+      </span>
     </div>
   </article>
 </template>
@@ -145,10 +159,38 @@ const proof = computed(() => props.project.evidence[0])
   padding-top: var(--space-3);
 }
 
+.card-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
 .card-action {
   font-size: var(--text-sm);
   font-weight: 560;
   color: var(--color-accent);
   white-space: nowrap;
+}
+
+/* Sits above the stretched card link so it is independently clickable. */
+.live-link {
+  position: relative;
+  z-index: 2;
+  font-size: var(--text-sm);
+  font-weight: 560;
+  white-space: nowrap;
+  text-decoration: none;
+  border: 1px solid var(--color-accent);
+  border-radius: 999px;
+  padding: 0.25em 0.85em;
+  color: var(--color-accent);
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.live-link:hover {
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
 }
 </style>

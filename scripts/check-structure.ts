@@ -74,7 +74,7 @@ const REQUIRED_FILES = [
   'content/projects/chomkar-decision-grid.json',
   'content/projects/chomkar-orderloop.json',
   'content/projects/ai-layer.json',
-  'content/projects/warden.json',
+  'content/projects/lms.json',
   'content/projects/demo-governance-review.json',
   // Public assets
   'public/robots.txt',

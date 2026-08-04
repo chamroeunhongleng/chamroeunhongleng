@@ -1,0 +1,82 @@
+{
+  "slug": "lms",
+  "name": "LMS [OWNER_INPUT_REQUIRED: Exact product name]",
+  "oneLiner": "[OWNER_INPUT_REQUIRED: One sentence — what the LMS does and for whom]",
+  "status": "Prototype",
+  "deployment": "Not deployed",
+  "timeline": {
+    "start": "2026",
+    "end": null,
+    "label": "[OWNER_INPUT_REQUIRED: Timeline]"
+  },
+  "pillars": ["software-product"],
+  "tags": ["LMS", "Web application"],
+  "featured": true,
+  "enabled": false,
+  "demo": false,
+  "question": "[OWNER_INPUT_REQUIRED: What does this project test or prove?]",
+  "problem": "[OWNER_INPUT_REQUIRED: The problem the LMS solves — who struggles with what today]",
+  "targetUsers": "[OWNER_INPUT_REQUIRED: Who uses it — students, teachers, schools?]",
+  "whyItMatters": "[OWNER_INPUT_REQUIRED: Why this problem matters in your context]",
+  "exactRole": "[OWNER_INPUT_REQUIRED: Exactly what you built — solo or team, which parts are yours]",
+  "teamContributions": "[OWNER_INPUT_REQUIRED: Teammates and their parts, or 'Independent project']",
+  "research": "[OWNER_INPUT_REQUIRED: What you researched or learned from before building]",
+  "validation": "[OWNER_INPUT_REQUIRED: Has anyone real used it? Testing done?]",
+  "proposedSolution": "[OWNER_INPUT_REQUIRED: How the LMS works — main features and flow]",
+  "userWorkflow": [
+    "[OWNER_INPUT_REQUIRED: Step 1 of how a user moves through it]",
+    "[OWNER_INPUT_REQUIRED: Step 2]"
+  ],
+  "systemArchitecture": "[OWNER_INPUT_REQUIRED: Stack and structure — frontend, backend, database, hosting]",
+  "methods": "[OWNER_INPUT_REQUIRED: Notable technical methods or patterns used]",
+  "businessValue": "[OWNER_INPUT_REQUIRED: The commercial or institutional value if it succeeds]",
+  "contractsPolicy": "[OWNER_INPUT_REQUIRED: Terms, licensing, or institutional policy considerations]",
+  "dataPrivacy": "[OWNER_INPUT_REQUIRED: Student data is sensitive — what does the LMS store, and how is it protected?]",
+  "risks": [
+    "[OWNER_INPUT_REQUIRED: Main risks — e.g. student-data exposure, grading errors]"
+  ],
+  "humanApprovalPoints": [
+    "[OWNER_INPUT_REQUIRED: Which decisions stay with teachers/admins rather than the system?]"
+  ],
+  "technicalDecisions": [
+    "[OWNER_INPUT_REQUIRED: Key technical decisions and why]"
+  ],
+  "completedWork": [
+    {
+      "text": "[OWNER_INPUT_REQUIRED: What is actually built and working]",
+      "evidence": "Unverified",
+      "workState": "Unverified"
+    }
+  ],
+  "evidence": [
+    {
+      "text": "[OWNER_INPUT_REQUIRED: Repository URL (public or private?) and live site URL]",
+      "evidence": "Unverified"
+    }
+  ],
+  "results": [
+    {
+      "text": "[OWNER_INPUT_REQUIRED: Honest current results — users, pilots, or 'not yet measured']",
+      "evidence": "Unverified"
+    }
+  ],
+  "limitations": {
+    "constraints": [
+      "[OWNER_INPUT_REQUIRED: What limits it today]"
+    ],
+    "tradeoffs": [
+      "[OWNER_INPUT_REQUIRED: What you chose to give up and why]"
+    ]
+  },
+  "lessonsLearned": [
+    "[OWNER_INPUT_REQUIRED: What building it taught you]"
+  ],
+  "nextValidation": [
+    "[OWNER_INPUT_REQUIRED: What you would validate next]"
+  ],
+  "publicLinks": [],
+  "aiAssistance": {
+    "scope": "[OWNER_INPUT_REQUIRED: What AI tools helped with]",
+    "humanOwned": "[OWNER_INPUT_REQUIRED: What stayed fully yours]"
+  }
+}
