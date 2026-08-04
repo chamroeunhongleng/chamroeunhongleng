@@ -1,4 +1,4 @@
-# Content replacement guide
+﻿# Content replacement guide
 
 How placeholder content becomes your real content, safely.
 

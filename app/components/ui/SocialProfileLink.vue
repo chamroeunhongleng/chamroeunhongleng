@@ -8,9 +8,12 @@ const props = withDefaults(
     label: string
     url: string
     tone?: 'accent' | 'muted'
+    /** Icon-only presentation: the label stays for screen readers. */
+    iconOnly?: boolean
   }>(),
   {
-    tone: 'accent'
+    tone: 'accent',
+    iconOnly: false
   }
 )
 
@@ -36,7 +39,7 @@ const platform = computed<SocialPlatform>(() => {
     target="_blank"
     rel="noopener"
     class="social-profile-link"
-    :class="`social-profile-link--${tone}`"
+    :class="[`social-profile-link--${tone}`, { 'social-profile-link--icon-only': iconOnly }]"
     :data-platform="platform"
     :aria-label="`${label} (opens in a new tab)`"
   >
@@ -80,8 +83,8 @@ const platform = computed<SocialPlatform>(() => {
       <path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2Zm6.9 6h-3a15.7 15.7 0 0 0-1.4-3.5A8.1 8.1 0 0 1 18.9 8ZM12 4c.8 1 1.5 2.3 1.9 4h-3.8c.4-1.7 1.1-3 1.9-4ZM4.3 14a7.9 7.9 0 0 1 0-4h3.8a16.9 16.9 0 0 0 0 4H4.3Zm.8 2h3a15.7 15.7 0 0 0 1.4 3.5A8.1 8.1 0 0 1 5.1 16Zm3-8h-3a8.1 8.1 0 0 1 4.4-3.5A15.7 15.7 0 0 0 8.1 8Zm3.9 12c-.8-1-1.5-2.3-1.9-4h3.8c-.4 1.7-1.1 3-1.9 4Zm2.3-6H9.7a14.4 14.4 0 0 1 0-4h4.6a14.4 14.4 0 0 1 0 4Zm.2 5.5a15.7 15.7 0 0 0 1.4-3.5h3a8.1 8.1 0 0 1-4.4 3.5Zm1.4-5.5a16.9 16.9 0 0 0 0-4h3.8a7.9 7.9 0 0 1 0 4h-3.8Z" />
     </svg>
 
-    <span>{{ label }}</span>
-    <span class="social-profile-link__external" aria-hidden="true">↗</span>
+    <span :class="{ 'visually-hidden': iconOnly }">{{ label }}</span>
+    <span v-if="!iconOnly" class="social-profile-link__external" aria-hidden="true">↗</span>
   </a>
 </template>
 
@@ -114,6 +117,24 @@ const platform = computed<SocialPlatform>(() => {
   height: 1.05rem;
   flex: 0 0 auto;
   fill: currentColor;
+}
+
+.social-profile-link--icon-only {
+  padding: var(--space-2);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-m);
+  transition:
+    border-color var(--duration-fast) var(--ease-out),
+    color var(--duration-fast) var(--ease-out);
+}
+
+.social-profile-link--icon-only:hover {
+  border-color: var(--color-accent);
+}
+
+.social-profile-link--icon-only .social-profile-link__icon {
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .social-profile-link__external {

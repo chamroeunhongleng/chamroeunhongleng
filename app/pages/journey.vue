@@ -2,20 +2,20 @@
 import { experience } from '~/data/portfolio'
 
 usePageMeta({
-  title: 'Experience',
+  title: 'Journey',
   description:
-    'Roles, competitions, field research, and community work — current work first, everything labeled with the evidence that exists.'
+    'The journey so far — from high school in Kampong Cham to dual degrees, studio work, competitions, and field research, labeled with the evidence that exists.'
 })
 </script>
 
 <template>
-  <div class="experience-page section">
+  <div class="journey-page section">
     <div class="container">
       <SectionHeading
         as="h1"
-        eyebrow="Experience"
-        title="Current work first, history honestly weighted"
-        text="Roles, competitions, and fieldwork are grouped by kind — not flattened into one list where a weekend hackathon looks like a year of work."
+        eyebrow="Journey"
+        title="Where I started, what I do now"
+        text="Current work first, then competitions, field research, and the milestones that led here — grouped by kind, never flattened into one list where a weekend hackathon looks like a year of work."
       />
 
       <div class="groups">

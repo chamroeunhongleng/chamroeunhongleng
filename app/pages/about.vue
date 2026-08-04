@@ -50,6 +50,25 @@ usePageMeta({
         </div>
 
         <aside class="about-side">
+          <figure class="portrait">
+            <img
+              v-if="profile.photo"
+              :src="profile.photo.src"
+              :alt="profile.photo.alt"
+              class="portrait-img"
+              width="480"
+              height="560"
+            >
+            <div v-else class="portrait-placeholder" aria-hidden="true">
+              <span class="portrait-monogram">{{ profile.monogram }}</span>
+            </div>
+            <figcaption class="portrait-caption mono">
+              <template v-if="profile.photo && profile.photo.caption">{{ profile.photo.caption }}</template>
+              <template v-else-if="profile.photo">{{ profile.name }} · {{ profile.location.text }}</template>
+              <MarkedText v-else text="[OWNER_INPUT_REQUIRED: Add your portrait — drop a photo at public/images/profile.jpg]" />
+            </figcaption>
+          </figure>
+
           <section class="side-card" aria-labelledby="education-title">
             <h2 id="education-title">Education</h2>
             <p class="side-summary"><MarkedText :text="education.summary" /></p>
@@ -69,7 +88,7 @@ usePageMeta({
             <h2 id="links-title">Profiles</h2>
             <ul role="list" class="profile-links">
               <li v-for="link in profile.links" :key="link.url">
-                <SocialProfileLink :label="link.label" :url="link.url" />
+                <SocialProfileLink :label="link.label" :url="link.url" icon-only />
               </li>
             </ul>
           </section>
@@ -102,6 +121,44 @@ usePageMeta({
   gap: var(--space-5);
   position: sticky;
   top: 5.5rem;
+}
+
+/* Portrait — editorial frame: hairline border, warm mat, mono caption */
+.portrait {
+  margin: 0;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.portrait-img,
+.portrait-placeholder {
+  width: 100%;
+  aspect-ratio: 6 / 7;
+  object-fit: cover;
+  border-radius: var(--radius-l);
+  border: 1px solid var(--color-border-strong);
+  box-shadow: var(--shadow-1);
+}
+
+.portrait-placeholder {
+  display: grid;
+  place-items: center;
+  background:
+    linear-gradient(160deg, var(--color-surface) 0%, var(--color-surface-sunken) 100%);
+  border-style: dashed;
+  box-shadow: none;
+}
+
+.portrait-monogram {
+  font-family: var(--font-display);
+  font-size: var(--text-4xl);
+  font-weight: 600;
+  color: var(--color-border-strong);
+}
+
+.portrait-caption {
+  font-size: var(--text-xs);
+  color: var(--color-text-faint);
 }
 
 .side-card {
@@ -158,8 +215,8 @@ usePageMeta({
 }
 
 .profile-links {
-  display: grid;
-  gap: var(--space-2);
+  display: flex;
+  gap: var(--space-3);
   list-style: none;
   margin: 0;
   padding: 0;

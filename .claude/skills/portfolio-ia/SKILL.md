@@ -1,4 +1,4 @@
----
+﻿---
 name: portfolio-ia
 description: The portfolio's information architecture and the rules that hold it together
 ---
@@ -6,7 +6,7 @@ description: The portfolio's information architecture and the rules that hold it
 # Portfolio information architecture
 
 ## Pages
-Home · Projects (+ `/projects/<slug>` case studies) · Experience · Learning ·
+Home · Projects (+ `/projects/<slug>` case studies) · Journey · Learning ·
 About · Contact · Colophon. `/#now` is a homepage anchor promoted to nav level.
 
 ## Homepage narrative arc (order is deliberate)

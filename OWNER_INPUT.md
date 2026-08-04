@@ -1,4 +1,4 @@
-# Owner Input — Chamroeun Hongleng
+﻿# Owner Input — Chamroeun Hongleng
 
 Answer what you want; skip what you don't. Every answer here retires a
 `[OWNER_INPUT_REQUIRED: …]` marker on the site. After editing, ask Claude to run
@@ -39,12 +39,13 @@ Per pillar, anything to add or remove from the topics lists?
 - Business & strategy: ______
 - Governance & commercial rules: ______
 
-## 4 · Experience (→ `content/experience.json`)
+## 4 · Journey (→ `content/experience.json` — shown on the /journey page)
 
 - CHNAI LAB role — is "Technology strategy & business" the right title? ______
 - Angkor Byte — confirm role title and start date: ______
 - **Turing Hackathon Cycle 10 Top 2** — do you have a certificate, photo, or
   organizer link? (upgrades the claim from Owner confirmed → Document evidence): ______
+- High-school chapter for the Journey page (school, years, story, any awards): ______
 - Leadership / volunteer / community roles to list (org, role, period, one
   sentence each — or "remove the section"): ______
 

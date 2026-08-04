@@ -1,4 +1,4 @@
-# Claude Code Contract — Chamroeun Hongleng Portfolio
+﻿# Claude Code Contract — Chamroeun Hongleng Portfolio
 
 Read this before changing anything. Then check `git status -sb` and run
 `npm run check:owner-content` to see the current content state.

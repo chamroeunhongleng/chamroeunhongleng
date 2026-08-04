@@ -1,9 +1,9 @@
-# UI review checklist
+﻿# UI review checklist
 
 Work through this against `npm run dev` or a preview URL. Check both themes
 for every item (toggle in the header).
 
-## Every page (Home, Projects, 6 case studies, Experience, Learning, About, Contact, Colophon, 404)
+## Every page (Home, Projects, 6 case studies, Journey, Learning, About, Contact, Colophon, 404)
 - [ ] Renders without console errors; no layout shift after load
 - [ ] Light AND dark theme: readable, no unstyled patches, no invisible text
 - [ ] 360px, 760px, 1040px, 1440px: no horizontal scroll, grids collapse sensibly
@@ -27,8 +27,8 @@ for every item (toggle in the header).
 - [ ] Governance demo renders its model-card artifact as a table
 - [ ] Next-project link cycles; 404 for `/projects/nonexistent`
 
-## Experience / Learning / About / Contact / Colophon
-- [ ] Experience groups render in their layouts (timeline / rows / cards); current roles marked
+## Journey / Learning / About / Contact / Colophon
+- [ ] Journey groups render in their layouts (timeline / rows / cards); current roles marked
 - [ ] Learning: experiments link to case studies; roadmap items all read as Planned
 - [ ] About: education entries show evidence labels; "what I am not" section present
 - [ ] Contact: with unconfirmed email, GitHub fallback shows (no broken mailto);

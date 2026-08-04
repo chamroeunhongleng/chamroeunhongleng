@@ -92,6 +92,26 @@
       ]
     },
     {
+      "id": "milestones",
+      "title": "Earlier milestones",
+      "layout": "rows",
+      "entries": [
+        {
+          "organization": "[OWNER_INPUT_REQUIRED: Your high school — name and province]",
+          "role": "High school chapter",
+          "period": "[OWNER_INPUT_REQUIRED: Years]",
+          "current": false,
+          "summary": "[OWNER_INPUT_REQUIRED: The high-school story you want told — competitions, awards, activities, and what pointed you toward technology and business]",
+          "contributions": [
+            {
+              "text": "[PLACEHOLDER: A verifiable milestone — a certificate or public mention upgrades this to Document or Public evidence]",
+              "evidence": "Unverified"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "community",
       "title": "Leadership & community",
       "layout": "cards",

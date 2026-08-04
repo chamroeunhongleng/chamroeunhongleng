@@ -35,7 +35,7 @@ const REQUIRED_FILES = [
   'app/layouts/default.vue',
   'app/pages/index.vue',
   'app/pages/about.vue',
-  'app/pages/experience.vue',
+  'app/pages/journey.vue',
   'app/pages/learning.vue',
   'app/pages/contact.vue',
   'app/pages/colophon.vue',

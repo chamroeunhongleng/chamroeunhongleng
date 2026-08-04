@@ -1,4 +1,4 @@
-# Chamroeun Hongleng — Portfolio
+﻿# Chamroeun Hongleng — Portfolio
 
 A portfolio at the intersection of **AI/ML, software, business, and
 governance**, built so that honesty is enforced by the build system: every
@@ -28,7 +28,7 @@ Full guide: [docs/local-setup.md](docs/local-setup.md)
 | Markers | `shared/markers.ts` | `[OWNER_INPUT_REQUIRED: …]`-style placeholders, rendered as visible chips |
 | Rule engine | `shared/rules.ts` | mode-aware content rules, shared by CLI + build gate + tests |
 | Build gate | `modules/content-gate.ts` | aborts production builds while issues remain |
-| Pages | `app/pages/` | Home, Projects (+ case studies), Experience, Learning, About, Contact, Colophon |
+| Pages | `app/pages/` | Home, Projects (+ case studies), Journey, Learning, About, Contact, Colophon |
 | Verification | `scripts/`, `npm run verify` | structure, secrets, content, lint, types, tests, generate, links, a11y, SEO, gate self-test |
 | Claude tooling | `.claude/` | 10 commands, 10 skills, 6 reviewer agents, 3 guard hooks |
 

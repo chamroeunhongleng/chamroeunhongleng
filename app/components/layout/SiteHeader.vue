@@ -7,7 +7,7 @@ const menuOpen = ref(false)
 
 const NAV = [
   { label: 'Projects', to: '/projects' },
-  { label: 'Experience', to: '/experience' },
+  { label: 'Journey', to: '/journey' },
   { label: 'Learning', to: '/learning' },
   { label: 'Now', to: '/#now' },
   { label: 'About', to: '/about' },

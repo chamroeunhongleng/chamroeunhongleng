@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { EVIDENCE_LABELS, PILLARS, WORK_STATES } from './enums'
-import { claimSchema, linkSchema, slugSchema } from './common'
+import { claimSchema, imageRefSchema, linkSchema, slugSchema } from './common'
 
 // ── profile.json ─────────────────────────────────────────────────────────
 export const profileSchema = z.strictObject({
@@ -22,7 +22,9 @@ export const profileSchema = z.strictObject({
   /** Selected evidence strip on the homepage. */
   proofPoints: z.array(claimSchema).min(3),
   /** One-line AI-native working-style statement. */
-  aiWorkingStyle: z.string().min(1)
+  aiWorkingStyle: z.string().min(1),
+  /** Optional portrait; About renders a placeholder frame until provided. */
+  photo: imageRefSchema.optional()
 })
 export type Profile = z.infer<typeof profileSchema>
 

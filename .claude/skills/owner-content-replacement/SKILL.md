@@ -1,4 +1,4 @@
----
+﻿---
 name: owner-content-replacement
 description: Mapping OWNER_INPUT.md answers into content files without inventing anything
 ---
@@ -11,7 +11,7 @@ description: Mapping OWNER_INPUT.md answers into content files without inventing
 | Identity & headline | `profile.json` · name, preferredName, headline, identity |
 | Education | `education.json` · entries (periods, third entry entirely) |
 | Interests per pillar | `interests.json` · pillars[].topics, groundedIn |
-| Experience & roles | `experience.json` · groups (community group is placeholder) |
+| Journey & roles | `experience.json` · groups (community group is placeholder) |
 | Courses & learning | `learning.json` · disciplines, readingNotes |
 | Projects & roles | `content/projects/*.json` · teamContributions, evidence upgrades |
 | Contact | `contact.json` · email, responseExpectation |

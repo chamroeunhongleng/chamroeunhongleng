@@ -28,7 +28,7 @@ const projectRoutes = existsSync(projectsDir)
       .map((p) => `/projects/${p.slug}`)
   : []
 
-const staticRoutes = ['/', '/about', '/projects', '/experience', '/learning', '/contact', '/colophon']
+const staticRoutes = ['/', '/about', '/projects', '/journey', '/learning', '/contact', '/colophon']
 
 export default defineNuxtConfig({
   compatibilityDate: '2026-08-01',

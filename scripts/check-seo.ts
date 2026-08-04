@@ -100,7 +100,7 @@ if (!existsSync(sitemapPath)) {
       return url.pathname.replace(/\/$/, '') || '/'
     })
   )
-  const staticRoutes = ['/', '/about', '/projects', '/experience', '/learning', '/contact', '/colophon']
+  const staticRoutes = ['/', '/about', '/projects', '/journey', '/learning', '/contact', '/colophon']
   const projectRoutes = readdirSync(join(root, 'content', 'projects'))
     .filter((f) => f.endsWith('.json'))
     .map((f) => JSON.parse(readFileSync(join(root, 'content', 'projects', f), 'utf8')) as { slug: string; enabled?: boolean })
