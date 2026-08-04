@@ -41,6 +41,8 @@ export const educationSchema = z.strictObject({
         credential: z.string().min(1),
         /** Optional named major/track within the programme. */
         specialization: z.string().min(1).optional(),
+        /** Optional funding award carrying the enrolment, e.g. a scholarship. */
+        scholarship: z.string().min(1).optional(),
         period: z.string().min(1),
         status: z.enum(['In progress', 'Completed', 'Planned', 'Paused']),
         evidence: z.enum(EVIDENCE_LABELS),

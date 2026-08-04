@@ -83,6 +83,9 @@ usePageMeta({
                   <p v-if="entry.specialization" class="edu-specialization">
                     <MarkedText :text="entry.specialization" />
                   </p>
+                  <p v-if="entry.scholarship" class="edu-scholarship">
+                    <MarkedText :text="entry.scholarship" />
+                  </p>
                   <p class="edu-meta mono">
                     <MarkedText :text="entry.period" />
                   </p>
@@ -234,6 +237,14 @@ usePageMeta({
 .edu-specialization {
   font-size: var(--text-sm);
   color: var(--color-accent-2);
+}
+
+/* The funding award is the strongest signal in this card — a school chose to
+   pay for the place — so it carries the accent and the only added weight. */
+.edu-scholarship {
+  font-size: var(--text-sm);
+  font-weight: 560;
+  color: var(--color-accent);
 }
 
 .edu-meta {
