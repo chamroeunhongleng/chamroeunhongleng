@@ -19,3 +19,8 @@ Thumbs.db
 # Deploy/tooling state
 .vercel
 coverage
+
+.vercel
+.env*
+
+!.env.example
