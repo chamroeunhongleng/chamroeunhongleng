@@ -45,6 +45,20 @@ usePageMeta({
                 </p>
               </header>
               <p class="entry-summary"><MarkedText :text="entry.summary" /></p>
+              <ul v-if="entry.results?.length" class="results" role="list">
+                <li v-for="(result, i) in entry.results" :key="i" class="result">
+                  <span class="result-award">{{ result.award }}</span>
+                  <span class="result-event">
+                    <MarkedText :text="result.event" />
+                    <EvidenceLabel
+                      v-if="result.link"
+                      class="result-evidence"
+                      :evidence="result.evidence"
+                      :link="result.link"
+                    />
+                  </span>
+                </li>
+              </ul>
               <ClaimList v-if="entry.contributions.length" :claims="entry.contributions" />
               <figure v-if="entry.image" class="entry-figure">
                 <img
@@ -147,6 +161,48 @@ usePageMeta({
   color: var(--color-text-muted);
 }
 
+.results {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 var(--space-6);
+}
+
+.result {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding-block: var(--space-2);
+  border-block-end: 1px solid var(--color-border);
+}
+
+.result-award {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-accent-2);
+  white-space: nowrap;
+}
+
+.result-award::after {
+  content: '—';
+  margin-inline-start: var(--space-2);
+  color: var(--color-text-faint);
+}
+
+.result-event {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.result-evidence {
+  margin-inline-start: var(--space-2);
+}
+
 .entry-figure {
   margin: 0;
   display: grid;
@@ -170,6 +226,12 @@ usePageMeta({
 
 @media (max-width: 1040px) {
   .entries[data-layout='cards'] {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .results {
     grid-template-columns: 1fr;
   }
 }

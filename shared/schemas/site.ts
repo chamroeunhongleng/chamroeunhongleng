@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { EVIDENCE_LABELS, PILLARS, WORK_STATES } from './enums'
-import { claimSchema, imageRefSchema, linkSchema, slugSchema } from './common'
+import { claimSchema, hrefSchema, imageRefSchema, linkSchema, slugSchema } from './common'
 
 // ── profile.json ─────────────────────────────────────────────────────────
 export const profileSchema = z.strictObject({
@@ -23,6 +23,12 @@ export const profileSchema = z.strictObject({
   proofPoints: z.array(claimSchema).min(3),
   /** One-line AI-native working-style statement. */
   aiWorkingStyle: z.string().min(1),
+  /**
+   * Optional CV download. Header and contact links render only when this is
+   * set, and check:links fails the build if the referenced file is missing —
+   * so the link can never ship before the PDF does.
+   */
+  cv: z.strictObject({ label: z.string().min(1), url: hrefSchema }).optional(),
   /** Optional portrait; About renders a placeholder frame until provided. */
   photo: imageRefSchema.optional()
 })
@@ -75,6 +81,23 @@ export const interestsSchema = z.strictObject({
 export type Interests = z.infer<typeof interestsSchema>
 
 // ── experience.json ──────────────────────────────────────────────────────
+/**
+ * One competition result as a single scannable line: "award — event".
+ * The evidence label is data on every line; the UI stamps it visibly only
+ * when a public link backs it (same pattern as the education card, where
+ * labels live in JSON without rendering per-row chips).
+ */
+export const resultLineSchema = z.strictObject({
+  /** The outcome, e.g. "Gold Medal", "No. 1", "Top 2", "100% Scholarship". */
+  award: z.string().min(1),
+  /** The competition, examination, or awarding institution. */
+  event: z.string().min(1),
+  evidence: z.enum(EVIDENCE_LABELS),
+  /** Optional public receipt; rendered as a linked evidence stamp. */
+  link: hrefSchema.optional()
+})
+export type ResultLine = z.infer<typeof resultLineSchema>
+
 export const experienceEntrySchema = z.strictObject({
   organization: z.string().min(1),
   role: z.string().min(1),
@@ -82,6 +105,8 @@ export const experienceEntrySchema = z.strictObject({
   current: z.boolean(),
   summary: z.string().min(1),
   contributions: z.array(claimSchema),
+  /** Compact one-line results rendered as a scannable award list. */
+  results: z.array(resultLineSchema).optional(),
   links: z.array(linkSchema).optional(),
   /** Optional photographic evidence (e.g. medals, certificates). */
   image: imageRefSchema.optional()
