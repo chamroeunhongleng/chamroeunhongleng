@@ -17,6 +17,10 @@
     "typecheck": "nuxt typecheck",
     "lint": "eslint .",
     "test": "vitest run",
+    "test:e2e": "playwright test",
+    "test:e2e:devices": "cross-env E2E_DEVICES=1 playwright test",
+    "test:e2e:build": "npm run generate && cross-env E2E_DEVICES=1 E2E_BUILD=1 playwright test",
+    "test:e2e:ui": "playwright test --ui",
     "check:structure": "node --import jiti/register scripts/check-structure.ts",
     "check:secrets": "node --import jiti/register scripts/check-secrets.ts",
     "check:content": "node --import jiti/register scripts/check-content.ts",
@@ -27,14 +31,20 @@
     "assets:generate": "node --import jiti/register scripts/generate-assets.ts",
     "verify": "node --import jiti/register scripts/verify.ts"
   },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.115.0",
+    "zod": "^4.0.0"
+  },
   "devDependencies": {
     "@fontsource-variable/fraunces": "^5.0.0",
     "@fontsource-variable/inter": "^5.0.0",
     "@fontsource/ibm-plex-mono": "^5.0.0",
     "@nuxt/eslint": "^1.0.0",
     "@nuxtjs/sitemap": "^8.2.2",
+    "@playwright/test": "^1.62.1",
     "@resvg/resvg-js": "^2.6.2",
     "@types/node": "^24.13.3",
+    "@vercel/node": "^5.0.0",
     "@vitejs/plugin-vue": "^6.0.0",
     "@vue/test-utils": "^2.4.6",
     "cross-env": "^7.0.3",
@@ -47,7 +57,6 @@
     "vitest": "^3.1.0",
     "vue": "^3.5.39",
     "vue-router": "^5.1.0",
-    "vue-tsc": "^3.3.7",
-    "zod": "^4.0.0"
+    "vue-tsc": "^3.3.7"
   }
 }
