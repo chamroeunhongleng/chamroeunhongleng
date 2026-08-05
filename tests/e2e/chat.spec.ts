@@ -96,6 +96,57 @@ test.describe('Chat widget shell', () => {
     await expect(page.getByRole('button', { name: 'Chat about this site' })).toBeFocused()
   })
 
+  test('opening dims the page behind the panel', async ({ page }) => {
+    await page.goto('/')
+    const scrim = page.locator('.chat-scrim')
+    await expect(scrim).toBeHidden()
+
+    await openPanel(page)
+    await expect(scrim).toBeVisible()
+
+    // The scrim must cover the sticky header (z-index 50), or the site logo
+    // stays bright behind an open conversation — the whole point of it.
+    const covers = await page.evaluate(() => {
+      const s = document.querySelector('.chat-scrim')!.getBoundingClientRect()
+      const h = document.querySelector('.site-header')!.getBoundingClientRect()
+      return s.top <= h.top && s.bottom >= h.bottom && s.left <= h.left && s.right >= h.right
+    })
+    expect(covers, 'scrim does not cover the header').toBe(true)
+  })
+
+  test('clicking the dimmed area closes the panel', async ({ page }) => {
+    await page.goto('/')
+    await openPanel(page)
+
+    // Click top-left, far from the panel in the bottom-right corner.
+    await page.locator('.chat-scrim').click({ position: { x: 20, y: 20 } })
+    await expect(page.getByRole('dialog', { name: 'Portfolio concierge' })).toBeHidden()
+  })
+
+  test('the page still scrolls while the panel is open', async ({ page }) => {
+    await page.goto('/')
+    await openPanel(page)
+
+    const before = await page.evaluate(() => window.scrollY)
+    await page.mouse.wheel(0, 600)
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(before)
+
+    // No body scroll lock on purpose: the assistant navigates the visitor and
+    // scrolls to section anchors while the panel stays open, so locking scroll
+    // would break its own navigation feature.
+    await expect(page.getByRole('dialog', { name: 'Portfolio concierge' })).toBeVisible()
+  })
+
+  test('the launcher stays clickable above the dimmed area', async ({ page }) => {
+    await page.goto('/')
+    await openPanel(page)
+
+    // A scrim that swallows the launcher would leave it visibly enabled but
+    // dead — worse than hiding it.
+    await page.getByRole('button', { name: 'Chat about this site' }).click()
+    await expect(page.getByRole('dialog', { name: 'Portfolio concierge' })).toBeHidden()
+  })
+
   test('the close button closes the panel', async ({ page }) => {
     await page.goto('/')
     await openPanel(page)

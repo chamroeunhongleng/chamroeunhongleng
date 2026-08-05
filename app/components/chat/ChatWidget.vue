@@ -61,6 +61,19 @@ watch(
 
 <template>
   <div class="chat-widget" @keydown.escape="closeAndRefocus">
+    <!-- Dims the page behind an open panel, so the header and content recede
+         and the conversation is clearly the thing in focus. Decorative and
+         hidden from assistive tech: Escape and the Close button already do
+         this job for keyboard and screen-reader users. -->
+    <Transition name="chat-scrim">
+      <div
+        v-if="open"
+        class="chat-scrim"
+        aria-hidden="true"
+        @click="closeAndRefocus"
+      />
+    </Transition>
+
     <button
       ref="toggleButton"
       type="button"
@@ -199,9 +212,45 @@ watch(
   gap: var(--space-3);
 }
 
+/* Full-viewport, but a child of .chat-widget so it sits inside that stacking
+   context (z-index 60) and therefore covers the sticky header at z-index 50.
+   position: fixed takes it out of the grid flow, so it does not affect the
+   widget's track sizing.
+
+   Deliberately NO body scroll lock: the assistant navigates the visitor and
+   scrolls to section anchors while the panel stays open, and locking scroll
+   would break that. */
+.chat-scrim {
+  position: fixed;
+  inset: 0;
+  background: rgb(0 0 0 / 0.4);
+  cursor: pointer;
+}
+
+.chat-scrim-enter-active,
+.chat-scrim-leave-active {
+  transition: opacity var(--duration-base) var(--ease-out);
+}
+
+.chat-scrim-enter-from,
+.chat-scrim-leave-to {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-scrim-enter-active,
+  .chat-scrim-leave-active {
+    transition: none;
+  }
+}
+
 .chat-toggle {
   display: grid;
   place-items: center;
+  /* Positioned so it paints above the scrim, which is itself positioned —
+     a static element would render underneath it and become unclickable. */
+  position: relative;
+  z-index: 1;
   width: 3.5rem;
   height: 3.5rem;
   padding: 0;
@@ -252,6 +301,9 @@ watch(
 .chat-panel {
   display: flex;
   flex-direction: column;
+  /* Same reason as .chat-toggle — must paint above the scrim. */
+  position: relative;
+  z-index: 1;
   width: min(24rem, calc(100vw - 2rem));
   height: min(34rem, 75dvh);
   background: var(--color-surface);
