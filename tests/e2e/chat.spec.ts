@@ -137,14 +137,28 @@ test.describe('Chat widget shell', () => {
     await expect(page.getByRole('dialog', { name: 'Portfolio concierge' })).toBeVisible()
   })
 
-  test('the launcher stays clickable above the dimmed area', async ({ page }) => {
+  test('the launcher is hidden while the panel is open, and returns on close', async ({ page }) => {
+    await page.goto('/')
+    const launcher = page.getByRole('button', { name: 'Chat about this site' })
+    await expect(launcher).toBeVisible()
+
+    await openPanel(page)
+    // It would otherwise float over the panel with nothing useful to do.
+    await expect(launcher).toBeHidden()
+
+    await page.getByRole('button', { name: 'Close chat' }).click()
+    await expect(launcher).toBeVisible()
+  })
+
+  test('Escape restores focus to the launcher even though it was removed', async ({ page }) => {
     await page.goto('/')
     await openPanel(page)
 
-    // A scrim that swallows the launcher would leave it visibly enabled but
-    // dead — worse than hiding it.
-    await page.getByRole('button', { name: 'Chat about this site' }).click()
-    await expect(page.getByRole('dialog', { name: 'Portfolio concierge' })).toBeHidden()
+    // The launcher does not exist while the panel is open, so focus can only
+    // return after the close has rendered. A synchronous focus() call here
+    // silently does nothing and strands the keyboard user.
+    await page.keyboard.press('Escape')
+    await expect(page.getByRole('button', { name: 'Chat about this site' })).toBeFocused()
   })
 
   test('the close button closes the panel', async ({ page }) => {

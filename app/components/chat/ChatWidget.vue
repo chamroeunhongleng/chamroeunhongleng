@@ -24,9 +24,14 @@ const chips = computed(() => {
   return last?.role === 'assistant' && last.suggested?.length ? last.suggested : []
 })
 
-function closeAndRefocus(): void {
+async function closeAndRefocus(): Promise<void> {
   if (!open.value) return
   close()
+  // The launcher is removed while the panel is open, so it does not exist to
+  // focus until the close has rendered. Without this await the ref is still
+  // null and focus is silently dropped, stranding keyboard users where the
+  // panel used to be.
+  await nextTick()
   toggleButton.value?.focus()
 }
 
@@ -74,25 +79,32 @@ watch(
       />
     </Transition>
 
-    <button
-      ref="toggleButton"
-      type="button"
-      class="chat-toggle"
-      :aria-expanded="open"
-      aria-controls="chat-panel"
-      aria-label="Chat about this site"
-      title="Ask about Chamroeun"
-      @click="toggle"
-    >
-      <img
-        src="/images/chat-assistant.png"
-        alt=""
-        aria-hidden="true"
-        class="chat-toggle-icon"
-        width="256"
-        height="256"
+    <!-- Hidden while the panel is open: it would float over the panel with
+         nothing useful to do, since the header's Close button and Escape both
+         already dismiss. Reappears on close, and closeAndRefocus() awaits that
+         render before returning focus to it. -->
+    <Transition name="chat-launch">
+      <button
+        v-if="!open"
+        ref="toggleButton"
+        type="button"
+        class="chat-toggle"
+        :aria-expanded="open"
+        aria-controls="chat-panel"
+        aria-label="Chat about this site"
+        title="Ask about Chamroeun"
+        @click="toggle"
       >
-    </button>
+        <img
+          src="/images/chat-assistant.png"
+          alt=""
+          aria-hidden="true"
+          class="chat-toggle-icon"
+          width="256"
+          height="256"
+        >
+      </button>
+    </Transition>
 
     <Transition name="chat-pop">
       <section
@@ -237,9 +249,24 @@ watch(
   opacity: 0;
 }
 
+/* The launcher swaps out for the panel rather than vanishing abruptly. */
+.chat-launch-enter-active,
+.chat-launch-leave-active {
+  transition: opacity var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out);
+}
+
+.chat-launch-enter-from,
+.chat-launch-leave-to {
+  opacity: 0;
+  transform: scale(0.85);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .chat-scrim-enter-active,
-  .chat-scrim-leave-active {
+  .chat-scrim-leave-active,
+  .chat-launch-enter-active,
+  .chat-launch-leave-active {
     transition: none;
   }
 }
