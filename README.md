@@ -1,65 +1,99 @@
 # Chamroeun Hongleng
 
-**Applied ML & software — building Khmer-first systems for Cambodia.**
+Software engineering student in Phnom Penh. I build web systems, decision engines, and bilingual product tooling, and I fine-tune Khmer speech models when a product needs one. Most of my work starts from a problem I can watch happen here: a farmer selling before harvest, a shop owner counting stock by hand, a student studying in two languages.
 
-Phnom Penh 🇰🇭 · Dual degree: Information Technology Management @ AUPP + Computer Science @ Fort Hays State University · B.A. English for Work Skills @ IFL, Royal University of Phnom Penh
+I am early in my career, so I am training the habits I want to keep: ship working systems, write down the tradeoffs, publish the caveat next to the number, and use AI agents as engineering leverage rather than as a replacement for judgment.
 
-🔎 **Open to applied-ML and software engineering internships — research or product, remote or Phnom Penh, from 2026.**
+**Actively looking for a software engineering internship — full-stack, backend, or data and ML tooling — remote or Phnom Penh.**
+
+Dual degree: Computer Science at Fort Hays State University + Information Technology Management at AUPP · B.A. English for Work Skills at IFL, Royal University of Phnom Penh
 
 [Portfolio](https://chamroeunhongleng.me) · [CV (PDF)](https://chamroeunhongleng.me/cv/chamroeun-hongleng.pdf) · [Hugging Face](https://huggingface.co/Hongleng) · [LinkedIn](https://www.linkedin.com/in/chamroeun-hongleng-73b249375) · [Email](mailto:chamroeunhongleng825@gmail.com)
 
 ---
 
-## Selected work
+## Current Direction
 
-**[Kaskor ASR](https://github.com/chamroeunhongleng/kaskor-asr)** — Khmer speech-to-text
-`Python` `PyTorch` `Whisper` `Hugging Face`
+- Building software end to end in TypeScript and Python, and adding a machine learning layer only where a product genuinely needs one
+- Working on Khmer-language ML, where public data is scarce and the evaluation has to stay honest
+- Turning problems I can observe in Cambodia — smallholder agriculture, small retail, bilingual education — into small systems that can be tested
+- Practising AI-native engineering: written specs, agent-assisted implementation, test loops, and human review before anything ships
+- Building at CHNAI LAB, a six-member student studio in Phnom Penh, where I work most closely with one teammate
 
-`whisper-small` fine-tuned for Khmer across a complete public pipeline: raw audio → manifest → training → evaluation → released weights → a pip-installable CLI. Weights are on the Hub as [`Hongleng/kasekor-asr-v0.0`](https://huggingface.co/Hongleng/kasekor-asr-v0.0).
+## Public Proof of Work
 
-Best checkpoint: **17.48% CER**. The repository states plainly why that number is optimistic — the split is stratified by speaker, so 99.96% of test utterances come from voices the model trained on, and the training data is female-only. A speaker-independent evaluation is the stated next step. I would rather publish the caveat than the headline alone.
+- **Portfolio case studies:** [chamroeunhongleng.me](https://chamroeunhongleng.me) documents the architecture, results, and limits of each project. Every claim carries an evidence label — public document, repository, live demo, or plainly "stated by me" — and the build refuses to publish a claim that has none.
+- **Khmer speech model:** [`Hongleng/kasekor-asr-v0.0`](https://huggingface.co/Hongleng/kasekor-asr-v0.0) — released weights on the Hub, with the training and evaluation code public in [kaskor-asr](https://github.com/chamroeunhongleng/kaskor-asr). The raw audio stays private; everything needed to read the method does not.
+- **Shop operations platform:** [phsaros.vercel.app](https://phsaros.vercel.app) — a running Next.js application for Cambodian shops, cafés, and marts, open for self-serve signup. No business results are claimed: no shop's daily operation is documented on it yet.
+- **Agritech:** [chomkar.com](https://chomkar.com) is the Khmer-first product site for pre-harvest market access; the [Chomkar Decision Grid](https://github.com/chamroeunhongleng/chomkar-decision-grid) is the deterministic engine underneath that work.
+- **Studio:** [github.com/chnai-lab](https://github.com/chnai-lab) — CHNAI LAB, the student studio I build in. Products are divided between members. PhsarOS is my own build; on Chomkar I contributed the API it runs on from my account, the farmer interviews, and the business analysis.
 
-**[Chomkar Decision Grid](https://github.com/chamroeunhongleng/chomkar-decision-grid)** — auditable farm-lot decision engine
-`Python` `Decision intelligence` `CI` `Agritech`
+## Open-Source Proof
 
-Assembles multi-farm produce lots against a buyer order and explains every number. Deterministic, stdlib-only code owns the arithmetic; the AI layer cites it and is forbidden by a CI linter from computing money in prose. **62 unit tests**, an independent audit gate that re-derives every recommendation from raw data, designed-to-fail test orders, and bilingual Khmer/English reports ending in a human approval checklist.
+[kaskor-asr](https://github.com/chamroeunhongleng/kaskor-asr) is a complete Khmer speech-to-text pipeline for a low-resource language: raw audio → manifests → fine-tuning Whisper-small → evaluation → released weights → a pip-installable CLI. Its CI fails the build if the released model id stops resolving on the Hub, so the install path cannot quietly break.
 
-**Chomkar OrderLoop** — pre-harvest market coordination
-`Field research` `Product strategy`
+Best checkpoint: **17.48% CER**. I publish the caveat with that number, because the number alone would mislead. The split is stratified by speaker rather than holding speakers out, so 99.96% of test utterances come from voices the model trained on, and every training speaker is female. It is an honest measurement of the wrong thing: it does not estimate accuracy on a new speaker. A speaker-independent evaluation is the stated next version. The full limitations are in the [case study](https://chamroeunhongleng.me/projects/kaskor-asr).
 
-Coordinating buyer demand and smallholder commitments into one documented pre-harvest lot. Validated through ~30 farmer interviews in Kampong Cham. **Top 2, Turing Hackathon Cycle 10** (Techo Startup Center) · [case study](https://chamroeunhongleng.me/projects/chomkar-orderloop)
+## Runnable Verification
 
-**[chamroeunhongleng.me](https://github.com/chamroeunhongleng/chamroeunhongleng)** — this repository
-`Nuxt 4` `TypeScript` `Zod` `CI`
+This profile is also a live Nuxt application, not only a narrative README. Site content is JSON validated by zod schemas, and structure, claim labels, links, accessibility, SEO, and secrets are all checked by a 12-phase pipeline with a unit, end-to-end, and model-behaviour test suite behind it.
 
-My portfolio, and the enforcement mechanism behind it: content is schema-validated, every claim carries an evidence label, and a production build aborts if a claim is unlabelled or a placeholder remains. See [docs/repository.md](docs/repository.md).
+```bash
+npm ci
+npm run verify
+```
 
-## What I do
+A production build **fails** while any claim is unlabelled or any placeholder is still in the content — the honesty rule is enforced by the build, not by good intentions. The same pipeline runs in GitHub Actions on every push. Repository documentation: [docs/repository.md](docs/repository.md).
 
-Applied ML and the software around it: Khmer speech and language modelling, evaluation and data pipelines for a low-resource language, and decision systems for agriculture and informal commerce. I build end to end and add the ML layer when a product genuinely needs one.
+## Selected Work
 
-**Python** · **TypeScript** · PyTorch · Hugging Face · Whisper · Nuxt · Next.js · Claude API · PostgreSQL · Supabase · Prisma
+| Project | Problem space | Where it stands |
+| --- | --- | --- |
+| [Kaskor ASR](https://github.com/chamroeunhongleng/kaskor-asr) | Khmer speech-to-text for a low-resource language | Prototype · public code, released weights, 17.48% CER on a speaker-dependent split |
+| [PhsarOS](https://phsaros.vercel.app) | Daily operations for small Cambodian shops, cafés, and marts | Public demo · deployed with self-serve signup, no business results claimed |
+| [Chomkar Decision Grid](https://github.com/chamroeunhongleng/chomkar-decision-grid) | Auditable allocation of farm lots against a buyer order | Prototype · 62 unit tests, CI-gated, bilingual audit reports, a human approves every recommendation |
+| [Chomkar OrderLoop](https://chomkar.com) | Pre-harvest market access for smallholder farmers | Pre-pilot · around 30 farmer interviews in Kampong Cham; Top 2, Turing Hackathon Cycle 10 |
+| [Bilingual LMS](https://lms-for-education-nine.vercel.app) | Course delivery and assessment in English and Khmer | Prototype · public walkthrough |
+| [chamroeunhongleng.me](https://github.com/chamroeunhongleng/chamroeunhongleng) | Proving claims instead of asserting them | Deployed · this repository: schema-validated content and a build that gates publication |
 
-I work AI-natively — Claude supports research, drafting, and implementation — while decisions, evidence labels, and anything that ships stay under my review.
+Read more:
+
+- [Kaskor ASR case study](https://chamroeunhongleng.me/projects/kaskor-asr)
+- [PhsarOS case study](https://chamroeunhongleng.me/projects/phsaros)
+- [Chomkar OrderLoop case study](https://chamroeunhongleng.me/projects/chomkar-orderloop)
+- [How this site is built](https://chamroeunhongleng.me/projects/portfolio-site) and its [colophon](https://chamroeunhongleng.me/colophon)
+- [Journey — competitions, scholarships, and community work](https://chamroeunhongleng.me/journey)
+
+## Engineering Stack
+
+TypeScript, JavaScript, Vue, Nuxt, React, Next.js, Node.js, Python, PyTorch, Hugging Face, Whisper, Prisma, PostgreSQL, Supabase, Neon, Vercel, GitHub Actions, the Claude API, and agent-assisted development workflows.
 
 ## Background
 
-Mathematics competitor before I was a builder. That is where the habit of checking my own work came from.
+I was a mathematics competitor before I was a builder, and that is where the habit of checking my own work came from.
 
 - **National runner-up in mathematics**, Cambodia (Ministry of Education national examination, 2025) · Grade A, Bac II 2025
 - **Silver Award, Hong Kong International Mathematical Olympiad 2024** — [named in the organiser's official results](https://www.hongkongimo.com/uploads/2/8/9/2/28923219/hkimo_2024_heat_round_ss.pdf)
-- Ranked No. 1 in mathematics at school, district, and provincial level (Kampong Cham) · ~30 medals across SASMO, HKIMO, AMO, SEAMO, WMO, Math Kangaroo and others
-- **Two full (100%) university scholarships** — AUPP (second-place laureate in mathematics) and a four-year Ministry of Justice award for study at RUPP
+- Ranked first in mathematics at school, district, and provincial level in Kampong Cham · around 30 medals across SASMO, HKIMO, AMO, SEAMO, WMO, and Math Kangaroo
+- **Two full (100%) university scholarships** — AUPP, as second-place laureate in mathematics, and a four-year Ministry of Justice award for study at RUPP
 - **Author of six bilingual mathematics books** (~1,780 pages, First Editions 2026) — [free to download](https://github.com/chamroeunhongleng/chamroeunhongleng/releases/tag/scholar-series-2026)
+- **Lead of the FounderOS Professional Circle** — a small reading and practice group with a written handbook, rotating roles, and five binding rules on how members may use AI
 
-## How I work
+## How I Work
 
-Every claim I publish carries an evidence label — public document, repository, or plainly "stated by me". I would rather ship something small and honest than something impressive-sounding and unverified. Where a metric flatters me, I say why.
+- **Product first.** Start from a real user, a real workflow, and the way it currently fails.
+- **Evidence over hype.** Say what is shipped, what is still a prototype, and what has not been validated yet. Where a metric flatters me, say why.
+- **AI-native, not AI-blind.** Agents help with research, drafting, and implementation; decisions, evidence labels, and anything that ships stay under my review.
+- **Bounded authority.** Give an agent the minimum context and permission it needs, and keep deployment, security, financial, and public-claim decisions with a human.
+- **Private where it should stay private.** Field data, personal records, and other people's information stay out of public repositories and off the site.
+- **Readable systems.** Small commits, written tradeoffs, and architecture a future teammate can follow.
 
-That rule is enforced by code, not by good intentions: this repository is the source of [chamroeunhongleng.me](https://chamroeunhongleng.me), where an unlabelled claim fails to parse and a production build aborts while any placeholder remains.
+## Contact
+
+Portfolio: [chamroeunhongleng.me](https://chamroeunhongleng.me) · GitHub: [@chamroeunhongleng](https://github.com/chamroeunhongleng) · LinkedIn: [Chamroeun Hongleng](https://www.linkedin.com/in/chamroeun-hongleng-73b249375) · Email: [chamroeunhongleng825@gmail.com](mailto:chamroeunhongleng825@gmail.com)
 
 ## Licence
 
 The site's source code is [MIT](LICENSE). The personal content — biography, project descriptions, case studies, images, and everything under `content/` — is all rights reserved; see [NOTICE](NOTICE).
 
-<sub>From Kampong Cham, based in Phnom Penh · Studio: <a href="https://github.com/CHNAI-LAB">@CHNAI-LAB</a></sub>
+<sub>From Kampong Cham, based in Phnom Penh · Studio: <a href="https://github.com/chnai-lab">@chnai-lab</a></sub>
