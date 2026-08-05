@@ -28,6 +28,10 @@ const LAPTOP = {
 
 export default defineConfig({
   testDir: './tests/e2e',
+  // The screenshot capture run is a review tool, not a pass/fail check — it
+  // writes ~100 images and would slow every ordinary run. Opt in with
+  // `npm run test:e2e:shots`.
+  testIgnore: process.env.E2E_SHOTS ? [] : ['**/screenshots.spec.ts'],
   // Compiles every route once, serially, so parallel workers never race the
   // Nuxt dev server's first-request compile. See tests/e2e/global-setup.ts.
   globalSetup: './tests/e2e/global-setup.ts',
@@ -56,6 +60,13 @@ export default defineConfig({
   projects: FULL_MATRIX
     ? [
         LAPTOP,
+        // 320x568 — the narrowest realistic phone. Below SiteHeader's 22.4em
+        // (~358px) rule, so the brand NAME should be hidden and the monogram
+        // alone carries the brand.
+        { name: 'mobile-small', use: appleMetricsOnChromium(devices['iPhone SE']) },
+        // 360x740 — what SiteHeader.vue calls "the most common Android width",
+        // and the width its header-row spacing was tuned against.
+        { name: 'mobile-android-compact', use: { ...devices['Galaxy S8'] } },
         // 393x851 — below the 760px breakpoint, so: mobile menu.
         { name: 'mobile-android', use: { ...devices['Pixel 5'] } },
         // 390x844 — mobile menu.

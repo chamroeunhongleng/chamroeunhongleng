@@ -3,7 +3,9 @@ import { publishedProjects } from './fixtures/projects'
 
 // Must match the breakpoint in app/components/layout/SiteHeader.vue.
 // At or below this width the desktop nav is hidden and the Menu toggle appears.
-const MOBILE_BREAKPOINT = 760
+// 820px is where the desktop header measurably stops fitting on one line —
+// which puts iPad portrait (810px) on the mobile menu, by design.
+const MOBILE_BREAKPOINT = 820
 
 type Page = import('@playwright/test').Page
 type Locator = import('@playwright/test').Locator
@@ -50,6 +52,29 @@ test.describe('Responsive header', () => {
       await expect(desktopNav).toBeVisible()
       await expect(toggle).toBeHidden()
     }
+  })
+
+  test('header stays on one line', async ({ page }) => {
+    await page.goto('/')
+    await page.evaluate(() => document.fonts.ready)
+
+    const { rowHeight, tallestControl } = await page.evaluate(() => {
+      const row = document.querySelector('.header-row') as HTMLElement
+      const kids = Array.from(row.children).map((c) => c.getBoundingClientRect())
+      return {
+        rowHeight: row.getBoundingClientRect().height,
+        tallestControl: Math.max(...kids.map((k) => k.height))
+      }
+    })
+
+    // A wrapped header is roughly double height. The brand name is supposed to
+    // drop out below 450px so the row still fits on one line — before that was
+    // fixed, every phone width from 360px up rendered a 102px double-height
+    // header instead of 64px.
+    expect(
+      rowHeight,
+      `header wrapped to two lines (row ${rowHeight}px vs tallest control ${tallestControl}px)`
+    ).toBeLessThan(tallestControl * 1.8)
   })
 
   test('mobile menu opens, then Escape closes it and restores focus', async ({ page }) => {

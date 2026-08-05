@@ -30,3 +30,9 @@ blob-report
 .env*
 
 !.env.example
+
+# Firecrawl scratch output
+.firecrawl/
+
+# Disposable intermediates (screenshots, scratch exports)
+.tmp
