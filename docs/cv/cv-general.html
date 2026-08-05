@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chamroeun Hongleng — CV</title>
+<style>
+  :root {
+    --ink: #0a1814;
+    --muted: #52675f;
+    --faint: #718078;
+    --line: rgba(13, 47, 37, 0.14);
+    --line-strong: rgba(13, 47, 37, 0.28);
+    --brand: #2e7600;
+    --brand-2: #007f72;
+    --lime: #adff2f;
+    --tint: #eef4ee;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { background: #d8ded9; }
+  body {
+    font-family: Inter, "Segoe UI", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    color: var(--ink);
+    font-size: 9.4pt;
+    line-height: 1.45;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .page {
+    width: 210mm;
+    min-height: 296mm;
+    margin: 24px auto;
+    padding: 11mm 12mm 9mm;
+    background: #ffffff;
+    box-shadow: 0 20px 60px rgba(20, 46, 35, 0.25);
+    display: flex;
+    flex-direction: column;
+  }
+  h1, h2, h3 {
+    font-family: "Arial Narrow", "Roboto Condensed", Inter, sans-serif;
+    letter-spacing: -0.03em;
+    line-height: 1.02;
+  }
+
+  /* ---------- Header ---------- */
+  .cv-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .logo-mark {
+    flex: none;
+    width: 46px;
+    height: 46px;
+    display: grid;
+    place-items: center;
+    background: var(--lime);
+    color: #06100e;
+    border: 1px solid var(--line-strong);
+    border-radius: 10px;
+    transform: rotate(-3deg);
+    font-weight: 900;
+    font-size: 13pt;
+    letter-spacing: -0.08em;
+    margin-top: 3px;
+  }
+  .head-main { flex: 1; }
+  h1 { font-size: 25pt; font-weight: 800; text-transform: uppercase; }
+  .headline {
+    margin-top: 3px;
+    font-size: 10.6pt;
+    font-weight: 700;
+    color: var(--brand);
+  }
+  .headline span { color: var(--brand-2); }
+  .contact-row {
+    margin-top: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px 14px;
+    font-size: 8.4pt;
+    color: var(--muted);
+  }
+  .contact-row a { color: var(--muted); text-decoration: none; }
+  .contact-row strong { color: var(--ink); font-weight: 650; }
+
+  /* ---------- Proof strip ---------- */
+  .proof-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 9px 0 10px;
+    background: var(--tint);
+  }
+  .proof-strip .stat {
+    padding: 6px 10px 7px;
+    border-left: 1px solid var(--line);
+  }
+  .proof-strip .stat:first-child { border-left: none; }
+  .stat .value {
+    font-family: "Arial Narrow", "Roboto Condensed", Inter, sans-serif;
+    font-size: 13.5pt;
+    font-weight: 800;
+    color: var(--brand);
+    letter-spacing: -0.02em;
+  }
+  .stat .label { font-size: 7.3pt; color: var(--muted); line-height: 1.3; margin-top: 1px; }
+
+  /* ---------- Columns ---------- */
+  .columns {
+    display: grid;
+    grid-template-columns: 1fr 57mm;
+    gap: 0 8mm;
+    flex: 1;
+  }
+
+  section { margin-bottom: 10px; }
+  h2 {
+    font-size: 10.2pt;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+  }
+  h2::after { content: ''; flex: 1; height: 1px; background: var(--line-strong); }
+
+  .profile p { color: #24352e; font-size: 9.2pt; margin-bottom: 4px; }
+  .profile p:last-child { margin-bottom: 0; }
+
+  /* ---------- Projects ---------- */
+  .project { margin-bottom: 9px; }
+  .project:last-child { margin-bottom: 0; }
+  .project-head {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  h3 { font-size: 10.6pt; font-weight: 800; }
+  .status {
+    font-size: 6.8pt;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 1.5px 7px;
+    border-radius: 999px;
+    border: 1px solid var(--brand);
+    color: var(--brand);
+    white-space: nowrap;
+  }
+  .status.field { border-color: var(--brand-2); color: var(--brand-2); }
+  .project-meta { font-size: 7.6pt; color: var(--faint); }
+  .role-line { font-size: 8.2pt; color: var(--brand-2); font-weight: 650; margin: 1px 0 3px; }
+  ul { list-style: none; }
+  li {
+    position: relative;
+    padding-left: 11px;
+    margin-bottom: 2.5px;
+    font-size: 8.9pt;
+    color: #24352e;
+  }
+  li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 6px;
+    width: 5px;
+    height: 5px;
+    border-radius: 1.5px;
+    background: var(--brand);
+    transform: rotate(45deg);
+  }
+  .stack-line { margin-top: 3px; font-size: 7.6pt; color: var(--faint); }
+  .stack-line strong { color: var(--muted); font-weight: 700; text-transform: uppercase; font-size: 6.8pt; letter-spacing: 0.06em; }
+
+  /* ---------- Experience ---------- */
+  .xp { margin-bottom: 7px; }
+  .xp:last-child { margin-bottom: 0; }
+  .xp-head { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+  .xp-head h3 { font-size: 9.8pt; }
+  .xp-head .period { font-size: 7.6pt; color: var(--faint); white-space: nowrap; }
+  .xp p { font-size: 8.8pt; color: #24352e; margin-top: 1px; }
+  .xp .org { color: var(--brand-2); font-weight: 650; font-size: 8.2pt; }
+
+  /* ---------- Sidebar ---------- */
+  aside section { margin-bottom: 11px; }
+  .edu-item { margin-bottom: 6px; }
+  .edu-item .degree { font-weight: 700; font-size: 8.9pt; }
+  .edu-item .school { font-size: 8.3pt; color: var(--muted); }
+  .edu-item .period { font-size: 7.5pt; color: var(--faint); }
+  .skill-group { margin-bottom: 6px; }
+  .skill-group .cat {
+    font-size: 7.2pt;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--brand);
+    margin-bottom: 2px;
+  }
+  .skill-group p { font-size: 8.5pt; color: #24352e; }
+  .award {
+    border: 1px solid var(--line-strong);
+    border-left: 3px solid var(--brand);
+    border-radius: 6px;
+    padding: 6px 9px;
+    background: var(--tint);
+  }
+  .award .title { font-weight: 750; font-size: 8.9pt; }
+  .award p { font-size: 8.2pt; color: var(--muted); margin-top: 1px; }
+  .principles li { font-size: 8.4pt; margin-bottom: 3.5px; }
+  .principles li strong { display: block; font-size: 8.5pt; color: var(--ink); }
+  .principles li span { color: var(--muted); font-size: 8pt; }
+
+  /* ---------- Footer ---------- */
+  .cv-footer {
+    margin-top: auto;
+    padding-top: 7px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 7.6pt;
+    color: var(--faint);
+  }
+  .cv-footer strong { color: var(--brand); font-weight: 700; }
+
+  /* ---------- Print ---------- */
+  @page { size: A4; margin: 0; }
+  @media print {
+    html { background: #ffffff; }
+    .page { margin: 0; box-shadow: none; width: auto; min-height: auto; }
+    .print-hint { display: none; }
+  }
+  .print-hint {
+    width: 210mm;
+    margin: 0 auto 28px;
+    text-align: center;
+    font-size: 8.6pt;
+    color: #4b5a52;
+  }
+  @media (max-width: 220mm) {
+    .page, .print-hint { width: auto; margin-inline: 10px; }
+    .columns { grid-template-columns: 1fr; }
+    .proof-strip { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+  <header class="cv-header">
+    <div class="logo-mark" aria-hidden="true">HL</div>
+    <div class="head-main">
+      <h1>Chamroeun Hongleng</h1>
+      <p class="headline">Applied ML &amp; Product Builder <span>· AI × Software × Business</span></p>
+      <div class="contact-row">
+        <span><strong>Phnom Penh, Cambodia</strong></span>
+        <a href="mailto:chamroeunhongleng825@gmail.com">chamroeunhongleng825@gmail.com</a>
+        <a href="https://chamroeunhongleng.me">chamroeunhongleng.me</a>
+        <a href="https://github.com/chamroeunhongleng">github.com/chamroeunhongleng</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="proof-strip">
+    <div class="stat"><div class="value">17.48%</div><div class="label">best reported Khmer ASR CER</div></div>
+    <div class="stat"><div class="value">~86k</div><div class="label">audio samples in ASR training work</div></div>
+    <div class="stat"><div class="value">62</div><div class="label">unit tests in Decision Grid</div></div>
+    <div class="stat"><div class="value">Top 2</div><div class="label">TSC Turing Hackathon C10</div></div>
+  </div>
+
+  <div class="columns">
+
+    <main>
+      <section class="profile">
+        <h2>Profile</h2>
+        <p>Dual-degree student (Computer Science + IT Management) building applied machine-learning
+        systems for low-resource Khmer contexts — speech recognition, agricultural coordination, and
+        human-approved decision tools.</p>
+        <p>I am exploring the intersection of artificial intelligence, machine learning, software,
+        and business: I want to understand not only how intelligent systems are built, but also how
+        contracts, policies, risks, and business decisions shape how those systems should be designed
+        and used. My long-term aspiration is to build practical AI products that are technically
+        sound, useful to real people, commercially valuable, and responsibly governed.</p>
+      </section>
+
+      <section>
+        <h2>Selected Projects</h2>
+
+        <article class="project">
+          <div class="project-head">
+            <h3>Kaskor ASR</h3>
+            <span class="status">Released</span>
+            <span class="project-meta">2026 · Khmer speech recognition</span>
+          </div>
+          <p class="role-line">ML pipeline, evaluation, and release tooling</p>
+          <ul>
+            <li>Built a reproducible Khmer speech-to-text pipeline on Whisper-small (~86k audio samples); best checkpoint reports <strong>17.48% CER</strong>, 67.2% WER (secondary), 0.0346 eval loss.</li>
+            <li>Chose Character Error Rate as the primary metric because Khmer does not reliably separate words with spaces; normalized text and verified 16&nbsp;kHz audio so evaluation stays honest.</li>
+            <li>Shipped a pip-installable CLI (files, folders, reference text, microphone) under MIT; datasets and model weights are excluded intentionally.</li>
+          </ul>
+          <p class="stack-line"><strong>Stack</strong> &nbsp;Python · PyTorch · Hugging Face · Whisper · Torchaudio · CER evaluation</p>
+        </article>
+
+        <article class="project">
+          <div class="project-head">
+            <h3>Chomkar Decision Grid</h3>
+            <span class="status">Released</span>
+            <span class="project-meta">2026 · Agritech decision intelligence</span>
+          </div>
+          <p class="role-line">Framework design, deterministic engine, and Claude workflow</p>
+          <ul>
+            <li>Designed an open-source engine that assembles smallholder farmer lots to satisfy buyer orders, with auditable prices, allocations, and route-risk scores.</li>
+            <li>Deterministic Python core with <strong>62 unit tests</strong> and CI; an independent audit stage re-derives payouts, coverage, and the winning score — “cannot fulfill” is a valid, tested output.</li>
+            <li>Generates bilingual Khmer/English reports that end with an explicit human-approval checklist; all bundled data is synthetic by design.</li>
+          </ul>
+          <p class="stack-line"><strong>Stack</strong> &nbsp;Python stdlib · unit tests · Claude Code · bilingual reports · decision audit</p>
+        </article>
+
+        <article class="project">
+          <div class="project-head">
+            <h3>Chomkar OrderLoop</h3>
+            <span class="status field">Field-validated</span>
+            <span class="project-meta">2026 · Market coordination for farmers</span>
+          </div>
+          <p class="role-line">ML roadmap, business analysis, and field validation</p>
+          <ul>
+            <li>Interviewed ~30 bok choy farmers in Kang Meas, Kampong Cham (with the team) to validate a buyer-first order loop that coordinates farmer commitments into one documented cooperative lot.</li>
+            <li>Concept placed <strong>Top 2</strong> at TSC Turing Hackathon Cycle 10 (Market Access for Farmers); pilot thesis is deliberately bounded to one recurring buyer, one cooperator, and 30–100 farmers.</li>
+          </ul>
+        </article>
+      </section>
+
+      <section>
+        <h2>Experience</h2>
+        <div class="xp">
+          <div class="xp-head"><h3>Technology Strategy &amp; Business Lead</h3><span class="period">2026 — present</span></div>
+          <p class="org">CHNAI LAB</p>
+          <p>Contributing product direction, applied-ML planning, field validation, and evidence standards across Cambodia-first product experiments.</p>
+        </div>
+      </section>
+    </main>
+
+    <aside>
+      <section>
+        <h2>Education</h2>
+        <div class="edu-item">
+          <p class="degree">B.S. Computer Science</p>
+          <p class="school">Fort Hays State University</p>
+          <p class="period">2023 — present · dual degree</p>
+        </div>
+        <div class="edu-item">
+          <p class="degree">B.S. Information Technology Management</p>
+          <p class="school">American University of Phnom Penh</p>
+          <p class="period">2023 — present · dual degree</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>Skills</h2>
+        <div class="skill-group">
+          <p class="cat">Machine Learning</p>
+          <p>Python, PyTorch, Hugging Face, Whisper, dataset design, reproducible pipelines, CER/WER evaluation</p>
+        </div>
+        <div class="skill-group">
+          <p class="cat">Software</p>
+          <p>TypeScript, Vue/Nuxt, unit testing &amp; CI, Claude Code workflows, human approval gates</p>
+        </div>
+        <div class="skill-group">
+          <p class="cat">Product &amp; Business</p>
+          <p>Field research, product discovery, PRD writing, risk &amp; governance framing, evidence-first claims</p>
+        </div>
+        <div class="skill-group">
+          <p class="cat">Languages</p>
+          <p>Khmer (native) · English (professional, technical writing)</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>Award</h2>
+        <div class="award">
+          <p class="title">Top 2 — TSC Turing Hackathon C10</p>
+          <p>Market Access for Farmers track, with the Chomkar OrderLoop concept (team result).</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>How I Work</h2>
+        <ul class="principles">
+          <li><strong>Evidence before hype</strong><span>Released, field-validated, and prototype are different claims.</span></li>
+          <li><strong>Deterministic core, AI shell</strong><span>Code owns calculations and invariants; AI assists the workflow.</span></li>
+          <li><strong>Humans approve consequences</strong><span>Models recommend; people stay accountable for real decisions.</span></li>
+          <li><strong>Design for Khmer reality</strong><span>Low-resource data and local workflows are constraints, not edge cases.</span></li>
+        </ul>
+      </section>
+    </aside>
+
+  </div>
+
+  <footer class="cv-footer">
+    <span>Full case studies — metrics, limitations, and next validations: <strong>chamroeunhongleng.me</strong></span>
+    <span>Open to applied-ML research &amp; product internships</span>
+  </footer>
+
+</div>
+
+<p class="print-hint">To export as PDF: open this file in Chrome/Edge → Ctrl+P → “Save as PDF” → Margins: <b>None</b> → enable <b>Background graphics</b>. This hint does not print.</p>
+
+</body>
+</html>
