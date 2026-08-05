@@ -6,7 +6,7 @@
 
 > **This is a dated snapshot, not a live status page.** It records what was
 > true on 2026-08-04 and is kept for the audit trail rather than rewritten.
-> Several figures below have since moved: the suite is now 169 tests across
+> Several figures below have since moved: the suite is now 175 tests across
 > 12 files (was 52/7), the production gate self-test now expects and gets a
 > PASS because the placeholder content it was blocking on is resolved (was
 > "36 readable issues"), and CI has run on every push since 2026-08-05. One

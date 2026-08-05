@@ -105,7 +105,7 @@
       "link": "https://github.com/chamroeunhongleng/chamroeunhongleng/tree/main/scripts"
     },
     {
-      "text": "A test suite of 169 unit tests across 12 files, plus GitHub Actions running quality checks, the production gate, and CodeQL scanning.",
+      "text": "A test suite of 175 unit tests across 12 files, plus GitHub Actions running quality checks, the production gate, and CodeQL scanning.",
       "evidence": "Repository evidence",
       "workState": "Tested",
       "link": "https://github.com/chamroeunhongleng/chamroeunhongleng/tree/main/tests"

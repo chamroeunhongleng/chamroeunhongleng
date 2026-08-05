@@ -39,10 +39,18 @@ import { buildSystemPrompt } from '../shared/chat/knowledge.js'
 import { buildNavAllowlist, validateNavigateTo } from '../shared/chat/navigation.js'
 import { CHAT_REPLY_JSON_SCHEMA, chatReplySchema } from '../shared/chat/contract.js'
 
-/** Kept in step with api/chat.ts — the eval must exercise the shipped config. */
-const CHAT_MODEL = 'claude-haiku-4-5'
+/**
+ * Imported from api/chat.ts, not copied. "Kept in step with api/chat.ts" was a
+ * comment, and a comment cannot fail — the eval could quietly grade a
+ * different model or token budget than the one that ships. Importing makes
+ * drift impossible.
+ */
+import { CHAT_MODEL, MAX_OUTPUT_TOKENS } from '../api/chat.js'
+
+/** The judge is deliberately named separately: grading with the same model
+ *  being graded is the weakest possible configuration, and calling that out
+ *  here is more useful than hiding it behind a shared constant. */
 const JUDGE_MODEL = 'claude-haiku-4-5'
-const MAX_OUTPUT_TOKENS = 1024
 /** Concurrency stays modest: the function's own limiter allows 8/ip/minute. */
 const CONCURRENCY = 4
 /** Longest pause worth taking on a live 429 before calling the day spent. */
