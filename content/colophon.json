@@ -25,9 +25,9 @@
   ],
   "provenance": [
     {
-      "text": "This site's source is public on the portfolio branch of my profile repository, including the schemas, the rule engine, the twelve-phase verification pipeline, the build gate that fails a production build on any unresolved claim, and the tests.",
+      "text": "This site's source is public in my profile repository, including the schemas, the rule engine, the twelve-phase verification pipeline, the build gate that fails a production build on any unresolved claim, and the tests.",
       "evidence": "Repository evidence",
-      "link": "https://github.com/chamroeunhongleng/chamroeunhongleng/tree/portfolio"
+      "link": "https://github.com/chamroeunhongleng/chamroeunhongleng/tree/main"
     },
     {
       "text": "The chomkar-decision-grid repository publishes the same AI-native working method this site uses — its CLAUDE.md and agent-workflow files are public.",

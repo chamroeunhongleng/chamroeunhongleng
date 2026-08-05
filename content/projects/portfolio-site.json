@@ -90,25 +90,25 @@
       "text": "An evidence-label system of eight labels, with lifecycle status and deployment reality as separate schema-enforced axes.",
       "evidence": "Repository evidence",
       "workState": "Completed",
-      "link": "https://github.com/chamroeunhongleng/chamroeunhongleng/tree/portfolio/shared/schemas"
+      "link": "https://github.com/chamroeunhongleng/chamroeunhongleng/tree/main/shared/schemas"
     },
     {
       "text": "A single rule engine used identically by the checking script, the build gate, and the tests; production builds fail while any placeholder or enabled demonstration project remains.",
       "evidence": "Repository evidence",
       "workState": "Completed",
-      "link": "https://github.com/chamroeunhongleng/chamroeunhongleng/tree/portfolio/shared/rules.ts"
+      "link": "https://github.com/chamroeunhongleng/chamroeunhongleng/tree/main/shared/rules.ts"
     },
     {
       "text": "A verification pipeline of twelve phases — structure, secrets, content schemas, owner content, lint, typecheck, tests, static generation, links and assets, accessibility basics, SEO metadata, and a production-gate self-test — run before every deploy.",
       "evidence": "Repository evidence",
       "workState": "Tested",
-      "link": "https://github.com/chamroeunhongleng/chamroeunhongleng/tree/portfolio/scripts"
+      "link": "https://github.com/chamroeunhongleng/chamroeunhongleng/tree/main/scripts"
     },
     {
-      "text": "A test suite of 87 unit tests across 11 files, plus GitHub Actions running quality checks, the production gate, and CodeQL scanning.",
+      "text": "A test suite of 99 unit tests across 11 files, plus GitHub Actions running quality checks, the production gate, and CodeQL scanning.",
       "evidence": "Repository evidence",
       "workState": "Tested",
-      "link": "https://github.com/chamroeunhongleng/chamroeunhongleng/tree/portfolio/tests"
+      "link": "https://github.com/chamroeunhongleng/chamroeunhongleng/tree/main/tests"
     },
     {
       "text": "A site assistant answering visitors from the published content only, through one serverless function, with navigation restricted to an allowlist derived from the content and no message storage.",
@@ -124,9 +124,9 @@
       "link": "https://chamroeunhongleng.me"
     },
     {
-      "text": "The source is public on the portfolio branch of my profile repository, including the schemas, the rule engine, the verification scripts, the build gate, the tests, and the working agreement the coding agents follow.",
+      "text": "The source is public in my profile repository, including the schemas, the rule engine, the verification scripts, the build gate, the tests, and the working agreement the coding agents follow.",
       "evidence": "Repository evidence",
-      "link": "https://github.com/chamroeunhongleng/chamroeunhongleng/tree/portfolio"
+      "link": "https://github.com/chamroeunhongleng/chamroeunhongleng/tree/main"
     },
     {
       "text": "The colophon page states where AI was involved and what stays under human control, and the repository carries a security policy and a licence.",
@@ -179,8 +179,8 @@
       "evidence": "Public evidence"
     },
     {
-      "label": "Source (portfolio branch)",
-      "url": "https://github.com/chamroeunhongleng/chamroeunhongleng/tree/portfolio",
+      "label": "Source (public repository)",
+      "url": "https://github.com/chamroeunhongleng/chamroeunhongleng/tree/main",
       "kind": "repository",
       "evidence": "Repository evidence"
     },
@@ -191,7 +191,7 @@
       "evidence": "Public evidence"
     }
   ],
-  "primaryLink": "https://github.com/chamroeunhongleng/chamroeunhongleng/tree/portfolio",
+  "primaryLink": "https://github.com/chamroeunhongleng/chamroeunhongleng/tree/main",
   "aiAssistance": {
     "scope": "Built AI-natively with coding agents under a written contract in the repository: they implemented, refactored, and drafted tests and documentation, and they draft prose I then correct.",
     "humanOwned": "The architecture rules, every claim and evidence label, what stays private, and the decision to deploy."
