@@ -1,0 +1,89 @@
+name: Chat evals
+
+# The unit tests prove the chat function's plumbing offline. They cannot prove
+# the assistant still REFUSES what it is supposed to refuse — that behaviour
+# lives in the system prompt and only shows up in real calls.
+#
+# This workflow replays tests/chat/evals/cases.jsonl (scope, pretext/injection,
+# invented-fact, hedge-preservation, grounding, navigation) against the model
+# with the prompt built from the commit under test, and grades each answer with
+# a judge model. A prompt or content edit that quietly breaks the scope guard
+# fails here instead of on the live site.
+#
+# Needs one repository secret:
+#   ANTHROPIC_API_KEY   — use a key dedicated to CI, not the production one
+#
+# Without it the job skips cleanly. Each run costs a few cents at Haiku pricing.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'shared/chat/**'
+      - 'api/chat.ts'
+      - 'content/**'
+      - 'tests/chat/evals/**'
+      - 'scripts/eval-chat.ts'
+      - '.github/workflows/chat-evals.yml'
+  pull_request:
+    paths:
+      - 'shared/chat/**'
+      - 'api/chat.ts'
+      - 'content/**'
+      - 'tests/chat/evals/**'
+      - 'scripts/eval-chat.ts'
+  schedule:
+    # Weekly drift check — model updates can change refusal behaviour even
+    # when neither the prompt nor the content moved.
+    - cron: '0 3 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: chat-evals-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  evals:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check for an API key
+        id: creds
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -n "$ANTHROPIC_API_KEY" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::ANTHROPIC_API_KEY is not set — skipping chat evals. Add it as a repository secret to enable them."
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.creds.outputs.ready == 'true'
+
+      - uses: actions/setup-node@v4
+        if: steps.creds.outputs.ready == 'true'
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        if: steps.creds.outputs.ready == 'true'
+        run: npm ci --no-audit --no-fund
+
+      - name: Run chat evals
+        if: steps.creds.outputs.ready == 'true'
+        run: npm run eval:chat -- --json=eval-report.json
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+
+      - name: Upload eval report
+        if: always() && steps.creds.outputs.ready == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: chat-eval-report
+          path: eval-report.json
+          retention-days: 30

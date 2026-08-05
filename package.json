@@ -29,6 +29,7 @@
     "check:links": "node --import jiti/register scripts/check-links.ts",
     "check:a11y": "node --import jiti/register scripts/check-a11y.ts",
     "check:seo": "node --import jiti/register scripts/check-seo.ts",
+    "eval:chat": "node --import jiti/register scripts/eval-chat.ts",
     "assets:generate": "node --import jiti/register scripts/generate-assets.ts",
     "verify": "node --import jiti/register scripts/verify.ts"
   },

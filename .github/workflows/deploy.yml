@@ -1,0 +1,121 @@
+name: Deploy
+
+# Production deploys move off one laptop and into CI.
+#
+# The job builds with the Vercel CLI on the runner and ships the prebuilt
+# output, so the deploy that reaches production is the one this workflow
+# verified — Vercel's own git auto-builds stay disabled in vercel.json.
+#
+# It runs ONLY after the full verification pipeline passes, and only for the
+# production branch. Until the repository secrets below exist it skips
+# cleanly rather than failing every push:
+#
+#   VERCEL_TOKEN        Vercel account token (Settings → Tokens)
+#   VERCEL_ORG_ID       from .vercel/project.json ("orgId")
+#   VERCEL_PROJECT_ID   from .vercel/project.json ("projectId")
+#
+# Deploying is an owner decision (CLAUDE.md rule 6). Adding these secrets is
+# what grants that permission; removing them takes it back.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Full verification pipeline
+        run: npm run verify
+
+  deploy:
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: production
+    steps:
+      - name: Check for deploy credentials
+        id: creds
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          if [ -n "$VERCEL_TOKEN" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::VERCEL_TOKEN is not set — skipping the deploy. Add VERCEL_TOKEN, VERCEL_ORG_ID and VERCEL_PROJECT_ID as repository secrets to enable CI deploys."
+          fi
+
+      - uses: actions/checkout@v4
+        if: steps.creds.outputs.ready == 'true'
+
+      - uses: actions/setup-node@v4
+        if: steps.creds.outputs.ready == 'true'
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        if: steps.creds.outputs.ready == 'true'
+        run: npm ci --no-audit --no-fund
+
+      - name: Pull Vercel production environment
+        if: steps.creds.outputs.ready == 'true'
+        run: npx vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Build
+        if: steps.creds.outputs.ready == 'true'
+        run: npx vercel build --prod --token="$VERCEL_TOKEN"
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      - name: Deploy prebuilt output to production
+        if: steps.creds.outputs.ready == 'true'
+        id: deploy
+        run: |
+          url=$(npx vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN")
+          echo "url=$url" >> "$GITHUB_OUTPUT"
+          echo "Deployed: $url"
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+      # A deploy that reports success while serving stale HTML has happened on
+      # this project before (an uploaded .output/ shadowed the build). Prove the
+      # live domain actually changed instead of trusting the CLI's exit code.
+      - name: Verify the live domain serves this build
+        if: steps.creds.outputs.ready == 'true'
+        run: |
+          sleep 10
+          html=$(curl -fsS https://chamroeunhongleng.me/)
+          if ! printf '%s' "$html" | grep -q 'portfolioMode:"production"'; then
+            echo "::error::The live site is not serving a production-mode build."
+            exit 1
+          fi
+          printf '%s' "$html" | grep -o '_b=[a-f0-9-]*' | head -1
+          echo "Live domain verified."

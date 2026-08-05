@@ -1,8 +1,10 @@
 name: Quality
 
+# Runs the same 12-phase pipeline the owner runs locally (`npm run verify`),
+# on EVERY branch — the guardrails must not depend on remembering to run them.
 on:
   push:
-    branches: [main, portfolio]
+    branches: ['**']
   pull_request:
   workflow_dispatch:
 

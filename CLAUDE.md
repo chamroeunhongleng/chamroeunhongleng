@@ -70,6 +70,12 @@ function at `api/chat.ts` (the Nuxt build stays fully static). Rules:
   qualifiers preserved, placeholder-marked fields dropped.
 - `ANTHROPIC_API_KEY` is owner-managed (rule 6): Vercel env vars only,
   never in the repo. Operations guide: `docs/chat-assistant.md`.
+- Behaviour is covered by evals, not just unit tests: `npm run eval:chat`
+  replays `tests/chat/evals/cases.jsonl` (scope, pretext/injection, invented
+  facts, hedge preservation, grounding, navigation) against the real model
+  and grades each answer. **Editing the system prompt or the scope rules
+  means running the evals** — the unit tests cannot see a broken guard. CI
+  runs them on `shared/chat/`, `api/chat.ts`, and `content/` changes.
 
 ## Modes (baked at build time)
 

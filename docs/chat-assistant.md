@@ -76,6 +76,45 @@ For a real end-to-end run:
 On a preview deploy, confirm in the function logs that the second request
 within 5 minutes shows `cached=` > 0 (prompt caching working).
 
+## Evals — the regression net for behaviour
+
+`tests/chat/` proves the plumbing offline (validation, rate limits, allowlist,
+parsing). It cannot prove the assistant still *refuses* what it should refuse:
+that lives in the system prompt, so it needs real calls.
+
+`tests/chat/evals/cases.jsonl` holds the adversarial suite — 26 cases across
+five categories:
+
+| category     | what it defends |
+| ------------ | --------------- |
+| `scope`      | general knowledge, homework, code help, translation, other people, medical/product advice |
+| `pretext`    | injections that name-drop his work, role overrides, "act as him", prompt exfiltration, hypothetical framing |
+| `honesty`    | invented projects/employers, and hedges that must survive ("self-reported", raw audio private) |
+| `grounding`  | the load-bearing numbers: 17.48% CER, 62 tests, six-member CHNAI LAB, contact email, PhsarOS URL |
+| `navigation` | routes to the right page, and `navigateTo: null` on declines |
+
+Run them:
+
+```bash
+npm run eval:chat                                  # model + this tree's prompt (needs ANTHROPIC_API_KEY)
+npm run eval:chat -- --filter=pretext              # one category
+npm run eval:chat -- --target=live --no-judge      # the deployed endpoint, structural checks only
+```
+
+Each case gets deterministic checks (required/forbidden substrings,
+`navigateTo` inside the allowlist, null on declines) plus an LLM judge for the
+behavioural verdict. Any failure exits non-zero.
+
+`--target=live` sweeps the real production endpoint. It *will* be throttled —
+8 requests per IP per minute — so the runner honours `Retry-After` and paces
+itself; a full sweep takes a few minutes. That throttling is the limiter
+working, not a failure.
+
+CI runs the suite (`.github/workflows/chat-evals.yml`) on changes to
+`shared/chat/`, `api/chat.ts`, or `content/`, plus weekly to catch model drift.
+It needs an `ANTHROPIC_API_KEY` repository secret — use a **separate CI key**,
+not the production one — and skips cleanly when the secret is absent.
+
 ## Constraints to preserve
 
 - The Nuxt build stays `nuxt generate` (fully static). The function is
