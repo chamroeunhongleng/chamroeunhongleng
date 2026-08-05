@@ -7,8 +7,8 @@ name: Deploy
 # verified — Vercel's own git auto-builds stay disabled in vercel.json.
 #
 # It runs ONLY after the full verification pipeline passes, and only for the
-# production branch. Until the repository secrets below exist it skips
-# cleanly rather than failing every push:
+# production branch. Until the repository secrets below exist there is nothing
+# to deploy with:
 #
 #   VERCEL_TOKEN        Vercel account token (Settings → Tokens)
 #   VERCEL_ORG_ID       from .vercel/project.json ("orgId")
@@ -16,6 +16,16 @@ name: Deploy
 #
 # Deploying is an owner decision (CLAUDE.md rule 6). Adding these secrets is
 # what grants that permission; removing them takes it back.
+#
+# WHY THE PREFLIGHT JOB EXISTS — a green check that deployed nothing is worse
+# than no check. An earlier revision guarded every step of the deploy job with
+# `if: creds-are-present`, so a run with no token reported the deploy job as
+# SUCCESS while every step inside it was skipped: the commit got a ✅ and
+# production never changed. Nobody reads step-level status. A job-level `if`
+# cannot see the `secrets` context, so preflight converts secret presence into
+# a job output, and the deploy job keys off that — with no credentials the run
+# now shows "deploy — skipped" in grey, which is the truth, instead of a green
+# check that means nothing. Do not collapse this back into per-step guards.
 on:
   push:
     branches: [main]
@@ -29,6 +39,40 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  preflight:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      ready: ${{ steps.creds.outputs.ready }}
+    steps:
+      - name: Check for deploy credentials
+        id: creds
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+        run: |
+          missing=""
+          [ -n "$VERCEL_TOKEN" ]      || missing="$missing VERCEL_TOKEN"
+          [ -n "$VERCEL_ORG_ID" ]     || missing="$missing VERCEL_ORG_ID"
+          [ -n "$VERCEL_PROJECT_ID" ] || missing="$missing VERCEL_PROJECT_ID"
+
+          if [ -z "$missing" ]; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+            echo "Deploy credentials present." >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::NOTHING WAS DEPLOYED — missing repository secrets:$missing. The live site still serves the previous build. Deploy from a workstation with 'npm run generate:production && npx vercel deploy --prod --yes', or add the secrets to switch CI deploys on."
+            {
+              echo "## ⚠️ Nothing was deployed"
+              echo
+              echo "Missing repository secrets:$missing"
+              echo
+              echo "The live site still serves the previous build. This run verified the"
+              echo "code but did **not** ship it."
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 25
@@ -47,75 +91,72 @@ jobs:
         run: npm run verify
 
   deploy:
-    needs: verify
+    needs: [preflight, verify]
+    if: needs.preflight.outputs.ready == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     environment: production
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
     steps:
-      - name: Check for deploy credentials
-        id: creds
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: |
-          if [ -n "$VERCEL_TOKEN" ]; then
-            echo "ready=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "ready=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::VERCEL_TOKEN is not set — skipping the deploy. Add VERCEL_TOKEN, VERCEL_ORG_ID and VERCEL_PROJECT_ID as repository secrets to enable CI deploys."
-          fi
-
       - uses: actions/checkout@v4
-        if: steps.creds.outputs.ready == 'true'
 
       - uses: actions/setup-node@v4
-        if: steps.creds.outputs.ready == 'true'
         with:
           node-version: 24
           cache: npm
 
       - name: Install dependencies
-        if: steps.creds.outputs.ready == 'true'
         run: npm ci --no-audit --no-fund
 
+      # Nuxt stamps a fresh build id into every generated page. Recording the
+      # one currently being served is what makes the post-deploy check able to
+      # prove the live domain actually moved.
+      - name: Record the build the live domain serves now
+        id: before
+        run: |
+          id=$(curl -fsS https://chamroeunhongleng.me/ | grep -o '_b=[a-f0-9-]*' | head -1)
+          echo "build=$id" >> "$GITHUB_OUTPUT"
+          echo "Live before deploy: $id"
+
       - name: Pull Vercel production environment
-        if: steps.creds.outputs.ready == 'true'
         run: npx vercel pull --yes --environment=production --token="$VERCEL_TOKEN"
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
       - name: Build
-        if: steps.creds.outputs.ready == 'true'
         run: npx vercel build --prod --token="$VERCEL_TOKEN"
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
       - name: Deploy prebuilt output to production
-        if: steps.creds.outputs.ready == 'true'
         id: deploy
         run: |
           url=$(npx vercel deploy --prebuilt --prod --token="$VERCEL_TOKEN")
           echo "url=$url" >> "$GITHUB_OUTPUT"
           echo "Deployed: $url"
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
       # A deploy that reports success while serving stale HTML has happened on
       # this project before (an uploaded .output/ shadowed the build). Prove the
-      # live domain actually changed instead of trusting the CLI's exit code.
+      # live domain actually changed instead of trusting the CLI's exit code:
+      # the served build id must differ from the one recorded above, and the
+      # build must still be a production-mode one.
       - name: Verify the live domain serves this build
-        if: steps.creds.outputs.ready == 'true'
+        env:
+          BEFORE: ${{ steps.before.outputs.build }}
         run: |
-          sleep 10
-          html=$(curl -fsS https://chamroeunhongleng.me/)
-          if ! printf '%s' "$html" | grep -q 'portfolioMode:"production"'; then
-            echo "::error::The live site is not serving a production-mode build."
-            exit 1
-          fi
-          printf '%s' "$html" | grep -o '_b=[a-f0-9-]*' | head -1
-          echo "Live domain verified."
+          for attempt in 1 2 3 4 5 6; do
+            sleep 10
+            html=$(curl -fsS "https://chamroeunhongleng.me/?ci=$GITHUB_RUN_ID-$attempt") || continue
+            now=$(printf '%s' "$html" | grep -o '_b=[a-f0-9-]*' | head -1)
+            if [ -n "$now" ] && [ "$now" != "$BEFORE" ]; then
+              if ! printf '%s' "$html" | grep -q 'portfolioMode:"production"'; then
+                echo "::error::The live site is not serving a production-mode build."
+                exit 1
+              fi
+              echo "Live domain verified: $BEFORE -> $now"
+              echo "Live domain now serves \`$now\` (was \`$BEFORE\`)." >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+            echo "attempt $attempt: still serving $now"
+          done
+          echo "::error::The live domain still serves $BEFORE after the deploy reported success — production did not change."
+          exit 1

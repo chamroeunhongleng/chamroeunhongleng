@@ -13,7 +13,15 @@ name: Chat evals
 # Needs one repository secret:
 #   ANTHROPIC_API_KEY   — use a key dedicated to CI, not the production one
 #
-# Without it the job skips cleanly. Each run costs a few cents at Haiku pricing.
+# Without it there is nothing to run the evals with. The preflight job exists
+# for the same reason as the one in deploy.yml: guarding every step of a single
+# job with `if: key-is-present` makes that job report SUCCESS while running
+# nothing, so a commit gets a green "Chat evals" check that graded no answers.
+# A job-level `if` cannot read the `secrets` context, so preflight turns secret
+# presence into a job output and the evals job keys off it — with no key the run
+# shows "evals — skipped" in grey, which is the truth.
+#
+# Each run costs a few cents at Haiku pricing.
 on:
   push:
     branches: [main]
@@ -45,9 +53,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  evals:
+  preflight:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 5
+    outputs:
+      ready: ${{ steps.creds.outputs.ready }}
     steps:
       - name: Check for an API key
         id: creds
@@ -56,32 +66,41 @@ jobs:
         run: |
           if [ -n "$ANTHROPIC_API_KEY" ]; then
             echo "ready=true" >> "$GITHUB_OUTPUT"
+            echo "API key present — evals will run." >> "$GITHUB_STEP_SUMMARY"
           else
             echo "ready=false" >> "$GITHUB_OUTPUT"
-            echo "::notice::ANTHROPIC_API_KEY is not set — skipping chat evals. Add it as a repository secret to enable them."
+            echo "::warning::NO EVALS RAN — ANTHROPIC_API_KEY is not set. The assistant's scope guard and grounding are UNVERIFIED for this commit. Add the secret (use a key dedicated to CI) to switch the evals on."
+            {
+              echo "## ⚠️ No evals ran"
+              echo
+              echo "\`ANTHROPIC_API_KEY\` is not set, so the assistant's refusal"
+              echo "behaviour and grounding are **unverified** for this commit."
+            } >> "$GITHUB_STEP_SUMMARY"
           fi
 
+  evals:
+    needs: preflight
+    if: needs.preflight.outputs.ready == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
       - uses: actions/checkout@v4
-        if: steps.creds.outputs.ready == 'true'
 
       - uses: actions/setup-node@v4
-        if: steps.creds.outputs.ready == 'true'
         with:
           node-version: 24
           cache: npm
 
       - name: Install dependencies
-        if: steps.creds.outputs.ready == 'true'
         run: npm ci --no-audit --no-fund
 
       - name: Run chat evals
-        if: steps.creds.outputs.ready == 'true'
         run: npm run eval:chat -- --json=eval-report.json
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
 
       - name: Upload eval report
-        if: always() && steps.creds.outputs.ready == 'true'
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: chat-eval-report
