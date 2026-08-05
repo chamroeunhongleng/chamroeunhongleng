@@ -235,8 +235,16 @@ watch(
 .chat-scrim {
   position: fixed;
   inset: 0;
-  background: rgb(0 0 0 / 0.4);
+  /* Light enough that the page reads as receded rather than blacked out. */
+  background: rgb(0 0 0 / 0.25);
   cursor: pointer;
+}
+
+/* On a near-black page (--color-bg is #131318) a 25% black veil is almost
+   invisible, so the panel would appear to float over an undimmed page. Dark
+   theme needs more of it to produce the same perceived separation. */
+:root[data-theme='dark'] .chat-scrim {
+  background: rgb(0 0 0 / 0.5);
 }
 
 .chat-scrim-enter-active,
