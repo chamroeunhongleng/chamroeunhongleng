@@ -45,7 +45,7 @@
     "@nuxtjs/sitemap": "^8.2.2",
     "@playwright/test": "^1.62.1",
     "@resvg/resvg-js": "^2.6.2",
-    "@types/node": "^24.13.3",
+    "@types/node": "^26.1.2",
     "@vercel/node": "^5.0.0",
     "@vitejs/plugin-vue": "^6.0.0",
     "@vue/test-utils": "^2.4.6",
