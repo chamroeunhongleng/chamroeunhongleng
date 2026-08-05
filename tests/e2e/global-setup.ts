@@ -1,4 +1,4 @@
-import { publishedProjects } from './fixtures/projects'
+import { ALL_ROUTES } from './fixtures/routes'
 
 /**
  * Warm every route once, sequentially, before the test workers start.
@@ -9,22 +9,11 @@ import { publishedProjects } from './fixtures/projects'
  * while passing fine in isolation. One serial pass primes the compile cache so
  * the parallel run only ever hits warm routes.
  *
- * Route list derives from content (CLAUDE.md rule 4) and mirrors the
- * staticRoutes + projectRoutes split in nuxt.config.ts.
+ * Route list derives from content (CLAUDE.md rule 4) — see fixtures/routes.ts.
  */
-const STATIC_ROUTES = [
-  '/',
-  '/about',
-  '/projects',
-  '/journey',
-  '/learning',
-  '/contact',
-  '/colophon'
-]
-
 export default async function globalSetup() {
   const baseURL = 'http://127.0.0.1:3000'
-  const routes = [...STATIC_ROUTES, ...publishedProjects.map((p) => `/projects/${p.slug}`)]
+  const routes = ALL_ROUTES
 
   const started = Date.now()
   let warmed = 0

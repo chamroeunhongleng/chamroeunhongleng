@@ -13,27 +13,32 @@ interaction bugs before deploy.
 ## Commands
 
 ```bash
-# Fast loop — laptop only, dev server (~14s)
+# Default — laptop only, against the real build (~16s incl. build)
 npm run test:e2e
 
-# Full device matrix, dev server (~60s, occasionally flaky — see #5)
+# Full device matrix, all seven devices (~41s incl. build)
 npm run test:e2e:devices
 
-# Full device matrix against the REAL BUILD (~35s incl. build) — most reliable
-npm run test:e2e:build
+# Visual review captures
+npm run test:e2e:shots
 
 # Interactive UI mode
 npm run test:e2e:ui
 
+# Dev server instead of the build — for HMR while editing. Flaky at this test
+# count; see gotcha #5. Not the default, for that reason.
+npm run test:e2e:dev
+
 # One device only
-E2E_DEVICES=1 npx playwright test --project=mobile-android
+E2E_DEVICES=1 E2E_BUILD=1 npx playwright test --project=mobile-android
 ```
 
-**Prefer `npm run test:e2e:build` for anything that matters.** It generates the
-static site and serves `.output/public`, so there is no on-demand compilation:
-full 8-worker concurrency, no flake, and it tests the artifact that actually
-deploys. Measured: 180 tests, 3 consecutive runs, 86 passed / 0 failed, ~20s
-each. The dev-server matrix at the same scale failed 1–2 tests per run.
+**Everything except `test:e2e:dev` generates the site first and serves
+`.output/public`.** That costs ~13s and buys total reliability: no on-demand
+compilation, full 8-worker concurrency, and it exercises the artifact that
+actually deploys. Current: **220 tests across seven devices, 0 failures, ~41s**,
+stable across repeated runs. The dev server could not sustain this test count —
+see gotcha #5.
 
 ## The device matrix
 
@@ -72,21 +77,48 @@ assuming a constant.
 
 ## What is covered
 
-- **`homepage.spec.ts`** — loads, `<h1>`, no console errors. Device-agnostic.
-- **`responsive.spec.ts`** — correct nav per viewport; mobile menu opens,
-  closes on Escape with focus restored, and closes after navigating; **no
-  horizontal overflow** on every static page *and* every published project
-  page. Runs on all five devices.
-- **`project-pages.spec.ts`** — every published case study renders with its
-  name in `<h1>` and `<title>`, in-page section anchors all resolve, no
-  `target="_blank"` without `rel="noopener"`; the index links every published
-  project and none of the unpublished ones; disabled projects return ≥400.
-  Laptop only (content does not vary by device).
+**220 tests across seven devices.** Device-independent checks run on `laptop`
+only; per-device concerns run everywhere.
 
-Slugs derive from `content/projects/*.json` (CLAUDE.md rule 4) via
-`tests/e2e/fixtures/projects.ts`, mirroring `nuxt.config.ts`. **Adding a
-project JSON file automatically adds its E2E coverage** — and disabling one
-automatically asserts it is unreachable.
+- **`site.spec.ts`** — every published route: returns 200, has a non-empty
+  `<title>` and meta description, has exactly **one** `<h1>`, logs no console
+  or page errors, every `<img>` carries an `alt` attribute, and no
+  `target="_blank"` lacks `rel="noopener"`. Plus site-wide: every internal link
+  resolves (collected across all pages, each checked once), the skip link is the
+  first Tab stop and points at a real element, an unknown URL returns 404, and
+  the theme toggle changes the document and survives a reload.
+- **`chat.spec.ts`** — the assistant, with `POST /api/chat` mocked at the
+  network boundary. Panel opens and closes by button and Escape (focus returns
+  to the launcher), Send is disabled until something is typed, the input caps at
+  the contract's 500 chars, a message round-trips with follow-up chips, starter
+  chips send, the local welcome bubble is **never** sent as history, a
+  `navigateTo` moves the visitor and offers a one-shot way back, a non-path
+  `navigateTo` is ignored rather than followed off-site, and 500 / 429 / network
+  failure each produce their intended friendly message with the input still
+  usable.
+- **`responsive.spec.ts`** — correct nav per viewport, header stays on one line,
+  mobile menu opens / closes on Escape with focus restored / closes after
+  navigating, and **no horizontal overflow** on every static page *and* every
+  published case study. All seven devices.
+- **`project-pages.spec.ts`** — every published case study renders its name in
+  `<h1>` and `<title>`, in-page section anchors all resolve, external links are
+  safe; the index links every published project and none of the unpublished
+  ones; disabled projects return ≥400.
+- **`homepage.spec.ts`** — loads, `<h1>`, no console errors.
+
+### Why the chat API is mocked
+
+The static build under test has no serverless function, the real endpoint costs
+Anthropic credits, and the key is owner-managed (CLAUDE.md rule 6). Mocking also
+makes the 500 / 429 / offline paths testable on demand. These tests cover the
+**client** contract — that the widget sends what `api/chat.ts` expects and
+renders what it returns. The server's own logic is unit-tested in `tests/chat/`.
+
+Routes and slugs derive from `content/projects/*.json` (CLAUDE.md rule 4) via
+`tests/e2e/fixtures/`, mirroring `nuxt.config.ts`. **Adding a project JSON file
+automatically adds its E2E coverage** — and disabling one automatically asserts
+it is unreachable.
+
 
 ## Bugs this suite has already caught
 
@@ -287,14 +319,21 @@ Rules that keep tests honest here:
 ## Before each deploy
 
 ```bash
-npm run test:e2e:build   # all devices, against the real build
-npm run verify           # the 12-phase pipeline (includes vitest)
+npm run test:e2e:devices   # 220 tests, all seven devices, against the real build
+npm run verify             # the 12-phase pipeline (includes vitest)
 ```
 
 ## Not yet covered
 
-- **Chat assistant flow** (`api/chat.ts`) — the highest-value remaining gap
-- Real Safari/WebKit (blocked, see above)
-- Keyboard-only navigation beyond the mobile-menu Escape path
+- **Real Safari/WebKit** — blocked on this machine, see above. The one gap with
+  no local workaround.
+- **The live chat endpoint.** `chat.spec.ts` mocks the network, so it proves the
+  client contract, not that the deployed function answers. A smoke test against
+  the real endpoint would need the owner's key and would spend credits
+  (CLAUDE.md rule 6) — an owner decision, not an automated one.
+- Keyboard-only navigation beyond the skip link and the two Escape paths
 - Colour contrast / automated a11y assertions beyond `npm run check:a11y`
-- Visual regression (screenshot diffing)
+- Visual regression (screenshot diffing against a committed baseline)
+- **Page length.** Case studies run 17–25 phone screens and `/journey` hits 27
+  at 320px. Measured and logged by `test:e2e:shots`, but no test asserts a
+  budget — it is a content decision, not a defect.
