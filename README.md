@@ -38,6 +38,11 @@ That number replaced the 17.48% I had published for the same weights, and how it
 
 ## Runnable Verification
 
+[![Quality](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/quality.yml/badge.svg)](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/quality.yml)
+[![Production gate](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/production-gate.yml/badge.svg)](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/production-gate.yml)
+[![Chat evals](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/chat-evals.yml/badge.svg)](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/chat-evals.yml)
+[![CodeQL](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/codeql.yml/badge.svg)](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/codeql.yml)
+
 This profile is also a live Nuxt application, not only a narrative README. Site content is JSON validated by zod schemas, and structure, claim labels, links, accessibility, SEO, and secrets are all checked by a 12-phase pipeline with a unit, end-to-end, and model-behaviour test suite behind it.
 
 ```bash
