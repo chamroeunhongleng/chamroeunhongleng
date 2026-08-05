@@ -30,7 +30,13 @@ const REQUIRED_FILES = [
   // questionnaire, gitignored so half-answered personal notes never ship
   // in a public repo. It still lives in the working tree locally.
   'SECURITY.md',
+  'CODE_OF_CONDUCT.md',
+  'CONTRIBUTING.md',
   'LICENSE',
+  // NOTICE carries the content-rights scope that LICENSE deliberately does not:
+  // MIT covers the code, the personal content is reserved. Losing it would make
+  // the repository read as if everything were MIT.
+  'NOTICE',
   // App
   'app/app.vue',
   'app/error.vue',
