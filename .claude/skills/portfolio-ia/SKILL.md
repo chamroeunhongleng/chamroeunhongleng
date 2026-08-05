@@ -9,11 +9,14 @@ description: The portfolio's information architecture and the rules that hold it
 Home · Projects (+ `/projects/<slug>` case studies) · Journey · Learning ·
 About · Contact · Colophon. `/#now` is a homepage anchor promoted to nav level.
 
-## Homepage narrative arc (order is deliberate)
-who I am (verbatim intro — meaning is owner-approved, do not rewrite) →
-four connected pillars → featured proof → what's in motion now → learning
-snapshot → principles → idea-to-production process with human gates →
-selected evidence → contact.
+## Homepage narrative arc (order is deliberate; trimmed 2026-08-05 after HR review)
+who I am (verbatim intro — meaning is owner-approved, do not rewrite) with a
+hero metrics strip (`profile.metrics`, ≤4 numbers restating labeled claims) →
+four connected pillars → what's in motion now → flagship + project rows →
+two working principles with a colophon pointer → contact.
+Removed by owner decision (do not reintroduce without asking): the learning
+snapshot, the selected-evidence ClaimList, and the direction section — the
+recruiter-facing homepage stays short; depth lives on the inner pages.
 
 ## Non-negotiable rules
 1. The two intro paragraphs and the hero statement keep their approved meaning.

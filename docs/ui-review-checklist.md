@@ -25,6 +25,7 @@ for every item (toggle in the header).
 - [ ] All 28 fields render; limitations split into Constraints / Tradeoffs
 - [ ] Demo case study is unmistakably labeled (dashed card, Demo chips, Demo-only labels)
 - [ ] Governance demo renders its model-card artifact as a table
+- [ ] Repository tree draws correct connectors, aligns its notes column, scrolls in place, and takes keyboard focus
 - [ ] Next-project link cycles; 404 for `/projects/nonexistent`
 
 ## Journey / Learning / About / Contact / Colophon

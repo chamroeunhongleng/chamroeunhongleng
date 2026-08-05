@@ -10,13 +10,13 @@ import {
   principlesSchema,
   processSchema,
   profileSchema
-} from './site'
-import { projectSchema } from './project'
+} from './site.js'
+import { projectSchema } from './project.js'
 
-export * from './enums'
-export * from './common'
-export * from './project'
-export * from './site'
+export * from './enums.js'
+export * from './common.js'
+export * from './project.js'
+export * from './site.js'
 
 /**
  * The single file → schema map. The app loader, the check-content script,

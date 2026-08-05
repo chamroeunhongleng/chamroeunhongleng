@@ -46,7 +46,7 @@ Also verified directly:
 
 Real content is seeded and labeled: repository-verifiable claims carry
 Repository/Public evidence with links; owner-only claims (hackathon Top 2,
-~86k samples, OrderLoop, AI Layer, Warden details, Angkor Byte role) carry
+~86k samples, OrderLoop, AI Layer, Warden details) carry
 Owner confirmed or Private, and OWNER_INPUT.md documents the upgrade path for
 each. One demonstration project (`demo-governance-review`) is enabled and
 labeled; production refuses to build while it remains.

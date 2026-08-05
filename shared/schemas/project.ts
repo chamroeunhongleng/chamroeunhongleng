@@ -5,17 +5,19 @@ import {
   HARD_EVIDENCE_LABELS,
   PILLARS,
   PROJECT_STATUSES
-} from './enums'
-import { claimSchema, hrefSchema, imageRefSchema, linkSchema, slugSchema } from './common'
+} from './enums.js'
+import { claimSchema, hrefSchema, imageRefSchema, linkSchema, slugSchema } from './common.js'
 
 /**
- * Governance artifact rendered inside a case study — a model card,
- * authority matrix, or policy control map presented as a labeled table.
- * Publishing the artifact IS the governance evidence.
+ * Structured artifact rendered inside a case study — a model card, authority
+ * matrix, policy control map, or business model, presented as a labeled
+ * table. Publishing the artifact IS the evidence: every row carries its own
+ * label, so a pricing figure or an authority boundary can be stated plainly
+ * without an unlabeled claim escaping into prose.
  */
 export const governanceArtifactSchema = z.strictObject({
   title: z.string().min(1),
-  kind: z.enum(['model-card', 'authority-matrix', 'policy-control-map']),
+  kind: z.enum(['model-card', 'authority-matrix', 'policy-control-map', 'business-model']),
   description: z.string().min(1),
   rows: z
     .array(
@@ -30,6 +32,52 @@ export const governanceArtifactSchema = z.strictObject({
 export type GovernanceArtifact = z.infer<typeof governanceArtifactSchema>
 
 /**
+ * The repository's own layout, published as architecture evidence — the file
+ * tree IS the claim, so it ships as data rather than a screenshot or a pasted
+ * ASCII blob: `entries` is the tree flattened into reading order, and the
+ * connectors (├── └── │) are drawn at render time from `depth`. A name ending
+ * in "/" is a directory; `note` is the one line saying why that file exists.
+ * One evidence label covers the block, the way a governance artifact's table
+ * carries labels per row — every row here is a fact about the same repository.
+ */
+export const repoStructureSchema = z
+  .strictObject({
+    /** Root directory name, rendered as the tree's first line. */
+    root: z.string().min(1),
+    /** What a reader should take away from the layout. */
+    description: z.string().min(1),
+    evidence: z.enum(EVIDENCE_LABELS),
+    entries: z
+      .array(
+        z.strictObject({
+          /** 0 = a direct child of the root. */
+          depth: z.number().int().min(0).max(3),
+          name: z.string().min(1),
+          note: z.string().min(1).optional()
+        })
+      )
+      .min(3)
+      .max(80)
+  })
+  .superRefine((structure, ctx) => {
+    // Reading order is the whole contract: a row hangs off the nearest
+    // shallower row above it, so a jump of more than one level describes a
+    // child with no parent — a tree the renderer cannot draw.
+    let previous = -1
+    for (const [i, entry] of structure.entries.entries()) {
+      if (entry.depth > previous + 1) {
+        ctx.addIssue({
+          code: 'custom',
+          path: ['entries', i, 'depth'],
+          message: `"${entry.name}" sits at depth ${entry.depth} directly under a depth-${previous} row; a child must be exactly one level deeper than its parent.`
+        })
+      }
+      previous = entry.depth
+    }
+  })
+export type RepoStructure = z.infer<typeof repoStructureSchema>
+
+/**
  * The full case-study schema — all 28 required fields from the portfolio
  * spec, plus honesty metadata (status vs. deployment as separate axes,
  * demo flag, evidence-labeled claims).
@@ -42,6 +90,16 @@ export const projectSchema = z
     name: z.string().min(1),
     /** 2. One-sentence explanation */
     oneLiner: z.string().min(1).max(180),
+    /**
+     * Meta description for search/social snippets (50–170 chars, the check:seo
+     * window); falls back to oneLiner. Any metric quoted here must be copied
+     * verbatim from an evidence-labeled claim, hedge included — a meta tag
+     * cannot render an EvidenceLabel, so honesty rides on the claim's own
+     * wording. Deliberately excluded from PROJECT_PROSE_FIELDS in
+     * shared/rules.ts (that rule guards on-page prose, where a visible label
+     * is possible and therefore required).
+     */
+    seoDescription: z.string().min(50).max(170).optional(),
     /** 3. Lifecycle status */
     status: z.enum(PROJECT_STATUSES),
     /** Deployment reality — separate axis from status. */
@@ -55,6 +113,16 @@ export const projectSchema = z
     pillars: z.array(z.enum(PILLARS)).min(1),
     tags: z.array(z.string().min(1)).min(1).max(10),
     featured: z.boolean(),
+    /**
+     * Manual placement within a group of projects that already tie on featured
+     * AND status — lower sorts first. Listing order is otherwise alphabetical,
+     * which is arbitrary editorially; this is the override for when two equally
+     * mature projects should not be ranked by their initials. Defaults to 0, so
+     * a project without it keeps its alphabetical place among the other zeros.
+     */
+    order: z.number().int().default(0),
+    /** Homepage flagship — at most one enabled project carries this (check-content enforces). */
+    flagship: z.boolean().default(false),
     /** Disabled projects are excluded from routes and listings. */
     enabled: z.boolean(),
     /** Demonstration project — allowed in demo/review, fatal in production. */
@@ -62,6 +130,20 @@ export const projectSchema = z
     /** Optional falsifiable question the project tests. */
     question: z.string().optional(),
     cover: imageRefSchema.optional(),
+    /**
+     * A single portrait-shaped photograph shown beside the case-study header,
+     * in the same plated treatment as the homepage hero: the image on one
+     * side, the argument on the other. Its caption is the message that runs
+     * with it, so it says what the photograph is — not what it proves.
+     */
+    portrait: imageRefSchema.optional(),
+    /**
+     * Supporting photographs — evidence you can look at (an award ceremony,
+     * a field visit, a shipped artifact). Each caption carries the same
+     * honesty duty as prose: describe what the photo shows, claim nothing
+     * beyond it. Capped so a case study stays a case study, not an album.
+     */
+    gallery: z.array(imageRefSchema).min(1).max(4).optional(),
 
     // ── Story ──────────────────────────────────────────────────────────
     /** 5. Problem */
@@ -119,8 +201,10 @@ export const projectSchema = z
     publicLinks: z.array(linkSchema),
 
     // ── Transparency extras ────────────────────────────────────────────
-    /** Optional governance artifact (model card, authority matrix, …). */
+    /** Optional structured artifact (model card, authority matrix, business model, …). */
     artifact: governanceArtifactSchema.optional(),
+    /** Optional annotated repository tree — the layout shown, not described. */
+    repoStructure: repoStructureSchema.optional(),
     /** AI-assistance provenance, rendered in the case-study facts block. */
     aiAssistance: z
       .strictObject({

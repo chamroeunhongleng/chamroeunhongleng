@@ -126,11 +126,16 @@ const filtered = computed(() =>
 }
 
 .chip {
+  display: inline-flex;
+  align-items: center;
   font-size: var(--text-sm);
-  padding: 0.35em 0.9em;
+  padding: 0.45em 0.9em;
   border: 1px solid var(--color-border-strong);
   border-radius: 999px;
   color: var(--color-text-muted);
+  /* Flex items default to min-width:auto — without this a long pillar name
+     ("Governance & Commercial Rules") runs off a 320px screen. */
+  max-width: 100%;
   transition:
     background var(--duration-fast) var(--ease-out),
     color var(--duration-fast) var(--ease-out);
@@ -156,6 +161,9 @@ const filtered = computed(() =>
 .control {
   display: grid;
   gap: var(--space-1);
+  min-width: 0;
+  flex: 1 1 12rem;
+  max-width: 22rem;
 }
 
 .control-label {
@@ -174,7 +182,22 @@ input[type='search'] {
   padding: 0.45em 0.8em;
   font-size: var(--text-sm);
   color: var(--color-text);
-  min-width: 12rem;
+  width: 100%;
+  min-width: 0;
+}
+
+@media (pointer: coarse) {
+  .chip,
+  select,
+  input[type='search'] {
+    min-height: 44px;
+  }
+
+  /* iOS Safari zooms the page when a focused field is under 16px. */
+  select,
+  input[type='search'] {
+    font-size: var(--text-base);
+  }
 }
 
 .result-count {

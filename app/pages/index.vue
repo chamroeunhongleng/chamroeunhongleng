@@ -3,16 +3,15 @@ import {
   contact,
   featuredProjects,
   interests,
-  learning,
   now,
   principles,
   profile
 } from '~/data/portfolio'
 
 usePageMeta({
-  title: 'Applied Machine Learning & Software',
+  title: 'Software Engineering & Applied ML',
   description:
-    'Chamroeun Hongleng — applied-ML student in Phnom Penh building machine-learning systems and the software around them. Open to internships.'
+    'Chamroeun Hongleng — software engineering student in Phnom Penh building web and data systems, with applied-ML work in Khmer speech. Open to internships.'
 })
 
 // One flagship project carries the homepage; the rest are one-line rows.
@@ -25,7 +24,10 @@ const flagship
   )
   ?? featuredProjects[0]
 const moreProjects = featuredProjects.filter((p) => p !== flagship)
-const topEvidence = profile.proofPoints.slice(0, 3)
+
+// The homepage keeps only the two rules a recruiter needs to read; the full
+// list stays in principles.json and on the colophon-linked process story.
+const heroPrinciples = principles.principles.slice(0, 2)
 </script>
 
 <template>
@@ -35,7 +37,7 @@ const topEvidence = profile.proofPoints.slice(0, 3)
       <div class="container hero-layout">
         <div class="hero-grid">
           <p class="eyebrow">{{ profile.name }} · {{ profile.location.text }}</p>
-          <h1 id="hero-title">Applied machine learning and the software around it</h1>
+          <h1 id="hero-title">Software engineering, and the machine learning underneath it</h1>
           <p class="hero-statement">{{ profile.headline }}</p>
           <p class="hero-availability">{{ profile.availability }}</p>
           <div class="hero-intro">
@@ -46,6 +48,23 @@ const topEvidence = profile.proofPoints.slice(0, 3)
             <NuxtLink to="/projects" class="btn btn-primary">View projects</NuxtLink>
             <a :href="`mailto:${contact.email}`" class="btn btn-secondary">Email me</a>
           </div>
+
+          <!-- Three numbers a recruiter can scan in seconds. Values restate
+               claims that exist elsewhere with the same evidence labels. -->
+          <ul v-if="profile.metrics?.length" class="hero-stats" role="list">
+            <li v-for="metric in profile.metrics" :key="metric.award" class="hero-stat">
+              <span class="stat-value mono">{{ metric.award }}</span>
+              <span class="stat-label">
+                <a
+                  v-if="metric.link"
+                  :href="metric.link"
+                  target="_blank"
+                  rel="noopener"
+                >{{ metric.event }} <span aria-hidden="true">↗</span></a>
+                <template v-else>{{ metric.event }}</template>
+              </span>
+            </li>
+          </ul>
         </div>
 
         <figure v-if="profile.photo" class="hero-portrait">
@@ -134,62 +153,21 @@ const topEvidence = profile.proofPoints.slice(0, 3)
       </div>
     </section>
 
-    <!-- Learning snapshot -->
-    <section class="section learning-section">
-      <div class="container">
-        <SectionHeading eyebrow="Learning in public" title="Currently studying" />
-        <div class="learning-grid">
-          <article v-for="discipline in learning.disciplines" :key="discipline.pillar" class="learning-card">
-            <h3>{{ discipline.title }}</h3>
-            <p><MarkedText :text="discipline.stance" /></p>
-          </article>
-        </div>
-        <p class="band-more"><NuxtLink to="/learning">Full learning log →</NuxtLink></p>
-      </div>
-    </section>
-
     <!-- Principles, compact -->
     <section id="process" class="section">
       <div class="container">
         <SectionHeading eyebrow="How I work" title="Rules I work by" />
 
         <div class="principles-row">
-          <article v-for="principle in principles.principles" :key="principle.title" class="principle">
+          <article v-for="principle in heroPrinciples" :key="principle.title" class="principle">
             <h3>{{ principle.title }}</h3>
             <p>{{ principle.text }}</p>
           </article>
         </div>
 
         <p class="process-legend">
-          Everything here moves from idea to production through explicit human approval gates —
-          the full process and AI policy live on the
+          The full process and AI policy live on the
           <NuxtLink to="/colophon">colophon</NuxtLink>.
-        </p>
-      </div>
-    </section>
-
-    <!-- Selected evidence — top three -->
-    <section class="section evidence-section">
-      <div class="container">
-        <SectionHeading eyebrow="Selected evidence" title="Where these claims come from" />
-        <ClaimList :claims="topEvidence" />
-      </div>
-    </section>
-
-    <!-- Direction -->
-    <section class="section">
-      <div class="container">
-        <SectionHeading eyebrow="Direction" title="What I am building toward" />
-        <p class="direction-text">
-          I would like to help build practical AI products for Cambodia: speech interfaces that
-          work in Khmer, coordination tools that farmers and cooperatives can actually trust, and
-          enough evaluation discipline to know whether any of it works. I am early in that, and
-          the projects here are the steps so far.
-        </p>
-        <p class="direction-next">
-          The next steps are already on the roadmap: a model card and public demo for Kaskor
-          ASR, one recurring-buyer pilot for Chomkar, and writing publicly about evaluation
-          for Khmer.
         </p>
       </div>
     </section>
@@ -315,6 +293,59 @@ const topEvidence = profile.proofPoints.slice(0, 3)
   flex-wrap: wrap;
   gap: var(--space-3);
   margin-top: var(--space-2);
+}
+
+/* Hero metrics — the numeric register (mono, like the availability line),
+   hairline-separated so the row reads as one strip, not three cards. */
+.hero-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-5);
+  list-style: none;
+  margin: var(--space-3) 0 0;
+  padding: 0;
+}
+
+.hero-stat {
+  display: grid;
+  gap: var(--space-1);
+  align-content: start;
+}
+
+.hero-stat + .hero-stat {
+  border-inline-start: 1px solid var(--color-border);
+  padding-inline-start: var(--space-5);
+}
+
+.stat-value {
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-accent-2);
+}
+
+.stat-label {
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+  max-width: 22ch;
+}
+
+.stat-label a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--color-border-strong);
+  text-underline-offset: 2px;
+}
+
+.stat-label a:hover {
+  color: var(--color-accent);
+  text-decoration-color: currentColor;
+}
+
+@media (pointer: coarse) {
+  .stat-label a {
+    display: inline-block;
+    padding-block: var(--space-1);
+  }
 }
 
 /* Pillar band — slim */
@@ -469,38 +500,10 @@ const topEvidence = profile.proofPoints.slice(0, 3)
   opacity: 1;
 }
 
-/* Learning */
-.learning-section {
-  background: var(--color-surface);
-  border-block: 1px solid var(--color-border);
-}
-
-.learning-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-4);
-}
-
-.learning-card {
-  display: grid;
-  gap: var(--space-1);
-  border-top: 2px solid var(--color-text);
-  padding-top: var(--space-3);
-}
-
-.learning-card h3 {
-  font-size: var(--text-base);
-}
-
-.learning-card p {
-  font-size: var(--text-sm);
-  color: var(--color-text-muted);
-}
-
 /* Principles — compact row */
 .principles-row {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: var(--space-4) var(--space-6);
 }
 
@@ -527,26 +530,6 @@ const topEvidence = profile.proofPoints.slice(0, 3)
   max-width: var(--prose-max);
 }
 
-.direction-text {
-  font-family: var(--font-display);
-  font-size: var(--text-lg);
-  line-height: var(--leading-relaxed);
-  max-width: var(--prose-max);
-}
-
-.direction-next {
-  margin-top: var(--space-3);
-  font-size: var(--text-sm);
-  color: var(--color-text-muted);
-  max-width: var(--prose-max);
-}
-
-/* Evidence */
-.evidence-section {
-  background: var(--color-surface);
-  border-block: 1px solid var(--color-border);
-}
-
 /* CTA */
 .cta-panel {
   display: grid;
@@ -566,10 +549,6 @@ const topEvidence = profile.proofPoints.slice(0, 3)
   .pillar:nth-child(3) {
     border-inline-start: none;
     padding-inline-start: 0;
-  }
-
-  .principles-row {
-    grid-template-columns: 1fr 1fr;
   }
 
   /* The one-liner column drops out; thumb, name, status, and arrow keep one row.
@@ -614,9 +593,20 @@ const topEvidence = profile.proofPoints.slice(0, 3)
 
 @media (max-width: 760px) {
   .pillar-band,
-  .learning-grid,
   .principles-row {
     grid-template-columns: 1fr;
+  }
+
+  /* Narrow screens wrap the strip; a sibling-combinator border would leave a
+     dangling hairline on wrapped rows, so the separators come off entirely. */
+  .hero-stats {
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .hero-stat + .hero-stat {
+    border-inline-start: none;
+    padding-inline-start: 0;
   }
 
   .pillar + .pillar {

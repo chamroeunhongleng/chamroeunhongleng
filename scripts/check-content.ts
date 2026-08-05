@@ -19,6 +19,11 @@ const problems: string[] = []
 if (enabled.length === 0) problems.push('No enabled projects.')
 if (!enabled.some((p) => p.featured)) problems.push('No enabled project is featured.')
 
+const flagships = enabled.filter((p) => p.flagship)
+if (flagships.length > 1) {
+  problems.push(`More than one flagship project: ${flagships.map((p) => p.slug).join(', ')}.`)
+}
+
 const slugs = new Set(bundle.projects.map((p) => p.slug))
 if (slugs.size !== bundle.projects.length) problems.push('Duplicate project slugs detected.')
 

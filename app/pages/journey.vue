@@ -1,4 +1,4 @@
-﻿<script setup lang="ts">
+<script setup lang="ts">
 import { experience } from '~/data/portfolio'
 
 usePageMeta({
@@ -17,6 +17,16 @@ usePageMeta({
         title="Where I started, what I do now"
         text="Current work first, then competitions, field research, and the milestones that led here — grouped by kind, never flattened into one list where a weekend hackathon looks like a year of work."
       />
+
+      <!-- The through-line the grouped timeline cannot show: why this shape. -->
+      <section v-if="experience.story" class="story" aria-labelledby="story-title">
+        <h2 id="story-title" class="story-title">{{ experience.story.title }}</h2>
+        <div class="story-body prose">
+          <p v-for="(paragraph, i) in experience.story.paragraphs" :key="i">
+            <MarkedText :text="paragraph" />
+          </p>
+        </div>
+      </section>
 
       <nav class="group-nav" aria-label="Journey sections">
         <a v-for="group in experience.groups" :key="group.id" :href="`#group-${group.id}`">
@@ -39,9 +49,10 @@ usePageMeta({
               :key="`${entry.organization}-${entry.role}`"
               class="entry"
               :data-current="entry.current || undefined"
+              :data-figure="entry.image ? '' : undefined"
             >
               <header class="entry-header">
-                <div>
+                <div class="entry-identity">
                   <h3 class="entry-role"><MarkedText :text="entry.role" /></h3>
                   <p class="entry-org"><MarkedText :text="entry.organization" /></p>
                 </div>
@@ -50,35 +61,48 @@ usePageMeta({
                   <span v-if="entry.current" class="current-chip">Current</span>
                 </p>
               </header>
-              <p class="entry-summary"><MarkedText :text="entry.summary" /></p>
-              <ul v-if="entry.results?.length" class="results" role="list">
-                <li v-for="(result, i) in entry.results" :key="i" class="result">
-                  <span class="result-award">{{ result.award }}</span>
-                  <span class="result-event">
-                    <MarkedText :text="result.event" />
-                    <EvidenceLabel
-                      v-if="result.link"
-                      class="result-evidence"
-                      :evidence="result.evidence"
-                      :link="result.link"
-                    />
-                  </span>
-                </li>
-              </ul>
-              <ClaimList v-if="entry.contributions.length" :claims="entry.contributions" />
-              <figure v-if="entry.image" class="entry-figure">
-                <img
-                  :src="entry.image.src"
-                  :alt="entry.image.alt"
-                  loading="lazy"
-                  width="1000"
-                  height="1333"
-                >
-                <figcaption v-if="entry.image.caption" class="mono">
-                  {{ entry.image.caption }}
-                </figcaption>
-              </figure>
-              <LinkStrip v-if="entry.links?.length" :links="entry.links" />
+
+              <div class="entry-body">
+                <div class="entry-main">
+                  <p class="entry-summary"><MarkedText :text="entry.summary" /></p>
+                  <ul v-if="entry.results?.length" class="results" role="list">
+                    <li v-for="(result, i) in entry.results" :key="i" class="result">
+                      <span class="result-award">{{ result.award }}</span>
+                      <span class="result-event">
+                        <MarkedText :text="result.event" />
+                        <EvidenceLabel
+                          v-if="result.link"
+                          class="result-evidence"
+                          :evidence="result.evidence"
+                          :link="result.link"
+                        />
+                      </span>
+                    </li>
+                  </ul>
+                  <ClaimList v-if="entry.contributions.length" :claims="entry.contributions" />
+                </div>
+
+                <figure v-if="entry.image" class="entry-figure">
+                  <img
+                    :src="entry.image.src"
+                    :alt="entry.image.alt"
+                    loading="lazy"
+                    decoding="async"
+                    :width="entry.image.width"
+                    :height="entry.image.height"
+                  >
+                  <figcaption v-if="entry.image.caption" class="mono">
+                    {{ entry.image.caption }}
+                  </figcaption>
+                </figure>
+              </div>
+
+              <LinkStrip
+                v-if="entry.links?.length"
+                class="entry-links"
+                :links="entry.links"
+                :variant="group.layout === 'cards' ? 'grid' : 'inline'"
+              />
             </article>
           </div>
         </section>
@@ -88,6 +112,43 @@ usePageMeta({
 </template>
 
 <style scoped>
+/* Set off from the entry cards below by a rule, not a box — the page already
+   carries five bordered groups and a sixth would read as another entry. */
+.story {
+  display: grid;
+  gap: var(--space-4);
+  margin-block-end: var(--space-8);
+  padding-inline-start: var(--space-5);
+  border-inline-start: 2px solid var(--color-accent);
+}
+
+.story-title {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-accent-2);
+  font-weight: 500;
+}
+
+.story-body p {
+  max-width: 68ch;
+  color: var(--color-text-muted);
+}
+
+/* The opening line carries the answer; give it the weight of a lead. */
+.story-body p:first-child {
+  font-size: var(--text-lg);
+  line-height: var(--leading-snug);
+  color: var(--color-text);
+}
+
+@media (max-width: 760px) {
+  .story {
+    padding-inline-start: var(--space-4);
+  }
+}
+
 .group-nav {
   display: flex;
   flex-wrap: wrap;
@@ -130,18 +191,17 @@ usePageMeta({
   border-bottom: 1px solid var(--color-border);
 }
 
+/* Every group is a single column of full-width entries. Cards used to sit
+   two-up, which cut each entry to ~30rem — long roles wrapped, claims went
+   thin and tall, and the two cards ended at wildly different heights. */
 .entries {
   display: grid;
   gap: var(--space-5);
 }
 
-.entries[data-layout='cards'] {
-  grid-template-columns: repeat(2, 1fr);
-}
-
 .entry {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-5);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-l);
   background: var(--color-surface);
@@ -156,6 +216,7 @@ usePageMeta({
 .entry-header {
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
   gap: var(--space-4);
   flex-wrap: wrap;
 }
@@ -168,6 +229,7 @@ usePageMeta({
   color: var(--color-text-muted);
   font-size: var(--text-sm);
   margin-top: var(--space-1);
+  max-width: none;
 }
 
 .entry-period {
@@ -176,6 +238,7 @@ usePageMeta({
   display: flex;
   align-items: center;
   gap: var(--space-2);
+  white-space: nowrap;
 }
 
 .current-chip {
@@ -186,6 +249,25 @@ usePageMeta({
   border: 1px solid var(--color-positive);
   border-radius: 999px;
   padding: 0.05em 0.5em;
+}
+
+.entry-body {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.entry-main {
+  display: grid;
+  gap: var(--space-4);
+  align-content: start;
+}
+
+/* Cards carry the photographic entries: prose on the left, the photograph
+   held in a rail on the right, so neither has to squeeze past the other. */
+.entries[data-layout='cards'] .entry[data-figure] .entry-body {
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: var(--space-6);
+  align-items: start;
 }
 
 .entry-summary {
@@ -239,6 +321,7 @@ usePageMeta({
   display: grid;
   gap: var(--space-3);
   justify-items: start;
+  align-content: start;
 }
 
 .entry-figure img {
@@ -249,15 +332,31 @@ usePageMeta({
   box-shadow: var(--shadow-1);
 }
 
+/* In the rail the photograph owns its column outright. */
+.entries[data-layout='cards'] .entry-figure img {
+  max-width: 100%;
+}
+
 .entry-figure figcaption {
   font-size: var(--text-xs);
   color: var(--color-text-faint);
   max-width: 60ch;
+  line-height: var(--leading-snug);
+}
+
+/* The receipt grid closes the card, ruled off from the story above it. */
+.entries[data-layout='cards'] .entry-links {
+  padding-block-start: var(--space-4);
+  border-block-start: 1px solid var(--color-border);
 }
 
 @media (max-width: 1040px) {
-  .entries[data-layout='cards'] {
-    grid-template-columns: 1fr;
+  .entries[data-layout='cards'] .entry[data-figure] .entry-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .entries[data-layout='cards'] .entry-figure img {
+    max-width: min(28rem, 100%);
   }
 }
 

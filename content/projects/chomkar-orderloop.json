@@ -3,24 +3,41 @@
   "name": "Chomkar OrderLoop",
   "oneLiner": "A buyer-first coordination concept: one recurring buyer order assembled from documented smallholder commitments before harvest.",
   "status": "Pre-pilot",
-  "deployment": "Not deployed",
+  "deployment": "Public demo",
   "timeline": {
     "start": "2026",
     "end": null,
     "label": "2026 — present"
   },
-  "pillars": ["business-strategy", "software-product"],
-  "tags": ["Field research", "Product strategy", "Agritech", "Market coordination", "Khmer"],
+  "pillars": [
+    "business-strategy",
+    "software-product"
+  ],
+  "tags": [
+    "Field research",
+    "Product strategy",
+    "Agritech",
+    "Market coordination",
+    "Khmer"
+  ],
   "featured": true,
   "enabled": true,
   "demo": false,
   "question": "Can one recurring buyer order coordinate 30–100 smallholder commitments before harvest — reliably enough to improve farmer income?",
+  "cover": {
+    "src": "/images/chomkar-orderloop-site.jpg",
+    "width": 1600,
+    "height": 900,
+    "alt": "The Khmer-language chomkar.com homepage: a headline over a photograph of farmers working under shade netting in a vegetable field.",
+    "caption": "chomkar.com — the product site, Khmer first with an English toggle.",
+    "demo": false
+  },
   "problem": "Smallholder farmers often plant without reliable demand visibility, while buyers cannot easily coordinate consistent volume and quality across many small farms. Both sides lose: farmers to price uncertainty and spoilage, buyers to unreliable supply.",
   "targetUsers": "One recurring produce buyer, one cooperator who aggregates on the ground, and the smallholder farmers in that cooperator's network — deliberately not 'all farmers' or a marketplace.",
   "whyItMatters": "Demand-blind planting is one of the quietest ways smallholder income evaporates. If coordination works for a single recurring order loop, it can be measured honestly; if it cannot work at that scale, a marketplace built on top of it was never going to.",
-  "exactRole": "ML roadmap, business analysis, and field validation contribution within the team.",
-  "teamContributions": "A CHNAI LAB team effort: field interviews, concept design, and the hackathon submission were collaborative. [OWNER_INPUT_REQUIRED: Name the teammates and their roles so team credit is explicit]",
-  "research": "The team ran structured interviews with bok choy farmers in Kang Meas district, Kampong Cham, focused on planting decisions, price information, and willingness to commit volumes pre-harvest. Interview records are private; the framing they produced is public in the Decision Grid repository.",
+  "exactRole": "My share of a team project: interview design and analysis for the field research, business analysis of the order-loop economics, and the Khmer voice-intake layer — it is built on Kaskor ASR, my own fine-tuned speech model, and I provide that API from my own account for the team to build against.",
+  "teamContributions": "A CHNAI LAB team project. We ran the field interviews, designed the concept, and submitted the hackathon entry together. My teammate wrote the code for the public Chomkar website; I contributed the research and the business analysis, and I provide the Kaskor ASR API — my own Khmer speech model — that the team builds the voice intake on.",
+  "research": "We ran structured interviews with bok choy farmers in Kang Meas district, Kampong Cham, focused on planting decisions, price information, and willingness to commit volumes pre-harvest. Interview records are private; the framing they produced is public in the Decision Grid repository.",
   "validation": "Concept validation only so far: field interviews plus a hackathon placement. The pilot thesis is deliberately bounded — one recurring buyer, one cooperator, roughly 30–100 farmers — and no recurring delivery has been run yet, so order reliability and unit economics remain hypotheses.",
   "proposedSolution": "Start from a confirmed recurring buyer requirement and work backwards: the cooperator collects farmer commitments against that order, the system documents each commitment and exception, and voice input in Khmer lowers the data-entry barrier. Software coordinates; the cooperator remains the operational anchor.",
   "userWorkflow": [
@@ -54,6 +71,12 @@
   ],
   "completedWork": [
     {
+      "text": "Public bilingual (Khmer-first) product site at chomkar.com presenting the order-loop model — built with a CHNAI LAB teammate",
+      "evidence": "Public evidence",
+      "workState": "Completed",
+      "link": "https://chomkar.com"
+    },
+    {
       "text": "Structured field interviews with approximately 30 bok choy farmers in Kang Meas, Kampong Cham (team effort)",
       "evidence": "Owner confirmed",
       "workState": "Completed"
@@ -77,13 +100,14 @@
   ],
   "evidence": [
     {
-      "text": "The Turing Hackathon (Techo Startup Center / Startup Cambodia) is a real national program.",
-      "evidence": "Public evidence",
+      "text": "Runner-Up (Top 2) in Turing Hackathon Cycle 10 (Techo Startup Center / Startup Cambodia) — with ~30 structured farmer interviews behind the concept.",
+      "evidence": "Owner confirmed",
       "link": "https://hackathon.techostartup.center/"
     },
     {
-      "text": "The Top 2 placement and the interview count are stated by me and the team; no public results page or published study verifies them yet. [OWNER_INPUT_REQUIRED: Certificate or organizer link would upgrade this to Document evidence]",
-      "evidence": "Owner confirmed"
+      "text": "The Chomkar site is live in Khmer and English at chomkar.com — the public face of the coordination model.",
+      "evidence": "Public evidence",
+      "link": "https://chomkar.com"
     },
     {
       "text": "Chomkar is publicly named as a CHNAI LAB product track (B2B agriculture coordination).",
@@ -97,7 +121,7 @@
       "evidence": "Owner confirmed"
     },
     {
-      "text": "No pilot has run; there are no fulfillment, income, or spoilage results to report, and this page will not pretend otherwise.",
+      "text": "No pilot has run yet; there are no fulfillment, income, or spoilage results to report.",
       "evidence": "Owner confirmed"
     }
   ],
@@ -123,6 +147,11 @@
   ],
   "publicLinks": [
     {
+      "label": "Chomkar website",
+      "url": "https://chomkar.com",
+      "kind": "website"
+    },
+    {
       "label": "Turing Hackathon",
       "url": "https://hackathon.techostartup.center/",
       "kind": "other",
@@ -138,5 +167,67 @@
   "aiAssistance": {
     "scope": "Claude assisted with research synthesis, business analysis drafts, and pilot design documentation.",
     "humanOwned": "Field interviews, the pilot thesis, commercial judgments, and all claims about what has and has not been validated."
-  }
+  },
+  "seoDescription": "Buyer-first agritech coordination for Cambodian smallholders: field interviews with bok choy farmers in Kampong Cham, working toward one recurring-buyer pilot.",
+  "artifact": {
+    "title": "How Chomkar is meant to make money",
+    "kind": "business-model",
+    "description": "The commercial design behind the order loop, stated before there is any revenue to point at. Nothing here is proven — the pricing row is deliberately empty because no pilot has run.",
+    "rows": [
+      {
+        "label": "Who pays",
+        "value": "The buyer, never the farmer. chomkar.com states the model plainly: zero percent cut of the produce price, and farmers pay nothing to take part.",
+        "evidence": "Public evidence"
+      },
+      {
+        "label": "Revenue stream",
+        "value": "A coordination fee charged to the buyer on a recurring order — the fee for turning one request into one verified lot. Unpriced until a pilot shows the loop is reliable enough to charge for.",
+        "evidence": "Owner confirmed"
+      },
+      {
+        "label": "Customer segments",
+        "value": "One recurring produce buyer needing consistent bulk volume, one cooperator who aggregates on the ground, and the smallholders in that cooperator's network.",
+        "evidence": "Owner confirmed"
+      },
+      {
+        "label": "Value to the buyer",
+        "value": "Send one message, get back one assembled lot that can be checked before purchase — instead of chasing many farms for volume and quality.",
+        "evidence": "Owner confirmed"
+      },
+      {
+        "label": "Value to the farmer",
+        "value": "Demand visibility before planting rather than after harvest, and the negotiated price kept intact instead of eroded through middleman layers.",
+        "evidence": "Owner confirmed"
+      },
+      {
+        "label": "Cost structure",
+        "value": "The cooperator's coordination time is the real operating cost; the software is deliberately thin, so the model only works if coordination is cheaper than the spoilage and shortfall it prevents.",
+        "evidence": "Owner confirmed"
+      },
+      {
+        "label": "What is unproven",
+        "value": "Everything commercial. No pilot has run, no fee has been charged, and no buyer has committed to a recurring order — willingness to pay is a hypothesis, not a finding.",
+        "evidence": "Owner confirmed"
+      }
+    ]
+  },
+  "portrait": {
+    "src": "/images/turing-hackathon-certificate.jpg",
+    "width": 960,
+    "height": 1280,
+    "alt": "Chamroeun Hongleng standing on the Demo Day stage holding an open folder with the CHNAI LAB certificate of completion and the Runner-Up Award trophy.",
+    "caption": "Runner-Up (Top 2), Turing Hackathon Cycle 10 · Demo Day, Techo Startup Center, Phnom Penh · 28 June 2026.",
+    "demo": false
+  },
+  "gallery": [
+    {
+      "src": "/images/turing-hackathon-team.jpg",
+      "width": 1280,
+      "height": 960,
+      "alt": "Six people standing on the Techo Startup Center stage in front of a Turing Hackathon Cycle 10 screen, holding certificate folders and an oversized 1,000,000 KHR Runner-Up Award cheque.",
+      "caption": "The CHNAI LAB team after the Runner-Up result, with the 1,000,000 KHR award · Turing Hackathon Cycle 10 Demo Day.",
+      "demo": false
+    }
+  ],
+  "primaryLink": "https://chomkar.com"
 }

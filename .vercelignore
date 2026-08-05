@@ -1,0 +1,19 @@
+# Kept out of deploy uploads. The CLI does not reliably honour .gitignore here,
+# and these directories are large, local-only, and never needed by a deployment.
+#
+# NOTE: .output is deliberately NOT listed. Deploys of this project work by
+# uploading the locally built .output/public, which shadows the remote build.
+# Excluding it would break the deploy path documented in docs/deployment.md.
+
+# Disposable intermediates (screenshots, scratch exports) — 100s of MB
+.tmp
+
+# Playwright artifacts
+test-results
+playwright-report
+blob-report
+.playwright
+
+node_modules
+.git
+.nuxt

@@ -24,6 +24,9 @@ body {
   line-height: var(--leading-normal);
   -webkit-font-smoothing: antialiased;
   min-height: 100dvh;
+  /* Long tokens (URLs, emails, code identifiers) break instead of pushing the
+     page sideways on 320px phones. */
+  overflow-wrap: break-word;
 }
 
 img,

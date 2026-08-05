@@ -9,19 +9,38 @@
     "end": null,
     "label": "2026 — present"
   },
-  "pillars": ["software-product", "business-strategy"],
-  "tags": ["Next.js", "TypeScript", "Education", "Bilingual", "Khmer", "Product design"],
+  "pillars": [
+    "software-product",
+    "business-strategy"
+  ],
+  "tags": [
+    "Next.js",
+    "TypeScript",
+    "Education",
+    "Bilingual",
+    "Khmer",
+    "Product design"
+  ],
   "featured": true,
+  "order": 1,
   "enabled": true,
   "demo": false,
   "question": "Can one bilingual workspace make course delivery, assessment, and student support calm enough for schools and training teams in Cambodia?",
+  "cover": {
+    "src": "/images/lms-dashboard.jpg",
+    "width": 1600,
+    "height": 900,
+    "alt": "The LMS landing page: the headline “A calmer way to run teaching and learning” beside a teacher dashboard showing courses, class progress, and recent activity.",
+    "caption": "The walkthrough prototype's teacher dashboard. Every figure shown is sample data — no real course or student records.",
+    "demo": false
+  },
   "problem": "Teaching operations are scattered across chat apps, spreadsheets, and paper: course plans in one place, assignments in another, grades in a third, and student communication everywhere. For bilingual institutions, most off-the-shelf tools also assume English-only users.",
   "targetUsers": "Schools, universities, and training teams — with distinct role experiences for teachers, students, and administrators, in English and Khmer.",
   "whyItMatters": "Academic operations software shapes how teachers spend their time. A workspace designed for the bilingual reality of Cambodian institutions lowers the barrier for schools that current LMS products treat as an afterthought.",
-  "exactRole": "[OWNER_INPUT_REQUIRED: Your exact role — solo build or team, and which parts are yours]",
-  "teamContributions": "[OWNER_INPUT_REQUIRED: Teammates and their parts, or 'Independent project']",
-  "research": "[OWNER_INPUT_REQUIRED: What you studied before building — existing LMS products, teacher interviews, school workflows?]",
-  "validation": "The product is deployed as a public walkthrough prototype and labels itself as such on its own interface. No school or training team is using it in real operations yet, and this page does not claim otherwise.",
+  "exactRole": "Sole builder of the public walkthrough prototype: interface design, the role-based teacher/student/admin views, bilingual English/Khmer UX, and the product framing pages.",
+  "teamContributions": "Independent project.",
+  "research": "Looked at how existing LMS products assume English-only users, and at how Cambodian teaching operations actually run — scattered across chat apps, spreadsheets, and paper — to decide which workflows the walkthrough had to demonstrate end to end.",
+  "validation": "The product is deployed as a public walkthrough prototype and labels itself as such on its own interface. No school or training team is using it in real operations yet.",
   "proposedSolution": "One accessible workspace covering the teaching lifecycle: plan courses, deliver lessons, assess work, message students, and track progress through academic analytics — with role-based views (teacher, student, admin) and full English/Khmer experiences.",
   "userWorkflow": [
     "A teacher plans a course and publishes lessons",
@@ -30,7 +49,7 @@
     "Messages keep student communication inside the workspace",
     "Academic analytics summarize progress across every class"
   ],
-  "systemArchitecture": "Next.js application deployed on Vercel; the public walkthrough demonstrates the full interface with sample data. [OWNER_INPUT_REQUIRED: Backend, database, and auth details once you want them public]",
+  "systemArchitecture": "Next.js application deployed on Vercel; the public walkthrough demonstrates the full interface with sample data. Backend, database, and auth details stay private with the source repository.",
   "methods": "Role-based interface design (teacher, student, administrator), bilingual UX as a first-class requirement rather than a translation pass, and accessibility by default — responsive, keyboard-friendly, mobile-ready.",
   "businessValue": "The prototype includes product framing beyond the software itself — features, solutions, lifecycle, and pricing pages — treating the LMS as a commercial product exploration, not just an interface exercise. Commercial viability remains untested until real institutions pilot it.",
   "contractsPolicy": "A real deployment would sit on institutional contracts: service agreements with schools, acceptable-use terms for students, and clear data-processing commitments. Drafting those is part of taking this beyond a prototype.",
@@ -104,7 +123,9 @@
     ]
   },
   "lessonsLearned": [
-    "[OWNER_INPUT_REQUIRED: What building the LMS taught you — technical, product, or process]"
+    "Bilingual UX designed in from the start is far cheaper than retrofitting translations onto an English-only interface",
+    "A complete clickable surface communicates a product better than any document — and invites honest feedback about what is missing",
+    "Sample data keeps a public demo safe, but it also means every real-workflow claim has to wait for a real pilot"
   ],
   "nextValidation": [
     "Run one walkthrough session with a real teacher or training coordinator and record what breaks",
@@ -120,8 +141,50 @@
     }
   ],
   "aiAssistance": {
-    "scope": "[OWNER_INPUT_REQUIRED: What AI tools helped with]",
-    "humanOwned": "[OWNER_INPUT_REQUIRED: What stayed fully yours]"
+    "scope": "Claude assisted with interface scaffolding, component implementation, and copy drafts.",
+    "humanOwned": "Product scope, the role designs, bilingual content decisions, and what the walkthrough claims — and does not claim — about itself."
   },
-  "primaryLink": "https://lms-for-education-nine.vercel.app"
+  "primaryLink": "https://lms-for-education-nine.vercel.app",
+  "artifact": {
+    "title": "How the LMS is priced",
+    "kind": "business-model",
+    "description": "The commercial model published on the prototype itself. The pricing is designed and stated; it is not yet validated, because no institution has been billed.",
+    "rows": [
+      {
+        "label": "Unit of pricing",
+        "value": "Per active learner, per year — an active learner is a student who signs in and engages with at least one course during the billing term. Staff accounts and archived accounts do not count.",
+        "evidence": "Public evidence"
+      },
+      {
+        "label": "Classroom tier",
+        "value": "Free forever, up to fifty active learners and three active courses — the complete teaching workflow, for one educator or a small training team testing it.",
+        "evidence": "Public evidence"
+      },
+      {
+        "label": "School tier",
+        "value": "Three US dollars per active learner per year, from one hundred learners upward, billed annually or monthly, with volume discounts. Adds departments and cohorts, staff roles, academic analytics, data export, bulk enrolment, and onboarding.",
+        "evidence": "Public evidence"
+      },
+      {
+        "label": "Institution tier",
+        "value": "Custom pricing, from two US dollars per active learner per year at scale, planned alongside integration and service work. Adds multi-campus structure, single sign-on, directory sync, and student-information-system integration.",
+        "evidence": "Public evidence"
+      },
+      {
+        "label": "Who pays",
+        "value": "The institution, not the teacher or the student — the free tier exists so a teacher can evaluate the full workflow before anyone is asked to buy anything.",
+        "evidence": "Public evidence"
+      },
+      {
+        "label": "Where the cost sits",
+        "value": "Onboarding, training, and integration work scale with the institution, not with the hosting bill — which is why the upper tiers are sold with service planning rather than as a bigger seat count.",
+        "evidence": "Owner confirmed"
+      },
+      {
+        "label": "What is unproven",
+        "value": "The revenue side entirely. The tiers are published product design, not tested willingness to pay: no school has piloted the system and no invoice has been issued.",
+        "evidence": "Owner confirmed"
+      }
+    ]
+  }
 }

@@ -1,0 +1,199 @@
+{
+  "slug": "portfolio-site",
+  "name": "chamroeunhongleng.me",
+  "oneLiner": "This site: a portfolio where every claim carries an evidence label, and the build refuses to publish work that is not yet honest.",
+  "status": "Public demo",
+  "deployment": "Deployed",
+  "timeline": {
+    "start": "2026-08",
+    "end": null,
+    "label": "August 2026 — present"
+  },
+  "pillars": [
+    "software-product",
+    "governance-commercial"
+  ],
+  "tags": [
+    "Nuxt 4",
+    "TypeScript",
+    "Zod",
+    "Static site",
+    "Design tokens",
+    "Accessibility",
+    "CI",
+    "AI-native development"
+  ],
+  "featured": true,
+  "flagship": false,
+  "enabled": true,
+  "demo": false,
+  "seoDescription": "The engineering behind chamroeunhongleng.me: a static Nuxt 4 portfolio where content is schema-validated and the build fails if a claim is not yet honest.",
+  "question": "Can a portfolio be held to the same evidence standard it demands of its projects — enforced by the build system instead of by good intentions?",
+  "cover": {
+    "src": "/images/portfolio-site.jpg",
+    "width": 1600,
+    "height": 900,
+    "alt": "The chamroeunhongleng.me homepage: the headline “Applied machine learning and the software around it”, an internship availability line, and a portrait photograph.",
+    "caption": "The site's own homepage — the hero, the availability line, and the evidence-labelled prose this case study describes.",
+    "demo": false
+  },
+  "problem": "Student portfolios overstate. Not usually by lying, but by leaving things comfortable and vague: a prototype reads like a product, a local script reads like a deployment, and a number appears with no source. I wanted the opposite problem — a site where being vague is harder than being accurate, because the tooling will not let a soft claim through.",
+  "targetUsers": "Recruiters, engineers, and founders reading it to judge whether my work is real, plus my future self, who has to keep it accurate without rereading every page.",
+  "whyItMatters": "I ask people to believe claims about models, awards, and products they cannot easily check. The only fair answer is to label how well each claim is backed and to make the labels part of the build, so an unlabeled or unresolved claim breaks the deploy instead of quietly shipping.",
+  "exactRole": "Owner of the architecture, the content, and every claim on it. I built it AI-natively: coding agents did much of the implementation while I set the rules they work under, wrote or approved the content, chose every evidence label, and reviewed everything before it shipped. Deployment, the domain, and what stays private are my decisions alone.",
+  "teamContributions": "Individual project. No teammates; the AI assistance is described separately and in detail on the colophon page.",
+  "research": "I studied other portfolios for structure rather than style, and took two patterns from a teammate's site: grouped skills and a short statement of direction. The evidence-label idea comes from the habit competition mathematics taught me — an answer only counts when you can show it is right — applied to a website.",
+  "validation": "The site is live on its own domain in production mode, and the verification pipeline passes all of its phases before every deploy. What is not validated is whether the honesty discipline helps me get hired; that is the real test and it has not been run yet.",
+  "proposedSolution": "Keep all content in JSON validated by schemas, give every important claim one of eight evidence labels, and separate what a project is (lifecycle status) from whether it actually runs anywhere (deployment reality) so a polished prototype can never read as a shipped product. Then put the rules in one engine used by the command line, the build, and the tests alike, and let the production build fail while any placeholder or demonstration project remains.",
+  "userWorkflow": [
+    "A visitor lands on the homepage and sees one project in depth, the rest as one line each",
+    "Each claim shows its evidence label, so the reader knows what is checkable and what is only my word",
+    "A case study separates my exact role from the team's contributions, and constraints from chosen tradeoffs",
+    "A reader who wants to know how the site is built opens the colophon, which states where AI was involved",
+    "A reader who prefers to ask can use the site assistant, which answers only from published content"
+  ],
+  "systemArchitecture": "A static Nuxt 4 site prerendered to plain files, written in TypeScript with hand-written CSS design tokens and light and dark themes. Content lives in JSON, validated by Zod schemas that are the single source of truth for every vocabulary on the site; routes and the sitemap are derived from the content files, so adding a project means adding one JSON file and nothing else. One rule engine holds every content rule and is imported identically by the checking script, the build gate, and the tests. There are three build modes, and production mode fails the build while any placeholder or enabled demonstration project remains. The only runtime code is one serverless function for the site assistant.",
+  "methods": "Deterministic tooling over trust: schema validation, one shared rule engine, unit tests, typechecking, linting, link and asset checking, structural accessibility checks, SEO metadata checks, and a self-test that asks whether a production build would pass. The site assistant is the one AI feature, and it is constrained rather than clever — its knowledge is built from the same validated content the pages render, placeholder-marked fields are dropped from what it can see, and it can only navigate to pages derived from the content.",
+  "businessValue": "Not a commercial product. Its value is professional: it is the artifact I point at when I claim I can design a typed system, hold it to automated standards, and lead coding agents without losing control of what ships. It also does the ordinary job of a portfolio, which is to get me an internship interview.",
+  "contractsPolicy": "The site publishes only claims I am willing to stand behind, and only personal data I have chosen to make public — a contact email, not a phone number or date of birth. Third-party material is treated carefully: no school logos, no press citation I could not verify, and no photograph of other people without consent. Documents that would expose other people's personal data stay private and are shown on request instead.",
+  "dataPrivacy": "No analytics and no trackers, so ordinary visits are not recorded at all. The one exception is stated openly: a message typed into the site assistant travels through a site-owned serverless function to the Claude API to be answered, and the site does not store it. Private evidence — certificates, rosters, private repositories — is referenced by label and never uploaded.",
+  "risks": [
+    "Evidence labels are only as honest as the person applying them; the tooling can enforce that a label exists, not that it is the right one",
+    "A visitor may read the labels as hedging rather than rigour, and honest hedging can cost me an opportunity a bolder page would win",
+    "The site assistant speaks to visitors on my behalf, so a wrong or overstated answer is my problem even though a model produced it",
+    "Deploys are made from a local machine by command line, which is reliable but depends on me being the one to run it",
+    "A strict production gate means a small content mistake can block a release at the worst moment — the cost of the design working as intended"
+  ],
+  "humanApprovalPoints": [
+    "Every claim and every evidence label is mine, not the AI's",
+    "Publishing personal or third-party material — the CV, photographs, private documents — is a decision I make case by case",
+    "Production deploys, the domain, and environment configuration stay with me",
+    "The assistant's system prompt forbids overstating me, and its knowledge is limited to what I have already published"
+  ],
+  "technicalDecisions": [
+    "Content in JSON validated by Zod rather than files with front matter — a claim without an evidence label should fail the build, not a style review",
+    "Content validated by loading it through the schemas, never by pattern-matching source text, which the previous version of this site did badly",
+    "Routes and the sitemap derived from the content directory, so no route list can drift out of date",
+    "Lifecycle status and deployment reality kept as two separate labels, enforced by the schema, so nothing polished can read as shipped",
+    "One rule engine shared by the command line, the build gate, and the tests, so the rules cannot disagree with each other",
+    "A static build with one serverless function, rather than a server — cheap, fast, and almost nothing to attack",
+    "Styling through design tokens only, so light and dark themes and contrast are decided once"
+  ],
+  "completedWork": [
+    {
+      "text": "A static Nuxt 4 site in TypeScript with schema-validated content, design tokens, light and dark themes, and no analytics or trackers — live on its own domain with HTTPS.",
+      "evidence": "Public evidence",
+      "workState": "Completed",
+      "link": "https://chamroeunhongleng.me"
+    },
+    {
+      "text": "An evidence-label system of eight labels, with lifecycle status and deployment reality as separate schema-enforced axes.",
+      "evidence": "Repository evidence",
+      "workState": "Completed",
+      "link": "https://github.com/chamroeunhongleng/chamroeunhongleng/tree/portfolio/shared/schemas"
+    },
+    {
+      "text": "A single rule engine used identically by the checking script, the build gate, and the tests; production builds fail while any placeholder or enabled demonstration project remains.",
+      "evidence": "Repository evidence",
+      "workState": "Completed",
+      "link": "https://github.com/chamroeunhongleng/chamroeunhongleng/tree/portfolio/shared/rules.ts"
+    },
+    {
+      "text": "A verification pipeline of twelve phases — structure, secrets, content schemas, owner content, lint, typecheck, tests, static generation, links and assets, accessibility basics, SEO metadata, and a production-gate self-test — run before every deploy.",
+      "evidence": "Repository evidence",
+      "workState": "Tested",
+      "link": "https://github.com/chamroeunhongleng/chamroeunhongleng/tree/portfolio/scripts"
+    },
+    {
+      "text": "A test suite of 87 unit tests across 11 files, plus GitHub Actions running quality checks, the production gate, and CodeQL scanning.",
+      "evidence": "Repository evidence",
+      "workState": "Tested",
+      "link": "https://github.com/chamroeunhongleng/chamroeunhongleng/tree/portfolio/tests"
+    },
+    {
+      "text": "A site assistant answering visitors from the published content only, through one serverless function, with navigation restricted to an allowlist derived from the content and no message storage.",
+      "evidence": "Public evidence",
+      "workState": "Completed",
+      "link": "https://chamroeunhongleng.me"
+    }
+  ],
+  "evidence": [
+    {
+      "text": "The site you are reading is the artifact: live at chamroeunhongleng.me on its own domain, built in production mode.",
+      "evidence": "Public evidence",
+      "link": "https://chamroeunhongleng.me"
+    },
+    {
+      "text": "The source is public on the portfolio branch of my profile repository, including the schemas, the rule engine, the verification scripts, the build gate, the tests, and the working agreement the coding agents follow.",
+      "evidence": "Repository evidence",
+      "link": "https://github.com/chamroeunhongleng/chamroeunhongleng/tree/portfolio"
+    },
+    {
+      "text": "The colophon page states where AI was involved and what stays under human control, and the repository carries a security policy and a licence.",
+      "evidence": "Public evidence",
+      "link": "https://chamroeunhongleng.me/colophon"
+    }
+  ],
+  "results": [
+    {
+      "text": "The site is live in production mode with every page passing the twelve-phase pipeline, and no placeholder or unresolved claim can ship while that gate holds.",
+      "evidence": "Public evidence",
+      "link": "https://chamroeunhongleng.me"
+    },
+    {
+      "text": "Whether the honesty discipline actually helps me get hired is untested — no interview outcome is claimed here.",
+      "evidence": "Owner confirmed"
+    }
+  ],
+  "limitations": {
+    "constraints": [
+      "Remote builds of this repository fail on the hosting platform for reasons I have not resolved, so deploys are made by command line from my own machine",
+      "It is a static site, so anything genuinely interactive has to be added deliberately as a serverless function",
+      "The evidence labels depend on my judgment; automation can require a label but cannot verify that it is the right one"
+    ],
+    "tradeoffs": [
+      "Honest hedging over confident marketing — safer for the reader, and sometimes weaker as a sales page",
+      "A strict production gate that will block my own release rather than let a vague claim through",
+      "Content in JSON validated by schemas instead of a content management system — more discipline, less convenience",
+      "No analytics at all, which means no visitor data to learn from"
+    ]
+  },
+  "lessonsLearned": [
+    "Putting honesty in the build system changed my behaviour more than any intention did — a rule that fails a deploy is obeyed",
+    "Separating lifecycle status from deployment reality removed the single most common way portfolios mislead, including mine",
+    "Validating content by loading it through schemas, instead of pattern-matching the source, made the whole checking layer trustworthy",
+    "Leading coding agents well is mostly writing down the rules first: the contract file in the repository does more for quality than any single review",
+    "Writing at a level a non-native reader can follow made the pages clearer for everyone, not simpler"
+  ],
+  "nextValidation": [
+    "Fix the remote builds so deployment does not depend on my own machine",
+    "Publish the evaluation results and model card that some claims on this site still point to as planned",
+    "Watch which pages a recruiter actually reads, without adding trackers — by asking them",
+    "Keep the labels current as claims strengthen: several are one document or one published result away from a stronger label"
+  ],
+  "publicLinks": [
+    {
+      "label": "Live site",
+      "url": "https://chamroeunhongleng.me",
+      "kind": "website",
+      "evidence": "Public evidence"
+    },
+    {
+      "label": "Source (portfolio branch)",
+      "url": "https://github.com/chamroeunhongleng/chamroeunhongleng/tree/portfolio",
+      "kind": "repository",
+      "evidence": "Repository evidence"
+    },
+    {
+      "label": "Colophon — how it was built",
+      "url": "https://chamroeunhongleng.me/colophon",
+      "kind": "docs",
+      "evidence": "Public evidence"
+    }
+  ],
+  "primaryLink": "https://github.com/chamroeunhongleng/chamroeunhongleng/tree/portfolio",
+  "aiAssistance": {
+    "scope": "Built AI-natively with coding agents under a written contract in the repository: they implemented, refactored, and drafted tests and documentation, and they draft prose I then correct.",
+    "humanOwned": "The architecture rules, every claim and evidence label, what stays private, and the decision to deploy."
+  }
+}

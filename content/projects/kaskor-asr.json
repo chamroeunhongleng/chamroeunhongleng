@@ -1,7 +1,8 @@
 {
   "slug": "kaskor-asr",
   "name": "Kaskor ASR",
-  "oneLiner": "A reproducible Khmer speech-to-text fine-tuning pipeline built on Whisper-small, from raw audio to an installable CLI.",
+  "oneLiner": "Khmer speech-to-text on a fine-tuned Whisper-small — best checkpoint 17.48% CER (self-reported) — public training and evaluation code, released weights, and an installable CLI.",
+  "seoDescription": "Khmer speech-to-text fine-tuning on Whisper-small — best checkpoint self-reports 17.48% CER on its own held-out split — from raw audio to a pip-installable CLI.",
   "status": "Prototype",
   "deployment": "Local only",
   "timeline": {
@@ -12,14 +13,16 @@
   "pillars": ["ai-ml", "software-product"],
   "tags": ["Python", "PyTorch", "Whisper", "Hugging Face", "Speech recognition", "Khmer"],
   "featured": true,
+  "flagship": true,
+  "order": 2,
   "enabled": true,
   "demo": false,
-  "question": "Can a fully reproducible fine-tuning pipeline make Khmer speech recognition approachable with limited public data?",
+  "question": "Can a fully public fine-tuning pipeline — code, splits, and released weights — make Khmer speech recognition approachable with limited public data?",
   "problem": "Khmer speech interfaces are held back by low-resource data, evaluation that standard word-based metrics get wrong, and research pipelines that nobody else can rerun. Most Khmer ASR work is not reproducible by a second person, which makes results hard to trust and harder to build on.",
   "targetUsers": "Developers and researchers who need Khmer speech-to-text building blocks, and — eventually — voice-first products for Khmer speakers, starting with agricultural data intake where typing is impractical.",
-  "whyItMatters": "Speech is the natural interface for many Khmer-speaking users, especially in field contexts. If the pipeline itself is reproducible, every future improvement in data or compute translates directly into a better model instead of a new unverifiable claim.",
+  "whyItMatters": "Speech is the natural interface for many Khmer-speaking users, especially in field contexts. Because the training and evaluation code is public, every future improvement in data or compute can translate into a better model instead of a new unverifiable claim — even though the raw audio itself stays private.",
   "exactRole": "Sole builder of the public pipeline: data preparation, training and evaluation scripts, CLI packaging, and documentation.",
-  "teamContributions": "Independent project. [OWNER_INPUT_REQUIRED: Credit any dataset sources, advisors, or collaborators who should be named here]",
+  "teamContributions": "Independent project.",
   "research": "Studied why word error rate misleads for Khmer — the script does not separate words with spaces, so WER punishes segmentation choices rather than recognition quality. Character error rate became the primary metric, with WER kept only as a secondary signal, and the reasoning is documented in the repository.",
   "validation": "Evaluation runs on a held-out split through the repository's own evaluation script. There is no external benchmark or third-party validation yet — the published numbers are self-reported and the README says so.",
   "proposedSolution": "One repository that packages the entire path from raw Khmer audio to a trained, exportable model: dataset inspection, manifest building, resampling, speaker-stratified splitting, feature caching, training, evaluation, export, and a pip-installable transcription CLI for files, folders, and microphone input.",
@@ -31,10 +34,10 @@
     "Evaluate with CER as the primary metric on the held-out split",
     "Export the model and transcribe through the CLI"
   ],
-  "systemArchitecture": "A staged pipeline of eleven Python scripts with explicit inputs and outputs. Large artifacts — raw audio and model weights — stay outside git by design; the versioned repository holds manifests, scripts, and evaluation logic, so the recipe is public even where the ingredients cannot be.",
+  "systemArchitecture": "A staged pipeline of eleven Python scripts with explicit inputs and outputs. Raw audio stays outside git by design; the versioned repository holds manifests, scripts, and evaluation logic, and the fine-tuned weights are published separately on Hugging Face — so both the recipe and the resulting model are public even where the audio cannot be.",
   "methods": "Fine-tuning openai/whisper-small with Hugging Face Transformers, torchaudio preprocessing, speaker-stratified splits, feature caching for iteration speed, and CER-first evaluation chosen for the linguistics of Khmer script.",
   "businessValue": "An enabling layer rather than a product: reliable Khmer speech-to-text lowers the cost of every voice-first product idea that follows, including agricultural data intake for the Chomkar direction. Framed as potential — no commercial use exists yet.",
-  "contractsPolicy": "The code is MIT-licensed and public. The real commercial-legal question is dataset rights: audio provenance, speaker consent, and licensing must be documented before any weights are published — which is exactly why they have not been published yet.",
+  "contractsPolicy": "The code is MIT-licensed and public, and the fine-tuned weights are published on Hugging Face. The real commercial-legal question is dataset rights: audio provenance, speaker consent, and licensing must be documented before the raw audio or any dataset is released — which is why the recordings themselves stay private.",
   "dataPrivacy": "Voice recordings are personal data. Raw audio is excluded from the repository, and any future release of weights or datasets requires documented consent and a provenance review first.",
   "risks": [
     "A single aggregate metric can overstate quality for underrepresented speakers, dialects, or noisy environments",
@@ -48,7 +51,7 @@
   ],
   "technicalDecisions": [
     "Character error rate as the primary metric, because Khmer does not reliably separate words with spaces",
-    "Raw audio and model weights stay outside git; manifests, scripts, and evaluation logic are versioned",
+    "Raw audio stays outside git; manifests, scripts, and evaluation logic are versioned, and the fine-tuned weights are released on Hugging Face",
     "The full training pipeline is separate from the lightweight CLI that transcription users install",
     "Text normalization and 16 kHz verification happen explicitly, so evaluation differences cannot hide inside preprocessing"
   ],
@@ -63,6 +66,12 @@
       "text": "Pip-installable CLI supporting files, folders, reference text, and optional microphone input",
       "evidence": "Repository evidence",
       "link": "https://github.com/chamroeunhongleng/kaskor-asr",
+      "workState": "Completed"
+    },
+    {
+      "text": "Fine-tuned model weights (v0.0) published on Hugging Face with processor configs and a transcription script",
+      "evidence": "Public evidence",
+      "link": "https://huggingface.co/Hongleng/kasekor-asr-v0.0",
       "workState": "Completed"
     },
     {
@@ -89,13 +98,14 @@
       "link": "https://github.com/chamroeunhongleng/kaskor-asr/tree/main/data"
     },
     {
-      "text": "Training used approximately 86,000 audio samples. This figure appears only in my own profile README and is not yet verifiable from the repository.",
-      "evidence": "Owner confirmed"
+      "text": "Training used approximately 86,500 audio samples — the committed train.csv manifest lists them row by row, alongside ~4,800-sample validation and test manifests.",
+      "evidence": "Repository evidence",
+      "link": "https://github.com/chamroeunhongleng/kaskor-asr/tree/main/data"
     }
   ],
   "results": [
     {
-      "text": "Best checkpoint self-reports 17.48% CER, 67.2% WER (secondary), and 0.0346 evaluation loss on the project's own held-out split — measured by the repository's evaluation script; weights and audio are not published, so the numbers are not externally reproducible.",
+      "text": "Best checkpoint self-reports 17.48% CER, 67.2% WER (secondary), and 0.0346 evaluation loss on the project's own held-out split — measured by the repository's evaluation script. The fine-tuned weights (v0.0) are public on Hugging Face; the raw audio remains private, so training-from-scratch reproduction still requires the source recordings.",
       "evidence": "Repository evidence",
       "link": "https://github.com/chamroeunhongleng/kaskor-asr"
     },
@@ -108,12 +118,12 @@
   "limitations": {
     "constraints": [
       "Limited public Khmer speech data; reproducing training requires access to the source audio and suitable compute",
-      "Weights cannot be responsibly published until dataset provenance and consent are documented",
+      "Raw audio cannot be responsibly published until dataset provenance and consent are documented",
       "Evaluation is a single held-out split, not per-condition analysis"
     ],
     "tradeoffs": [
       "Whisper-small over larger models, trading headline accuracy for iteration speed on available compute",
-      "Keeping audio and weights out of git makes the repo clonable but means visitors cannot run inference immediately"
+      "Audio stays out of git; the weights live on Hugging Face, so running inference means installing the CLI and pulling the v0.0 checkpoint"
     ]
   },
   "lessonsLearned": [
@@ -132,6 +142,12 @@
       "url": "https://github.com/chamroeunhongleng/kaskor-asr",
       "kind": "repository",
       "evidence": "Repository evidence"
+    },
+    {
+      "label": "Model weights on Hugging Face",
+      "url": "https://huggingface.co/Hongleng/kasekor-asr-v0.0",
+      "kind": "other",
+      "evidence": "Public evidence"
     },
     {
       "label": "Data manifests",

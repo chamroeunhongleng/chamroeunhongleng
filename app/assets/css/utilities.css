@@ -70,3 +70,11 @@
   border-color: var(--color-accent);
   color: var(--color-accent);
 }
+
+/* Touch devices: controls clear the 44px comfortable-tap minimum. Pointer
+   devices keep the tighter editorial proportions. */
+@media (pointer: coarse) {
+  .btn {
+    min-height: 44px;
+  }
+}

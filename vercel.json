@@ -3,6 +3,12 @@
   "buildCommand": "npm run generate",
   "outputDirectory": ".output/public",
   "git": { "deploymentEnabled": false },
+  "functions": {
+    "api/chat.ts": {
+      "maxDuration": 30,
+      "includeFiles": "content/**"
+    }
+  },
   "headers": [
     {
       "source": "/(.*)",

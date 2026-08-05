@@ -6,7 +6,7 @@ import {
   projectSchema,
   type ContentBundle,
   type Project
-} from '../../shared/schemas/index'
+} from '../../shared/schemas/index.js'
 
 // npm scripts and vitest both execute with the repo root as cwd; vitest's
 // module transform makes import.meta.url unreliable here, so cwd it is.

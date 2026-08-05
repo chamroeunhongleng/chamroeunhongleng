@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Chamroeun Hongleng — CV</title>
+<style>
+  /* A4, Chromium print-to-PDF. Margins live here, not in the print dialog. */
+  @page { size: A4; margin: 14mm 15mm 12mm; }
+
+  :root {
+    --accent: #4338ca;      /* indigo — matches the site */
+    --accent-2: #a14d28;    /* terracotta — bullet marks */
+    --ink: #16161a;
+    --muted: #55555f;
+    --faint: #77777f;
+    --rule: #d8d8e0;
+    --serif: georgia, 'Times New Roman', serif;
+    --sans: 'Segoe UI', system-ui, sans-serif;
+    --mono: consolas, 'Cascadia Mono', ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: var(--serif);
+    font-size: 9.6pt;
+    line-height: 1.42;
+    color: var(--ink);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ── Header ───────────────────────────────────────────────── */
+  .name {
+    font-family: var(--serif);
+    font-size: 25pt;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    margin: 0 0 2mm;
+  }
+  .tagline {
+    font-size: 10.5pt;
+    font-style: italic;
+    color: var(--accent);
+    margin: 0 0 2.5mm;
+    line-height: 1.35;
+  }
+  .contact {
+    font-family: var(--mono);
+    font-size: 7.6pt;
+    color: var(--muted);
+    line-height: 1.6;
+    margin: 0 0 4mm;
+  }
+  .contact a { color: var(--muted); text-decoration: none; }
+  .rule-strong { border: 0; border-top: 1.6pt solid var(--ink); margin: 0 0 4mm; }
+
+  /* ── Sections ─────────────────────────────────────────────── */
+  h2 {
+    font-family: var(--mono);
+    font-size: 7.8pt;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 5mm 0 0;
+    padding-bottom: 1.2mm;
+    border-bottom: 0.6pt solid var(--rule);
+    /* never let a heading sit alone at the foot of a page */
+    break-after: avoid-page;
+    page-break-after: avoid;
+  }
+  h2:first-of-type { margin-top: 0; }
+
+  /* An entry is atomic: title, dates and its bullets never split. */
+  .entry {
+    margin-top: 3mm;
+    break-inside: avoid-page;
+    page-break-inside: avoid;
+  }
+  .entry-head {
+    display: flex;
+    align-items: baseline;
+    gap: 3mm;
+  }
+  .entry-title { font-size: 10pt; font-weight: 700; flex: 1; }
+  .entry-title .sub {
+    font-weight: 400;
+    font-size: 8.8pt;
+    color: var(--muted);
+  }
+  .dates {
+    font-family: var(--mono);
+    font-size: 7.4pt;
+    color: var(--faint);
+    white-space: nowrap;
+  }
+
+  ul.points { list-style: none; margin: 1mm 0 0; padding: 0; }
+  ul.points li {
+    position: relative;
+    padding-left: 4.2mm;
+    margin-top: 0.9mm;
+    color: var(--ink);
+    break-inside: avoid-page;
+    page-break-inside: avoid;
+  }
+  ul.points li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--accent-2);
+  }
+
+  /* ── Awards: two columns, each item atomic ────────────────── */
+  .awards {
+    columns: 2;
+    column-gap: 7mm;
+    margin-top: 2mm;
+  }
+  .award {
+    break-inside: avoid-page;
+    page-break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+    position: relative;
+    padding-left: 4.2mm;
+    margin-bottom: 1.6mm;
+  }
+  .award::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--accent-2);
+  }
+
+  /* ── Skills ───────────────────────────────────────────────── */
+  .skills { margin-top: 2mm; break-inside: avoid-page; }
+  .skills p { margin: 0 0 1.5mm; }
+  .skills b { font-weight: 700; }
+  .closing {
+    margin-top: 2.5mm;
+    color: var(--muted);
+    font-size: 9pt;
+    line-height: 1.45;
+  }
+  .closing a { color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+
+  <h1 class="name">Chamroeun Hongleng</h1>
+  <p class="tagline">Software engineering student building web and data systems in TypeScript and Python — with applied-ML work in Khmer speech and field-tested product judgment.</p>
+  <p class="contact">
+    Phnom Penh, Cambodia · chamroeunhongleng825@gmail.com · chamroeunhongleng.me<br>
+    github.com/chamroeunhongleng · huggingface.co/Hongleng · t.me/honglenggg · linkedin.com/in/chamroeun-hongleng-73b249375
+  </p>
+  <hr class="rule-strong">
+
+  <h2>Education</h2>
+
+  <div class="entry">
+    <div class="entry-head">
+      <div class="entry-title">American University of Phnom Penh <span class="sub">— B.S. Information Technology Management</span></div>
+      <div class="dates">Oct 2025 — present</div>
+    </div>
+    <ul class="points">
+      <li>100% bachelor's-degree scholarship as second-place laureate in mathematics (rector-signed certificate, 30 Apr 2025).</li>
+    </ul>
+  </div>
+
+  <div class="entry">
+    <div class="entry-head">
+      <div class="entry-title">Fort Hays State University <span class="sub">— B.S. Computer Science</span></div>
+      <div class="dates">Oct 2025 — present</div>
+    </div>
+    <ul class="points">
+      <li>Studied through the accredited AUPP–FHSU dual-degree partnership, alongside the ITM degree.</li>
+    </ul>
+  </div>
+
+  <div class="entry">
+    <div class="entry-head">
+      <div class="entry-title">Institute of Foreign Languages, RUPP <span class="sub">— B.A. English for Work Skills</span></div>
+      <div class="dates">Jan 2026 — present</div>
+    </div>
+    <ul class="points">
+      <li>100% four-year scholarship from Cambodia's Ministry of Justice on a Grade A national Bac II result (2025) — one of twenty named recipients.</li>
+      <li>Declared direction: English for International Business major (Year IV).</li>
+    </ul>
+  </div>
+
+  <h2>Selected projects</h2>
+
+  <div class="entry">
+    <div class="entry-head">
+      <div class="entry-title">Kaskor ASR <span class="sub">— Khmer speech recognition (sole builder · public repo + weights)</span></div>
+      <div class="dates">2026 — present</div>
+    </div>
+    <ul class="points">
+      <li>Public Whisper-small fine-tuning pipeline for Khmer: 11 scripts from raw-audio inspection through training, evaluation, export, and a pip-installable transcription CLI (raw audio private).</li>
+      <li>Best checkpoint 17.48% character error rate on the project's held-out split (self-reported; 86,550 training samples, speaker-stratified so no speaker crosses splits).</li>
+      <li>Evaluation designed around Khmer script: character-level metrics, because space-free script makes word-level ones misleading. Weights public on Hugging Face.</li>
+    </ul>
+  </div>
+
+  <div class="entry">
+    <div class="entry-head">
+      <div class="entry-title">PhsarOS <span class="sub">— operations platform for Cambodian SMEs (deployed)</span></div>
+      <div class="dates">2026 — present</div>
+    </div>
+    <ul class="points">
+      <li>Point of sale, inventory, customers, and expenses on one screen for small shops, cafés, and restaurants — multi-tenant Next.js, Prisma, Postgres.</li>
+    </ul>
+  </div>
+
+  <div class="entry">
+    <div class="entry-head">
+      <div class="entry-title">Chomkar Decision Grid <span class="sub">— auditable farm-lot decision engine (public repo)</span></div>
+      <div class="dates">2026 — present</div>
+    </div>
+    <ul class="points">
+      <li>Deterministic engine assembling smallholder farm lots with human-approval gates: 62 unit tests, CI, bilingual Khmer/English audit reports — synthetic data by design.</li>
+    </ul>
+  </div>
+
+  <div class="entry">
+    <div class="entry-head">
+      <div class="entry-title">Chomkar OrderLoop <span class="sub">— buyer-first agritech coordination (team project)</span></div>
+      <div class="dates">2026 — present</div>
+    </div>
+    <ul class="points">
+      <li>Runner-Up (Top 2), Turing Hackathon Cycle 10 (Techo Startup Center), Market Access for Farmers track.</li>
+      <li>Ran the interview design and analysis for structured field research with ~30 bok choy farmers in Kang Meas, Kampong Cham; next step is one documented recurring-buyer pilot.</li>
+    </ul>
+  </div>
+
+  <div class="entry">
+    <div class="entry-head">
+      <div class="entry-title">Bilingual LMS <span class="sub">— learning management walkthrough prototype (sole builder)</span></div>
+      <div class="dates">2026</div>
+    </div>
+    <ul class="points">
+      <li>English/Khmer course delivery, assessment, and academic analytics across teacher, student, and administrator roles — deployed as a public clickable prototype on sample data.</li>
+    </ul>
+  </div>
+
+  <h2>Experience &amp; leadership</h2>
+
+  <div class="entry">
+    <div class="entry-head">
+      <div class="entry-title">CHNAI LAB <span class="sub">— Technology strategy &amp; business</span></div>
+      <div class="dates">2026 — present</div>
+    </div>
+    <ul class="points">
+      <li>Product direction, applied-ML planning, field validation, and evidence standards in a six-member student studio, working most closely with one teammate on Cambodia-first product experiments.</li>
+    </ul>
+  </div>
+
+  <div class="entry">
+    <div class="entry-head">
+      <div class="entry-title">FounderOS Professional Circle <span class="sub">— Lead</span></div>
+      <div class="dates">Jul 2026 — present</div>
+    </div>
+    <ul class="points">
+      <li>Lead a professional reading circle governed by a 42-page handbook I wrote and maintain — constitution, reading method, AI-use policy, working templates, and a twelve-month pipeline. Leadership rotates through weekly offices; progress is measured by member output, not pages read.</li>
+    </ul>
+  </div>
+
+  <div class="entry">
+    <div class="entry-head">
+      <div class="entry-title">Bilingual mathematics titles <span class="sub">— Author &amp; editor, CHNAI LAB · Phnom Penh</span></div>
+      <div class="dates">2026</div>
+    </div>
+    <ul class="points">
+      <li>Wrote and self-published six bilingual English–Khmer mathematics titles (First Editions, ~1,780 pages): Grade 6 and Grade 7 sets of a dictionary, an exercise book (595 and 572 original questions), and full worked-solution answer books.</li>
+    </ul>
+  </div>
+
+  <div class="entry">
+    <div class="entry-head">
+      <div class="entry-title">CIMOC 2025 <span class="sub">— Volunteer, competition organization &amp; examination writing</span></div>
+      <div class="dates">2025</div>
+    </div>
+    <ul class="points">
+      <li>Organized the national final at SCIA Phnom Penh and wrote the Grade 11 examination paper.</li>
+    </ul>
+  </div>
+
+  <h2>Awards &amp; distinctions</h2>
+  <div class="awards">
+    <div class="award">National runner-up in mathematics, Ministry of Education national examination (2025); first in Grade 12 mathematics at school, district, and provincial level, Kampong Cham.</div>
+    <div class="award">Silver Award, Hong Kong International Mathematical Olympiad 2024, Senior Secondary group — named on the organizer's official results list.</div>
+    <div class="award">Grade A, national Bac II examination, Cambodia (2025).</div>
+    <div class="award">Second-place mathematics laureate — basis of the AUPP 100% scholarship (2025).</div>
+    <div class="award">1st place, Angkor Mathematics Competition 2024 (Global Round) and AMC Mathematics Competition (2024).</div>
+    <div class="award">Runner-Up (Top 2), Turing Hackathon Cycle 10 (2026) · medals across SEAMO, SASMO, Copernicus, PhIMO, and Math Kangaroo Cambodia.</div>
+  </div>
+
+  <h2>Skills &amp; working style</h2>
+  <div class="skills">
+    <p><b>Software:</b> TypeScript, Vue/Nuxt, Next.js, Python, Prisma/Postgres, schema-validated content systems, unit testing, CI · <b>ML &amp; speech:</b> PyTorch, Hugging Face, Whisper fine-tuning, dataset design, evaluation &amp; error analysis · <b>Business &amp; governance:</b> field research, unit economics, contracts/terms/policy coursework · <b>Languages:</b> Khmer, English.</p>
+    <p class="closing">I work AI-natively: AI tools support research, drafting, and implementation; decisions, evidence standards, and anything that ships stay under my review. Every claim on my portfolio carries an evidence label — <a href="https://chamroeunhongleng.me">chamroeunhongleng.me</a>.</p>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,191 @@
+{
+  "slug": "phsaros",
+  "name": "PhsarOS",
+  "oneLiner": "An operations platform for small Cambodian shops, cafés, and restaurants: point of sale, inventory, customers, and expenses on one screen.",
+  "status": "Public demo",
+  "deployment": "Deployed",
+  "timeline": {
+    "start": "2026-07",
+    "end": null,
+    "label": "July 2026 — present"
+  },
+  "pillars": [
+    "software-product",
+    "business-strategy"
+  ],
+  "tags": [
+    "SME operations",
+    "Point of sale",
+    "Inventory",
+    "Next.js",
+    "Prisma",
+    "Postgres",
+    "Multi-tenant",
+    "Cambodia"
+  ],
+  "featured": true,
+  "flagship": false,
+  "enabled": true,
+  "demo": false,
+  "seoDescription": "PhsarOS is a live operations platform for Cambodian SME shops and cafés: point of sale, inventory, customers, and expenses, built on Next.js and Postgres.",
+  "question": "Can one student build an operations system that a neighbourhood shop can really run its day on — sales, stock, customers, and expenses — without a back office or an IT budget?",
+  "cover": {
+    "src": "/images/phsaros-app.jpg",
+    "width": 1600,
+    "height": 900,
+    "alt": "The PhsarOS landing page: the headline “Run your shop, cafe, or restaurant from one screen” above sign-up and log-in buttons.",
+    "caption": "phsaros.vercel.app — the public product site. The application itself sits behind sign-in.",
+    "demo": false
+  },
+  "problem": "Small shops, cafés, and restaurants in Cambodia usually run on paper, a calculator, and memory. The owner does not know today's profit until the day is over, stock runs out without warning, and expenses are only remembered if someone wrote them down. The software that solves this is normally built for larger businesses: it costs too much, it asks for training, and it is not written for the way a neighbourhood shop actually works.",
+  "targetUsers": "Owners of small shops, marts, coffee shops, and restaurants in Cambodia and the wider region — and the staff who ring up sales at the counter. One organisation per business, with its own accounts and its own data.",
+  "whyItMatters": "A shop owner who cannot see today's sales and today's expenses cannot price, order stock, or plan. This is the most ordinary software problem in Cambodian small business, and it is unsolved for most of them not because it is hard but because nobody builds for their size, their language, and their budget.",
+  "exactRole": "Main builder. Almost all of the repository's commits are mine: the data model, authentication and organisation isolation, the point-of-sale flow, inventory, customers, expenses, the dashboard, the design system, and the tests and checks that guard them.",
+  "teamContributions": "A CHNAI LAB project. One teammate contributed a small number of commits; the studio provides the shared standards the repository follows — contribution rules, a security policy, and the AI working agreement.",
+  "research": "The product follows the daily routine of a small shop rather than a feature list: ring up a sale, watch stock fall, record what was spent, and see where the day finished. I have not yet run structured interviews with shop owners, so the workflow is my own reading of the problem and not a validated customer study.",
+  "validation": "The application is deployed and anyone can create an organisation and complete a real sale in it, so the workflow is proven to work end to end. It is not proven in business terms: no shop's daily operation has been documented on it here, and I publish no user, revenue, or retention figures.",
+  "proposedSolution": "One screen for the whole day. Self-serve signup creates a business with its own isolated data. The counter sells from a searchable product grid with a running cart that refuses to oversell. Stock falls as sales complete, low-stock thresholds raise their own alerts, expenses are categorised as they happen, and the dashboard computes today's sales, today's expenses, low stock, and a seven-day revenue trend from that real data instead of from a report the owner has to request.",
+  "userWorkflow": [
+    "The owner signs up, which creates their business and their admin account",
+    "They add products with price, cost, stock, and a low-stock threshold",
+    "Staff ring up sales from the product grid; the cart guards against overselling and calculates change",
+    "Completing a sale writes it and reduces stock in one atomic transaction",
+    "Expenses are recorded and categorised as money leaves the business",
+    "The dashboard shows today's sales and expenses, low-stock alerts, and the seven-day trend"
+  ],
+  "systemArchitecture": "Next.js with the App Router and React Server Components, written in strict TypeScript. Mutations are Server Actions rather than a separate REST or GraphQL layer, and every one of them validates its input on the server with Zod. Data lives in Postgres through Prisma with the node-postgres driver adapter, hosted on Neon and deployed on Vercel. Authentication is self-hosted with Auth.js credentials and JWT sessions, and every query is scoped to the caller's organisation so two businesses can never see each other's data. The interface is built on hand-written design tokens with Khmer-capable typography.",
+  "methods": "Plain, deterministic software rather than machine learning — this product needs to be correct, not clever. The engineering discipline is the interesting part: server-side validation on every mutation, atomic transactions for anything that moves both money and stock, soft deletes so history survives, unit tests under Vitest, typechecking and linting, and a repository check script that runs before work is called done.",
+  "businessValue": "The value to a shop is the day it stops guessing: what sold, what is nearly out, what was spent, and what is left. The commercial thesis — that owners of this size will pay a small monthly fee for that clarity — is untested. No shop has been charged, and I make no revenue claim.",
+  "contractsPolicy": "Selling this to businesses would need terms that say plainly who owns the shop's data, what happens to it if the business stops paying, and what uptime is promised by a service run by one student. Payment handling would bring the rules that come with it. None of that is drafted yet, and it is deliberately not implied by the live application.",
+  "dataPrivacy": "The data is commercially sensitive: prices, costs, margins, customer records, and daily takings. Isolation between organisations is enforced in every query rather than trusted to the interface, passwords are hashed and authentication is self-hosted with no third-party account required, and the demonstration data in the live app is seeded, not real. A real deployment would need a stated retention and export policy before a shop's books lived here.",
+  "risks": [
+    "A single-person service is a single point of failure — a shop that depends on it daily needs support and uptime I cannot promise alone today",
+    "Prices, costs, and takings are the most sensitive data a small business has; any isolation defect between organisations would be serious",
+    "Small shops may prefer paper for good reasons — speed, trust, and no login — and the honest response would be to fit that reality, not argue with it",
+    "Payments, tax, and invoicing rules differ by market and are not yet handled",
+    "Feature breadth is a trap at this size: point of sale, inventory, customers, expenses, staff, and finance is a large surface for one builder to keep correct"
+  ],
+  "humanApprovalPoints": [
+    "Nothing is charged and no payment is processed — the owner remains the only one who moves money",
+    "Stock corrections and deletions are the owner's decision; deletes are soft, so a mistake stays recoverable",
+    "Onboarding a real shop is a human decision, not a signup event — I would not put a business's books on this without agreeing support first",
+    "Every release is reviewed and deployed by me; AI-assisted changes ship only after my own review"
+  ],
+  "technicalDecisions": [
+    "Server Actions instead of a separate API layer — mutations stay type-safe from the form to the database with no boilerplate to drift",
+    "Zod validation on the server for every mutation, so the client cannot bypass a rule by calling differently",
+    "Prisma with the node-postgres driver adapter, which keeps the data layer portable between any Postgres host by changing one connection string",
+    "Self-hosted Auth.js credentials rather than a third-party identity provider — a neighbourhood shop should not need an external account to open its own till",
+    "Atomic transactions for sales, because a sale that records without reducing stock is worse than a sale that fails",
+    "Soft deletes across the data model so a deleted product does not erase the history of what it sold",
+    "Organisation scoping applied in the query layer, not the interface, so isolation does not depend on a screen being written correctly"
+  ],
+  "completedWork": [
+    {
+      "text": "Self-serve signup that creates an isolated organisation and admin account, with credentials authentication and JWT sessions.",
+      "evidence": "Public evidence",
+      "workState": "Completed",
+      "link": "https://phsaros.vercel.app"
+    },
+    {
+      "text": "Point of sale with a searchable product grid, a running cart, stock guards that prevent overselling, and change calculation inside one atomic transaction.",
+      "evidence": "Public evidence",
+      "workState": "Completed",
+      "link": "https://phsaros.vercel.app"
+    },
+    {
+      "text": "Inventory, customers, and categorised expenses, with per-product low-stock thresholds and soft deletes throughout.",
+      "evidence": "Private",
+      "workState": "Completed"
+    },
+    {
+      "text": "An operations dashboard computed server-side from real records: today's sales, today's expenses, low-stock alerts, a seven-day revenue trend, and a recent-sales feed.",
+      "evidence": "Public evidence",
+      "workState": "Completed",
+      "link": "https://phsaros.vercel.app"
+    },
+    {
+      "text": "A hand-built design-token system — buttons, cards, badges, inputs, toasts, skeletons, an icon-rail sidebar — with Khmer-capable typography and keyboard navigation.",
+      "evidence": "Public evidence",
+      "workState": "Completed",
+      "link": "https://phsaros.vercel.app"
+    },
+    {
+      "text": "Engineering guards: unit tests under Vitest, strict typechecking, linting, and a repository check script, wired into a CI workflow that ran green on its last push (2 August 2026).",
+      "evidence": "Private",
+      "workState": "Tested"
+    },
+    {
+      "text": "Staff management and financial reporting.",
+      "evidence": "Planned",
+      "workState": "Planned"
+    }
+  ],
+  "evidence": [
+    {
+      "text": "The application is deployed and publicly reachable: anyone can open it, create an organisation, and use the point of sale.",
+      "evidence": "Public evidence",
+      "link": "https://phsaros.vercel.app"
+    },
+    {
+      "text": "The repository is private, so its internals cannot be inspected publicly. It holds a strict-TypeScript Next.js application with an eight-model Prisma schema, Vitest tests, a CI workflow, a contribution guide, and a security policy — available on request.",
+      "evidence": "Private"
+    },
+    {
+      "text": "Almost every commit in the repository is mine; one teammate contributed a small number. The work runs from July 2026 to the present.",
+      "evidence": "Private"
+    }
+  ],
+  "results": [
+    {
+      "text": "A working multi-tenant operations application is live: signup, point of sale, inventory, customers, expenses, and a server-computed dashboard all function end to end.",
+      "evidence": "Public evidence",
+      "link": "https://phsaros.vercel.app"
+    },
+    {
+      "text": "No business results are claimed. No shop's daily operation has been documented on it here, and no user, revenue, or retention figures are published.",
+      "evidence": "Owner confirmed"
+    }
+  ],
+  "limitations": {
+    "constraints": [
+      "The repository is private, so a reader can verify the running application but not the code behind it",
+      "One builder, studying three programmes at the same time — support and uptime cannot be promised at business grade",
+      "No structured interviews with shop owners yet, so the workflow reflects my reading of the problem rather than a validated study",
+      "Payments, tax, and invoicing rules are not implemented"
+    ],
+    "tradeoffs": [
+      "Server Actions over a public API — simpler and type-safe end to end, but no external integration surface until one is written on purpose",
+      "Self-hosted credentials authentication instead of a third-party identity provider — no external account needed, at the cost of carrying password security myself",
+      "Breadth before depth in the first month: covering the daily loop end to end mattered more than perfecting any one screen",
+      "Soft deletes everywhere — history survives, at the cost of extra care in every query"
+    ]
+  },
+  "lessonsLearned": [
+    "Validating on the server for every mutation removed a whole class of bug that no amount of interface polish would have caught",
+    "A sale is not one write. Treating it as a transaction that moves money and stock together is the difference between a till and a spreadsheet",
+    "Deleting data is almost never what a business means; soft deletes turned an easy destructive action into a recoverable one",
+    "Building the design system as tokens first made the later screens fast to add and consistent without a second pass",
+    "The hardest part of an SME product is not the software — it is deciding what a shop should not have to learn in order to use it"
+  ],
+  "nextValidation": [
+    "Sit with one real shop for a full day and watch where the workflow fights them, before adding any feature",
+    "Document one shop running its sales and expenses on it for a week, with the owner's consent, as the first real evidence",
+    "Add staff management and financial reports — the two things owners ask for once the daily loop works",
+    "Write the terms a paying business would need: data ownership, export, and what happens if the service stops",
+    "Decide honestly whether this deserves a second builder before any shop depends on it"
+  ],
+  "publicLinks": [
+    {
+      "label": "Live application",
+      "url": "https://phsaros.vercel.app",
+      "kind": "demo",
+      "evidence": "Public evidence"
+    }
+  ],
+  "primaryLink": "https://phsaros.vercel.app",
+  "aiAssistance": {
+    "scope": "Built AI-natively: coding agents assisted with implementation, refactoring, and test drafting, under the working agreement the repository carries in its own CLAUDE.md and AGENTS.md files.",
+    "humanOwned": "The data model, the product decisions, the security and isolation rules, and every review before a change ships are mine."
+  }
+}

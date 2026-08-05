@@ -54,6 +54,23 @@ meaning may not change without owner approval.
 - `docs/` — setup, deployment, checklists, validation report
 - `OWNER_INPUT.md` — the owner questionnaire that retires the placeholders
 
+## Chat assistant
+
+The floating "Ask" widget is the site's only runtime backend: one Vercel
+function at `api/chat.ts` (the Nuxt build stays fully static). Rules:
+
+- Its knowledge derives from `content/*.json` (via the same zod loader) plus
+  `shared/chat/site-facts.ts`, which mirrors the Skills / "What I bring"
+  prose hardcoded in `app/pages/about.vue` — **change both in the same
+  commit**. No regex sync-check (rule 3); the comment marks the duty.
+- Navigation targets derive from project content (rule 4) in
+  `shared/chat/navigation.ts`; the server validates every `navigateTo`
+  against that allowlist.
+- Evidence rules apply to the system prompt: never overstate the owner,
+  qualifiers preserved, placeholder-marked fields dropped.
+- `ANTHROPIC_API_KEY` is owner-managed (rule 6): Vercel env vars only,
+  never in the repo. Operations guide: `docs/chat-assistant.md`.
+
 ## Modes (baked at build time)
 
 `NUXT_PUBLIC_PORTFOLIO_MODE` = `demo` (banner + demo content) · `review`

@@ -187,6 +187,8 @@ useHead({
           <h3>Methods</h3>
           <MarkedText tag="p" :text="project.methods" />
         </div>
+
+        <RepoTree v-if="project.repoStructure" :structure="project.repoStructure" class="repo-block" />
       </section>
 
       <section :id="'governance'" class="case-section">
@@ -639,7 +641,8 @@ useHead({
   font-weight: 560;
 }
 
-.artifact-block {
+.artifact-block,
+.repo-block {
   margin-top: var(--space-2);
 }
 

@@ -76,7 +76,12 @@ export function runContentRules(
     ['now', bundle.now],
     ['colophon', bundle.colophon]
   ]
-  for (const project of bundle.projects) sections.push([`projects/${project.slug}`, project])
+  for (const project of bundle.projects) {
+    // Disabled projects ship nothing — no route, no listing — so their dormant
+    // content does not gate production. Rule 2's own remedy ("Disable or
+    // replace it before production") depends on this.
+    if (project.enabled) sections.push([`projects/${project.slug}`, project])
+  }
 
   for (const [name, section] of sections) {
     for (const { path, marker } of collectMarkers(section, name)) {
@@ -105,14 +110,22 @@ export function runContentRules(
 
   // 3. Demo images.
   for (const project of bundle.projects) {
-    const cover = project.cover
-    if (cover && (cover.demo || cover.src.includes('/images/demo/'))) {
-      add(
-        mode === 'production' ? 'error' : 'info',
-        'demo-image',
-        `projects/${project.slug}.cover`,
-        `Demo image "${cover.src}" must be replaced before production.`
-      )
+    if (!project.enabled) continue
+    const images: Array<[string, NonNullable<typeof project.cover>]> = []
+    if (project.cover) images.push([`projects/${project.slug}.cover`, project.cover])
+    if (project.portrait) images.push([`projects/${project.slug}.portrait`, project.portrait])
+    for (const [i, image] of (project.gallery ?? []).entries()) {
+      images.push([`projects/${project.slug}.gallery[${i}]`, image])
+    }
+    for (const [path, image] of images) {
+      if (image.demo || image.src.includes('/images/demo/')) {
+        add(
+          mode === 'production' ? 'error' : 'info',
+          'demo-image',
+          path,
+          `Demo image "${image.src}" must be replaced before production.`
+        )
+      }
     }
   }
 
@@ -140,6 +153,7 @@ export function runContentRules(
 
   // 5. Numeric claims outside evidence-labeled Claim objects.
   for (const project of bundle.projects) {
+    if (!project.enabled) continue
     for (const field of PROJECT_PROSE_FIELDS) {
       const text = project[field]
       if (typeof text === 'string' && NUMERIC_CLAIM_RE.test(text)) {

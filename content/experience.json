@@ -1,4 +1,12 @@
 {
+  "story": {
+    "title": "From proofs on paper to systems in the field",
+    "paragraphs": [
+      "Mathematics came first. Competitions taught me that an answer is worth nothing until you can prove it — the habit that still decides what I am willing to claim. Code was the natural next step: the same rigor, but the result is something people can use.",
+      "Turing Hackathon Cycle 10 changed the plan. Building Chomkar OrderLoop with CHNAI LAB, I found the engineering was the smallest of the open questions. Who pays for this? What does a contract with a buyer actually promise? Who is accountable when a recommendation costs a farmer income? A system that works is not yet a company.",
+      "So I went after the other questions directly: computer science at Fort Hays State, IT management at AUPP, and English for Work Skills at IFL with international business as the declared major — alongside my own reading in technology law and policy. It is one plan, not three: build the system, understand the market, know the rules."
+    ]
+  },
   "groups": [
     {
       "id": "current",
@@ -10,15 +18,28 @@
           "role": "Technology strategy & business",
           "period": "2026 — present",
           "current": true,
-          "summary": "Contributing product direction, applied-ML planning, field validation, and evidence standards across Cambodia-first product experiments in a student-run studio.",
+          "summary": "A student-run product studio that I help run and grow. I work most closely with one teammate, and the studio's products are divided between its members instead of being built by one person alone.",
           "contributions": [
             {
-              "text": "CHNAI LAB is a real, public student-run product studio with a published governance model (agent workflow, security policy, contribution rules).",
+              "text": "CHNAI LAB is a small student-run studio — six members on its GitHub organization, where I am one of the administrators. We split the products between us rather than all working on the same one: my share is product direction, applied-ML planning, field validation, the evidence standards we hold our products to, and PhsarOS, the operations platform for small shops that I build myself.",
+              "evidence": "Owner confirmed"
+            },
+            {
+              "text": "PhsarOS, my own product inside the studio, is deployed and publicly reachable: point of sale, inventory, customers, expenses, and a dashboard computed from real records.",
+              "evidence": "Public evidence",
+              "link": "https://phsaros.vercel.app"
+            },
+            {
+              "text": "Chomkar OrderLoop and our Turing Hackathon Cycle 10 entry were team work, not solo projects.",
+              "evidence": "Owner confirmed"
+            },
+            {
+              "text": "CHNAI LAB is a public student-run product studio with a published governance model (agent workflow, security policy, contribution rules); Chomkar is named there as a product track.",
               "evidence": "Public evidence",
               "link": "https://github.com/CHNAI-LAB"
             },
             {
-              "text": "My role and specific responsibilities inside the studio are stated by me, not yet documented publicly.",
+              "text": "Contributing product direction, applied-ML planning, field validation, and evidence standards across the studio's Cambodia-first experiments.",
               "evidence": "Owner confirmed"
             }
           ],
@@ -28,19 +49,6 @@
               "url": "https://github.com/CHNAI-LAB",
               "kind": "profile",
               "evidence": "Public evidence"
-            }
-          ]
-        },
-        {
-          "organization": "Angkor Byte",
-          "role": "Product Growth & Technical Content Trainee",
-          "period": "2026 — present",
-          "current": true,
-          "summary": "Creating English/Khmer technical content and demos about AI-assisted development workflows, debugging, refactoring, and developer productivity.",
-          "contributions": [
-            {
-              "text": "Role and scope stated by me; no public listing verifies this position yet.",
-              "evidence": "Owner confirmed"
             }
           ]
         }
@@ -53,19 +61,15 @@
       "entries": [
         {
           "organization": "Turing Hackathon Cycle 10 (Techo Startup Center)",
-          "role": "Top 2 — Market Access for Farmers track",
+          "role": "Runner-Up Award — Market Access for Farmers track",
           "period": "2026",
           "current": false,
-          "summary": "Placed Top 2 with the Chomkar OrderLoop concept: coordinating buyer demand and smallholder farmer commitments into one documented pre-harvest lot.",
+          "summary": "Runner-Up Award with the Chomkar OrderLoop concept as team CHNAI LAB: coordinating buyer demand and smallholder farmer commitments into one documented pre-harvest lot. The model is public at chomkar.com.",
           "contributions": [
             {
-              "text": "The hackathon is a real national program run by Techo Startup Center / Startup Cambodia.",
+              "text": "The hackathon is a national program run by Techo Startup Center / Startup Cambodia.",
               "evidence": "Public evidence",
               "link": "https://hackathon.techostartup.center/"
-            },
-            {
-              "text": "The Top 2 placement is stated by me; no public results page names the team.",
-              "evidence": "Owner confirmed"
             }
           ]
         }
@@ -101,22 +105,14 @@
           "role": "Grade 9 — provincial first in mathematics",
           "period": "2022",
           "current": false,
-          "summary": "The first competitive year: first in Grade 9 mathematics across the district and the province, and ten medals in national and international competitions.",
+          "summary": "The first competitive year: first in Grade 9 mathematics across the district and the province, and ten medals in national and international competitions — two golds, five silvers, and two bronzes among them.",
           "contributions": [],
           "results": [
             { "award": "No. 1", "event": "Grade 9 Mathematics — Kampong Cham Province", "evidence": "Owner confirmed" },
             { "award": "No. 1", "event": "Grade 9 Mathematics — Prey Totueng District", "evidence": "Owner confirmed" },
-            { "award": "No. 2", "event": "Grade 9 Mathematics — Hun Sen Prey Totueng High School", "evidence": "Owner confirmed" },
-            { "award": "Selected", "event": "National Grade 9 Mathematics Examination, Siem Reap", "evidence": "Owner confirmed" },
             { "award": "Gold Medal", "event": "Angkor Mathematics Competition", "evidence": "Owner confirmed" },
             { "award": "Gold Medal", "event": "AMC Mathematics Competition", "evidence": "Owner confirmed" },
-            { "award": "Silver Medal", "event": "Copernicus Mathematics Olympiad", "evidence": "Owner confirmed" },
-            { "award": "Silver Medal", "event": "American Mathematics Competition", "evidence": "Owner confirmed" },
-            { "award": "Silver Medal", "event": "Golden Gate American School Mathematics Competition", "evidence": "Owner confirmed" },
-            { "award": "Silver Medal", "event": "Westview Mathematics Competition", "evidence": "Owner confirmed" },
-            { "award": "Silver Medal", "event": "National Mathematics Competition", "evidence": "Owner confirmed" },
-            { "award": "Bronze Medal", "event": "HKIMO National Round — qualified for the Final Round", "evidence": "Owner confirmed" },
-            { "award": "Bronze Medal", "event": "World Mathematics Olympiad (WMO)", "evidence": "Owner confirmed" }
+            { "award": "Bronze Medal", "event": "HKIMO National Round — qualified for the Final Round", "evidence": "Owner confirmed" }
           ]
         },
         {
@@ -124,19 +120,12 @@
           "role": "Grade 10 — the regional olympiad circuit",
           "period": "2023",
           "current": false,
-          "summary": "A year competing across Southeast Asia's school-olympiad circuit, alongside the Asian Scholarship Programme 2023.",
+          "summary": "A year competing across Southeast Asia's school-olympiad circuit — a gold, three silvers, and two bronzes — alongside the Asian Scholarship Programme 2023.",
           "contributions": [],
           "results": [
             { "award": "Gold Medal", "event": "Angkor Mathematics Competition", "evidence": "Owner confirmed" },
-            { "award": "Silver Medal", "event": "FISO — Future Intelligence Students Olympiad", "evidence": "Owner confirmed" },
-            { "award": "Silver Medal", "event": "Golden Gate Mathematics Competition", "evidence": "Owner confirmed" },
-            { "award": "Silver Medal", "event": "Math Kangaroo Cambodia", "evidence": "Owner confirmed" },
             { "award": "Bronze Medal", "event": "SEAMO — Southeast Asian Mathematical Olympiad", "evidence": "Owner confirmed" },
-            { "award": "Bronze Medal", "event": "HKIMO — Hong Kong International Mathematical Olympiad", "evidence": "Owner confirmed" },
-            { "award": "Merit Medal", "event": "PIMSO Mathematics Olympiad", "evidence": "Owner confirmed" },
-            { "award": "Top 5", "event": "Casio Mathematics Competition", "evidence": "Owner confirmed" },
-            { "award": "Participant", "event": "MOSC Mathematics Competition", "evidence": "Owner confirmed" },
-            { "award": "Participant", "event": "Asian Scholarship Programme 2023", "evidence": "Owner confirmed" }
+            { "award": "Bronze Medal", "event": "HKIMO — Hong Kong International Mathematical Olympiad", "evidence": "Owner confirmed" }
           ]
         },
         {
@@ -154,17 +143,13 @@
           "results": [
             { "award": "No. 1", "event": "Angkor Mathematics Competition — Global Round", "evidence": "Document evidence" },
             { "award": "No. 1", "event": "AMC Mathematics Competition", "evidence": "Owner confirmed" },
-            { "award": "Gold Medal", "event": "AMO — American Mathematics Olympiad", "evidence": "Owner confirmed" },
-            { "award": "Gold Medal", "event": "MPCH Mathematics Competition", "evidence": "Owner confirmed" },
-            { "award": "Gold Medal", "event": "SMC Mathematics Competition", "evidence": "Owner confirmed" },
             { "award": "Silver Medal", "event": "HKIMO — Hong Kong International Mathematical Olympiad", "evidence": "Public evidence", "link": "https://www.hongkongimo.com/uploads/2/8/9/2/28923219/hkimo_2024_heat_round_ss.pdf" },
-            { "award": "Silver Medal", "event": "SASMO — Singapore and Asian Schools Math Olympiad", "evidence": "Owner confirmed" },
-            { "award": "Silver Medal", "event": "Young Master Mathematics Competition", "evidence": "Owner confirmed" },
-            { "award": "Top 4", "event": "YMO — Youth Mathematics Olympiad", "evidence": "Owner confirmed" },
-            { "award": "Top 5", "event": "Math Kangaroo Cambodia", "evidence": "Owner confirmed" }
+            { "award": "Gold Medal", "event": "AMO — American Mathematics Olympiad", "evidence": "Owner confirmed" }
           ],
           "image": {
             "src": "/images/medals.jpg",
+            "width": 1000,
+            "height": 1333,
             "alt": "A display of mathematics olympiad medals hanging in rows — colorful ribbons from SEAMO 2023, Copernicus Olympiad 2022, and other competitions — with a golden first-place Angkor Mathematics Competition 2024 trophy standing in front of a laptop.",
             "caption": "The medal wall: SEAMO 2023 · Copernicus Olympiad, Phnom Penh 2022 · PhIMO · AMC golds · 1st Place, Angkor Mathematics Competition 2024 Global Round.",
             "demo": false
@@ -175,7 +160,7 @@
           "role": "Grade 12 — national runner-up in mathematics",
           "period": "2025",
           "current": false,
-          "summary": "The final school year closed the arc: first at every local level, national runner-up in mathematics, Grade A in the Bac II — and four full scholarships.",
+          "summary": "The final school year: first at every local level, national runner-up in mathematics, Grade A in the Bac II, and four full scholarships.",
           "contributions": [
             {
               "text": "The national runner-up standing is echoed by the AUPP scholarship certificate naming its recipient second-place laureate in mathematics; both accepted scholarships are certified by documents held privately and detailed on the About page.",
@@ -187,12 +172,7 @@
             { "award": "Runner-Up", "event": "Mathematics — national examination, Ministry of Education, Youth and Sport", "evidence": "Owner confirmed" },
             { "award": "Grade A", "event": "Cambodian Baccalaureate Examination (Bac II) 2025", "evidence": "Document evidence" },
             { "award": "No. 1", "event": "Grade 12 Mathematics — Kampong Cham Province", "evidence": "Owner confirmed" },
-            { "award": "No. 1", "event": "Grade 12 Mathematics — Prey Chor District", "evidence": "Owner confirmed" },
-            { "award": "No. 1", "event": "Grade 12 Mathematics — Hun Sen Prey Totueng High School", "evidence": "Owner confirmed" },
             { "award": "Gold · Top 2", "event": "SASMO — Singapore and Asian Schools Math Olympiad", "evidence": "Owner confirmed" },
-            { "award": "Top 2", "event": "SMC Mathematics Competition", "evidence": "Owner confirmed" },
-            { "award": "Top 2", "event": "AMO — American Mathematics Olympiad", "evidence": "Owner confirmed" },
-            { "award": "Top 3", "event": "MOSC Mathematics Competition", "evidence": "Owner confirmed" },
             { "award": "100% Scholarship", "event": "American University of Phnom Penh (AUPP)", "evidence": "Document evidence", "link": "/about" },
             { "award": "100% Scholarship", "event": "IFL, Royal University of Phnom Penh — Ministry of Justice award", "evidence": "Document evidence", "link": "/about" },
             { "award": "100% Scholarship", "event": "Paragon International University", "evidence": "Owner confirmed" },
@@ -207,46 +187,71 @@
       "layout": "cards",
       "entries": [
         {
-          "organization": "CIMOC 2026",
-          "role": "Volunteer — competition organization & examination writing",
-          "period": "2026",
-          "current": false,
-          "summary": "Back in the mathematics-competition world from the other side of the table: helping organize CIMOC 2026 and contributing to the Grade 11 examination paper.",
-          "contributions": [
-            {
-              "text": "Assisted in organizing the mathematics competition and contributed to writing and preparing the Grade 11 mathematics examination paper. Stated by me — organizer records are not public.",
-              "evidence": "Owner confirmed"
-            }
-          ]
-        },
-        {
-          "organization": "Reading Book Club",
-          "role": "Reading club lead",
+          "organization": "FounderOS Professional Circle",
+          "role": "Lead",
           "period": "July 2026 — present",
           "current": true,
-          "summary": "Leading a four-member book club built around one idea: understand each book deeply instead of just finishing it. First book: “Surrounded by Idiots” by Thomas Erikson.",
+          "summary": "I lead a small professional reading circle governed by a written handbook. Leadership rotates through weekly offices, and members are measured on what they produce — explanations, artifacts, applied experiments — rather than on pages read. These are the standards I set for the circle, not results it has reported.",
           "contributions": [
             {
-              "text": "The club began on 28 July 2026 with four members; I lead the reading and discussion. Stated by me — no public page documents the club yet.",
-              "evidence": "Owner confirmed"
-            }
-          ]
-        },
-        {
-          "organization": "CHNAI LAB · Phnom Penh",
-          "role": "Author — six mathematics titles (Scholar Series)",
-          "period": "2026",
-          "current": false,
-          "summary": "Wrote and self-published six bilingual mathematics titles as First Editions (2026) under the CHNAI LAB imprint: matched Grade 6 and Grade 7 sets of an English–Khmer dictionary, an exercise book, and a full worked-solutions answer book — about 1,780 pages in total, written for Cambodian students who study mathematics in English.",
-          "contributions": [
-            {
-              "text": "Grade 6 set: an English–Khmer Mathematics Dictionary (240 pages), a Mathematics Exercise Book (595 original questions in six levels across twenty chapters, 260 pages), and a Mathematics Answer Book with a full worked method for every question (340 pages).",
+              "text": "Wrote and maintain the circle's governing handbook — 42 pages, Second Edition 2026 — covering the constitution, the reading method, the AI-use policy, working templates, and a twelve-month book pipeline. It is reviewed quarterly and stays internal rather than published.",
               "evidence": "Document evidence"
             },
             {
-              "text": "Grade 7 set: an English–Khmer Mathematics Dictionary (488 pages), a Mathematics Exercise Book (572 questions in six levels, chapter by chapter, written against the Ministry of Education, Youth and Sport Grade 7 textbook, 156 pages), and a Mathematics Answer Book reprinting every question above its full worked solution (296 pages). All six books are free to download from the GitHub release linked below; five of the covers are shown in the photograph.",
+              "text": "Wrote the circle's AI-use policy: five rules binding on every member, including me — AI never replaces the reading, recall before assistance, AI as challenger rather than answer machine, first drafts authored by the member, and disclosure of AI's role in anything shipped. It is the same claim discipline this site runs on, written for a group instead of for one person.",
+              "evidence": "Document evidence"
+            },
+            {
+              "text": "The circle grew out of a four-member reading club begun on 28 July 2026 and now runs live sessions under this handbook.",
+              "evidence": "Owner confirmed"
+            }
+          ]
+        },
+        {
+          "organization": "CIMOC 2025 — Cambodia International Mathematical Olympiad Champion",
+          "role": "Volunteer — competition organization & examination writing",
+          "period": "2025",
+          "current": false,
+          "summary": "Back in the mathematics-competition world from the other side of the table: helping run the CIMOC Final Round in Phnom Penh and contributing to the Grade 11 examination paper.",
+          "contributions": [
+            {
+              "text": "Assisted in organizing and invigilating the CIMOC Final Round (26 October 2025, SCIA, Phnom Penh) and contributed to writing and preparing the Grade 11 mathematics examination paper.",
+              "evidence": "Owner confirmed"
+            },
+            {
+              "text": "The volunteer team was photographed together at the Final Round award ceremony.",
+              "evidence": "Document evidence"
+            }
+          ],
+          "image": {
+            "src": "/images/cimoc-2025.jpg",
+            "width": 1600,
+            "height": 1200,
+            "alt": "About twenty CIMOC volunteers in white polo shirts with Cambodian-flag badges and red lanyards, standing together on the SCIA auditorium stage in front of the Award Ceremony screen.",
+            "caption": "The CIMOC Final 2025 volunteer team · Auditorium @ SCIA, Phnom Penh · 26 October 2025.",
+            "demo": false
+          }
+        },
+        {
+          "organization": "CHNAI LAB · Phnom Penh",
+          "role": "Author & editor — six bilingual mathematics titles",
+          "period": "2026",
+          "current": false,
+          "summary": "Compiled, edited, and self-published six bilingual mathematics titles as First Editions (2026) under the CHNAI LAB imprint: matched Grade 6 and Grade 7 sets of an English–Khmer dictionary, an exercise book, and a full worked-solutions answer book — 1,780 pages in total, with original exercise questions and fully worked solutions, written for Cambodian students who study mathematics in English.",
+          "contributions": [
+            {
+              "text": "Grade 6 set: an English–Khmer Mathematics Dictionary (240 pages), a Mathematics Exercise Book (595 original questions in six levels across twenty chapters, 260 pages), and a Mathematics Answer Book with a full worked method for every question (340 pages).",
               "evidence": "Public evidence",
               "link": "https://github.com/chamroeunhongleng/chamroeunhongleng/releases/tag/scholar-series-2026"
+            },
+            {
+              "text": "Grade 7 set: an English–Khmer Mathematics Dictionary (488 pages), a Mathematics Exercise Book (572 questions in six levels, chapter by chapter, written against the Ministry of Education, Youth and Sport Grade 7 textbook, 156 pages), and a Mathematics Answer Book reprinting every question above its full worked solution (296 pages). All six books are free to download from the GitHub release.",
+              "evidence": "Public evidence",
+              "link": "https://github.com/chamroeunhongleng/chamroeunhongleng/releases/tag/scholar-series-2026"
+            },
+            {
+              "text": "Produced with AI assistance, disclosed here under the same rule I apply to anything I ship: AI tools drafted the questions, worked solutions, and dictionary entries, and I reviewed, corrected, and approved the content before release.",
+              "evidence": "Owner confirmed"
             }
           ],
           "links": [
@@ -289,6 +294,8 @@
           ],
           "image": {
             "src": "/images/math-books.jpg",
+            "width": 1372,
+            "height": 1272,
             "alt": "Five book covers in a matching cream-and-navy design with an Angkor Wat watermark and bilingual English–Khmer titles: Grade 6 Mathematics Exercise Book, Grade 6 Mathematics Answer Book, Grade 6 English–Khmer Mathematics Dictionary, Grade 7 Mathematics Exercise Book, and Grade 7 Mathematics Answer Book — each credited to Chamroeun Hongleng, CHNAI LAB, Phnom Penh.",
             "caption": "First Editions · 2026 — five of the six covers; the sixth title is the Grade 7 English–Khmer Mathematics Dictionary.",
             "demo": false

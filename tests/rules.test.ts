@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { loadContent } from '../scripts/lib/load-content'
-import { runContentRules, worstSeverity } from '../shared/rules'
+import { runContentRules } from '../shared/rules'
 import { projectSchema, type ContentBundle } from '../shared/schemas/index'
 import { makeProject } from './fixtures'
 
@@ -18,19 +18,17 @@ describe('real content through the rule engine', () => {
     expect(findings.filter((f) => f.severity === 'warning')).toEqual([])
   })
 
-  it('review mode: warnings for placeholders, no errors', () => {
+  it('review mode: no errors on real content', () => {
     const findings = runContentRules(bundle as ContentBundle, 'review')
     expect(findings.filter((f) => f.severity === 'error')).toEqual([])
-    expect(findings.some((f) => f.code === 'marker-owner-input-required')).toBe(true)
-    expect(findings.some((f) => f.code === 'demo-project-enabled')).toBe(true)
+    // The demonstration project is disabled by owner decision (2026-08-04),
+    // so the demo-project rule must stay silent on real content.
+    expect(findings.some((f) => f.code === 'demo-project-enabled')).toBe(false)
   })
 
-  it('production mode: gate fails while placeholders and demo content remain', () => {
+  it('production mode: real content passes the gate (all markers retired 2026-08-04)', () => {
     const findings = runContentRules(bundle as ContentBundle, 'production')
-    expect(worstSeverity(findings)).toBe('error')
-    const codes = new Set(findings.filter((f) => f.severity === 'error').map((f) => f.code))
-    expect(codes.has('marker-owner-input-required')).toBe(true)
-    expect(codes.has('demo-project-enabled')).toBe(true)
+    expect(findings.filter((f) => f.severity === 'error')).toEqual([])
   })
 
   it('production mode: an unconfirmed contact email is a gate error', () => {
@@ -102,6 +100,30 @@ describe('individual rules on synthetic content', () => {
     }
     const findings = runContentRules(broken, 'review')
     expect(findings.some((f) => f.code === 'broken-project-reference')).toBe(true)
+  })
+
+  it('flags placeholder markers as production errors', () => {
+    const b = bundleWith({ problem: 'Unfinished. [PLACEHOLDER: fill the problem statement]' })
+    const findings = runContentRules(b, 'production')
+    expect(
+      findings.some((f) => f.code === 'marker-placeholder' && f.severity === 'error')
+    ).toBe(true)
+  })
+
+  it('ignores markers inside disabled projects', () => {
+    const b = bundleWith({ enabled: false, problem: '[PLACEHOLDER: dormant note]' })
+    const findings = runContentRules(b, 'production')
+    expect(
+      findings.some((f) => f.code.startsWith('marker-') && f.path.startsWith('projects/'))
+    ).toBe(false)
+  })
+
+  it('flags an enabled demo project as a production error', () => {
+    const b = bundleWith({ demo: true })
+    const findings = runContentRules(b, 'production')
+    expect(
+      findings.some((f) => f.code === 'demo-project-enabled' && f.severity === 'error')
+    ).toBe(true)
   })
 
   it('errors when no enabled project is featured', () => {

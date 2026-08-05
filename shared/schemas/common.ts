@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { EVIDENCE_LABELS, WORK_STATES } from './enums'
+import { EVIDENCE_LABELS, WORK_STATES } from './enums.js'
 
 /**
  * Allowed link targets: absolute https, mailto, or root-relative internal
@@ -44,6 +44,13 @@ export const imageRefSchema = z.strictObject({
   src: z.string().min(1),
   alt: z.string().min(3),
   caption: z.string().optional(),
+  /**
+   * Intrinsic pixel size. Rendered as the img width/height attributes so the
+   * browser reserves the correct box before the file loads — without them a
+   * landscape photo pops out of a portrait-shaped hole on first paint.
+   */
+  width: z.number().int().positive().optional(),
+  height: z.number().int().positive().optional(),
   /** Demo images are fatal in production mode. */
   demo: z.boolean().default(false)
 })

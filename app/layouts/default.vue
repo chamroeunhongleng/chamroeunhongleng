@@ -11,6 +11,7 @@ const mode = usePortfolioMode()
       <slot />
     </main>
     <SiteFooter />
+    <ChatWidget />
   </div>
 </template>
 

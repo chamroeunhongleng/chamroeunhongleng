@@ -26,6 +26,13 @@ const liveLink = computed(() =>
 
 <template>
   <article class="project-card" :data-demo="project.demo || undefined">
+    <img
+      v-if="project.cover"
+      :src="project.cover.src"
+      :alt="project.cover.alt"
+      class="card-cover"
+      loading="lazy"
+    >
     <div class="card-top">
       <StatusBadge :status="project.status" />
       <DeploymentBadge :deployment="project.deployment" />
@@ -43,8 +50,14 @@ const liveLink = computed(() =>
 
     <div v-if="proof" class="card-proof">
       <p class="proof-label">Proof</p>
-      <p class="proof-text"><MarkedText :text="proof.text" /></p>
-      <EvidenceLabel :evidence="proof.evidence" />
+      <p v-if="proof.link" class="proof-text">
+        <a :href="proof.link" target="_blank" rel="noopener" class="proof-link">
+          <MarkedText :text="proof.text" />
+          <span aria-hidden="true">↗</span>
+        </a>
+      </p>
+      <p v-else class="proof-text"><MarkedText :text="proof.text" /></p>
+      <EvidenceLabel :evidence="proof.evidence" :link="proof.link" />
     </div>
 
     <div class="card-bottom">
@@ -87,6 +100,14 @@ const liveLink = computed(() =>
 
 .project-card[data-demo] {
   border-style: dashed;
+}
+
+.card-cover {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-m);
 }
 
 .card-top {
@@ -148,6 +169,29 @@ const liveLink = computed(() =>
 .proof-text {
   font-size: var(--text-sm);
   color: var(--color-text-muted);
+  margin: 0;
+}
+
+.proof-link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--color-border);
+  text-underline-offset: 0.15em;
+  text-decoration-thickness: 1px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  transition: all 0.2s ease;
+}
+
+.proof-link:hover {
+  color: var(--color-accent);
+  text-decoration-color: var(--color-accent);
+}
+
+.proof-link span[aria-hidden] {
+  opacity: 0.6;
+  font-size: 0.85em;
 }
 
 .card-bottom {
@@ -155,14 +199,16 @@ const liveLink = computed(() =>
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-4);
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-4);
   padding-top: var(--space-3);
 }
 
 .card-actions {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-4);
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-4);
 }
 
 .card-action {
@@ -176,13 +222,15 @@ const liveLink = computed(() =>
 .live-link {
   position: relative;
   z-index: 2;
+  display: inline-flex;
+  align-items: center;
   font-size: var(--text-sm);
   font-weight: 560;
   white-space: nowrap;
   text-decoration: none;
   border: 1px solid var(--color-accent);
   border-radius: 999px;
-  padding: 0.25em 0.85em;
+  padding: 0.45em 0.95em;
   color: var(--color-accent);
   transition:
     background var(--duration-fast) var(--ease-out),
@@ -192,5 +240,11 @@ const liveLink = computed(() =>
 .live-link:hover {
   background: var(--color-accent);
   color: var(--color-accent-contrast);
+}
+
+@media (pointer: coarse) {
+  .live-link {
+    min-height: 44px;
+  }
 }
 </style>

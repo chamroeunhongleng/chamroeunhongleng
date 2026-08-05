@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { profile } from '~/data/portfolio'
+import { contact, profile } from '~/data/portfolio'
 
-const YEAR = 2026
+// Baked at prerender; recomputed identically at hydration. Advances on redeploy.
+const YEAR = new Date().getFullYear()
 </script>
 
 <template>
@@ -9,7 +10,10 @@ const YEAR = 2026
     <div class="container footer-row">
       <div class="footer-brand">
         <p class="footer-name">{{ profile.name }}</p>
-        <p class="footer-line">{{ profile.headline }}</p>
+        <p class="footer-line">
+          {{ profile.location.text }} ·
+          <a :href="`mailto:${contact.email}`" class="footer-email">{{ contact.email }}</a>
+        </p>
       </div>
 
       <ul class="footer-social" role="list" aria-label="Profiles">
@@ -54,6 +58,15 @@ const YEAR = 2026
   margin-top: var(--space-1);
 }
 
+.footer-email {
+  color: var(--color-text-muted);
+  text-decoration-color: var(--color-border-strong);
+}
+
+.footer-email:hover {
+  color: var(--color-accent);
+}
+
 .footer-social {
   display: flex;
   gap: var(--space-3);
@@ -81,10 +94,18 @@ const YEAR = 2026
 }
 
 .colophon-link {
+  display: inline-flex;
+  align-items: center;
   color: var(--color-text-faint);
   font-size: var(--text-xs);
   font-family: var(--font-mono);
   text-decoration: none;
+}
+
+@media (pointer: coarse) {
+  .colophon-link {
+    min-height: 40px;
+  }
 }
 
 .colophon-link:hover {

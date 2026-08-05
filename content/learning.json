@@ -1,11 +1,12 @@
 {
-  "intro": "I am a student across every area on this page, and this page is deliberately honest about that. It tracks what I am actively studying, what I have tested in real projects, and what remains planned — so progress is visible without pretending to expertise I have not earned yet.",
+  "intro": "A public study log, honest about being one: what I am actively learning, what I have already tested in real projects, and what is still planned. The through-line is deliberate practice — fundamentals before frameworks, evaluation before claims, and critical review of anything my AI tools produce before it ships. The reading runs on a written method I now lead a professional circle on: brief a book before page one, recall each chapter closed-book, ship an explanation or a one-week experiment in real work, then review at 48 hours, 7 days, and 30 days.",
   "disciplines": [
     {
       "pillar": "ai-ml",
       "title": "AI & Machine Learning",
-      "stance": "Learning by fine-tuning and evaluating real models for Khmer, where low-resource constraints punish cargo-cult ML quickly.",
+      "stance": "Building from both ends: classic ML fundamentals in Python and C++ for depth, and fine-tuning real speech models for Khmer for practice — low-resource constraints punish cargo-cult ML quickly.",
       "currentFocus": [
+        "Classic machine-learning fundamentals — supervised models, evaluation discipline, and the Python and C++ underneath them",
         "Speech-model fine-tuning and feature pipelines (Whisper-family models)",
         "Evaluation design for Khmer text, where character error rate beats word error rate",
         "Error analysis by speaker, device, and noise condition",
@@ -15,48 +16,54 @@
     {
       "pillar": "software-product",
       "title": "Software & Product Systems",
-      "stance": "Learning to ship small, typed, tested systems instead of large unproven architectures.",
+      "stance": "Learning to design systems before writing them, ship small typed and tested slices, and lead AI coding agents the way a reviewer leads a team — critically, with explicit approval gates.",
       "currentFocus": [
+        "AI-native development workflows — leading coding agents, reviewing their output critically, and keeping human approval gates explicit",
+        "System design — decomposing a product into components, data flows, and failure modes before writing code",
         "Deterministic pipelines with unit tests and CI",
         "Typed content architectures and schema validation",
-        "Static-site engineering, deployment workflows, and rollback thinking",
-        "AI-native development workflows with explicit human review gates"
+        "Static-site engineering, deployment workflows, and rollback thinking"
       ]
     },
     {
       "pillar": "business-strategy",
       "title": "Business & Strategy",
-      "stance": "Learning to test commercial assumptions in the field before writing code.",
+      "stance": "Learning to test commercial assumptions in the field before writing code — and to tell the story afterward, through digital marketing and bilingual technical content.",
       "currentFocus": [
-        "International business coursework — [OWNER_INPUT_REQUIRED: List the specific courses or modules you want named]",
+        "International business coursework",
+        "Digital marketing and technical content — including short-form video editing in CapCut for English/Khmer developer content",
         "Unit economics of agricultural coordination (spoilage, payment timing, fulfillment)",
-        "Buyer-first validation instead of marketplace-first assumptions",
-        "Reading markets where operations matter more than software"
+        "Buyer-first validation instead of marketplace-first assumptions"
       ]
     },
     {
       "pillar": "governance-commercial",
       "title": "Governance & Commercial Rules",
-      "stance": "Learning how contracts, terms, and policies decide what AI systems may do — as a builder who reads the rules, not as a lawyer.",
+      "stance": "Learning how contracts, terms, and policies decide what AI systems may do — using research agents to survey the primary literature, as a builder who reads the rules, not as a lawyer.",
       "currentFocus": [
+        "Using AI research agents to survey technology-law papers and pull out what actually applies to my products",
         "Contracts and terms of service for software and AI products",
         "Data licensing, consent, and privacy for speech datasets",
-        "Risk assessment and human-approval design patterns",
-        "How AI governance frameworks translate into product decisions"
+        "Risk assessment and human-approval design patterns"
       ]
     }
   ],
   "readingNotes": [
     {
-      "title": "[PLACEHOLDER: First reading note]",
-      "source": "[OWNER_INPUT_REQUIRED: Books, papers, courses, or policies you want to log here — title and source]",
-      "takeaway": "[PLACEHOLDER: The one thing this changed about how you think or build]"
+      "title": "Surrounded by Idiots — Thomas Erikson",
+      "source": "Reading now",
+      "takeaway": "A four-style model of how people communicate. I am reading it to get better at explaining technical work to non-technical people — farmers, teachers, teammates — in the way each of them actually hears it."
+    },
+    {
+      "title": "Master Thinking",
+      "source": "Next up",
+      "takeaway": "Queued as the next read: sharpening the critical-thinking habits I lean on when I review my own AI agents' output instead of trusting it blindly."
     }
   ],
   "experiments": [
     {
       "title": "Khmer ASR fine-tuning",
-      "question": "Can a fully reproducible Whisper-small pipeline reach a usable Khmer character error rate with limited public data?",
+      "question": "Can a fully public Whisper-small pipeline — code, splits, and released weights — reach a usable Khmer character error rate with limited public data?",
       "state": "Demonstrated",
       "projectSlug": "kaskor-asr"
     },
@@ -75,8 +82,7 @@
     {
       "title": "Governance review practice",
       "question": "Can a structured pre-launch review (data use, terms, oversight, risk) be demonstrated well enough to practice on real products?",
-      "state": "Demonstrated",
-      "projectSlug": "demo-governance-review"
+      "state": "Planned"
     }
   ],
   "roadmap": [
@@ -89,8 +95,23 @@
           "workState": "Planned"
         },
         {
-          "text": "Deepen contracts and terms-of-service study through international business coursework.",
+          "text": "Work through classic machine-learning fundamentals — supervised models and evaluation — alongside Python and C++ practice.",
+          "evidence": "Owner confirmed",
+          "workState": "Planned"
+        },
+        {
+          "text": "Practice digital marketing and short-form technical video (CapCut) through English/Khmer developer content.",
+          "evidence": "Owner confirmed",
+          "workState": "Planned"
+        },
+        {
+          "text": "Run one recurring buyer pilot for Chomkar OrderLoop, recording every commitment and exception, so the coordination assumptions meet a real order.",
           "evidence": "Planned",
+          "workState": "Planned"
+        },
+        {
+          "text": "Deepen contracts and terms-of-service study through international business coursework, using AI research agents to survey essential technology-law papers.",
+          "evidence": "Owner confirmed",
           "workState": "Planned"
         }
       ]
@@ -99,7 +120,12 @@
       "horizon": "Next",
       "items": [
         {
-          "text": "Run one recurring-buyer pilot for Chomkar OrderLoop and record every commitment and exception.",
+          "text": "Take the machine-learning fundamentals past supervised models — implementing the core algorithms in Python and C++ myself before reaching for a library, so the evaluation decisions I make in Kaskor ASR rest on something I have built at least once.",
+          "evidence": "Planned",
+          "workState": "Planned"
+        },
+        {
+          "text": "Practise system design on something larger than a static site: one service with a database, authentication, and a rollback plan — moving from shipping pages to shipping systems.",
           "evidence": "Planned",
           "workState": "Planned"
         },

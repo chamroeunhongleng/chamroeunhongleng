@@ -26,7 +26,7 @@
         "AI-native development with human review"
       ],
       "groundedIn": "Information Technology Management coursework at AUPP and product work with CHNAI LAB.",
-      "projects": ["lms", "chomkar-decision-grid", "ai-layer"]
+      "projects": ["phsaros", "chomkar-decision-grid", "lms"]
     },
     {
       "id": "business-strategy",
@@ -40,7 +40,7 @@
         "Commercial practicality of AI products"
       ],
       "groundedIn": "International business studies and field validation for Chomkar OrderLoop in Kampong Cham.",
-      "projects": ["chomkar-orderloop"]
+      "projects": ["chomkar-orderloop", "phsaros"]
     },
     {
       "id": "governance-commercial",
@@ -54,7 +54,7 @@
         "Responsible AI and accountability"
       ],
       "groundedIn": "Contracts, terms, and policy work in my international business studies, plus the human-approval and audit patterns built into Chomkar Decision Grid.",
-      "projects": ["chomkar-decision-grid", "demo-governance-review"]
+      "projects": ["chomkar-decision-grid"]
     }
   ],
   "connection": "These are not four separate interests. The CS and ITM degrees build the ability to make intelligent systems; the international business studies and field research supply the commercial lens; and the contracts, terms, and policy work asks what those systems are allowed — and ought — to do. Every project on this site touches at least two pillars, on purpose."

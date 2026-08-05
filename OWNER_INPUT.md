@@ -42,7 +42,11 @@ Per pillar, anything to add or remove from the topics lists?
 ## 4 · Journey (→ `content/experience.json` — shown on the /journey page)
 
 - CHNAI LAB role — is "Technology strategy & business" the right title? ______
-- Angkor Byte — confirm role title and start date: ______
+- ~~Angkor Byte — confirm role title and start date~~ — **✓ resolved 2026-08-05:
+  owner confirmed the role is not accurate — he never worked with Angkor Byte.
+  Removed from `content/experience.json`, all three CV HTML variants, and
+  (2026-08-05, second pass) the CV PDF template `scripts/cv/cv.html`, which
+  still carried the entry. Do not reinstate.**
 - **Turing Hackathon Cycle 10 Top 2** — do you have a certificate, photo, or
   organizer link? (upgrades the claim from Owner confirmed → Document evidence): ______
 - High-school chapter for the Journey page (school, years, story, any awards):
@@ -51,20 +55,27 @@ Per pillar, anything to add or remove from the topics lists?
   year by year, Bac II Grade A, national runner-up, four full scholarships,
   CIMOC 2026 volunteering). Published as the "Mathematics achievements"
   timeline on /journey. Optional upgrades: certificates or result pages for
-  any individual medal (→ Document evidence) · a sentence on what pointed
-  you from mathematics toward technology and business.
+  any individual medal (→ Document evidence).
+- What pointed you from mathematics toward technology, business, and law:
+  **✓ answered 2026-08-05** — owner's account: chose CS because he loves
+  mathematics and wants to turn ideas into things people use; the Turing
+  hackathon showed that a working system is not yet a company, so business
+  and law became part of the plan. Published as `experience.story` —
+  the "Why computer science, then business and law" block at the top of
+  /journey (and folded into the chat assistant's knowledge).
 - Leadership / volunteer / community roles to list (org, role, period, one
   sentence each — or "remove the section"): **two entries seeded 2026-08-04**
   - **Reading Book Club — lead** ✓ (answered 2026-08-04: began 28 July
     2026, four members, goal is deep understanding over finishing, first
     book *Surrounded by Idiots*). Optional upgrades: where it runs
     (university / community / online) · a photo or public link.
-  - **Author — six mathematics titles** ✓ (answered 2026-08-04: PDFs
-    verified — Grade 6 Exercise + Answer Books, Grade 7 Exercise + Answer
-    Books, English–Khmer Mathematics Dictionary Grade 6, and a Bac II
-    exponential-function solutions booklet in Khmer; CHNAI LAB imprint,
-    First Editions 2026, ~980 pages total; five covers published as
-    `/images/math-books.jpg`, upgraded to Document evidence).
+  - **Author — six mathematics titles** ✓ (record corrected 2026-08-04
+    evening against the published GitHub release: the six titles are the
+    Grade 6 and Grade 7 English–Khmer Mathematics Dictionaries, Exercise
+    Books, and Answer Books; page counts verified from the release PDFs —
+    240 + 260 + 340 + 488 + 156 + 296 = **1,780 pages total**; CHNAI LAB
+    imprint, First Editions 2026; five covers published as
+    `/images/math-books.jpg`).
     **Public link ✓ (2026-08-04)**: all six Scholar Series production
     PDFs are published as a GitHub release —
     https://github.com/chamroeunhongleng/chamroeunhongleng/releases/tag/scholar-series-2026

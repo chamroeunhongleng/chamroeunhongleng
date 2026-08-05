@@ -49,6 +49,11 @@ usePageMeta({
           <h2>What I can contribute</h2>
           <ul class="skills-list" role="list">
             <li>
+              <strong>Shipping working software</strong> — TypeScript and Python end to end: a
+              schema-validated Nuxt site whose build fails on unproven claims, a decision engine
+              with 62 unit tests and CI, and a bilingual LMS prototype.
+            </li>
+            <li>
               <strong>Mathematical grounding</strong> — a decade of competition mathematics ending
               as national runner-up; the habit of proving an answer right before claiming it.
             </li>
@@ -63,8 +68,8 @@ usePageMeta({
               output.
             </li>
             <li>
-              <strong>Organizing work around written standards</strong> — I founded and chair a
-              small professional reading circle that runs on a handbook I wrote: rotating officer
+              <strong>Organizing work around written standards</strong> — I lead a small
+              professional reading circle that runs on a handbook I wrote: rotating officer
               roles, progress measured by what members produce rather than by pages read, and an
               AI-use policy binding on me as much as on every member.
             </li>
@@ -77,14 +82,14 @@ usePageMeta({
           <h2>Skills</h2>
           <ul class="skills-list" role="list">
             <li>
-              <strong>Machine learning</strong> — Python, PyTorch, Hugging Face Transformers,
-              Whisper fine-tuning, CER/WER evaluation design, dataset and manifest discipline;
-              currently studying classic ML fundamentals and C++.
+              <strong>Software</strong> — TypeScript, Vue/Nuxt, Next.js, Python, unit testing and
+              CI, schema-validated content architectures, and AI-native development: leading
+              coding agents with explicit human review gates.
             </li>
             <li>
-              <strong>Software</strong> — TypeScript, Vue/Nuxt, Next.js, unit testing and CI,
-              schema-validated content architectures, and AI-native development: leading coding
-              agents with explicit human review gates.
+              <strong>Machine learning</strong> — PyTorch, Hugging Face Transformers, Whisper
+              fine-tuning, CER/WER evaluation design, dataset and manifest discipline; currently
+              studying classic ML fundamentals and C++.
             </li>
             <li>
               <strong>Product &amp; business</strong> — structured field research, buyer-first

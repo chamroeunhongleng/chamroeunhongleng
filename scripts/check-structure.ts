@@ -59,6 +59,16 @@ const REQUIRED_FILES = [
   'shared/schemas/project.ts',
   'shared/schemas/site.ts',
   'modules/content-gate.ts',
+  // Chat assistant
+  'api/chat.ts',
+  'shared/chat/contract.ts',
+  'shared/chat/knowledge.ts',
+  'shared/chat/navigation.ts',
+  'shared/chat/site-facts.ts',
+  'app/components/chat/ChatWidget.vue',
+  'app/components/chat/ChatMessage.vue',
+  'app/composables/useChat.ts',
+  'docs/chat-assistant.md',
   // Content
   'content/profile.json',
   'content/education.json',

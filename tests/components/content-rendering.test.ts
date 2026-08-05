@@ -3,7 +3,8 @@ import { describe, expect, it } from 'vitest'
 import MarkedText from '../../app/components/ui/MarkedText.vue'
 import ModeBanner from '../../app/components/layout/ModeBanner.vue'
 import ProjectCard from '../../app/components/projects/ProjectCard.vue'
-import { projectSchema } from '../../shared/schemas/index'
+import RepoTree from '../../app/components/projects/RepoTree.vue'
+import { projectSchema, repoStructureSchema } from '../../shared/schemas/index'
 import { makeProject } from '../fixtures'
 
 const NuxtLinkStub = {
@@ -70,13 +71,16 @@ describe('ProjectCard', () => {
     expect(wrapper.find('.card-link').exists()).toBe(true)
   })
 
-  it('renders the proof block with its evidence label', () => {
+  it('renders the proof block with the evidence claim', () => {
     const wrapper = mount(ProjectCard, {
       props: { project },
       global: { stubs: { NuxtLink: NuxtLinkStub } }
     })
     expect(wrapper.text()).toContain('Proof')
-    expect(wrapper.text()).toContain('Repository evidence')
+    // Evidence claims are displayed; if a link exists, it becomes clickable
+    const proofBlock = wrapper.find('.card-proof')
+    expect(proofBlock.exists()).toBe(true)
+    expect(proofBlock.text()).toContain('It parses')
   })
 
   it('marks demo projects visually', () => {
@@ -88,5 +92,64 @@ describe('ProjectCard', () => {
       global: { stubs: { NuxtLink: NuxtLinkStub } }
     })
     expect(wrapper.find('[data-demo]').exists()).toBe(true)
+  })
+})
+
+describe('RepoTree', () => {
+  //  fixture-repo/
+  //  ├── CLAUDE.md
+  //  ├── .claude/
+  //  │   ├── commands/
+  //  │   │   └── run.md
+  //  │   └── settings.json
+  //  └── tools/
+  const structure = repoStructureSchema.parse({
+    root: 'fixture-repo/',
+    description: 'The layout is the claim.',
+    evidence: 'Repository evidence',
+    entries: [
+      { depth: 0, name: 'CLAUDE.md', note: 'Project brain' },
+      { depth: 0, name: '.claude/' },
+      { depth: 1, name: 'commands/' },
+      { depth: 2, name: 'run.md' },
+      { depth: 1, name: 'settings.json' },
+      { depth: 0, name: 'tools/', note: 'Deterministic core' }
+    ]
+  })
+
+  // textContent, not .text(): wrapper.text() trims, and the trailing space
+  // after each connector is exactly what aligns the column.
+  const branches = () =>
+    mount(RepoTree, { props: { structure } })
+      .findAll('.branch')
+      .map((b) => b.element.textContent)
+
+  it('draws tee connectors for siblings and an elbow for the last child', () => {
+    const drawn = branches()
+    expect(drawn[0]).toBe('├── ')
+    expect(drawn[5]).toBe('└── ')
+  })
+
+  it('carries the spine down through open ancestors only', () => {
+    const drawn = branches()
+    expect(drawn[2]).toBe('│   ├── ')
+    expect(drawn[3]).toBe('│   │   └── ')
+    expect(drawn[4]).toBe('│   └── ')
+  })
+
+  it('hides the connectors from assistive technology but not the paths', () => {
+    const wrapper = mount(RepoTree, { props: { structure } })
+    for (const branch of wrapper.findAll('.branch')) {
+      expect(branch.attributes('aria-hidden')).toBe('true')
+    }
+    expect(wrapper.findAll('.path').map((p) => p.text())).toContain('settings.json')
+  })
+
+  it('labels the block with its evidence and marks directories', () => {
+    const wrapper = mount(RepoTree, { props: { structure } })
+    expect(wrapper.text()).toContain('Repository evidence')
+    expect(wrapper.text()).toContain('fixture-repo/')
+    // Directories are the names ending in "/": .claude/, commands/, tools/
+    expect(wrapper.findAll('li[data-dir]')).toHaveLength(3)
   })
 })

@@ -21,7 +21,9 @@ const form = reactive({
 })
 
 // The form is backend-free by design: submitting composes the email in the
-// visitor's own mail app. Nothing is sent to, or stored on, any server.
+// visitor's own mail app. The form itself sends nothing to any server.
+// (The site's one runtime network call is the separate chat assistant,
+// disclosed in the widget and on /colophon.)
 function submitForm() {
   const type = contact.inquiryTypes.find((i) => i.title === form.inquiry)
   const subject = `${type?.subject ?? 'Hello'} — from ${form.name}`
@@ -29,14 +31,16 @@ function submitForm() {
   window.location.href = `mailto:${contact.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
 }
 
-const copied = ref(false)
+const copyState = ref<'idle' | 'copied' | 'failed'>('idle')
 async function copyEmail() {
   try {
     await navigator.clipboard.writeText(contact.email)
-    copied.value = true
-    setTimeout(() => (copied.value = false), 2500)
+    copyState.value = 'copied'
+    setTimeout(() => (copyState.value = 'idle'), 2500)
   } catch {
-    copied.value = false
+    // Clipboard access can be denied (permissions, insecure context) — say so
+    // instead of failing silently; the address itself stays selectable.
+    copyState.value = 'failed'
   }
 }
 </script>
@@ -52,8 +56,9 @@ async function copyEmail() {
       />
 
       <div class="contact-grid">
-        <!-- The form -->
-        <form class="contact-form" @submit.prevent="submitForm">
+        <div class="form-col">
+          <!-- The form -->
+          <form class="contact-form" @submit.prevent="submitForm">
           <div class="field-row">
             <div class="field">
               <label for="contact-name">Name</label>
@@ -106,8 +111,8 @@ async function copyEmail() {
           <template v-if="emailReady">
             <button type="submit" class="btn btn-primary">Send message</button>
             <p class="form-note">
-              This opens the message in your own email app — nothing is sent to or stored on any
-              server.
+              This opens the message in your own email app — the form itself sends nothing to
+              any server.
             </p>
           </template>
           <div v-else class="form-fallback">
@@ -125,6 +130,27 @@ async function copyEmail() {
           </div>
         </form>
 
+          <div v-if="emailReady" class="direct-contact">
+            <a :href="`mailto:${contact.email}`" class="direct-email-lg">{{ contact.email }}</a>
+            <button type="button" class="copy-btn mono" @click="copyEmail">Copy</button>
+            <span
+              role="status"
+              aria-live="polite"
+              class="copy-status"
+              :class="{ failed: copyState === 'failed' }"
+            >
+              {{
+                copyState === 'copied'
+                  ? 'Email copied to clipboard.'
+                  : copyState === 'failed'
+                    ? 'Copy failed — please select the address and copy it manually.'
+                    : ''
+              }}
+            </span>
+            <p class="direct-note"><MarkedText :text="contact.responseExpectation" /></p>
+          </div>
+        </div>
+
         <!-- Side panel -->
         <aside class="contact-side">
           <div class="side-block">
@@ -132,20 +158,13 @@ async function copyEmail() {
             <p>{{ profile.availability }}</p>
           </div>
 
-          <div class="side-block">
-            <h2>Response time</h2>
-            <p><MarkedText :text="contact.responseExpectation" /></p>
-          </div>
-
-          <div v-if="emailReady" class="side-block">
-            <h2>Prefer email?</h2>
-            <div class="direct-row">
-              <a :href="`mailto:${contact.email}`" class="direct-email mono">{{ contact.email }}</a>
-              <button type="button" class="copy-btn mono" @click="copyEmail">Copy</button>
-            </div>
-            <span role="status" aria-live="polite" class="copy-status">
-              {{ copied ? 'Email copied to clipboard.' : '' }}
-            </span>
+          <div v-if="profile.cv" class="side-block">
+            <h2>CV</h2>
+            <p>
+              <a :href="profile.cv.url" target="_blank" rel="noopener" class="btn btn-secondary">
+                {{ profile.cv.label }}
+              </a>
+            </p>
           </div>
 
           <div class="side-block">
@@ -164,28 +183,6 @@ async function copyEmail() {
         </aside>
       </div>
 
-      <!-- Boundaries -->
-      <section class="boundaries" aria-labelledby="boundaries-title">
-        <h2 id="boundaries-title" class="rule-title">Honest boundaries</h2>
-        <div class="boundaries-grid">
-          <div>
-            <h3>Looking for</h3>
-            <ul role="list">
-              <li v-for="item in contact.boundaries.seeking" :key="item">
-                <MarkedText :text="item" />
-              </li>
-            </ul>
-          </div>
-          <div>
-            <h3>Not looking for</h3>
-            <ul role="list">
-              <li v-for="item in contact.boundaries.notSeeking" :key="item">
-                <MarkedText :text="item" />
-              </li>
-            </ul>
-          </div>
-        </div>
-      </section>
     </div>
   </div>
 </template>
@@ -307,32 +304,16 @@ async function copyEmail() {
   color: var(--color-text-muted);
 }
 
-.direct-row {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  flex-wrap: wrap;
-}
-
-.direct-email {
-  font-size: var(--text-sm);
-  text-decoration: none;
-  color: var(--color-text);
-  overflow-wrap: anywhere;
-}
-
-.direct-email:hover {
-  color: var(--color-accent);
-}
-
 .copy-btn {
+  display: inline-flex;
+  align-items: center;
   font-size: var(--text-xs);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--color-text-muted);
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-s);
-  padding: 0.2em 0.6em;
+  padding: 0.35em 0.7em;
 }
 
 .copy-btn:hover {
@@ -346,6 +327,11 @@ async function copyEmail() {
   min-height: 1.2em;
 }
 
+/* The same live region carries the failure message — it must not read green. */
+.copy-status.failed {
+  color: var(--color-danger);
+}
+
 .side-socials {
   display: flex;
   gap: var(--space-3);
@@ -354,48 +340,40 @@ async function copyEmail() {
   margin: 0;
 }
 
-/* Boundaries */
-.rule-title {
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
-  color: var(--color-accent-2);
-  font-weight: 500;
-  padding-bottom: var(--space-2);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.boundaries {
-  margin-top: var(--space-10);
-}
-
-.boundaries-grid {
+.form-col {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-8);
-  margin-top: var(--space-6);
+  gap: var(--space-5);
+  align-content: start;
 }
 
-.boundaries-grid h3 {
+/* Direct contact strip — sits directly under the form as the reliable path */
+.direct-contact {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-m);
+  background: var(--color-surface);
+  padding: var(--space-4) var(--space-5);
+}
+
+.direct-email-lg {
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-weight: 500;
+  font-size: var(--text-lg);
+  color: var(--color-text);
+  text-decoration-color: var(--color-accent);
+  overflow-wrap: anywhere;
+}
+
+.direct-email-lg:hover {
+  color: var(--color-accent);
+}
+
+.direct-note {
+  flex-basis: 100%;
+  font-size: var(--text-sm);
   color: var(--color-text-faint);
-  margin-bottom: var(--space-3);
-}
-
-.boundaries-grid ul {
-  display: grid;
-  gap: var(--space-2);
-  margin: 0;
-  padding-inline-start: 1.1rem;
-}
-
-.boundaries-grid li {
-  font-size: var(--text-sm);
 }
 
 @media (max-width: 1040px) {
@@ -413,9 +391,26 @@ async function copyEmail() {
     padding: var(--space-5);
   }
 
-  .field-row,
-  .boundaries-grid {
+  .field-row {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 400px) {
+  .contact-form {
+    padding: var(--space-4);
+  }
+}
+
+@media (pointer: coarse) {
+  .field input,
+  .field select {
+    min-height: 44px;
+  }
+
+  .copy-btn,
+  .direct-email-lg {
+    min-height: 40px;
   }
 }
 </style>

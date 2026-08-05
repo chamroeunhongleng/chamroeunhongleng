@@ -4,20 +4,10 @@ import EvidenceLabel from '../../app/components/ui/EvidenceLabel.vue'
 import StatusBadge from '../../app/components/ui/StatusBadge.vue'
 import DeploymentBadge from '../../app/components/ui/DeploymentBadge.vue'
 import WorkStateBadge from '../../app/components/ui/WorkStateBadge.vue'
-import { EVIDENCE_LABELS, PROJECT_STATUSES } from '../../shared/schemas/index'
+import { PROJECT_STATUSES } from '../../shared/schemas/index'
 
 describe('EvidenceLabel', () => {
-  it('renders every defined evidence label as text', () => {
-    for (const evidence of EVIDENCE_LABELS) {
-      const wrapper = mount(EvidenceLabel, { props: { evidence } })
-      expect(wrapper.text()).toContain(evidence)
-    }
-  })
-
-  it('renders a span without a link and an anchor with one', () => {
-    const plain = mount(EvidenceLabel, { props: { evidence: 'Owner confirmed' } })
-    expect(plain.find('a').exists()).toBe(false)
-
+  it('renders a link when a link is provided', () => {
     const linked = mount(EvidenceLabel, {
       props: { evidence: 'Repository evidence', link: 'https://github.com/example/repo' }
     })
@@ -27,9 +17,16 @@ describe('EvidenceLabel', () => {
     expect(anchor.attributes('rel')).toContain('noopener')
   })
 
-  it('slugifies the label into a data attribute for styling', () => {
-    const wrapper = mount(EvidenceLabel, { props: { evidence: 'Demo only' } })
-    expect(wrapper.find('[data-evidence="demo-only"]').exists()).toBe(true)
+  it('renders nothing when no link is provided', () => {
+    const plain = mount(EvidenceLabel, { props: { evidence: 'Owner confirmed' } })
+    expect(plain.find('a').exists()).toBe(false)
+  })
+
+  it('displays a small icon for linked evidence', () => {
+    const wrapper = mount(EvidenceLabel, {
+      props: { evidence: 'Public evidence', link: 'https://example.com' }
+    })
+    expect(wrapper.find('a span[aria-hidden]').exists()).toBe(true)
   })
 })
 

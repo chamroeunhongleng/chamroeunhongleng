@@ -42,6 +42,9 @@ function toggle() {
 .theme-toggle {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  /* The track stays 1.6rem tall; the hit area grows to a comfortable tap. */
+  min-height: 44px;
 }
 
 .track {

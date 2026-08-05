@@ -8,8 +8,7 @@ import { defineNuxtConfig } from 'nuxt/config'
 const SITE_NAME = 'Chamroeun Hongleng'
 
 // NUXT_PUBLIC_SITE_URL overrides at build time. chamroeunhongleng.me is the
-// intended production domain but was not serving when this repo was built —
-// verify DNS + hosting before a production release.
+// live production domain (Namecheap registration, Vercel nameservers).
 const siteUrl = process.env.NUXT_PUBLIC_SITE_URL || 'https://chamroeunhongleng.me'
 
 // demo | review | production — baked in at generate time (static site).

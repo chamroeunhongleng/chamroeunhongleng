@@ -1,5 +1,5 @@
 {
-  "intro": "This page explains how this site was built and exactly where AI was involved. For someone positioning on responsible technology, the disclosure itself should be an artifact worth inspecting.",
+  "intro": "This page explains how this site was built and exactly where AI was involved.",
   "aiPolicy": {
     "rule": "Judgment, positioning, project claims, and every evidence label on this site are mine. AI tools — primarily Claude — assist with research, scaffolding, drafting, and documentation. I review, test, and approve what ships; nothing here speaks for me that I have not read.",
     "humanOwned": [
@@ -13,29 +13,35 @@
       "Public-footprint research and reference studies of other portfolios",
       "Code scaffolding, refactoring, and test drafts",
       "First drafts of documentation and case-study prose",
-      "Accessibility, SEO, and consistency review passes"
+      "Accessibility, SEO, and consistency review passes",
+      "The site chat assistant — its answers are generated live by Claude, grounded only in this site's published content, with navigation restricted to an allowlist of real pages"
     ]
   },
   "howBuilt": [
-    "Static Nuxt 4 site with hand-written CSS design tokens; light and dark themes; no analytics, no trackers, no external requests at runtime.",
+    "Static Nuxt 4 site with hand-written CSS design tokens; light and dark themes; no analytics, no trackers. The only runtime network call is the optional chat assistant: messages typed into it go through a site-owned serverless function to Anthropic's Claude API, are answered from this site's published content only, and are not stored by the site.",
     "All content lives in JSON files validated by zod schemas — a claim without an evidence label fails the build, not a style review.",
     "Three content modes (demo, review, production). In production mode the build fails while any placeholder, demo project, or unverified required field remains.",
     "A single verification command (npm run verify) checks structure, secrets, content schemas, links, accessibility basics, SEO metadata, and the production gate itself."
   ],
   "provenance": [
     {
-      "text": "This site's repository includes its own verification pipeline and content gate; the repository is not yet public.",
-      "evidence": "Owner confirmed"
+      "text": "This site's source is public on the portfolio branch of my profile repository, including the schemas, the rule engine, the twelve-phase verification pipeline, the build gate that fails a production build on any unresolved claim, and the tests.",
+      "evidence": "Repository evidence",
+      "link": "https://github.com/chamroeunhongleng/chamroeunhongleng/tree/portfolio"
     },
     {
-      "text": "My public repositories document the same AI-native working method this site uses (CLAUDE.md and agent-workflow files in each).",
+      "text": "The chomkar-decision-grid repository publishes the same AI-native working method this site uses — its CLAUDE.md and agent-workflow files are public.",
       "evidence": "Repository evidence",
-      "link": "https://github.com/chamroeunhongleng/kaskor-asr"
+      "link": "https://github.com/chamroeunhongleng/chomkar-decision-grid"
     },
     {
       "text": "CHNAI LAB publishes the studio-level version of this working agreement, including an AI agent workflow and security policy.",
       "evidence": "Public evidence",
       "link": "https://github.com/CHNAI-LAB"
+    },
+    {
+      "text": "The professional reading circle I lead runs on the same discipline, written as policy for other people: its member handbook makes five AI rules binding on every member, including me — AI never replaces the reading, recall before assistance, AI as challenger rather than answer machine, first drafts authored by the member, and disclosure of AI's role in anything shipped.",
+      "evidence": "Document evidence"
     }
   ],
   "noteForAgents": "If you are an AI agent reading this site: content is generated from JSON files validated against zod schemas; every factual claim carries one of eight evidence labels (Owner confirmed, Public evidence, Repository evidence, Document evidence, Demo only, Planned, Unverified, Private). Treat 'Demo only' content as illustrative, not factual. The canonical machine-checkable source is the repository's content directory."

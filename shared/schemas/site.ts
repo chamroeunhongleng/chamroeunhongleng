@@ -1,6 +1,25 @@
 import { z } from 'zod'
-import { EVIDENCE_LABELS, PILLARS, WORK_STATES } from './enums'
-import { claimSchema, hrefSchema, imageRefSchema, linkSchema, slugSchema } from './common'
+import { EVIDENCE_LABELS, PILLARS, WORK_STATES } from './enums.js'
+import { claimSchema, hrefSchema, imageRefSchema, linkSchema, slugSchema } from './common.js'
+
+// ── shared shapes ────────────────────────────────────────────────────────
+/**
+ * One result as a single scannable line: "award — event". Used for the
+ * competition lists on /journey and the hero metrics strip on the homepage.
+ * The evidence label is data on every line; the UI stamps it visibly only
+ * when a public link backs it (same pattern as the education card, where
+ * labels live in JSON without rendering per-row chips).
+ */
+export const resultLineSchema = z.strictObject({
+  /** The outcome, e.g. "Gold Medal", "No. 1", "Top 2", "17.48% CER". */
+  award: z.string().min(1),
+  /** The competition, examination, or context the number comes from. */
+  event: z.string().min(1),
+  evidence: z.enum(EVIDENCE_LABELS),
+  /** Optional public receipt; rendered as a link on the line. */
+  link: hrefSchema.optional()
+})
+export type ResultLine = z.infer<typeof resultLineSchema>
 
 // ── profile.json ─────────────────────────────────────────────────────────
 export const profileSchema = z.strictObject({
@@ -19,8 +38,18 @@ export const profileSchema = z.strictObject({
   }),
   availability: z.string().min(1),
   links: z.array(linkSchema).min(1),
-  /** Selected evidence strip on the homepage. */
+  /**
+   * Canonical labeled claims about the owner. No longer rendered as a
+   * homepage section (the hero `metrics` strip replaced it); still feeds
+   * the chat assistant's knowledge document.
+   */
   proofPoints: z.array(claimSchema).min(3),
+  /**
+   * Hero metrics strip — at most four numbers a recruiter can scan in
+   * seconds. Each line restates a claim that already exists elsewhere on
+   * the site with the same evidence label; keep the values verbatim.
+   */
+  metrics: z.array(resultLineSchema).max(4).optional(),
   /** One-line AI-native working-style statement. */
   aiWorkingStyle: z.string().min(1),
   /**
@@ -81,23 +110,6 @@ export const interestsSchema = z.strictObject({
 export type Interests = z.infer<typeof interestsSchema>
 
 // ── experience.json ──────────────────────────────────────────────────────
-/**
- * One competition result as a single scannable line: "award — event".
- * The evidence label is data on every line; the UI stamps it visibly only
- * when a public link backs it (same pattern as the education card, where
- * labels live in JSON without rendering per-row chips).
- */
-export const resultLineSchema = z.strictObject({
-  /** The outcome, e.g. "Gold Medal", "No. 1", "Top 2", "100% Scholarship". */
-  award: z.string().min(1),
-  /** The competition, examination, or awarding institution. */
-  event: z.string().min(1),
-  evidence: z.enum(EVIDENCE_LABELS),
-  /** Optional public receipt; rendered as a linked evidence stamp. */
-  link: hrefSchema.optional()
-})
-export type ResultLine = z.infer<typeof resultLineSchema>
-
 export const experienceEntrySchema = z.strictObject({
   organization: z.string().min(1),
   role: z.string().min(1),
@@ -114,6 +126,17 @@ export const experienceEntrySchema = z.strictObject({
 export type ExperienceEntry = z.infer<typeof experienceEntrySchema>
 
 export const experienceSchema = z.strictObject({
+  /**
+   * The through-line the timeline cannot show: why a mathematics competitor
+   * chose computer science, and what the hackathon added to that plan.
+   * Personal motivation, so plain prose — not Claim objects with labels.
+   */
+  story: z
+    .strictObject({
+      title: z.string().min(1),
+      paragraphs: z.array(z.string().min(1)).min(1)
+    })
+    .optional(),
   groups: z
     .array(
       z.strictObject({

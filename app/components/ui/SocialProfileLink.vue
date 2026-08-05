@@ -132,6 +132,14 @@ const platform = computed<SocialPlatform>(() => {
   border-color: var(--color-accent);
 }
 
+@media (pointer: coarse) {
+  .social-profile-link--icon-only {
+    min-width: 44px;
+    min-height: 44px;
+    justify-content: center;
+  }
+}
+
 .social-profile-link--icon-only .social-profile-link__icon {
   width: 1.25rem;
   height: 1.25rem;

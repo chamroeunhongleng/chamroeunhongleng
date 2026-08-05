@@ -67,6 +67,9 @@ export const projects: Project[] = Object.values(projectModules)
     if (a.featured !== b.featured) return a.featured ? -1 : 1
     const statusDiff = STATUS_ORDER.indexOf(a.status) - STATUS_ORDER.indexOf(b.status)
     if (statusDiff !== 0) return statusDiff
+    // Editorial override before the alphabet: two projects of equal maturity
+    // should not be ranked by their initials when the owner has said otherwise.
+    if (a.order !== b.order) return a.order - b.order
     return a.name.localeCompare(b.name)
   })
 
