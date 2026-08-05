@@ -11,10 +11,22 @@
  * parses `--host` as a positional rootDir. Zero dependencies on purpose.
  *
  * Binds 127.0.0.1 explicitly — see playwright.config.ts on the IPv4/IPv6 trap.
+ *
+ * SERVING MODEL: the request path is never joined onto a filesystem path.
+ * `.output/public` is walked once at startup into a URL -> absolute-path map,
+ * and a request is a plain Map lookup; anything not in the map is a 404. The
+ * earlier version joined the decoded URL onto ROOT and guarded the result with
+ * normalize() + startsWith(), which CodeQL flagged as path injection (5 High
+ * alerts) and which is genuinely hard to prove correct — it has to be right
+ * about percent-encoding, null bytes, Windows vs POSIX separators, and
+ * symlinks all at once. An allowlist has none of those failure modes: the set
+ * of servable files is fixed before the socket opens. Directory entries that
+ * are symlinks are skipped rather than followed, so a link planted in the
+ * build output cannot escape either.
  */
-import { createReadStream, existsSync, statSync } from 'node:fs'
+import { createReadStream, existsSync, readdirSync } from 'node:fs'
 import { createServer } from 'node:http'
-import { extname, join, normalize, sep } from 'node:path'
+import { extname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const ROOT = fileURLToPath(new URL('../../.output/public', import.meta.url))
@@ -46,31 +58,55 @@ if (!existsSync(ROOT)) {
   process.exit(1)
 }
 
-/** Resolve a URL path to a file inside ROOT, or null if it escapes or is missing. */
-function resolve(urlPath) {
-  const decoded = decodeURIComponent(urlPath.split('?')[0])
-  // normalize() collapses "..", and the prefix check keeps traversal inside ROOT.
-  const candidate = normalize(join(ROOT, decoded))
-  if (candidate !== ROOT && !candidate.startsWith(ROOT + sep)) return null
-
-  if (existsSync(candidate) && statSync(candidate).isFile()) return candidate
-
-  // Prerendered routes are directories holding index.html.
-  const asIndex = join(candidate, 'index.html')
-  if (existsSync(asIndex) && statSync(asIndex).isFile()) return asIndex
-
-  return null
+/**
+ * Walk the prerendered output once and return every servable URL path mapped
+ * to its absolute file path. Prerendered routes are directories holding
+ * index.html, so each of those is registered under `/route`, `/route/` and
+ * `/route/index.html` — the three forms a browser or test may ask for.
+ */
+function indexOutput(directory, urlPrefix = '') {
+  const files = new Map()
+  for (const entry of readdirSync(directory, { withFileTypes: true })) {
+    const absolute = join(directory, entry.name)
+    const urlPath = `${urlPrefix}/${entry.name}`
+    if (entry.isDirectory()) {
+      for (const [key, value] of indexOutput(absolute, urlPath)) files.set(key, value)
+    } else if (entry.isFile()) {
+      // isFile() is false for symlinks (Dirent reflects lstat), so links are
+      // skipped rather than followed out of the tree.
+      files.set(urlPath, absolute)
+      if (entry.name === 'index.html') {
+        files.set(urlPrefix === '' ? '/' : urlPrefix, absolute)
+        files.set(`${urlPrefix}/`, absolute)
+      }
+    }
+  }
+  return files
 }
 
+const FILES = indexOutput(ROOT)
+
+/** Look a request up in the allowlist. Never touches the filesystem. */
+function lookup(requestUrl) {
+  let decoded
+  try {
+    decoded = decodeURIComponent(requestUrl.split(/[?#]/)[0])
+  } catch {
+    return null // malformed percent-encoding
+  }
+  return FILES.get(decoded) ?? null
+}
+
+const NOT_FOUND = FILES.get('/404.html') ?? null
+
 const server = createServer((req, res) => {
-  const file = resolve(req.url ?? '/')
+  const file = lookup(req.url ?? '/')
 
   if (!file) {
     // Static hosts serve 404.html with a real 404 status; the "unpublished
     // project is unreachable" test depends on that status being honest.
-    const notFound = join(ROOT, '404.html')
     res.writeHead(404, { 'content-type': 'text/html; charset=utf-8' })
-    if (existsSync(notFound)) return createReadStream(notFound).pipe(res)
+    if (NOT_FOUND) return createReadStream(NOT_FOUND).pipe(res)
     return res.end('Not found')
   }
 
@@ -79,5 +115,5 @@ const server = createServer((req, res) => {
 })
 
 server.listen(PORT, HOST, () => {
-  console.log(`[static-server] serving .output/public at http://${HOST}:${PORT}`)
+  console.log(`[static-server] serving ${FILES.size} paths from .output/public at http://${HOST}:${PORT}`)
 })
