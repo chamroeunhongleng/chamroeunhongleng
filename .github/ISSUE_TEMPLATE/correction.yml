@@ -1,0 +1,43 @@
+name: Factual correction
+description: Report a claim on the site that is wrong, overstated, or unsupported
+title: "Correction: "
+labels: ["correction"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you — this is the most valuable kind of issue I can receive.
+        Every claim on this site is supposed to carry an evidence label that
+        matches its source. If one does not, I want to fix it.
+
+  - type: input
+    id: location
+    attributes:
+      label: Where does the claim appear?
+      description: A page URL, or a path such as `content/projects/kaskor-asr.json`.
+      placeholder: https://chamroeunhongleng.me/projects/kaskor-asr
+    validations:
+      required: true
+
+  - type: textarea
+    id: claim
+    attributes:
+      label: What does it currently say?
+      description: Quote the text as it appears.
+    validations:
+      required: true
+
+  - type: textarea
+    id: correction
+    attributes:
+      label: What should it say, and why?
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence
+      description: >
+        A link, document, or reference that supports the correction. If the
+        point is that a claim has no evidence, say so — that is also valid.

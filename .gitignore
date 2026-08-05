@@ -16,7 +16,7 @@ dist
 .DS_Store
 Thumbs.db
 
-# Deploy/tooling state
+# Deploy and tooling state
 .vercel
 coverage
 
@@ -26,13 +26,8 @@ playwright-report
 blob-report
 .playwright
 
-.vercel
-.env*
-
-!.env.example
-
 # Firecrawl scratch output
-.firecrawl/
+.firecrawl
 
 # Disposable intermediates (screenshots, scratch exports)
 .tmp

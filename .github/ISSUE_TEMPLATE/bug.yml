@@ -1,0 +1,36 @@
+name: Bug report
+description: Something on the site is broken, unreadable, or inaccessible
+title: "Bug: "
+labels: ["bug"]
+body:
+  - type: input
+    id: page
+    attributes:
+      label: Page
+      placeholder: https://chamroeunhongleng.me/journey
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened, and what did you expect instead?
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Browser, device, and screen size
+      description: >
+        Please be specific — Safari and iOS issues are the ones I cannot
+        reproduce locally.
+      placeholder: Safari 18 · iPhone 15 · 393×852
+    validations:
+      required: true
+
+  - type: textarea
+    id: extra
+    attributes:
+      label: Screenshot or console output
+      description: Optional, but it usually saves a round trip.
