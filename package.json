@@ -53,7 +53,7 @@
     "eslint": "^9.30.0",
     "happy-dom": "^15.11.6",
     "jiti": "^2.4.2",
-    "node-html-parser": "^7.0.1",
+    "node-html-parser": "^9.0.1",
     "nuxt": "^4.4.8",
     "typescript": "^5.8.0",
     "vitest": "^3.1.0",
