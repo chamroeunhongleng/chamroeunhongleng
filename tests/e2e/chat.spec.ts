@@ -57,7 +57,7 @@ function mockChat(page: Page, reply: Partial<ChatReply>, status = 200) {
  */
 const openPanel = async (page: Page) => {
   const launcher = page.getByRole('button', { name: 'Chat about this site' })
-  const panel = page.getByRole('dialog', { name: 'Site assistant' })
+  const panel = page.getByRole('dialog', { name: 'Portfolio concierge' })
 
   await expect(async () => {
     if (!(await panel.isVisible())) await launcher.click()
@@ -74,7 +74,7 @@ test.describe('Chat widget shell', () => {
   test('launcher is present and the panel starts closed', async ({ page }) => {
     await page.goto('/')
     await expect(page.getByRole('button', { name: 'Chat about this site' })).toBeVisible()
-    await expect(page.getByRole('dialog', { name: 'Site assistant' })).toBeHidden()
+    await expect(page.getByRole('dialog', { name: 'Portfolio concierge' })).toBeHidden()
   })
 
   test('opens with a welcome message and starter questions', async ({ page }) => {
@@ -92,7 +92,7 @@ test.describe('Chat widget shell', () => {
     await openPanel(page)
 
     await page.keyboard.press('Escape')
-    await expect(page.getByRole('dialog', { name: 'Site assistant' })).toBeHidden()
+    await expect(page.getByRole('dialog', { name: 'Portfolio concierge' })).toBeHidden()
     await expect(page.getByRole('button', { name: 'Chat about this site' })).toBeFocused()
   })
 
@@ -101,7 +101,7 @@ test.describe('Chat widget shell', () => {
     await openPanel(page)
 
     await page.getByRole('button', { name: 'Close chat' }).click()
-    await expect(page.getByRole('dialog', { name: 'Site assistant' })).toBeHidden()
+    await expect(page.getByRole('dialog', { name: 'Portfolio concierge' })).toBeHidden()
   })
 
   test('Send is disabled until something is typed', async ({ page }) => {
@@ -112,6 +112,52 @@ test.describe('Chat widget shell', () => {
     await expect(send).toBeDisabled()
     await page.getByLabel('Ask about Chamroeun').fill('hello')
     await expect(send).toBeEnabled()
+  })
+
+  test('the header shows the assistant name and its scope', async ({ page }) => {
+    await page.goto('/')
+    await openPanel(page)
+
+    // The subtitle is a claim about how the assistant behaves; it sits in the
+    // header precisely so a visitor sees it before asking anything.
+    await expect(page.locator('.chat-title')).toHaveText('Portfolio concierge')
+    await expect(page.locator('.chat-subtitle')).toContainText('Published evidence only')
+    await expect(page.locator('.chat-subtitle')).toContainText('read-only')
+  })
+
+  test('reset clears the conversation back to the welcome message', async ({ page }) => {
+    await mockChat(page, { reply: 'A specific answer about Kaskor.' })
+
+    await page.goto('/')
+    await openPanel(page)
+    await ask(page, 'tell me about Kaskor')
+    await expect(page.locator('.chat-messages')).toContainText('A specific answer about Kaskor.')
+
+    await page.getByRole('button', { name: 'Start a new conversation' }).click()
+
+    // Conversation state is module-scoped and survives navigation and closing,
+    // so without a reset the only way to clear a thread is a page reload.
+    await expect(page.locator('.chat-messages')).not.toContainText('tell me about Kaskor')
+    await expect(page.locator('.chat-messages')).not.toContainText('A specific answer about Kaskor.')
+    await expect(page.locator('.chat-messages')).toContainText('I can answer questions about')
+    await expect(page.locator('.chat-chip').first()).toBeVisible()
+  })
+
+  test('reset genuinely clears the history sent to the API', async ({ page }) => {
+    const requests = await mockChat(page, { reply: 'ok' })
+
+    await page.goto('/')
+    await openPanel(page)
+    await ask(page, 'first question')
+    await expect(page.locator('.chat-messages')).toContainText('ok')
+
+    await page.getByRole('button', { name: 'Start a new conversation' }).click()
+    await ask(page, 'second question')
+    await expect.poll(() => requests.length).toBe(2)
+
+    // A reset that only clears the visible transcript would still leak the old
+    // thread into the model's context.
+    expect(requests[1]?.history ?? []).toEqual([])
   })
 
   test('the input caps length at the contract maximum', async ({ page }) => {
@@ -188,7 +234,7 @@ test.describe('Chat navigation', () => {
 
     await expect(page).toHaveURL(/\/projects$/)
     // The panel must survive the jump, or the conversation is lost.
-    await expect(page.getByRole('dialog', { name: 'Site assistant' })).toBeVisible()
+    await expect(page.getByRole('dialog', { name: 'Portfolio concierge' })).toBeVisible()
 
     const back = page.getByRole('button', { name: /Back to where you were/ })
     await expect(back).toBeVisible()
