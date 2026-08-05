@@ -43,7 +43,9 @@ Full guide: [docs/local-setup.md](local-setup.md)
 
 ## Personalizing
 
-Answer the questionnaire in [OWNER_INPUT.md](OWNER_INPUT.md), then either run
+Answer the questionnaire in `OWNER_INPUT.md` — a private working file, kept in
+the working tree but gitignored so half-answered personal notes never ship in a
+public repository. Then either run
 the `/replace-owner-content` command in Claude Code or edit the JSON directly.
 [docs/content-replacement-guide.md](content-replacement-guide.md) explains
 the rules; `npm run check:owner-content` shows what's left.

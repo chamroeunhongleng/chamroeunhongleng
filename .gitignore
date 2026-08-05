@@ -31,3 +31,7 @@ blob-report
 
 # Disposable intermediates (screenshots, scratch exports)
 .tmp
+
+# Private working questionnaire — personal notes and half-answered fields.
+# Kept locally (the /replace-owner-content workflow reads it); never published.
+OWNER_INPUT.md

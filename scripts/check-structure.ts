@@ -26,7 +26,9 @@ const REQUIRED_FILES = [
   '.editorconfig',
   'README.md',
   'CLAUDE.md',
-  'OWNER_INPUT.md',
+  // OWNER_INPUT.md is deliberately NOT required: it is a private working
+  // questionnaire, gitignored so half-answered personal notes never ship
+  // in a public repo. It still lives in the working tree locally.
   'SECURITY.md',
   'LICENSE',
   // App

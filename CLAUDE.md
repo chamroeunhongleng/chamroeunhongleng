@@ -53,6 +53,7 @@ meaning may not change without owner approval.
 - `scripts/` — verification pipeline (Node + jiti, no Python assumed)
 - `docs/` — setup, deployment, checklists, validation report
 - `OWNER_INPUT.md` — the owner questionnaire that retires the placeholders
+  (private: present locally, gitignored, never published)
 
 ## Chat assistant
 
