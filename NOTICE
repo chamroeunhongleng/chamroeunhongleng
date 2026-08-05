@@ -1,0 +1,19 @@
+NOTICE — scope of the MIT licence in this repository
+====================================================
+
+The MIT licence in LICENSE covers the SOURCE CODE of this website: the Nuxt
+application, components, schemas, build tooling, tests, and scripts.
+
+It does NOT cover the personal content. The following are
+© 2026 Chamroeun Hongleng, all rights reserved, and are not licensed for reuse:
+
+  - biography, headline, and all profile prose
+  - project descriptions and case studies
+  - every file under content/
+  - photographs and images under public/images/
+  - the CV documents under public/cv/ and docs/cv/
+
+You are welcome to read, fork, and learn from the code. Please do not republish
+the personal content, in whole or in part, as your own or as someone else's.
+
+Questions: chamroeunhongleng825@gmail.com
