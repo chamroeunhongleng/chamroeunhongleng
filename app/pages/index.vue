@@ -1,27 +1,29 @@
 <script setup lang="ts">
 import {
+  contact,
   featuredProjects,
   interests,
   learning,
   now,
   principles,
-  processContent,
   profile
 } from '~/data/portfolio'
 
 usePageMeta({
-  title: 'Exploring AI, Software, and Business',
+  title: 'Applied Machine Learning & Software',
   description:
-    'Chamroeun Hongleng — exploring the intersection of artificial intelligence, machine learning, software, and business, with responsible governance.'
+    'Chamroeun Hongleng — applied-ML student in Phnom Penh building machine-learning systems and the software around them. Open to internships.'
 })
 
 // One flagship project carries the homepage; the rest are one-line rows.
-// Prefer a flagship with a clickable live site — recruiters reach the real
-// product in one click.
+// The flagship is an explicit owner decision (flagship: true in the project
+// JSON); the clickable-site heuristic is only a fallback.
 const flagship
-  = featuredProjects.find((p) =>
+  = featuredProjects.find((p) => p.flagship)
+  ?? featuredProjects.find((p) =>
     p.publicLinks.some((l) => l.kind === 'demo' || l.kind === 'website')
-  ) ?? featuredProjects[0]
+  )
+  ?? featuredProjects[0]
 const moreProjects = featuredProjects.filter((p) => p !== flagship)
 const topEvidence = profile.proofPoints.slice(0, 3)
 </script>
@@ -33,15 +35,16 @@ const topEvidence = profile.proofPoints.slice(0, 3)
       <div class="container hero-layout">
         <div class="hero-grid">
           <p class="eyebrow">{{ profile.name }} · {{ profile.location.text }}</p>
-          <h1 id="hero-title">Exploring AI, Software, and Business</h1>
+          <h1 id="hero-title">Applied machine learning and the software around it</h1>
           <p class="hero-statement">{{ profile.headline }}</p>
+          <p class="hero-availability">{{ profile.availability }}</p>
           <div class="hero-intro">
             <p v-for="(paragraph, i) in profile.intro" :key="i" class="lede">{{ paragraph }}</p>
           </div>
           <p class="hero-identity"><MarkedText :text="profile.identity" /></p>
           <div class="hero-actions">
             <NuxtLink to="/projects" class="btn btn-primary">View projects</NuxtLink>
-            <NuxtLink to="/about" class="btn btn-secondary">About me</NuxtLink>
+            <a :href="`mailto:${contact.email}`" class="btn btn-secondary">Email me</a>
           </div>
         </div>
 
@@ -99,12 +102,27 @@ const topEvidence = profile.proofPoints.slice(0, 3)
       <div class="container">
         <SectionHeading
           eyebrow="Selected work"
-          title="One project in depth, the rest one line each"
+          title="What I have built so far"
         />
         <ProjectCard v-if="flagship" :project="flagship" />
         <ul class="project-rows" role="list">
           <li v-for="project in moreProjects" :key="project.slug">
             <NuxtLink :to="`/projects/${project.slug}`" class="project-row">
+              <!-- Thumbnail where a project has one; an empty cell otherwise, so
+                   the rows stay aligned whether or not every project ships art.
+                   alt is empty on purpose: the project name sits right beside it,
+                   so a description here would only pad the link's accessible name.
+                   The full alt text still rides the same image on the case study. -->
+              <img
+                v-if="project.cover"
+                :src="project.cover.src"
+                alt=""
+                :width="project.cover.width"
+                :height="project.cover.height"
+                class="row-thumb"
+                loading="lazy"
+              >
+              <span v-else class="row-thumb row-thumb-empty" aria-hidden="true" />
               <span class="row-name"><MarkedText :text="project.name" /></span>
               <span class="row-oneliner"><MarkedText :text="project.oneLiner" /></span>
               <StatusBadge :status="project.status" />
@@ -130,10 +148,10 @@ const topEvidence = profile.proofPoints.slice(0, 3)
       </div>
     </section>
 
-    <!-- Principles + process, compact -->
+    <!-- Principles, compact -->
     <section id="process" class="section">
       <div class="container">
-        <SectionHeading eyebrow="How I work" title="Rules and the road to production" />
+        <SectionHeading eyebrow="How I work" title="Rules I work by" />
 
         <div class="principles-row">
           <article v-for="principle in principles.principles" :key="principle.title" class="principle">
@@ -142,44 +160,53 @@ const topEvidence = profile.proofPoints.slice(0, 3)
           </article>
         </div>
 
-        <div class="process-compact">
-          <ol class="process-flow" role="list">
-            <li
-              v-for="(stage, i) in processContent.stages"
-              :key="stage.title"
-              class="process-chip"
-              :data-human-gate="stage.humanGate || undefined"
-            >
-              <span class="chip-index mono">{{ String(i + 1).padStart(2, '0') }}</span>
-              {{ stage.title }}
-            </li>
-          </ol>
-          <p class="process-legend">
-            <span class="gate-dot" aria-hidden="true" /> marked stages are always human
-            decisions — {{ processContent.humanControls.slice(0, 4).join(', ').toLowerCase() }},
-            and every final public claim. {{ processContent.aiSupport }}
-          </p>
-        </div>
+        <p class="process-legend">
+          Everything here moves from idea to production through explicit human approval gates —
+          the full process and AI policy live on the
+          <NuxtLink to="/colophon">colophon</NuxtLink>.
+        </p>
       </div>
     </section>
 
     <!-- Selected evidence — top three -->
     <section class="section evidence-section">
       <div class="container">
-        <SectionHeading eyebrow="Selected evidence" title="Claims with receipts" />
+        <SectionHeading eyebrow="Selected evidence" title="Where these claims come from" />
         <ClaimList :claims="topEvidence" />
+      </div>
+    </section>
+
+    <!-- Direction -->
+    <section class="section">
+      <div class="container">
+        <SectionHeading eyebrow="Direction" title="What I am building toward" />
+        <p class="direction-text">
+          I would like to help build practical AI products for Cambodia: speech interfaces that
+          work in Khmer, coordination tools that farmers and cooperatives can actually trust, and
+          enough evaluation discipline to know whether any of it works. I am early in that, and
+          the projects here are the steps so far.
+        </p>
+        <p class="direction-next">
+          The next steps are already on the roadmap: a model card and public demo for Kaskor
+          ASR, one recurring-buyer pilot for Chomkar, and writing publicly about evaluation
+          for Khmer.
+        </p>
       </div>
     </section>
 
     <!-- Contact CTA -->
     <section class="section">
       <div class="container cta-panel">
-        <h2>Building something at this intersection?</h2>
+        <h2>Open to internships and collaborations</h2>
         <p class="lede">
-          I am looking for research opportunities, internships, and product collaborations where
-          technical work meets business and governance questions.
+          I am a student looking for internships, research opportunities, and product work where
+          the technical side meets business and governance questions. If that sounds useful, I
+          would be glad to hear from you.
         </p>
-        <NuxtLink to="/contact" class="btn btn-primary">Start a conversation</NuxtLink>
+        <div class="hero-actions">
+          <a :href="`mailto:${contact.email}`" class="btn btn-primary">Email me</a>
+          <NuxtLink to="/contact" class="btn btn-secondary">Contact page</NuxtLink>
+        </div>
       </div>
     </section>
   </div>
@@ -262,6 +289,15 @@ const topEvidence = profile.proofPoints.slice(0, 3)
   line-height: var(--leading-snug);
 }
 
+/* The internship signal, above the fold — a fact, so it takes the mono
+   audit-trail register rather than display prose. */
+.hero-availability {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  max-width: 52ch;
+}
+
 .hero-intro {
   display: grid;
   gap: var(--space-3);
@@ -322,9 +358,17 @@ const topEvidence = profile.proofPoints.slice(0, 3)
 }
 
 .band-more a {
+  display: inline-flex;
+  align-items: center;
   font-weight: 560;
   text-decoration: none;
   font-size: var(--text-sm);
+}
+
+@media (pointer: coarse) {
+  .band-more a {
+    min-height: 40px;
+  }
 }
 
 /* Now */
@@ -369,7 +413,7 @@ const topEvidence = profile.proofPoints.slice(0, 3)
 
 .project-row {
   display: grid;
-  grid-template-columns: 14rem 1fr auto auto;
+  grid-template-columns: 6rem 14rem 1fr auto auto;
   align-items: center;
   gap: var(--space-4);
   padding: var(--space-3) 0;
@@ -378,9 +422,29 @@ const topEvidence = profile.proofPoints.slice(0, 3)
   color: var(--color-text);
 }
 
+/* Same plated treatment as .card-cover, at row scale. */
+.row-thumb {
+  width: 6rem;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-s);
+}
+
+/* Reserves the column so names stay aligned, but draws nothing — a visible
+   empty plate reads as a broken image rather than as "no screenshot yet". */
+.row-thumb-empty {
+  border-color: transparent;
+}
+
 .row-name {
   font-family: var(--font-display);
   font-weight: 600;
+  /* Needed for the minmax(0, 1fr) track to actually take effect: a grid item
+     will not shrink past its own min-content unless allowed to. A bare domain
+     name has no break opportunity, hence anywhere rather than break-word. */
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .row-oneliner {
@@ -456,61 +520,25 @@ const topEvidence = profile.proofPoints.slice(0, 3)
   color: var(--color-text-muted);
 }
 
-/* Process — chip flow */
-.process-compact {
-  margin-top: var(--space-7);
-}
-
-.process-flow {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.process-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5em;
-  font-size: var(--text-sm);
-  border: 1px solid var(--color-border-strong);
-  border-radius: 999px;
-  padding: 0.3em 0.9em;
-  color: var(--color-text-muted);
-  white-space: nowrap;
-}
-
-.chip-index {
-  font-size: var(--text-xs);
-  color: var(--color-text-faint);
-}
-
-.process-chip[data-human-gate] {
-  border-color: var(--color-accent);
-  color: var(--color-text);
-}
-
-.process-chip[data-human-gate] .chip-index {
-  color: var(--color-accent);
-  font-weight: 600;
-}
-
 .process-legend {
-  margin-top: var(--space-4);
+  margin-top: var(--space-5);
   font-size: var(--text-sm);
   color: var(--color-text-muted);
   max-width: var(--prose-max);
 }
 
-.gate-dot {
-  display: inline-block;
-  width: 0.6em;
-  height: 0.6em;
-  border-radius: 50%;
-  border: 2px solid var(--color-accent);
-  vertical-align: baseline;
+.direction-text {
+  font-family: var(--font-display);
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  max-width: var(--prose-max);
+}
+
+.direction-next {
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  max-width: var(--prose-max);
 }
 
 /* Evidence */
@@ -544,8 +572,17 @@ const topEvidence = profile.proofPoints.slice(0, 3)
     grid-template-columns: 1fr 1fr;
   }
 
+  /* The one-liner column drops out; thumb, name, status, and arrow keep one row.
+     minmax(0, 1fr) for the name column: a bare 1fr keeps an auto floor, so a
+     long project name ("chamroeunhongleng.me") set its own min-content as the
+     track minimum and pushed the status badge and arrow off a 320px screen. */
   .project-row {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 4.5rem minmax(0, 1fr) auto auto;
+    gap: var(--space-3);
+  }
+
+  .row-thumb {
+    width: 4.5rem;
   }
 
   .row-oneliner {
@@ -555,13 +592,23 @@ const topEvidence = profile.proofPoints.slice(0, 3)
 
 @media (max-width: 1040px) {
   .hero-layout {
-    grid-template-columns: 1fr;
+    /* minmax(0, …) so a long token can never widen the track past the page. */
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--space-6);
   }
 
   .hero-portrait {
     order: -1;
     width: clamp(11rem, 40vw, 14rem);
+  }
+
+  /* The portrait plate and the eyebrow render the same string — name ·
+     location. Side by side in two columns that reads as a caption; stacked,
+     the portrait moves above the text (order: -1) and the line repeats itself
+     immediately. Keep the plate only where the columns are side by side.
+     The photo keeps its alt text, so nothing is lost for assistive tech. */
+  .portrait-plate {
+    display: none;
   }
 }
 
@@ -581,6 +628,10 @@ const topEvidence = profile.proofPoints.slice(0, 3)
   .now-entry {
     grid-template-columns: 1fr;
     gap: var(--space-1);
+  }
+
+  .cta-panel {
+    padding: var(--space-5);
   }
 }
 </style>

@@ -106,10 +106,42 @@ track. `Nfr` means `minmax(auto, Nfr)`, and that `auto` floor will not shrink
 below content min-content — `.about-side` resolved a 302px track inside its own
 280px box. Fixed with `minmax(0, …)` at each level.
 
-**This grid pattern is systemic.** Many components use `display: grid` with no
-`grid-template-columns`, which is the same latent bug. The overflow tests cover
-every page on every device, so new instances surface as failures rather than as
-silent sideways scroll.
+**The homepage project rows overflowed at 320px.** `.project-row`'s mobile
+override used `4.5rem 1fr auto auto`; the `1fr` auto floor let a long project
+name set the track minimum and pushed the status badge and arrow 18px off
+screen. Fixed with `minmax(0, 1fr)` plus `min-width: 0; overflow-wrap: anywhere`
+on `.row-name` — the track cap does nothing unless the item is also allowed to
+shrink past its own min-content.
+
+**The hero caption duplicated the eyebrow.** `index.vue` renders
+`{{ profile.name }} · {{ profile.location.text }}` twice — once as the portrait
+plate, once as the eyebrow above the `<h1>`. Side by side in two columns that
+reads as a photo caption; below 1040px the portrait moves above the text
+(`order: -1`) and the same line appears twice in a row. The plate is now hidden
+where the columns stack. The photo keeps its alt text, so nothing is lost for
+assistive tech.
+
+**This grid pattern is systemic.** Five instances found so far, in four
+different files (`[slug].vue`, `about.vue` ×3, `index.vue` ×2). Many components
+still use `display: grid` with no `grid-template-columns`, which is the same
+latent bug. The rule: **`Nfr` means `minmax(auto, Nfr)`, and that `auto` floor
+refuses to shrink below content min-content.** Use `minmax(0, …)` on any track
+whose content you do not control, and add `min-width: 0` to the item.
+
+The overflow tests cover every page on every device, so new instances surface as
+failures rather than as silent sideways scroll.
+
+## A caution: verify the fix, and revert wrong diagnoses
+
+While fixing the above, a 6px "chat button overflows the viewport" reading led
+to a `max-width` + `grid-template-columns` change on `.chat-widget`. That
+reading was an artifact of measuring while the page still had 18px of overflow
+from the row arrows — the widget was never broken. Worse, the "fix" was a real
+regression: `justify-items: end` aligns an item *within its track*, not the
+track within the box, so widening the box moved the launcher to the bottom-LEFT
+over the `<h1>`. It was caught only by looking at the screenshot afterwards.
+
+Take the screenshot after the fix, not just before.
 
 `/projects/portfolio-site` scrolled sideways by **83px** on both phones. Cause:
 `.case-header .container` is a grid whose implicit `auto` track grows to its

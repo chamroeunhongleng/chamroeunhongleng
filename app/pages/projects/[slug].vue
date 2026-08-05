@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getProject, projects } from '~/data/portfolio'
+import { getProject, profile, projects } from '~/data/portfolio'
 import { PILLAR_TITLES } from '~~/shared/schemas/index'
 import { stripMarkers } from '~~/shared/markers'
 
@@ -10,9 +10,10 @@ if (!project) {
   throw createError({ statusCode: 404, statusMessage: 'Project not found', fatal: true })
 }
 
+const nextCycle = projects.filter((p) => !p.demo)
 const nextProject = computed(() => {
-  const index = projects.findIndex((p) => p.slug === project.slug)
-  return projects[(index + 1) % projects.length] ?? project
+  const index = nextCycle.findIndex((p) => p.slug === project.slug)
+  return nextCycle[(index + 1) % nextCycle.length] ?? project
 })
 
 const NAV_SECTIONS = [
@@ -25,11 +26,31 @@ const NAV_SECTIONS = [
   { id: 'reflection', label: 'Reflection' }
 ]
 
-useSeoMeta({
+usePageMeta({
   title: stripMarkers(project.name),
-  description: stripMarkers(project.oneLiner),
-  ogTitle: stripMarkers(project.name),
-  ogDescription: stripMarkers(project.oneLiner)
+  description: project.seoDescription ?? stripMarkers(project.oneLiner)
+})
+
+// Per-project structured data: projects with a public repository are
+// SoftwareSourceCode, the rest CreativeWork. The payload comes from
+// zod-validated content JSON, so inline serialization is safe.
+const repo = project.publicLinks.find((l) => l.kind === 'repository')
+const { siteUrl } = useRuntimeConfig().public
+useHead({
+  script: [
+    {
+      type: 'application/ld+json',
+      innerHTML: JSON.stringify({
+        '@context': 'https://schema.org',
+        '@type': repo ? 'SoftwareSourceCode' : 'CreativeWork',
+        'name': stripMarkers(project.name),
+        'description': project.seoDescription ?? stripMarkers(project.oneLiner),
+        'url': new URL(`/projects/${project.slug}`, siteUrl).href,
+        ...(repo ? { codeRepository: repo.url } : {}),
+        'author': { '@type': 'Person', 'name': profile.name, 'url': siteUrl }
+      })
+    }
+  ]
 })
 </script>
 
@@ -38,14 +59,47 @@ useSeoMeta({
     <header class="case-header">
       <div class="container">
         <NuxtLink to="/projects" class="back-link">← All projects</NuxtLink>
-        <p class="eyebrow">
-          {{ project.pillars.map((p) => PILLAR_TITLES[p]).join(' · ') }}
-        </p>
-        <h1><MarkedText :text="project.name" /></h1>
-        <p class="lede"><MarkedText :text="project.oneLiner" /></p>
-        <p v-if="project.question" class="case-question">
-          <MarkedText :text="project.question" />
-        </p>
+
+        <!-- Two columns when a portrait exists: the argument on one side, the
+             photograph on the other — the homepage hero's arrangement. -->
+        <div class="case-lead" :data-portrait="project.portrait ? '' : undefined">
+          <div class="case-lead-text">
+            <p class="eyebrow">
+              {{ project.pillars.map((p) => PILLAR_TITLES[p]).join(' · ') }}
+            </p>
+            <h1><MarkedText :text="project.name" /></h1>
+            <p class="lede"><MarkedText :text="project.oneLiner" /></p>
+            <p v-if="project.question" class="case-question">
+              <MarkedText :text="project.question" />
+            </p>
+
+            <aside v-if="project.results.length" class="header-outcomes" aria-label="Key results">
+              <p class="outcomes-label mono">Results</p>
+              <ClaimList :claims="project.results.slice(0, 2)" />
+            </aside>
+          </div>
+
+          <figure v-if="project.portrait" class="case-portrait">
+            <span class="portrait-backplate" aria-hidden="true" />
+            <img
+              :src="project.portrait.src"
+              :alt="project.portrait.alt"
+              :width="project.portrait.width"
+              :height="project.portrait.height"
+              class="portrait-img"
+              fetchpriority="high"
+            >
+            <figcaption v-if="project.portrait.caption" class="portrait-plate mono">
+              <span class="plate-tick" aria-hidden="true" />
+              <span>{{ project.portrait.caption }}</span>
+            </figcaption>
+          </figure>
+        </div>
+
+        <figure v-if="project.cover" class="case-cover">
+          <img :src="project.cover.src" :alt="project.cover.alt" loading="lazy">
+          <figcaption v-if="project.cover.caption">{{ project.cover.caption }}</figcaption>
+        </figure>
 
         <dl class="case-meta">
           <div>
@@ -176,6 +230,21 @@ useSeoMeta({
         <ClaimList :claims="project.completedWork" />
         <h3 class="sub">The receipts</h3>
         <ClaimList :claims="project.evidence" />
+        <template v-if="project.gallery?.length">
+          <h3 class="sub">Photographs</h3>
+          <div class="case-gallery">
+            <figure v-for="image in project.gallery" :key="image.src">
+              <img
+                :src="image.src"
+                :alt="image.alt"
+                :width="image.width"
+                :height="image.height"
+                loading="lazy"
+              >
+              <figcaption v-if="image.caption">{{ image.caption }}</figcaption>
+            </figure>
+          </div>
+        </template>
         <h3 class="sub">Results</h3>
         <ClaimList :claims="project.results" />
       </section>
@@ -248,14 +317,36 @@ useSeoMeta({
 
 .case-header .container {
   display: grid;
+  /* minmax(0, 1fr), not the implicit auto track: an auto track grows to its
+     items' min-content width, so one unbreakable token could drag the whole
+     header wider than the viewport. Items stay content-width via
+     justify-items: start, so this changes nothing visually. */
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-4);
   justify-items: start;
 }
 
+.case-header h1 {
+  /* A project title can be a bare domain ("chamroeunhongleng.me") with no
+     space to wrap at. `anywhere` — not `break-word` — because only `anywhere`
+     also shrinks the element's min-content width, which is what stops the
+     grid track from overflowing a 393px phone. */
+  overflow-wrap: anywhere;
+}
+
 .back-link {
+  display: inline-flex;
+  align-items: center;
   font-size: var(--text-sm);
   text-decoration: none;
   color: var(--color-text-muted);
+}
+
+@media (pointer: coarse) {
+  .back-link,
+  .next-link {
+    min-height: 44px;
+  }
 }
 
 .back-link:hover {
@@ -268,6 +359,139 @@ useSeoMeta({
   font-size: var(--text-lg);
   color: var(--color-accent-2);
   max-width: var(--prose-max);
+}
+
+.header-outcomes {
+  display: grid;
+  gap: var(--space-3);
+  max-width: var(--prose-max);
+  padding: var(--space-4) var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-m);
+  background: var(--color-surface-sunken);
+}
+
+.outcomes-label {
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-faint);
+}
+
+/* Lead block — one column normally, two when a portrait is present. */
+.case-lead {
+  width: 100%;
+  display: grid;
+  gap: var(--space-4);
+  justify-items: start;
+}
+
+.case-lead[data-portrait] {
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-9);
+  align-items: center;
+}
+
+.case-lead-text {
+  display: grid;
+  gap: var(--space-4);
+  justify-items: start;
+  max-width: 52rem;
+}
+
+/* Same archival plate as the homepage portrait: offset accent backplate,
+   hairline frame, mono caption plate with a terracotta tick. */
+.case-portrait {
+  position: relative;
+  margin: 0;
+  width: clamp(13rem, 21vw, 17rem);
+}
+
+.portrait-backplate {
+  position: absolute;
+  inset: 0;
+  transform: translate(var(--space-3), var(--space-3));
+  border-radius: var(--radius-l);
+  background: var(--color-accent-tint);
+  border: 1px solid var(--color-accent);
+  z-index: 0;
+}
+
+.case-portrait .portrait-img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  border-radius: var(--radius-l);
+  border: 1px solid var(--color-border-strong);
+  box-shadow: var(--shadow-2);
+}
+
+.portrait-plate {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  color: var(--color-text-faint);
+}
+
+.plate-tick {
+  flex: none;
+  width: 1.25rem;
+  height: 2px;
+  margin-top: 0.5em;
+  background: var(--color-accent-2);
+}
+
+.case-cover {
+  margin: 0;
+  max-width: 52rem;
+}
+
+.case-cover img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-m);
+}
+
+.case-cover figcaption {
+  margin-top: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--color-text-faint);
+}
+
+.case-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 20rem));
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+}
+
+.case-gallery figure {
+  margin: 0;
+}
+
+.case-gallery img {
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-m);
+}
+
+.case-gallery figcaption {
+  margin-top: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  line-height: 1.5;
+  color: var(--color-text-faint);
 }
 
 .case-meta {
@@ -311,11 +535,20 @@ useSeoMeta({
   gap: var(--space-5);
   list-style: none;
   margin: 0;
-  padding: var(--space-3) 0;
+  padding: var(--space-1) 0;
   overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+}
+
+.case-nav ul::-webkit-scrollbar {
+  display: none;
 }
 
 .case-nav a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   text-transform: uppercase;
@@ -339,6 +572,8 @@ useSeoMeta({
   display: grid;
   gap: var(--space-5);
   max-width: 52rem;
+  /* Clear both sticky bars (header + section nav) when jumping to an anchor. */
+  scroll-margin-top: 8.5rem;
 }
 
 .case-section > h2 {
@@ -431,6 +666,8 @@ useSeoMeta({
 }
 
 .next-link {
+  display: inline-flex;
+  align-items: center;
   font-family: var(--font-display);
   font-size: var(--text-xl);
   font-weight: 600;
@@ -447,13 +684,29 @@ useSeoMeta({
   color: var(--color-text-muted);
 }
 
+@media (max-width: 1040px) {
+  .case-lead[data-portrait] {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-6);
+  }
+
+  .case-portrait {
+    width: clamp(11rem, 40vw, 14rem);
+  }
+}
+
 @media (max-width: 760px) {
   .limitations-grid {
     grid-template-columns: 1fr;
   }
 
-  .case-nav {
-    top: 0;
+  .case-header {
+    padding-block: var(--space-6) var(--space-5);
+  }
+
+  .approval-panel,
+  .ai-panel {
+    padding: var(--space-4);
   }
 }
 </style>

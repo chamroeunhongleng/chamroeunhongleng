@@ -1,5 +1,5 @@
 ﻿<script setup lang="ts">
-import { education, interests, profile } from '~/data/portfolio'
+import { contact, education, interests, profile } from '~/data/portfolio'
 
 usePageMeta({
   title: 'About',
@@ -14,14 +14,27 @@ usePageMeta({
       <SectionHeading
         as="h1"
         eyebrow="About"
-        title="A builder who reads the rules"
-        :text="profile.headline"
+        title="How I ended up working across four fields"
+        text="The story behind the projects — from mathematics competitions in Kampong Cham to speech models for Khmer."
       />
 
       <div class="about-grid">
         <div class="about-main prose">
-          <h2>Where I am right now</h2>
-          <p v-for="(paragraph, i) in profile.intro" :key="i">{{ paragraph }}</p>
+          <h2>From mathematics to computer science</h2>
+          <p>
+            I grew up in Kampong Cham and started with mathematics competitions. I was first in my
+            province in Grade 9, national runner-up in Grade 12, and I left school with four full
+            university scholarships. Competition mathematics taught me the habit that this whole
+            site is built on: an answer only counts when you can show that it is right.
+          </p>
+          <p>
+            I now use the same habit in applied machine learning. I work on Khmer speech
+            recognition because the language I grew up speaking barely exists in the tools I use
+            every day. I work on agritech because the bok choy farmers our team interviewed in Kang
+            Meas plant their fields without knowing who will buy the harvest. In both problems,
+            careful testing matters more than an impressive demo, and the result is useful at home,
+            not only in a paper.
+          </p>
           <p><MarkedText :text="profile.identity" /></p>
 
           <h2>Why these interests connect</h2>
@@ -29,17 +42,59 @@ usePageMeta({
           <p>
             In practice that means the same project gets three questions instead of one: does the
             model work, would anyone pay for it, and what do the contracts, terms, and policies
-            allow it to do? The projects on this site are my attempts to answer all three at once,
-            at student scale, with honest labels.
+            allow it to do? The projects on this site are my attempts to answer all three at once
+            — student-scale work, labeled honestly, receipts attached.
           </p>
 
-          <h2>What I am — and what I am not</h2>
-          <p>
-            I am a student building across these areas, and this site is deliberate about that: I
-            am not a lawyer, not a legal expert, not a senior engineer, and not a machine-learning
-            expert. Claims here carry evidence labels precisely because a portfolio at my stage
-            earns trust through receipts, not titles.
-          </p>
+          <h2>What I can contribute</h2>
+          <ul class="skills-list" role="list">
+            <li>
+              <strong>Mathematical grounding</strong> — a decade of competition mathematics ending
+              as national runner-up; the habit of proving an answer right before claiming it.
+            </li>
+            <li>
+              <strong>Applied-ML practice with honest evaluation</strong> — a public Whisper
+              fine-tuning pipeline for Khmer with published weights, speaker-stratified splits,
+              and self-reported metrics labeled as exactly that.
+            </li>
+            <li>
+              <strong>Field research before code</strong> — interviews with real farmers before
+              writing anything, and a decision engine where refusal is a tested, first-class
+              output.
+            </li>
+            <li>
+              <strong>Organizing work around written standards</strong> — I founded and chair a
+              small professional reading circle that runs on a handbook I wrote: rotating officer
+              roles, progress measured by what members produce rather than by pages read, and an
+              AI-use policy binding on me as much as on every member.
+            </li>
+            <li>
+              <strong>Bilingual delivery</strong> — products, reports, and technical content that
+              work in Khmer and English from the first draft, not as a translation pass.
+            </li>
+          </ul>
+
+          <h2>Skills</h2>
+          <ul class="skills-list" role="list">
+            <li>
+              <strong>Machine learning</strong> — Python, PyTorch, Hugging Face Transformers,
+              Whisper fine-tuning, CER/WER evaluation design, dataset and manifest discipline;
+              currently studying classic ML fundamentals and C++.
+            </li>
+            <li>
+              <strong>Software</strong> — TypeScript, Vue/Nuxt, Next.js, unit testing and CI,
+              schema-validated content architectures, and AI-native development: leading coding
+              agents with explicit human review gates.
+            </li>
+            <li>
+              <strong>Product &amp; business</strong> — structured field research, buyer-first
+              validation, bilingual English/Khmer product design, digital marketing and
+              short-form technical video (CapCut).
+            </li>
+            <li>
+              <strong>Languages</strong> — Khmer (native), English (professional working).
+            </li>
+          </ul>
 
           <h2>How I work with AI</h2>
           <p><MarkedText :text="profile.aiWorkingStyle" /></p>
@@ -101,6 +156,9 @@ usePageMeta({
                 <SocialProfileLink :label="link.label" :url="link.url" icon-only />
               </li>
             </ul>
+            <p class="side-email-line">
+              <a :href="`mailto:${contact.email}`" class="mono">{{ contact.email }}</a>
+            </p>
           </section>
         </aside>
       </div>
@@ -111,7 +169,11 @@ usePageMeta({
 <style scoped>
 .about-grid {
   display: grid;
-  grid-template-columns: 3fr 2fr;
+  /* minmax(0, …) rather than a bare 3fr/2fr: `Nfr` means `minmax(auto, Nfr)`,
+     and that `auto` floor refuses to shrink below the content's min-content
+     width — so one long token inside can push the track wider than the page.
+     See the stacked rule below, where it was doing exactly that. */
+  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
   gap: var(--space-10);
   align-items: start;
 }
@@ -126,8 +188,32 @@ usePageMeta({
   margin-top: 0;
 }
 
+.skills-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.skills-list li {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  border-inline-start: 2px solid var(--color-border-strong);
+  padding-inline-start: var(--space-3);
+  max-width: var(--prose-max);
+}
+
+.skills-list strong {
+  color: var(--color-text);
+}
+
 .about-side {
   display: grid;
+  /* An implicit grid track is auto-sized, and `auto` will not shrink below its
+     items' min-content — so .side-card's padding + border + content floor
+     (302px) pushed this track past its own 280px box on a 320px phone. */
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-5);
   position: sticky;
   top: 5.5rem;
@@ -177,6 +263,9 @@ usePageMeta({
   background: var(--color-surface);
   padding: var(--space-5);
   display: grid;
+  /* Same reason as .about-side — the implicit auto track must be allowed to
+     shrink, or long content inside the card widens the card itself. */
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-4);
 }
 
@@ -262,7 +351,10 @@ usePageMeta({
 
 @media (max-width: 1040px) {
   .about-grid {
-    grid-template-columns: 1fr;
+    /* minmax(0, 1fr), not 1fr — stacked at 320px the auto floor let content
+       force the column to 302px inside a 280px container, scrolling the page
+       sideways by 2px. */
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .about-side {
