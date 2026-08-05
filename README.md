@@ -26,7 +26,7 @@ Dual degree: Computer Science at Fort Hays State University + Information Techno
 - **Khmer speech model:** [`Hongleng/kasekor-asr-v0.0`](https://huggingface.co/Hongleng/kasekor-asr-v0.0) — released weights on the Hub, with the training and evaluation code public in [kaskor-asr](https://github.com/chamroeunhongleng/kaskor-asr). The raw audio stays private; everything needed to read the method does not.
 - **Shop operations platform:** [phsaros.vercel.app](https://phsaros.vercel.app) — a running Next.js application for Cambodian shops, cafés, and marts, open for self-serve signup. No business results are claimed: no shop's daily operation is documented on it yet.
 - **Agritech:** [chomkar.com](https://chomkar.com) is the Khmer-first product site for pre-harvest market access; the [Chomkar Decision Grid](https://github.com/chamroeunhongleng/chomkar-decision-grid) is the deterministic engine underneath that work.
-- **Studio:** [github.com/chnai-lab](https://github.com/chnai-lab) — CHNAI LAB, the student studio I build in. Products are divided between members. PhsarOS is my own build; on Chomkar I contributed the API it runs on from my account, the farmer interviews, and the business analysis.
+- **Studio:** [github.com/chnai-lab](https://github.com/chnai-lab) — CHNAI LAB, the student studio I build in. Products are divided between members. PhsarOS is my own build; on Chomkar I provide the Khmer voice-intake model the team builds against — my own Kaskor ASR, served from my Hugging Face account — plus the farmer interviews and the business analysis.
 
 ## Open-Source Proof
 
