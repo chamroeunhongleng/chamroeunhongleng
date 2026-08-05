@@ -81,7 +81,7 @@ test.describe('Chat widget shell', () => {
     await page.goto('/')
     await openPanel(page)
 
-    await expect(page.locator('.chat-messages')).toContainText('I can answer questions about')
+    await expect(page.locator('.chat-messages')).toContainText('I answer questions about Chamroeun')
     // The starter chips are the discoverability affordance — an empty panel
     // gives a visitor nothing to click.
     await expect(page.locator('.chat-chip').first()).toBeVisible()
@@ -190,7 +190,7 @@ test.describe('Chat widget shell', () => {
     // so without a reset the only way to clear a thread is a page reload.
     await expect(page.locator('.chat-messages')).not.toContainText('tell me about Kaskor')
     await expect(page.locator('.chat-messages')).not.toContainText('A specific answer about Kaskor.')
-    await expect(page.locator('.chat-messages')).toContainText('I can answer questions about')
+    await expect(page.locator('.chat-messages')).toContainText('I answer questions about Chamroeun')
     await expect(page.locator('.chat-chip').first()).toBeVisible()
   })
 
@@ -254,7 +254,7 @@ test.describe('Chat conversation', () => {
     // The seed bubble is local text the API must never see; leaking it would
     // put words in the assistant's mouth as if it had said them.
     const history = requests[1]?.history ?? []
-    expect(history.some((h) => h.content.includes('I can answer questions about'))).toBe(false)
+    expect(history.some((h) => h.content.includes('I answer questions about Chamroeun'))).toBe(false)
     expect(history[0]).toEqual({ role: 'user', content: 'one' })
   })
 

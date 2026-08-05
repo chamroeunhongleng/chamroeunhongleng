@@ -30,8 +30,8 @@ export interface ChatBubble {
 const SEED_BUBBLE: ChatBubble = {
   role: 'assistant',
   text:
-    'Hi — I can answer questions about Chamroeun and his work, and take you straight to the right page. '
-    + 'English ឬភាសាខ្មែរ both work.',
+    'I answer questions about Chamroeun\'s projects, the evidence behind them, and his background, '
+    + 'and can open the relevant page for you.',
   suggested: [
     'What is he working on now?',
     'Tell me about the Khmer speech project',
