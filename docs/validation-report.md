@@ -4,6 +4,16 @@
 **Verified:** 2026-08-04, on Windows 11 · Node v24.16.0 · npm 11.13.0
 **State:** Review-ready. Production remains gated behind owner content and owner approval — by design.
 
+> **This is a dated snapshot, not a live status page.** It records what was
+> true on 2026-08-04 and is kept for the audit trail rather than rewritten.
+> Several figures below have since moved: the suite is now 169 tests across
+> 12 files (was 52/7), the production gate self-test now expects and gets a
+> PASS because the placeholder content it was blocking on is resolved (was
+> "36 readable issues"), and CI has run on every push since 2026-08-05. One
+> claim in it was outright wrong when written; see the correction under
+> "Also verified directly". For current status, run `npm run verify` and read
+> the CI badges in the README.
+
 ## Verified in this environment — `npm run verify`, all 12 phases PASSED (56s)
 
 | # | Phase | Result |
@@ -24,9 +34,21 @@
 Also verified directly:
 - `npm run check:owner-content -- --mode=production` exits 1 with a per-field
   issue list (the release blocker list — this is correct behavior today).
-- Claude hooks block force-push, `curl \| sh`, `.env` reads, and production
-  deploy commands (tested by piping sample tool JSON); session-context hook
-  reports mode + outstanding markers.
+- Claude hooks block force-push, `curl \| sh`, and `.env` reads (tested by
+  piping sample tool JSON); session-context hook reports mode + outstanding
+  markers.
+
+  **Correction (2026-08-06).** This line previously also claimed that
+  production deploy commands were blocked, and that the block had been
+  tested. Neither was true. The rule was written `\b(--prod|--production)\b`,
+  and `\b` asserts a word/non-word boundary — a space followed by a hyphen is
+  non-word on both sides, so the assertion could never hold and
+  `vercel deploy --prod` was never blocked. Nothing tested the hook, which is
+  why this sentence went unchallenged for as long as it did. Fixed in
+  `1921b79`, along with `tests/hooks/guard-bash.test.ts`, which drives the
+  hook as a subprocess and asserts the exit code for every rule. The claim is
+  now held up by a test rather than by this sentence — which is the only
+  reason it belongs in a validation report at all.
 - OG image renders correctly (1200×630, editorial serif on warm paper).
 
 ## Not verified here (environment limits — honest gaps)

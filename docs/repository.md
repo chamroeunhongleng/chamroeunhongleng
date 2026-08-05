@@ -7,7 +7,7 @@ independent axes (lifecycle status + deployment reality), and a production
 build **fails** while any placeholder or demo content remains.
 
 Built with Nuxt 4 · Vue 3 · TypeScript (strict) · zod · static generation.
-Zero runtime dependencies, no analytics, no trackers, self-hosted fonts.
+Two runtime dependencies (`@anthropic-ai/sdk`, `zod`), used only by the `api/chat.ts` serverless function; the static pages ship none. No analytics, no trackers, self-hosted fonts.
 
 ## Quick start
 

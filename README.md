@@ -40,17 +40,16 @@ That number replaced the 17.48% I had published for the same weights, and how it
 
 [![Quality](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/quality.yml/badge.svg)](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/quality.yml)
 [![Production gate](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/production-gate.yml/badge.svg)](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/production-gate.yml)
-[![Chat evals](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/chat-evals.yml/badge.svg)](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/chat-evals.yml)
 [![CodeQL](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/codeql.yml/badge.svg)](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/codeql.yml)
 
-This profile is also a live Nuxt application, not only a narrative README. Site content is JSON validated by zod schemas, and structure, claim labels, links, accessibility, SEO, and secrets are all checked by a 12-phase pipeline with a unit, end-to-end, and model-behaviour test suite behind it.
+This profile is also a live Nuxt application, not only a narrative README. Site content is JSON validated by zod schemas, and structure, claim labels, links, accessibility, SEO, and secrets are all checked by a 12-phase pipeline. Behind it sit three suites: unit tests, which run in CI and back the badges above; a Playwright end-to-end suite; and a model-behaviour eval suite for the assistant. The last two run on demand — the evals need an API key — so neither is represented by those badges.
 
 ```bash
 npm ci
 npm run verify
 ```
 
-A production build **fails** while any claim is unlabelled or any placeholder is still in the content — the honesty rule is enforced by the build, not by good intentions. The same pipeline runs in GitHub Actions on every push. Repository documentation: [docs/repository.md](docs/repository.md).
+A claim cannot parse without an evidence label, and a production build **fails** while any placeholder or unresolved marker remains in the content — the honesty rule is enforced by the build, not by good intentions. What the build enforces is that every claim carries a label and a source; whether a labelled claim is *true* is still my judgement, not the pipeline's. The same pipeline runs in GitHub Actions on every push. Repository documentation: [docs/repository.md](docs/repository.md).
 
 ## Selected Work
 
