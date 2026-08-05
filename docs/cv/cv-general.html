@@ -272,7 +272,7 @@
   </header>
 
   <div class="proof-strip">
-    <div class="stat"><div class="value">17.48%</div><div class="label">best reported Khmer ASR CER</div></div>
+    <div class="stat"><div class="value">3.74%</div><div class="label">best reported Khmer ASR CER</div></div>
     <div class="stat"><div class="value">~86k</div><div class="label">audio samples in ASR training work</div></div>
     <div class="stat"><div class="value">62</div><div class="label">unit tests in Decision Grid</div></div>
     <div class="stat"><div class="value">Top 2</div><div class="label">TSC Turing Hackathon C10</div></div>
@@ -304,7 +304,7 @@
           </div>
           <p class="role-line">ML pipeline, evaluation, and release tooling</p>
           <ul>
-            <li>Built a reproducible Khmer speech-to-text pipeline on Whisper-small (~86k audio samples); best checkpoint reports <strong>17.48% CER</strong>, 67.2% WER (secondary), 0.0346 eval loss.</li>
+            <li>Built a reproducible Khmer speech-to-text pipeline on Whisper-small (~86k audio samples); best checkpoint reports <strong>3.74% CER</strong>, 57.2% WER (secondary), 0.0356 eval loss on a validation split whose speakers are also in training.</li>
             <li>Chose Character Error Rate as the primary metric because Khmer does not reliably separate words with spaces; normalized text and verified 16&nbsp;kHz audio so evaluation stays honest.</li>
             <li>Shipped a pip-installable CLI (files, folders, reference text, microphone) under MIT; datasets and model weights are excluded intentionally.</li>
           </ul>

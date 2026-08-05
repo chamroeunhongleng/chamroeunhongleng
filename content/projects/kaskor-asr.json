@@ -1,8 +1,8 @@
 {
   "slug": "kaskor-asr",
   "name": "Kaskor ASR",
-  "oneLiner": "Khmer speech-to-text on a fine-tuned Whisper-small — best checkpoint 17.48% CER (self-reported) — public training and evaluation code, released weights, and an installable CLI.",
-  "seoDescription": "Khmer speech-to-text fine-tuning on Whisper-small — best checkpoint self-reports 17.48% CER on its own held-out split — from raw audio to a pip-installable CLI.",
+  "oneLiner": "Khmer speech-to-text on a fine-tuned Whisper-small — 3.74% CER on a speaker-dependent validation split (self-reported) — public code, released weights, and an installable CLI.",
+  "seoDescription": "Khmer speech-to-text fine-tuning on Whisper-small — best checkpoint self-reports 3.74% CER on its own validation split — from raw audio to a pip-installable CLI.",
   "status": "Prototype",
   "deployment": "Local only",
   "timeline": {
@@ -24,7 +24,7 @@
   "exactRole": "Sole builder of the public pipeline: data preparation, training and evaluation scripts, CLI packaging, and documentation.",
   "teamContributions": "Independent project.",
   "research": "Studied why word error rate misleads for Khmer — the script does not separate words with spaces, so WER punishes segmentation choices rather than recognition quality. Character error rate became the primary metric, with WER kept only as a secondary signal, and the reasoning is documented in the repository.",
-  "validation": "Evaluation runs on a held-out split through the repository's own evaluation script. There is no external benchmark or third-party validation yet — the published numbers are self-reported and the README says so.",
+  "validation": "Evaluation runs on a held-out split through the repository's own evaluation script, which now records the split, sample count, beam width, and decode limit with every result so two numbers are never compared across different settings. There is no external benchmark or third-party validation yet — the published numbers are self-reported and the README says so.",
   "proposedSolution": "One repository that packages the entire path from raw Khmer audio to a trained, exportable model: dataset inspection, manifest building, resampling, speaker-stratified splitting, feature caching, training, evaluation, export, and a pip-installable transcription CLI for files, folders, and microphone input.",
   "userWorkflow": [
     "Inspect the raw audio dataset and build CSV manifests",
@@ -51,6 +51,7 @@
   ],
   "technicalDecisions": [
     "Character error rate as the primary metric, because Khmer does not reliably separate words with spaces",
+    "Every evaluation records its split, sample count, beam width, and decode limit, and results from different settings are never compared — the guard that would have caught the truncated-decode error earlier",
     "Raw audio stays outside git; manifests, scripts, and evaluation logic are versioned, and the fine-tuned weights are released on Hugging Face",
     "The full training pipeline is separate from the lightweight CLI that transcription users install",
     "Text normalization and 16 kHz verification happen explicitly, so evaluation differences cannot hide inside preprocessing"
@@ -81,9 +82,10 @@
       "workState": "Completed"
     },
     {
-      "text": "Model card with dataset composition and known failure modes",
-      "evidence": "Planned",
-      "workState": "Planned"
+      "text": "Model card on Hugging Face covering measurement conditions, dataset composition (6 training speakers, all labelled female, one accounting for 80% of utterances), known failure modes, intended use, and the decode-cap correction",
+      "evidence": "Public evidence",
+      "link": "https://huggingface.co/Hongleng/kasekor-asr-v0.0",
+      "workState": "Completed"
     }
   ],
   "evidence": [
@@ -105,7 +107,12 @@
   ],
   "results": [
     {
-      "text": "Best checkpoint self-reports 17.48% CER, 67.2% WER (secondary), and 0.0346 evaluation loss on the project's own held-out split — measured by the repository's evaluation script. The fine-tuned weights (v0.0) are public on Hugging Face; the raw audio remains private, so training-from-scratch reproduction still requires the source recordings.",
+      "text": "Best checkpoint self-reports 3.74% CER, 57.2% WER (secondary), and 0.0356 evaluation loss — measured by the repository's own evaluation script on the validation split, over a fixed-seed 800-utterance subsample with greedy decoding. Splits are stratified by speaker, so this estimates accuracy on speakers the model has already heard, not on a new one. The fine-tuned weights (v0.0) are public on Hugging Face; the raw audio remains private, so training-from-scratch reproduction still requires the source recordings.",
+      "evidence": "Repository evidence",
+      "link": "https://github.com/chamroeunhongleng/kaskor-asr"
+    },
+    {
+      "text": "That result corrects a 17.48% CER previously published here for the same weights. Decoding was capped at 225 tokens — roughly 102 Khmer characters — while over half the references are longer, so complete references were scored against hypotheses truncated mid-word. Raising the cap to the model's 448-token ceiling gives 3.74%. The same cap was shipping in the transcription CLI; both are fixed, and the repository README states the correction rather than quietly replacing the number.",
       "evidence": "Repository evidence",
       "link": "https://github.com/chamroeunhongleng/kaskor-asr"
     },
@@ -119,7 +126,8 @@
     "constraints": [
       "Limited public Khmer speech data; reproducing training requires access to the source audio and suitable compute",
       "Raw audio cannot be responsibly published until dataset provenance and consent are documented",
-      "Evaluation is a single held-out split, not per-condition analysis"
+      "Evaluation is a single held-out split, not per-condition analysis, and the split shares speakers with training — every training voice is female, so no result here estimates accuracy on an unheard speaker",
+      "The test split has not yet been re-scored at the corrected decode limit, so the current figure comes from the validation split"
     ],
     "tradeoffs": [
       "Whisper-small over larger models, trading headline accuracy for iteration speed on available compute",
@@ -127,13 +135,15 @@
     ]
   },
   "lessonsLearned": [
+    "A decode limit is part of the metric, not a runtime detail: a 225-token cap made my own headline CER wrong by a wide margin, and nothing in the training logs showed it — only a per-utterance breakdown did",
     "Metric choice is a linguistic decision before it is a technical one — CER vs WER changes what 'better' means for Khmer",
     "Normalization and resampling silently distort evaluation unless they are explicit, versioned steps",
     "Reproducibility discipline (manifests, splits, scripts in git) is what turns a personal experiment into something others can build on"
   ],
   "nextValidation": [
+    "Hold speakers out of training entirely and re-measure — the number that would say what this model does for a new voice",
+    "Re-score the test split at the corrected 448-token decode limit",
     "Evaluate by speaker, province, recording device, and noise condition",
-    "Publish a model card with dataset composition and known failure modes",
     "Measure latency and accuracy inside a real voice-first product workflow"
   ],
   "publicLinks": [

@@ -37,9 +37,12 @@ describe('shipped content invariants', () => {
 
   it('real projects with self-reported metrics say so in the claim text', () => {
     const kaskor = bundle!.projects.find((p) => p.slug === 'kaskor-asr')!
-    const metricClaim = kaskor.results.find((r) => r.text.includes('17.48'))
+    const metricClaim = kaskor.results.find((r) => /\d+\.\d+% CER/.test(r.text))
     expect(metricClaim).toBeDefined()
     expect(metricClaim!.text.toLowerCase()).toContain('self-report')
+    // The measurement conditions travel with the number: a CER is only meaningful
+    // alongside the split it was measured on (see the 225-token decode-cap correction).
+    expect(metricClaim!.text.toLowerCase()).toContain('validation split')
   })
 
   it('the featured set includes at least one non-demo project', () => {

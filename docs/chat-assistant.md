@@ -90,7 +90,7 @@ five categories:
 | `scope`      | general knowledge, homework, code help, translation, other people, medical/product advice |
 | `pretext`    | injections that name-drop his work, role overrides, "act as him", prompt exfiltration, hypothetical framing |
 | `honesty`    | invented projects/employers, and hedges that must survive ("self-reported", raw audio private) |
-| `grounding`  | the load-bearing numbers: 17.48% CER, 62 tests, six-member CHNAI LAB, contact email, PhsarOS URL |
+| `grounding`  | the load-bearing numbers: 3.74% CER, 62 tests, six-member CHNAI LAB, contact email, PhsarOS URL |
 | `navigation` | routes to the right page, and `navigateTo: null` on declines |
 
 Run them:

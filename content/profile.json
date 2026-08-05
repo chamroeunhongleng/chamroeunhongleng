@@ -34,8 +34,8 @@
   ],
   "metrics": [
     {
-      "award": "17.48% CER",
-      "event": "Khmer ASR, held-out split (self-reported)",
+      "award": "3.74% CER",
+      "event": "Khmer ASR, validation split, speakers seen in training (self-reported)",
       "evidence": "Repository evidence",
       "link": "https://github.com/chamroeunhongleng/kaskor-asr"
     },
@@ -53,7 +53,7 @@
   ],
   "proofPoints": [
     {
-      "text": "Built a complete Khmer speech-recognition fine-tuning pipeline on Whisper-small — data preparation, training, evaluation, export, and an installable CLI, all public, with the fine-tuned weights on Hugging Face. Best checkpoint: 17.48% character error rate on its held-out split (self-reported).",
+      "text": "Built a complete Khmer speech-recognition fine-tuning pipeline on Whisper-small — data preparation, training, evaluation, export, and an installable CLI, all public, with the fine-tuned weights on Hugging Face. Best checkpoint: 3.74% character error rate on its validation split (self-reported), corrected downward from a previously published 17.48% after finding that a 225-token decode cap had been truncating the model's own output during evaluation.",
       "evidence": "Repository evidence",
       "link": "https://github.com/chamroeunhongleng/kaskor-asr"
     },

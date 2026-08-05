@@ -198,7 +198,8 @@
     </div>
     <ul class="points">
       <li>Public Whisper-small fine-tuning pipeline for Khmer: 11 scripts from raw-audio inspection through training, evaluation, export, and a pip-installable transcription CLI (raw audio private).</li>
-      <li>Best checkpoint 17.48% character error rate on the project's held-out split (self-reported; 86,550 training samples, speaker-stratified so no speaker crosses splits).</li>
+      <li>Best checkpoint 3.74% character error rate on the project's validation split (self-reported; 86,550 training samples, stratified by speaker, so the same voices appear in every split and the figure does not estimate accuracy on a new speaker).</li>
+      <li>Corrected that number down from a published 17.48% after tracing it to a 225-token decode cap that had been truncating the model's own output during evaluation; the correction is documented in the repository rather than quietly swapped.</li>
       <li>Evaluation designed around Khmer script: character-level metrics, because space-free script makes word-level ones misleading. Weights public on Hugging Face.</li>
     </ul>
   </div>

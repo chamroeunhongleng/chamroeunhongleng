@@ -190,8 +190,8 @@
   </header>
 
   <div class="proof-strip">
-    <div class="stat"><div class="value">17.48%</div><div class="label">best reported Khmer ASR CER</div></div>
-    <div class="stat"><div class="value">67.2%</div><div class="label">WER, reported as secondary</div></div>
+    <div class="stat"><div class="value">3.74%</div><div class="label">best reported Khmer ASR CER</div></div>
+    <div class="stat"><div class="value">57.2%</div><div class="label">WER, reported as secondary</div></div>
     <div class="stat"><div class="value">~86k</div><div class="label">audio samples in training work</div></div>
     <div class="stat"><div class="value">0.0346</div><div class="label">evaluation loss</div></div>
   </div>
@@ -223,7 +223,7 @@
           </div>
           <p class="role-line">ML pipeline, evaluation, and release tooling</p>
           <ul>
-            <li>Fine-tuned Whisper-small into a reproducible Khmer speech-to-text pipeline over ~86k audio samples; best published checkpoint reports <strong>17.48% CER, 67.2% WER, 0.0346 eval loss</strong>.</li>
+            <li>Fine-tuned Whisper-small into a reproducible Khmer speech-to-text pipeline over ~86k audio samples; best published checkpoint reports <strong>3.74% CER, 57.2% WER, 0.0356 eval loss</strong> on the validation split, greedy decoding. Corrected down from a published 17.48% after finding a 225-token decode cap that truncated the model's output during evaluation; splits share speakers, so this is not a new-speaker estimate.</li>
             <li>Selected <strong>Character Error Rate as the primary metric</strong> because Khmer does not reliably separate words with spaces, and documented WER as a secondary signal that should not be read as the main quality measure.</li>
             <li>Controlled preprocessing so evaluation differences are not hidden inside it — text normalization plus verified 16&nbsp;kHz resampling before training and scoring.</li>
             <li>Documented the full path end to end: dataset inspection, manifest building, resampling, splitting, training, evaluation, export, and inference; raw audio and weights stay outside Git while manifests, scripts, and evaluation logic are versioned.</li>

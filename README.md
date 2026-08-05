@@ -1,6 +1,6 @@
 # Chamroeun Hongleng
 
-Software engineering student in Phnom Penh. I build web systems, decision engines, and bilingual product tooling, and I fine-tune Khmer speech models when a product needs one. Most of my work starts from a problem I can watch happen here: a farmer selling before harvest, a shop owner counting stock by hand, a student studying in two languages.
+Software engineer and computer science student in Phnom Penh. I build web systems, decision engines, and bilingual product tooling, and I fine-tune Khmer speech models when a product needs one. Most of my work starts from a problem I can watch happen here: a farmer selling before harvest, a shop owner counting stock by hand, a student studying in two languages.
 
 I am early in my career, so I am training the habits I want to keep: ship working systems, write down the tradeoffs, publish the caveat next to the number, and use AI agents as engineering leverage rather than as a replacement for judgment.
 
@@ -32,7 +32,9 @@ Dual degree: Computer Science at Fort Hays State University + Information Techno
 
 [kaskor-asr](https://github.com/chamroeunhongleng/kaskor-asr) is a complete Khmer speech-to-text pipeline for a low-resource language: raw audio → manifests → fine-tuning Whisper-small → evaluation → released weights → a pip-installable CLI. Its CI fails the build if the released model id stops resolving on the Hub, so the install path cannot quietly break.
 
-Best checkpoint: **17.48% CER**. I publish the caveat with that number, because the number alone would mislead. The split is stratified by speaker rather than holding speakers out, so 99.96% of test utterances come from voices the model trained on, and every training speaker is female. It is an honest measurement of the wrong thing: it does not estimate accuracy on a new speaker. A speaker-independent evaluation is the stated next version. The full limitations are in the [case study](https://chamroeunhongleng.me/projects/kaskor-asr).
+Best checkpoint: **3.74% CER** — validation split, fixed-seed 800-utterance subsample, greedy decoding.
+
+That number replaced the 17.48% I had published for the same weights, and how it changed is the part I would rather show than hide. Decoding was capped at 225 tokens — about 102 Khmer characters — while more than half of the references are longer, so complete references were being scored against hypotheses truncated mid-word. The cap was a bug in my evaluation and in the shipped CLI, not a property of the model. Both are fixed, the old number is marked as corrected in the repository, and the caveat that matters still stands: the splits are stratified by speaker and every training voice is female, so this does not estimate accuracy on a speaker the model has never heard. A speaker-held-out evaluation is the next version. The full limitations are in the [case study](https://chamroeunhongleng.me/projects/kaskor-asr).
 
 ## Runnable Verification
 
@@ -49,7 +51,7 @@ A production build **fails** while any claim is unlabelled or any placeholder is
 
 | Project | Problem space | Where it stands |
 | --- | --- | --- |
-| [Kaskor ASR](https://github.com/chamroeunhongleng/kaskor-asr) | Khmer speech-to-text for a low-resource language | Prototype · public code, released weights, 17.48% CER on a speaker-dependent split |
+| [Kaskor ASR](https://github.com/chamroeunhongleng/kaskor-asr) | Khmer speech-to-text for a low-resource language | Prototype · public code, released weights, 3.74% CER on a speaker-dependent validation split |
 | [PhsarOS](https://phsaros.vercel.app) | Daily operations for small Cambodian shops, cafés, and marts | Public demo · deployed with self-serve signup, no business results claimed |
 | [Chomkar Decision Grid](https://github.com/chamroeunhongleng/chomkar-decision-grid) | Auditable allocation of farm lots against a buyer order | Prototype · 62 unit tests, CI-gated, bilingual audit reports, a human approves every recommendation |
 | [Chomkar OrderLoop](https://chomkar.com) | Pre-harvest market access for smallholder farmers | Pre-pilot · around 30 farmer interviews in Kampong Cham; Top 2, Turing Hackathon Cycle 10 |
