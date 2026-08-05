@@ -1,6 +1,6 @@
 # Chamroeun Hongleng
 
-Software engineer and computer science student in Phnom Penh. I build web systems, decision engines, and bilingual product tooling, and I fine-tune Khmer speech models when a product needs one. Most of my work starts from a problem I can watch happen here: a farmer selling before harvest, a shop owner counting stock by hand, a student studying in two languages.
+Computer science student in Phnom Penh. I build web systems, decision engines, and bilingual product tooling, and I fine-tune Khmer speech models when a product needs one. Most of my work starts from a problem I can watch happen here: a farmer selling before harvest, a shop owner counting stock by hand, a student studying in two languages.
 
 I am early in my career, so I am training the habits I want to keep: ship working systems, write down the tradeoffs, publish the caveat next to the number, and use AI agents as engineering leverage rather than as a replacement for judgment.
 
