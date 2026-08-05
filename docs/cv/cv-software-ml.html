@@ -3,14 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Chamroeun Hongleng — CV (Software Development)</title>
+<title>Chamroeun Hongleng — CV (Software Development — ML focus)</title>
 <style>
   /* A4, Chromium print-to-PDF. Margins live here, not in the print dialog.
-     The internship variant: software engineering and applied ML only.
+     Same target role and same facts as cv-software-dev.html — software
+     engineering. This variant only reorders the projects so the speech and
+     evaluation work reads first, for postings that mention ML. Keep in sync.
      Classic setting — Times New Roman throughout, black ink, hairline rules,
      no accent colour and no monospace. Times carries a smaller x-height than
      a UI sans, so the body is set at 10.2pt rather than 9.4pt and still fits
-     one page. It fills ~98% of the page; adding a bullet overflows it. */
+     one page. Kaskor ASR leads and keeps three bullets; every other project is cut to one. */
   @page { size: A4; margin: 13mm 16mm 9mm; }
 
   :root {
@@ -174,7 +176,7 @@
 <body>
 
   <h1 class="name">Chamroeun Hongleng</h1>
-  <p class="tagline">Software engineering student building tested full-stack products, backend systems, and machine-learning tools.</p>
+  <p class="tagline">Software engineering student applying machine learning — speech models, evaluation pipelines, tested products.</p>
   <p class="contact">
     Phnom Penh, Cambodia · <a href="mailto:chamroeunhongleng825@gmail.com">chamroeunhongleng825@gmail.com</a> ·
     <a href="https://chamroeunhongleng.me">chamroeunhongleng.me</a> ·
@@ -182,35 +184,10 @@
     <a href="https://huggingface.co/Hongleng">Hugging Face</a> ·
     <a href="https://www.linkedin.com/in/chamroeun-hongleng-73b249375">LinkedIn</a>
   </p>
-  <p class="avail">Seeking a software engineering internship · Phnom Penh or remote</p>
+  <p class="avail">Seeking a software engineering internship, including data and ML tooling · Phnom Penh or remote</p>
   <hr class="rule-strong">
 
   <h2>Projects</h2>
-
-  <div class="entry">
-    <div class="entry-head">
-      <div class="entry-title">PhsarOS <span class="sub">— operations platform for small shops · main builder</span></div>
-      <div class="dates">Jul 2026 — present</div>
-    </div>
-    <p class="stack">Next.js 15 (App Router, RSC, Server Actions) · TypeScript · Prisma · PostgreSQL · Auth.js · Zod &nbsp;·&nbsp; <a href="https://phsaros.vercel.app">phsaros.vercel.app</a></p>
-    <ul class="points">
-      <li>Live multi-tenant product: signup, point of sale, inventory, customers, expenses, and a server-computed dashboard. Anyone can sign up and complete a real sale.</li>
-      <li>Tenant isolation in the query layer, Zod-validated Server Actions, atomic sales, an eight-model Prisma schema, and Vitest with typechecking in CI. Authored 59 of the project’s 63 commits.</li>
-    </ul>
-  </div>
-
-  <div class="entry">
-    <div class="entry-head">
-      <div class="entry-title">chamroeunhongleng.me <span class="sub">— schema-validated content system · sole builder</span></div>
-      <div class="dates">Aug 2026 — present</div>
-    </div>
-    <p class="stack">Nuxt 4 · TypeScript · Zod · design tokens · Vitest · GitHub Actions + CodeQL · Vercel &nbsp;·&nbsp; <a href="https://github.com/chamroeunhongleng/chamroeunhongleng">source (public)</a></p>
-    <ul class="points">
-      <li>Content in JSON validated by Zod schemas, with routes and the sitemap derived from it; one shared rule engine fails production builds on any unresolved placeholder.</li>
-      <li>99 unit tests, a twelve-phase verification pipeline, GitHub Actions and CodeQL, and an assistant whose answers are graded by automated evaluations.</li>
-    </ul>
-  </div>
-
   <div class="entry">
     <div class="entry-head">
       <div class="entry-title">Kaskor ASR <span class="sub">— Khmer speech recognition · sole builder</span></div>
@@ -220,6 +197,7 @@
     <ul class="points">
       <li>Eleven-script pipeline from raw audio to trained model over ~86,500 samples, plus a pip-installable CLI and a published model card.</li>
       <li>Identified and fixed a 225-token evaluation cap that truncated model output, correcting the self-reported CER from 17.48% to 3.74% on a speaker-overlapping validation split.</li>
+      <li>Every evaluation records its split, sample count, beam width, and decode limit, so results measured under different settings are never compared.</li>
     </ul>
   </div>
 
@@ -233,6 +211,28 @@
       <li>Audit stage re-derives every result through independent code paths; 62 unit tests over invariants and designed failure paths, run in CI.</li>
     </ul>
   </div>
+  <div class="entry">
+    <div class="entry-head">
+      <div class="entry-title">PhsarOS <span class="sub">— operations platform for small shops · main builder</span></div>
+      <div class="dates">Jul 2026 — present</div>
+    </div>
+    <p class="stack">Next.js 15 (App Router, RSC, Server Actions) · TypeScript · Prisma · PostgreSQL · Auth.js · Zod &nbsp;·&nbsp; <a href="https://phsaros.vercel.app">phsaros.vercel.app</a></p>
+    <ul class="points">
+      <li>Live multi-tenant product — signup, point of sale, inventory, expenses, dashboard — with tenant isolation in the query layer, Zod-validated Server Actions, and Vitest in CI. Authored 59 of the project’s 63 commits.</li>
+    </ul>
+  </div>
+
+  <div class="entry">
+    <div class="entry-head">
+      <div class="entry-title">chamroeunhongleng.me <span class="sub">— schema-validated content system · sole builder</span></div>
+      <div class="dates">Aug 2026 — present</div>
+    </div>
+    <p class="stack">Nuxt 4 · TypeScript · Zod · design tokens · Vitest · GitHub Actions + CodeQL · Vercel &nbsp;·&nbsp; <a href="https://github.com/chamroeunhongleng/chamroeunhongleng">source (public)</a></p>
+    <ul class="points">
+      <li>Content in JSON validated by Zod schemas; one shared rule engine fails production builds on any unresolved placeholder. 99 unit tests, a twelve-phase pipeline, GitHub Actions and CodeQL, and an AI assistant whose answers are graded by replayed evaluations.</li>
+    </ul>
+  </div>
+
 
   <h2>Experience</h2>
 
@@ -250,16 +250,16 @@
   <h2>Skills</h2>
 
   <div class="row">
-    <div class="label">Web</div>
-    <div class="value">TypeScript, Next.js (App Router, RSC, Server Actions), Nuxt 4 / Vue, React, Tailwind</div>
+    <div class="label">ML</div>
+    <div class="value">Python, PyTorch, Hugging Face Transformers, Whisper fine-tuning, evaluation design</div>
   </div>
   <div class="row">
     <div class="label">Backend</div>
     <div class="value">PostgreSQL, Prisma, Auth.js with JWT, Zod validation, multi-tenant isolation, serverless</div>
   </div>
   <div class="row">
-    <div class="label">ML</div>
-    <div class="value">Python, PyTorch, Hugging Face Transformers, Whisper fine-tuning, evaluation design</div>
+    <div class="label">Web</div>
+    <div class="value">TypeScript, Next.js (App Router, RSC, Server Actions), Nuxt 4 / Vue, React, Tailwind</div>
   </div>
   <div class="row">
     <div class="label">AI-native practice</div>
