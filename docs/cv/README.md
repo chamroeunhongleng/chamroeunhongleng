@@ -6,9 +6,16 @@ metrics and claims in sync with `content/*.json` when either changes.
 
 | File | Use for | Leads with |
 | --- | --- | --- |
+| [`cv-software-dev.html`](./cv-software-dev.html) | Software developer roles | PhsarOS, the site's own build, engineering practice |
 | [`cv-general.html`](./cv-general.html) | General applications | Balanced view of all three projects |
 | [`cv-ml-research.html`](./cv-ml-research.html) | Applied-ML / research internships | Kaskor ASR metrics, research practice |
 | [`cv-product-business.html`](./cv-product-business.html) | Product / business analysis internships | OrderLoop field work, hackathon result |
+
+`cv-software-dev.html` carries software engineering **only** — no awards, no
+mathematics publications, no field-research or hackathon material, and no
+scholarships. It follows the design system of `scripts/cv/cv.html` rather than
+the three older variants, and it is tuned to fill exactly one A4 page: adding a
+bullet overflows it onto a second.
 
 ## Export to PDF
 

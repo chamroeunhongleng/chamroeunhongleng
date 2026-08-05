@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chamroeun Hongleng — CV (Software Development)</title>
+<style>
+  /* A4, Chromium print-to-PDF. Margins live here, not in the print dialog.
+     Same design system as scripts/cv/cv.html. This variant carries software
+     engineering only — no awards, publications, or field-research work — and
+     is tuned to fill exactly one page. Adding a bullet will overflow it. */
+  @page { size: A4; margin: 12mm 14mm 10mm; }
+
+  :root {
+    --accent: #4338ca;      /* indigo — matches the site */
+    --accent-2: #a14d28;    /* terracotta — bullet marks */
+    --ink: #16161a;
+    --muted: #55555f;
+    --faint: #77777f;
+    --rule: #d8d8e0;
+    --serif: georgia, 'Times New Roman', serif;
+    --sans: 'Segoe UI', system-ui, sans-serif;
+    --mono: consolas, 'Cascadia Mono', ui-monospace, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: var(--serif);
+    font-size: 9pt;
+    line-height: 1.31;
+    color: var(--ink);
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* ── Header ───────────────────────────────────────────────── */
+  .name {
+    font-family: var(--serif);
+    font-size: 22pt;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    margin: 0 0 1.4mm;
+  }
+  .tagline {
+    font-size: 9.8pt;
+    font-style: italic;
+    color: var(--accent);
+    margin: 0 0 2mm;
+    line-height: 1.3;
+  }
+  .contact {
+    font-family: var(--mono);
+    font-size: 7.3pt;
+    color: var(--muted);
+    line-height: 1.5;
+    margin: 0 0 2.8mm;
+  }
+  .contact a { color: var(--muted); text-decoration: none; }
+  .avail {
+    font-family: var(--mono);
+    font-size: 7.4pt;
+    color: var(--accent);
+    margin: 1.4mm 0 2.6mm;
+  }
+  .rule-strong { border: 0; border-top: 1.6pt solid var(--ink); margin: 0 0 3mm; }
+
+  /* ── Sections ─────────────────────────────────────────────── */
+  h2 {
+    font-family: var(--mono);
+    font-size: 7.5pt;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 3.4mm 0 0;
+    padding-bottom: 1mm;
+    border-bottom: 0.6pt solid var(--rule);
+    break-after: avoid-page;
+    page-break-after: avoid;
+  }
+  h2:first-of-type { margin-top: 0; }
+
+  /* An entry is atomic: title, stack line and bullets never split. */
+  .entry {
+    margin-top: 2.2mm;
+    break-inside: avoid-page;
+    page-break-inside: avoid;
+  }
+  .entry-head {
+    display: flex;
+    align-items: baseline;
+    gap: 3mm;
+  }
+  .entry-title { font-size: 9.6pt; font-weight: 700; flex: 1; }
+  .entry-title .sub {
+    font-weight: 400;
+    font-size: 8.5pt;
+    color: var(--muted);
+  }
+  .dates {
+    font-family: var(--mono);
+    font-size: 7.1pt;
+    color: var(--faint);
+    white-space: nowrap;
+  }
+  .stack {
+    font-family: var(--mono);
+    font-size: 7.1pt;
+    color: var(--faint);
+    margin: 0.5mm 0 0;
+    line-height: 1.35;
+  }
+  .stack a { color: var(--accent); text-decoration: none; }
+
+  ul.points { list-style: none; margin: 0.6mm 0 0; padding: 0; }
+  ul.points li {
+    position: relative;
+    padding-left: 4.2mm;
+    margin-top: 0.7mm;
+    color: var(--ink);
+    break-inside: avoid-page;
+    page-break-inside: avoid;
+  }
+  ul.points li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--accent-2);
+  }
+
+  /* ── Education: compact one-liners ────────────────────────── */
+  .edu {
+    display: flex;
+    align-items: baseline;
+    gap: 3mm;
+    margin-top: 1.5mm;
+    break-inside: avoid-page;
+  }
+  .edu .deg { flex: 1; }
+  .edu .deg b { font-weight: 700; }
+  .edu .deg span { color: var(--muted); }
+
+  /* ── Skills ───────────────────────────────────────────────── */
+  .skills { margin-top: 1.8mm; break-inside: avoid-page; }
+  .skills p { margin: 0 0 1.2mm; }
+  .skills b { font-weight: 700; }
+  .closing {
+    margin-top: 2mm;
+    color: var(--muted);
+    font-size: 8.6pt;
+    line-height: 1.4;
+  }
+  .closing a { color: var(--accent); text-decoration: none; }
+
+  /* ── Screen-only export hint ──────────────────────────────── */
+  .print-hint {
+    margin: 8mm 0 0;
+    padding-top: 2mm;
+    border-top: 0.6pt dashed var(--rule);
+    font-family: var(--sans);
+    font-size: 8pt;
+    color: var(--faint);
+  }
+  @media print { .print-hint { display: none; } }
+</style>
+</head>
+<body>
+
+  <h1 class="name">Chamroeun Hongleng</h1>
+  <p class="tagline">Software developer — TypeScript and Python, applied machine learning, and the business case for what I build.</p>
+  <p class="contact">
+    Phnom Penh, Cambodia · chamroeunhongleng825@gmail.com · chamroeunhongleng.me<br>
+    github.com/chamroeunhongleng · huggingface.co/Hongleng · linkedin.com/in/chamroeun-hongleng-73b249375
+  </p>
+  <p class="avail">Seeking a software engineering internship — full-stack, backend, or data and ML tooling · Phnom Penh or remote</p>
+  <hr class="rule-strong">
+
+  <h2>Software projects</h2>
+
+  <div class="entry">
+    <div class="entry-head">
+      <div class="entry-title">PhsarOS <span class="sub">— multi-tenant operations platform for small shops · main builder</span></div>
+      <div class="dates">Jul 2026 — present</div>
+    </div>
+    <p class="stack">Next.js 15 (App Router, RSC, Server Actions) · strict TypeScript · Prisma · PostgreSQL (Neon) · Auth.js · Zod &nbsp;·&nbsp; <a href="https://phsaros.vercel.app">phsaros.vercel.app</a></p>
+    <ul class="points">
+      <li>Live multi-tenant product covering a shop's whole day — signup, point of sale, inventory, customers, expenses, and a server-computed dashboard. Anyone can sign up and complete a real sale in it.</li>
+      <li>Tenant isolation enforced in the query layer, not the interface; every mutation is a Server Action validated server-side with Zod; sales commit atomically, so money and stock never move apart.</li>
+      <li>Eight-model Prisma schema with soft deletes, self-hosted credentials auth, a hand-built design-token UI with Khmer typography, and Vitest, typechecking, and linting in CI. 59 of the repository's 63 commits are mine; it is private, and open to review on request.</li>
+    </ul>
+  </div>
+
+  <div class="entry">
+    <div class="entry-head">
+      <div class="entry-title">chamroeunhongleng.me <span class="sub">— static site with a schema-validated content system · sole builder</span></div>
+      <div class="dates">Aug 2026 — present</div>
+    </div>
+    <p class="stack">Nuxt 4 · TypeScript · Zod · design tokens · Vitest · GitHub Actions + CodeQL · Vercel serverless &nbsp;·&nbsp; <a href="https://github.com/chamroeunhongleng/chamroeunhongleng">source (public)</a></p>
+    <ul class="points">
+      <li>Content lives in JSON validated by Zod schemas — the single source of truth for every vocabulary on the site. Routes and the sitemap derive from the content directory, so no route list can drift.</li>
+      <li>One rule engine imported identically by the CLI checker, the build gate, and the tests: a production build fails while any unresolved placeholder remains.</li>
+      <li>87 unit tests across 11 files, a twelve-phase verification pipeline, GitHub Actions and CodeQL, and one serverless function backing an assistant restricted to the validated content.</li>
+    </ul>
+  </div>
+
+  <div class="entry">
+    <div class="entry-head">
+      <div class="entry-title">Kaskor ASR <span class="sub">— Khmer speech-recognition pipeline and CLI · sole builder</span></div>
+      <div class="dates">2026 — present</div>
+    </div>
+    <p class="stack">Python · PyTorch · Hugging Face Transformers · torchaudio · Whisper-small · MIT &nbsp;·&nbsp; <a href="https://github.com/chamroeunhongleng/kaskor-asr">github.com/chamroeunhongleng/kaskor-asr</a></p>
+    <ul class="points">
+      <li>Eleven-script pipeline — inspection, manifests, resampling, splitting, caching, fine-tuning, evaluation, export, Hub push — over ~86,500 audio samples, plus a pip-installable transcription CLI.</li>
+      <li>Best checkpoint self-reports 17.48% CER on its held-out split (character-level, because Khmer does not space words); the split shares speakers with training, so it is not a new-speaker estimate.</li>
+    </ul>
+  </div>
+
+  <div class="entry">
+    <div class="entry-head">
+      <div class="entry-title">Chomkar Decision Grid <span class="sub">— deterministic decision engine with an audit gate · sole builder</span></div>
+      <div class="dates">2026 — present</div>
+    </div>
+    <p class="stack">Python (stdlib only) · unit tests · GitHub Actions · MIT &nbsp;·&nbsp; <a href="https://github.com/chamroeunhongleng/chomkar-decision-grid">github.com/chamroeunhongleng/chomkar-decision-grid</a></p>
+    <ul class="points">
+      <li>Dependency-free engine whose audit stage re-derives every result through independent code paths; 62 unit tests over invariants and designed failure paths, run in CI with lint and an end-to-end run.</li>
+    </ul>
+  </div>
+
+  <div class="entry">
+    <div class="entry-head">
+      <div class="entry-title">Bilingual LMS <span class="sub">— deployed walkthrough: teacher, student, and admin roles, Khmer and English</span></div>
+      <div class="dates">2026</div>
+    </div>
+    <p class="stack">Next.js · TypeScript · role-based UI · Vercel &nbsp;·&nbsp; <a href="https://lms-for-education-nine.vercel.app">lms-for-education-nine.vercel.app</a></p>
+  </div>
+
+  <h2>Experience &amp; skills</h2>
+
+  <div class="entry">
+    <div class="entry-head">
+      <div class="entry-title">CHNAI LAB <span class="sub">— student product studio · builder and organisation administrator</span></div>
+      <div class="dates">2026 — present</div>
+    </div>
+    <ul class="points">
+      <li>One of six members and an administrator of the GitHub organisation. Products are divided between members — PhsarOS is mine — and repositories carry shared contribution, security, and AI-use standards.</li>
+    </ul>
+  </div>
+
+  <div class="skills">
+    <p><b>Languages:</b> TypeScript, Python, SQL, HTML/CSS &nbsp;·&nbsp; <b>Web:</b> Next.js (App Router, React Server Components, Server Actions), Nuxt 4 / Vue, React, Tailwind, design tokens, accessible and bilingual Khmer/English UI.</p>
+    <p><b>Backend &amp; data:</b> PostgreSQL, Prisma, Auth.js with JWT sessions, Zod validation, multi-tenant isolation, serverless functions &nbsp;·&nbsp; <b>ML:</b> PyTorch, Hugging Face Transformers, Whisper fine-tuning, dataset and evaluation design.</p>
+    <p><b>Practice:</b> Git, GitHub Actions CI, Vitest and pytest, strict typechecking, ESLint, CodeQL, Vercel &nbsp;·&nbsp; <b>Spoken:</b> Khmer (native), English (professional).</p>
+    <p class="closing">I build AI-natively: agents implement under rules I write first, and nothing ships without my review. Every project above is documented in full — scope, limits, and next steps — at <a href="https://chamroeunhongleng.me">chamroeunhongleng.me</a>.</p>
+  </div>
+
+  <h2>Education</h2>
+  <div class="edu">
+    <div class="deg"><b>Fort Hays State University</b> <span>— B.S. Computer Science (AUPP–FHSU dual-degree partnership)</span></div>
+    <div class="dates">Oct 2025 — present</div>
+  </div>
+  <div class="edu">
+    <div class="deg"><b>American University of Phnom Penh</b> <span>— B.S. Information Technology Management</span></div>
+    <div class="dates">Oct 2025 — present</div>
+  </div>
+  <div class="edu">
+    <div class="deg"><b>Institute of Foreign Languages, RUPP</b> <span>— B.A. English for Work Skills (international business)</span></div>
+    <div class="dates">Jan 2026 — present</div>
+  </div>
+
+  <p class="print-hint">Export: open in Chrome or Edge → Ctrl+P → “Save as PDF” → Margins: <b>None</b> → enable <b>Background graphics</b>. This line does not print.</p>
+
+</body>
+</html>
