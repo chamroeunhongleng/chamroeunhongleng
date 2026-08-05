@@ -57,7 +57,7 @@ function mockChat(page: Page, reply: Partial<ChatReply>, status = 200) {
  */
 const openPanel = async (page: Page) => {
   const launcher = page.getByRole('button', { name: 'Chat about this site' })
-  const panel = page.getByRole('dialog', { name: 'Portfolio concierge' })
+  const panel = page.getByRole('dialog', { name: 'Portfolio assistant' })
 
   await expect(async () => {
     if (!(await panel.isVisible())) await launcher.click()
@@ -74,7 +74,7 @@ test.describe('Chat widget shell', () => {
   test('launcher is present and the panel starts closed', async ({ page }) => {
     await page.goto('/')
     await expect(page.getByRole('button', { name: 'Chat about this site' })).toBeVisible()
-    await expect(page.getByRole('dialog', { name: 'Portfolio concierge' })).toBeHidden()
+    await expect(page.getByRole('dialog', { name: 'Portfolio assistant' })).toBeHidden()
   })
 
   test('opens with a welcome message and starter questions', async ({ page }) => {
@@ -92,7 +92,7 @@ test.describe('Chat widget shell', () => {
     await openPanel(page)
 
     await page.keyboard.press('Escape')
-    await expect(page.getByRole('dialog', { name: 'Portfolio concierge' })).toBeHidden()
+    await expect(page.getByRole('dialog', { name: 'Portfolio assistant' })).toBeHidden()
     await expect(page.getByRole('button', { name: 'Chat about this site' })).toBeFocused()
   })
 
@@ -120,7 +120,7 @@ test.describe('Chat widget shell', () => {
 
     // Click top-left, far from the panel in the bottom-right corner.
     await page.locator('.chat-scrim').click({ position: { x: 20, y: 20 } })
-    await expect(page.getByRole('dialog', { name: 'Portfolio concierge' })).toBeHidden()
+    await expect(page.getByRole('dialog', { name: 'Portfolio assistant' })).toBeHidden()
   })
 
   test('the page still scrolls while the panel is open', async ({ page }) => {
@@ -134,7 +134,7 @@ test.describe('Chat widget shell', () => {
     // No body scroll lock on purpose: the assistant navigates the visitor and
     // scrolls to section anchors while the panel stays open, so locking scroll
     // would break its own navigation feature.
-    await expect(page.getByRole('dialog', { name: 'Portfolio concierge' })).toBeVisible()
+    await expect(page.getByRole('dialog', { name: 'Portfolio assistant' })).toBeVisible()
   })
 
   test('the launcher is hidden while the panel is open, and returns on close', async ({ page }) => {
@@ -166,7 +166,7 @@ test.describe('Chat widget shell', () => {
     await openPanel(page)
 
     await page.getByRole('button', { name: 'Close chat' }).click()
-    await expect(page.getByRole('dialog', { name: 'Portfolio concierge' })).toBeHidden()
+    await expect(page.getByRole('dialog', { name: 'Portfolio assistant' })).toBeHidden()
   })
 
   test('Send is disabled until something is typed', async ({ page }) => {
@@ -185,7 +185,7 @@ test.describe('Chat widget shell', () => {
 
     // The subtitle is a claim about how the assistant behaves; it sits in the
     // header precisely so a visitor sees it before asking anything.
-    await expect(page.locator('.chat-title')).toHaveText('Portfolio concierge')
+    await expect(page.locator('.chat-title')).toHaveText('Portfolio assistant')
     await expect(page.locator('.chat-subtitle')).toContainText('Published evidence only')
     await expect(page.locator('.chat-subtitle')).toContainText('read-only')
   })
@@ -299,7 +299,7 @@ test.describe('Chat navigation', () => {
 
     await expect(page).toHaveURL(/\/projects$/)
     // The panel must survive the jump, or the conversation is lost.
-    await expect(page.getByRole('dialog', { name: 'Portfolio concierge' })).toBeVisible()
+    await expect(page.getByRole('dialog', { name: 'Portfolio assistant' })).toBeVisible()
 
     const back = page.getByRole('button', { name: /Back to where you were/ })
     await expect(back).toBeVisible()

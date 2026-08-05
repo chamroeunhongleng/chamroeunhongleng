@@ -112,7 +112,7 @@ watch(
         id="chat-panel"
         class="chat-panel"
         role="dialog"
-        aria-label="Portfolio concierge"
+        aria-label="Portfolio assistant"
       >
         <header class="chat-header">
           <img
@@ -124,7 +124,7 @@ watch(
             height="256"
           >
           <div class="chat-heading">
-            <p class="chat-title">Portfolio concierge</p>
+            <p class="chat-title">Portfolio assistant</p>
             <p class="chat-subtitle">Published evidence only · read-only</p>
           </div>
           <button
