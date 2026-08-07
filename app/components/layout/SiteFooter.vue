@@ -67,6 +67,15 @@ const YEAR = new Date().getFullYear()
   color: var(--color-accent);
 }
 
+/* 17px of tappable height for the site's contact address. Padding on an inline
+   element grows the hit box without adding to the line box, so the footer
+   keeps its spacing exactly — inline-flex with a min-height would not. */
+@media (pointer: coarse) {
+  .footer-email {
+    padding-block: 0.85rem;
+  }
+}
+
 .footer-social {
   display: flex;
   gap: var(--space-3);

@@ -118,6 +118,136 @@ test.describe('Responsive header', () => {
   })
 })
 
+test.describe('Touch targets', () => {
+  /**
+   * These run only where the pointer is actually coarse — the fixes they guard
+   * are all inside `@media (pointer: coarse)`, so on the laptop project there
+   * is nothing to assert.
+   */
+  async function skipUnlessTouch(page: Page) {
+    const coarse = await page.evaluate(() => matchMedia('(pointer: coarse)').matches)
+    test.skip(!coarse, 'fine pointer — the touch rules do not apply')
+  }
+
+  /**
+   * Open the chat panel, tolerating hydration — the same contract as
+   * openMobileMenu above. The launcher is server-rendered and clickable before
+   * Vue attaches its handler, and a click that lands in that window is
+   * silently swallowed. Retrying is safe because the panel's own visibility
+   * guards it: an already-open panel is never clicked shut.
+   */
+  async function openChat(page: Page) {
+    const launcher = page.getByRole('button', { name: 'Chat about this site' })
+    const panel = page.locator('#chat-panel')
+    await expect(async () => {
+      if (!(await panel.isVisible())) await launcher.click()
+      await expect(panel).toBeVisible({ timeout: 1000 })
+    }).toPass({ timeout: 20_000 })
+  }
+
+  /** What a tap at (centre + offset) would actually activate. */
+  function hitAt(page: Page, selector: string, dx: number, dy: number) {
+    return page.evaluate(
+      ([sel, x, y]) => {
+        const el = document.querySelector(sel as string)
+        if (!el) return 'MISSING'
+        // 'instant' is required, not tidiness: base.css sets
+        // `html { scroll-behavior: smooth }`, which scrollIntoView inherits
+        // when no behavior is given. The scroll then animates, and the
+        // getBoundingClientRect below reads pre-scroll coordinates — so
+        // elementFromPoint probes a spot the target has not reached yet and
+        // every hit test reports "nothing".
+        el.scrollIntoView({ block: 'center', behavior: 'instant' })
+        const r = el.getBoundingClientRect()
+        const hit = document.elementFromPoint(
+          r.left + r.width / 2 + (x as number),
+          r.top + r.height / 2 + (y as number)
+        )
+        return hit?.closest('a, button')?.className ?? 'nothing'
+      },
+      [selector, dx, dy] as const
+    )
+  }
+
+  // The evidence arrow is a ~16px glyph repeated ~30 times sitewide, and it is
+  // the site's whole "check this claim yourself" affordance. It cannot grow
+  // without pushing inline text apart, so the hit area is an invisible pad —
+  // which means only a hit test can prove it is there.
+  test('the evidence arrow is tappable past the edge of its glyph', async ({ page }) => {
+    await page.goto('/projects')
+    await skipUnlessTouch(page)
+
+    for (const [dx, dy] of [
+      [0, 0],
+      [0, -16],
+      [0, 16],
+      [-16, 0],
+      [16, 0]
+    ]) {
+      expect(
+        await hitAt(page, '.evidence-link', dx, dy),
+        `a tap ${dx},${dy}px from the arrow's centre missed it`
+      ).toContain('evidence-link')
+    }
+  })
+
+  // The card title is 25px tall on a phone. The card is meant to be the target
+  // (hence .project-card's `position: relative`, .live-link's z-index, and the
+  // aria-hidden "Case study →" span) — assert it really is, and that the links
+  // layered above it did not get swallowed.
+  test('the project card body opens the case study', async ({ page }) => {
+    await page.goto('/projects')
+    await skipUnlessTouch(page)
+
+    for (const region of ['.card-summary', '.tag-list']) {
+      expect(await hitAt(page, region, 0, 0), `${region} is not part of the card link`)
+        .toContain('card-link')
+    }
+
+    // Independently clickable things must stay independently clickable.
+    for (const own of ['.live-link', '.proof-link', '.card-proof .evidence-link']) {
+      expect(await hitAt(page, own, 0, 0), `${own} was covered by the card overlay`)
+        .toContain(own.split('.').pop()!)
+    }
+  })
+
+  // iOS Safari zooms the page in when a focused field is under 16px and never
+  // zooms back out. projects/index.vue already guards its filter controls;
+  // the chat field was the one that still tripped it.
+  test('no focusable field is small enough to trigger iOS zoom', async ({ page }) => {
+    await page.goto('/')
+    await skipUnlessTouch(page)
+
+    await openChat(page)
+
+    const tooSmall = await page.evaluate(() =>
+      [...document.querySelectorAll('input, select, textarea')]
+        .filter((el) => el.getBoundingClientRect().height > 0)
+        .map((el) => ({ el: el.id || el.className, px: parseFloat(getComputedStyle(el).fontSize) }))
+        .filter((f) => f.px < 16)
+    )
+    expect(tooSmall, `fields under 16px: ${JSON.stringify(tooSmall)}`).toEqual([])
+  })
+
+  // The controls that drive the assistant. They were 29px (chips) and 40px
+  // (field, Send) — the smallest targets on the site after the arrows.
+  test('the chat controls meet the 44px target floor', async ({ page }) => {
+    await page.goto('/')
+    await skipUnlessTouch(page)
+
+    await openChat(page)
+
+    const short = await page.evaluate(() =>
+      [...document.querySelectorAll('.chat-chip, .chat-input, .chat-send, .chat-action')]
+        .map((el) => ({ el: el.className, h: +el.getBoundingClientRect().height.toFixed(1) }))
+        // Device emulation scales rects a shade under the CSS value, so the
+        // floor is asserted with a 1px tolerance rather than exactly 44.
+        .filter((c) => c.h < 43)
+    )
+    expect(short, `chat controls under 44px: ${JSON.stringify(short)}`).toEqual([])
+  })
+})
+
 test.describe('Responsive layout', () => {
   // The most common real-device regression: one wide element forces the whole
   // page to scroll sideways. Runs on every project, so a phone-only overflow

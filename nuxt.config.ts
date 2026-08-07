@@ -77,8 +77,16 @@ export default defineNuxtConfig({
         {
           // Anti-FOUC theme bootstrap: run before first paint. Light is the
           // default; localStorage then prefers-color-scheme decide.
+          //
+          // It also carries the resolved theme into <meta name="theme-color">,
+          // which is what tints the browser chrome on phones — Android Chrome's
+          // address bar and the iOS Safari toolbars. Left at the static light
+          // value, a dark-theme visitor on a phone got a warm-white bar sitting
+          // directly above a near-black page. A CSS media query cannot do this
+          // job: the theme follows data-theme, which the toggle can set against
+          // the OS preference. Values track --color-bg in tokens.css.
           innerHTML:
-            "(function(){try{var t=localStorage.getItem('theme');if(t!=='dark'&&t!=='light'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t}catch(e){}})();"
+            "(function(){try{var t=localStorage.getItem('theme');if(t!=='dark'&&t!=='light'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t;var m=document.querySelector('meta[name=\"theme-color\"]');if(!m){m=document.createElement('meta');m.name='theme-color';document.head.appendChild(m)}m.content=t==='dark'?'#131318':'#FAF7F2'}catch(e){}})();"
         }
       ]
     }

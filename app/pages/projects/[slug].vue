@@ -641,6 +641,16 @@ useHead({
   font-weight: 560;
 }
 
+/* Alone on its own line, so it can take the full target height without
+   disturbing anything around it. */
+@media (pointer: coarse) {
+  .ai-more a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+}
+
 .artifact-block,
 .repo-block {
   margin-top: var(--space-2);

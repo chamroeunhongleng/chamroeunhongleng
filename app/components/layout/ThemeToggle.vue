@@ -11,10 +11,22 @@ onMounted(() => {
   theme.value = document.documentElement.dataset.theme === 'dark' ? 'dark' : 'light'
 })
 
+/**
+ * Keep the phone browser chrome in step with the page. The bootstrap in
+ * nuxt.config sets this meta on load; without the same update here, flipping
+ * to dark on a phone left the address bar warm-white above a near-black page
+ * until the next navigation. Values track --color-bg in tokens.css.
+ */
+function paintBrowserChrome(next: 'light' | 'dark') {
+  const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')
+  if (meta) meta.content = next === 'dark' ? '#131318' : '#FAF7F2'
+}
+
 function toggle() {
   theme.value = theme.value === 'dark' ? 'light' : 'dark'
   document.documentElement.dataset.theme = theme.value
   document.documentElement.style.colorScheme = theme.value
+  paintBrowserChrome(theme.value)
   try {
     localStorage.setItem('theme', theme.value)
   } catch {

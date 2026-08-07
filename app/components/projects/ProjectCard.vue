@@ -132,6 +132,34 @@ const liveLink = computed(() =>
   text-decoration: none;
 }
 
+/* The stretched card link.
+ *
+ * It was designed in but never written: .project-card already carries the
+ * `position: relative` this needs, .live-link already lifts itself to z-index 2
+ * "above the stretched card link", and "Case study →" is an aria-hidden span
+ * rather than a link — all of which only make sense if the card itself is the
+ * target. Without it the sole way into a case study was the title text, which
+ * measures 25px tall on a phone: a thin line to hit with a thumb, with the rest
+ * of the card inert despite the hover state advertising otherwise.
+ *
+ * The <a> keeps the accessible name and stays the single tab stop; the overlay
+ * only extends where a pointer counts as hitting it.
+ */
+.card-link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+/* Anything genuinely separate must sit above the overlay or it stops being
+   clickable. .live-link handles itself; these two are covered by it. */
+.proof-link,
+.card-proof .evidence-link {
+  position: relative;
+  z-index: 2;
+}
+
 .project-card:hover .card-title a {
   color: var(--color-accent);
 }

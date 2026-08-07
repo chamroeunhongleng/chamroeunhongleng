@@ -288,6 +288,15 @@ usePageMeta({
   color: var(--color-text-muted);
 }
 
+/* 18px tall otherwise, and it is how a recruiter reaches him from this page.
+   Inline padding grows the hit box without changing the card's spacing —
+   same treatment as .footer-email. */
+@media (pointer: coarse) {
+  .side-email-line a {
+    padding-block: 0.85rem;
+  }
+}
+
 .education-list {
   display: grid;
   gap: var(--space-4);

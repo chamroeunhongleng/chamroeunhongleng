@@ -627,12 +627,39 @@ watch(
   color: var(--color-accent);
 }
 
+/* Touch sizing for the panel's own controls. The header's reset/close buttons
+   are already handled above; these are the ones a visitor actually drives the
+   conversation with, and at 29px (chips) and 40px (field and Send) they were
+   the smallest interactive targets on the site after the evidence arrows. */
+@media (pointer: coarse) {
+  .chat-chip {
+    min-height: 44px;
+    padding-inline: var(--space-4);
+  }
+
+  .chat-input,
+  .chat-send {
+    min-height: 44px;
+  }
+
+  /* Same rule projects/index.vue already applies to its filter controls: iOS
+     Safari zooms the whole page in when a focused field is under 16px, and it
+     does not zoom back out afterwards. --text-sm is 14px, so the chat field
+     was the one place on the site that still triggered it. */
+  .chat-input {
+    font-size: var(--text-base);
+  }
+}
+
 /* Narrow breakpoint (760px, per tokens.css convention): full-width sheet. */
 @media (max-width: 760px) {
   .chat-widget {
     right: var(--space-3);
     bottom: var(--space-3);
     left: var(--space-3);
+    /* Clear of the iPhone home indicator: at a flat 12px the launcher sat
+       inside the gesture strip, where a tap can be taken as a swipe-up. */
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
   .chat-panel {

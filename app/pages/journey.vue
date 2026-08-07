@@ -168,6 +168,16 @@ usePageMeta({
   padding: 0.35em 0.9em;
 }
 
+/* Section jump-pills: 30px tall from the em padding alone, and they are the
+   whole navigation for a long page on a phone. */
+@media (pointer: coarse) {
+  .group-nav a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+}
+
 .group-nav a:hover {
   color: var(--color-accent);
   border-color: var(--color-accent);
