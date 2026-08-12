@@ -1,0 +1,16 @@
+{
+  // The code `nuxt typecheck` never sees: Nuxt's generated tsconfigs include
+  // app/, shared/, and modules/ only, while jiti, vitest, and playwright all
+  // transpile WITHOUT checking. Without this project, a type error in the
+  // Vercel function, a check script, or a test surfaced only at runtime while
+  // the verify pipeline still reported "Typecheck ✓". Run via vue-tsc (not
+  // tsc) because component tests import .vue single-file components.
+  // .nuxt/nuxt.node.d.ts carries the generated config-context augmentations
+  // (e.g. the sitemap module's `site` key on NuxtConfig) that scripts
+  // importing nuxt.config.ts need; `nuxt prepare` (postinstall) generates it.
+  "extends": "./tsconfig.json",
+  "include": [".nuxt/nuxt.node.d.ts", "api/**/*", "scripts/**/*", "tests/**/*"],
+  "compilerOptions": {
+    "noEmit": true
+  }
+}

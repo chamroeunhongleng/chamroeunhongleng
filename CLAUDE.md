@@ -36,8 +36,14 @@ meaning may not change without owner approval.
 6. **Humans approve consequences.** Production deploys, DNS, env vars,
    analytics, contact-email publication, legal pages, and final public claims
    are owner decisions. Stop at the gate; the hooks enforce it anyway.
-7. **Tokens only.** Components style with custom properties from
-   `app/assets/css/tokens.css`. Content prose renders through `<MarkedText>`.
+7. **Tokens are the source of truth.** Colour, type, space, radius, and motion
+   come from `app/assets/css/tokens.css` — never a raw hex, px type size, or
+   ad-hoc breakpoint in a component. Tailwind utilities are allowed and read
+   those same tokens: `app/assets/css/tailwind.css` maps them into the theme
+   with `@theme inline` (so `dark` still swaps them at runtime) and defines the
+   breakpoints from the site's own 480/760/820/1040 conventions. Preflight is
+   deliberately not imported — `base.css` and `typography.css` own the element
+   reset. Content prose renders through `<MarkedText>`.
 
 ## Architecture map
 

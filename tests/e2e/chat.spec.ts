@@ -322,7 +322,7 @@ test.describe('Chat navigation', () => {
     await expect(page.locator('.chat-messages')).toContainText('Careful.')
     // The client only follows values starting with "/" — an absolute URL from
     // a compromised or confused reply must not move the visitor off-site.
-    await expect(page).toHaveURL(/127\.0\.0\.1:3000\/$/)
+    await expect(page).toHaveURL(/^http:\/\/127\.0\.0\.1:\d+\/$/)
   })
 })
 

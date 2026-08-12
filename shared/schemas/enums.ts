@@ -49,13 +49,17 @@ export const EVIDENCE_LABELS = [
 ] as const
 export type EvidenceLabel = (typeof EVIDENCE_LABELS)[number]
 
-/** Evidence labels strong enough to support a Production status claim. */
+/**
+ * Evidence labels strong enough to support a Production status claim.
+ * `satisfies` pins every entry to the vocabulary above, so renaming a label
+ * there is a compile error here instead of a silently weakened rule.
+ */
 export const HARD_EVIDENCE_LABELS = [
   'Owner confirmed',
   'Public evidence',
   'Repository evidence',
   'Document evidence'
-] as const
+] as const satisfies readonly EvidenceLabel[]
 
 /** State of an individual piece of work inside a case study. */
 export const WORK_STATES = [

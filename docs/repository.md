@@ -7,7 +7,7 @@ independent axes (lifecycle status + deployment reality), and a production
 build **fails** while any placeholder or demo content remains.
 
 Built with Nuxt 4 · Vue 3 · TypeScript (strict) · zod · static generation.
-Two runtime dependencies (`@anthropic-ai/sdk`, `zod`), used only by the `api/chat.ts` serverless function; the static pages ship none. No analytics, no trackers, self-hosted fonts.
+Two runtime dependencies (`@anthropic-ai/sdk`, `zod`), used only by the `api/chat.ts` serverless function; the static pages ship none. Cookie-free first-party analytics (Vercel Web Analytics), no third-party trackers, self-hosted fonts.
 
 ## Quick start
 
@@ -28,7 +28,7 @@ Full guide: [docs/local-setup.md](local-setup.md)
 | Markers | `shared/markers.ts` | `[OWNER_INPUT_REQUIRED: …]`-style placeholders, rendered as visible chips |
 | Rule engine | `shared/rules.ts` | mode-aware content rules, shared by CLI + build gate + tests |
 | Build gate | `modules/content-gate.ts` | aborts production builds while issues remain |
-| Pages | `app/pages/` | Home, Projects (+ case studies), Journey, Learning, About, Contact, Colophon |
+| Pages | `app/pages/` | Home, Projects (+ case studies), Journey, Learning, About, Contact, Colophon, CV (also the PDF source) |
 | Verification | `scripts/`, `npm run verify` | structure, secrets, content, lint, types, tests, generate, links, a11y, SEO, gate self-test |
 | Claude tooling | `.claude/` | 10 commands, 10 skills, 6 reviewer agents, 3 guard hooks |
 

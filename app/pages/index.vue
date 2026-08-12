@@ -14,100 +14,131 @@ usePageMeta({
     'Chamroeun Hongleng — software engineering student in Phnom Penh building web and data systems, with applied-ML work in Khmer speech. Open to internships.'
 })
 
-// One flagship project carries the homepage; the rest are one-line rows.
-// The flagship is an explicit owner decision (flagship: true in the project
-// JSON); the clickable-site heuristic is only a fallback.
-const flagship
-  = featuredProjects.find((p) => p.flagship)
-  ?? featuredProjects.find((p) =>
-    p.publicLinks.some((l) => l.kind === 'demo' || l.kind === 'website')
-  )
-  ?? featuredProjects[0]
-const moreProjects = featuredProjects.filter((p) => p !== flagship)
-
 // The homepage keeps only the two rules a recruiter needs to read; the full
 // list stays in principles.json and on the colophon-linked process story.
 const heroPrinciples = principles.principles.slice(0, 2)
+
+// The flagship (an explicit owner decision: flagship: true in the project
+// JSON) leads the grid; the rest keep the loader's status-ranked order.
+const flagship = featuredProjects.find((p) => p.flagship)
+const workProjects = flagship
+  ? [flagship, ...featuredProjects.filter((p) => p !== flagship)]
+  : featuredProjects
+
+// One calm sentence naming the four pillars; the full story lives on /about.
+const pillarLine = interests.pillars
+  .map((p, i, all) => (i === all.length - 1 ? `and ${p.title.toLowerCase()}` : p.title.toLowerCase()))
+  .join(', ')
+
+// Below-fold sections fade in as they enter the viewport (no-op for no-JS,
+// reduced-motion, and automated runs — see useReveal).
+useReveal()
 </script>
 
 <template>
   <div class="home">
-    <!-- Hero -->
+    <!-- Hero — name-first, one calm column. The h1 is the person, not a
+         slogan: the reference-portfolio pattern that reads most professional. -->
     <section class="hero section" aria-labelledby="hero-title">
-      <div class="container hero-layout">
-        <div class="hero-grid">
-          <p class="eyebrow">{{ profile.name }} · {{ profile.location.text }}</p>
-          <h1 id="hero-title">Software engineering, and the machine learning underneath it</h1>
-          <p class="hero-statement">{{ profile.headline }}</p>
-          <p class="hero-availability">{{ profile.availability }}</p>
-          <div class="hero-intro">
-            <p v-for="(paragraph, i) in profile.intro" :key="i" class="lede">{{ paragraph }}</p>
-          </div>
-          <p class="hero-identity"><MarkedText :text="profile.identity" /></p>
-          <div class="hero-actions">
-            <NuxtLink to="/projects" class="btn btn-primary">View projects</NuxtLink>
-            <a :href="`mailto:${contact.email}`" class="btn btn-secondary">Email me</a>
-          </div>
-
-          <!-- Three numbers a recruiter can scan in seconds. Values restate
-               claims that exist elsewhere with the same evidence labels. -->
-          <ul v-if="profile.metrics?.length" class="hero-stats" role="list">
-            <li v-for="metric in profile.metrics" :key="metric.award" class="hero-stat">
-              <span class="stat-value mono">{{ metric.award }}</span>
-              <span class="stat-label">
-                <a
-                  v-if="metric.link"
-                  :href="metric.link"
-                  target="_blank"
-                  rel="noopener"
-                >{{ metric.event }} <span aria-hidden="true">↗</span></a>
-                <template v-else>{{ metric.event }}</template>
-              </span>
-            </li>
-          </ul>
-        </div>
-
-        <figure v-if="profile.photo" class="hero-portrait">
-          <span class="portrait-backplate" aria-hidden="true" />
+      <div class="container hero-grid">
+        <header class="hero-head">
           <img
+            v-if="profile.photo"
             :src="profile.photo.src"
             :alt="profile.photo.alt"
-            class="portrait-img"
+            class="hero-avatar"
             width="640"
             height="640"
             fetchpriority="high"
           >
-          <figcaption class="portrait-plate mono">
-            <span class="plate-tick" aria-hidden="true" />
-            {{ profile.name }} · {{ profile.location.text }}
-          </figcaption>
-        </figure>
+          <div class="hero-id">
+            <h1 id="hero-title" class="hero-name">{{ profile.name }}</h1>
+            <p class="hero-role">Software engineering &amp; applied-ML student · {{ profile.location.text }}</p>
+          </div>
+          <ul class="hero-links" role="list" aria-label="Profiles and documents">
+            <li v-for="link in profile.links" :key="link.url">
+              <a :href="link.url" target="_blank" rel="noopener">
+                {{ link.label }} <span class="ext" aria-hidden="true">↗</span>
+              </a>
+            </li>
+            <li v-if="profile.cv">
+              <a :href="profile.cv.url" target="_blank" rel="noopener">{{ profile.cv.label }}</a>
+            </li>
+            <li><a :href="`mailto:${contact.email}`">Email</a></li>
+          </ul>
+        </header>
+
+        <div class="hero-prose">
+          <p class="hero-statement">{{ profile.headline }}</p>
+          <p v-for="(paragraph, i) in profile.intro" :key="i" class="hero-intro-p">{{ paragraph }}</p>
+          <p class="hero-identity"><MarkedText :text="profile.identity" /></p>
+        </div>
+
+        <p class="hero-availability">
+          <span class="availability-dot" aria-hidden="true" />
+          {{ profile.availability }}
+        </p>
+
+        <!-- Three numbers a recruiter can scan in seconds. Values restate
+             claims that exist elsewhere with the same evidence labels. -->
+        <ul v-if="profile.metrics?.length" class="hero-stats" role="list">
+          <li v-for="metric in profile.metrics" :key="metric.award" class="hero-stat">
+            <span class="stat-value mono">{{ metric.award }}</span>
+            <span class="stat-label">
+              <a
+                v-if="metric.link"
+                :href="metric.link"
+                target="_blank"
+                rel="noopener"
+              >{{ metric.event }} <span aria-hidden="true">↗</span></a>
+              <template v-else>{{ metric.event }}</template>
+            </span>
+          </li>
+        </ul>
       </div>
     </section>
 
-    <!-- Four pillars — slim band -->
-    <section class="section">
+    <!-- Selected work — screenshot-led grid, whole card clickable. -->
+    <section class="section" aria-labelledby="work-label">
       <div class="container">
-        <SectionHeading eyebrow="Four pillars, one direction" title="What I work across" />
-        <ol class="pillar-band" role="list">
-          <li v-for="pillar in interests.pillars" :key="pillar.id" class="pillar">
-            <p class="pillar-number mono">{{ pillar.number }}</p>
-            <h3>{{ pillar.title }}</h3>
-            <p class="pillar-summary"><MarkedText :text="pillar.summary" /></p>
+        <h2 id="work-label" class="quiet-label">Selected work</h2>
+        <ul class="work-grid" role="list">
+          <li v-for="project in workProjects" :key="project.slug" data-reveal>
+            <article class="work-card">
+              <!-- alt is empty on purpose: the project name sits right below,
+                   so a description here would only pad the link's accessible
+                   name. The full alt rides the same image on the case study. -->
+              <img
+                v-if="project.cover"
+                :src="project.cover.src"
+                alt=""
+                :width="project.cover.width"
+                :height="project.cover.height"
+                class="work-cover"
+                loading="lazy"
+              >
+              <div class="work-title-row">
+                <h3 class="work-name">
+                  <NuxtLink :to="`/projects/${project.slug}`" class="card-link work-link">
+                    <MarkedText :text="project.name" />
+                  </NuxtLink>
+                </h3>
+                <StatusBadge :status="project.status" />
+              </div>
+              <p class="work-oneliner"><MarkedText :text="project.oneLiner" /></p>
+            </article>
           </li>
-        </ol>
-        <p class="band-more">
-          <NuxtLink to="/about">Why these connect →</NuxtLink>
-        </p>
+        </ul>
+        <p class="band-more"><NuxtLink to="/projects">All projects →</NuxtLink></p>
       </div>
     </section>
 
     <!-- Now -->
-    <section id="now" class="section now-section">
+    <section id="now" class="section" aria-labelledby="now-label">
       <div class="container">
-        <SectionHeading eyebrow="Now" title="What is in motion" />
+        <h2 id="now-label" class="quiet-label">Now</h2>
         <ul class="now-feed" role="list">
-          <li v-for="(entry, i) in now.entries" :key="i" class="now-entry">
+          <li v-for="(entry, i) in now.entries" :key="i" class="now-entry" data-reveal>
             <span class="now-date mono">{{ entry.date }}</span>
             <p class="now-text"><MarkedText :text="entry.text" /></p>
             <EvidenceLabel :evidence="entry.evidence" />
@@ -116,72 +147,34 @@ const heroPrinciples = principles.principles.slice(0, 2)
       </div>
     </section>
 
-    <!-- Flagship project + compact list -->
-    <section class="section">
+    <!-- How I work — two principles, then the four-pillar line. -->
+    <section id="process" class="section" aria-labelledby="process-label">
       <div class="container">
-        <SectionHeading
-          eyebrow="Selected work"
-          title="What I have built so far"
-        />
-        <ProjectCard v-if="flagship" :project="flagship" />
-        <ul class="project-rows" role="list">
-          <li v-for="project in moreProjects" :key="project.slug">
-            <NuxtLink :to="`/projects/${project.slug}`" class="project-row">
-              <!-- Thumbnail where a project has one; an empty cell otherwise, so
-                   the rows stay aligned whether or not every project ships art.
-                   alt is empty on purpose: the project name sits right beside it,
-                   so a description here would only pad the link's accessible name.
-                   The full alt text still rides the same image on the case study. -->
-              <img
-                v-if="project.cover"
-                :src="project.cover.src"
-                alt=""
-                :width="project.cover.width"
-                :height="project.cover.height"
-                class="row-thumb"
-                loading="lazy"
-              >
-              <span v-else class="row-thumb row-thumb-empty" aria-hidden="true" />
-              <span class="row-name"><MarkedText :text="project.name" /></span>
-              <span class="row-oneliner"><MarkedText :text="project.oneLiner" /></span>
-              <StatusBadge :status="project.status" />
-              <span class="row-arrow" aria-hidden="true">→</span>
-            </NuxtLink>
-          </li>
-        </ul>
-        <p class="band-more"><NuxtLink to="/projects">All projects →</NuxtLink></p>
-      </div>
-    </section>
-
-    <!-- Principles, compact -->
-    <section id="process" class="section">
-      <div class="container">
-        <SectionHeading eyebrow="How I work" title="Rules I work by" />
-
+        <h2 id="process-label" class="quiet-label">How I work</h2>
         <div class="principles-row">
-          <article v-for="principle in heroPrinciples" :key="principle.title" class="principle">
+          <article v-for="principle in heroPrinciples" :key="principle.title" class="principle" data-reveal>
             <h3>{{ principle.title }}</h3>
             <p>{{ principle.text }}</p>
           </article>
         </div>
-
         <p class="process-legend">
-          The full process and AI policy live on the
-          <NuxtLink to="/colophon">colophon</NuxtLink>.
+          I work across {{ pillarLine }} —
+          <NuxtLink to="/about">why these connect</NuxtLink>. The full process and AI policy
+          live on the <NuxtLink to="/colophon">colophon</NuxtLink>.
         </p>
       </div>
     </section>
 
-    <!-- Contact CTA -->
-    <section class="section">
-      <div class="container cta-panel">
-        <h2>Open to internships and collaborations</h2>
-        <p class="lede">
+    <!-- Contact -->
+    <section class="section" aria-labelledby="contact-label">
+      <div class="container contact-block" data-reveal>
+        <h2 id="contact-label" class="quiet-label">Contact</h2>
+        <p class="contact-line">
           I am a student looking for internships, research opportunities, and product work where
           the technical side meets business and governance questions. If that sounds useful, I
           would be glad to hear from you.
         </p>
-        <div class="hero-actions">
+        <div class="contact-actions">
           <a :href="`mailto:${contact.email}`" class="btn btn-primary">Email me</a>
           <NuxtLink to="/contact" class="btn btn-secondary">Contact page</NuxtLink>
         </div>
@@ -191,94 +184,105 @@ const heroPrinciples = principles.principles.slice(0, 2)
 </template>
 
 <style scoped>
+/* The homepage reads as one narrow, calm column — quieter than the site
+   frame. Flat background throughout: hairlines inside lists, no bands. */
+.home .container {
+  max-width: 46rem;
+}
+
 /* Hero */
-.hero {
-  border-bottom: 1px solid var(--color-border);
-  background: var(--color-surface);
-}
-
-.hero-layout {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: var(--space-10);
-  align-items: center;
-  padding-block: var(--space-7);
-}
-
 .hero-grid {
   display: grid;
-  gap: var(--space-4);
-  justify-items: start;
+  gap: var(--space-6);
+  padding-block: var(--space-6) 0;
 }
 
-/* Portrait — archival plate treatment: offset indigo backplate, hairline
-   frame, mono caption plate with a terracotta tick */
-.hero-portrait {
-  position: relative;
-  margin: 0;
-  width: clamp(15rem, 24vw, 20rem);
-}
-
-.portrait-backplate {
-  position: absolute;
-  inset: 0;
-  transform: translate(var(--space-3), var(--space-3));
-  border-radius: var(--radius-l);
-  background: var(--color-accent-tint);
-  border: 1px solid var(--color-accent);
-  z-index: 0;
-}
-
-.hero-portrait .portrait-img {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  aspect-ratio: 1;
-  object-fit: cover;
-  border-radius: var(--radius-l);
-  border: 1px solid var(--color-border-strong);
-  box-shadow: var(--shadow-2);
-}
-
-.portrait-plate {
-  position: relative;
-  z-index: 1;
+.hero-head {
   display: flex;
   align-items: center;
-  gap: var(--space-2);
-  margin-top: var(--space-4);
-  font-size: var(--text-xs);
-  color: var(--color-text-faint);
+  flex-wrap: wrap;
+  gap: var(--space-4) var(--space-5);
 }
 
-.plate-tick {
-  display: inline-block;
-  width: 1.25rem;
-  height: 2px;
-  background: var(--color-accent-2);
+.hero-avatar {
+  width: 3.5rem;
+  height: 3.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--color-border-strong);
+  flex: 0 0 auto;
 }
 
-.hero-statement {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-size: var(--text-xl);
-  color: var(--color-accent-2);
-  max-width: 40ch;
-  line-height: var(--leading-snug);
+.hero-id {
+  display: grid;
+  gap: var(--space-1);
+  margin-inline-end: auto;
 }
 
-/* The internship signal, above the fold — a fact, so it takes the mono
-   audit-trail register rather than display prose. */
-.hero-availability {
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
+.hero-name {
+  font-size: var(--text-2xl);
+}
+
+.hero-role {
   color: var(--color-text-muted);
-  max-width: 52ch;
+  font-size: var(--text-sm);
 }
 
-.hero-intro {
+/* The link strip — plain text links, the quietest possible chrome. */
+.hero-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2) var(--space-4);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.hero-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  font-size: var(--text-sm);
+  font-weight: 560;
+  text-decoration: none;
+  color: var(--color-accent);
+  white-space: nowrap;
+}
+
+.hero-links a:hover {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.ext {
+  color: var(--color-text-faint);
+  font-size: var(--text-xs);
+}
+
+@media (pointer: coarse) {
+  .hero-links a {
+    min-height: 44px;
+  }
+}
+
+.hero-prose {
   display: grid;
   gap: var(--space-3);
+}
+
+/* The owner-approved statement leads as plain confident prose — no italics,
+   no display color. Restraint is the register. */
+.hero-statement {
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  max-width: var(--prose-max);
+}
+
+.hero-intro-p {
+  color: var(--color-text-muted);
+  line-height: var(--leading-relaxed);
+  max-width: var(--prose-max);
 }
 
 .hero-identity {
@@ -288,21 +292,33 @@ const heroPrinciples = principles.principles.slice(0, 2)
   padding-inline-start: var(--space-3);
 }
 
-.hero-actions {
+/* The internship signal — a fact, so it keeps the mono audit-trail register. */
+.hero-availability {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
-  margin-top: var(--space-2);
+  align-items: baseline;
+  gap: var(--space-2);
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  max-width: 60ch;
 }
 
-/* Hero metrics — the numeric register (mono, like the availability line),
-   hairline-separated so the row reads as one strip, not three cards. */
+.availability-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--color-positive);
+  flex: 0 0 auto;
+  align-self: center;
+}
+
+/* Hero metrics — hairline-separated so the row reads as one strip. */
 .hero-stats {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-3) var(--space-5);
   list-style: none;
-  margin: var(--space-3) 0 0;
+  margin: 0;
   padding: 0;
 }
 
@@ -320,7 +336,6 @@ const heroPrinciples = principles.principles.slice(0, 2)
 .stat-value {
   font-size: var(--text-lg);
   font-weight: 600;
-  color: var(--color-accent-2);
 }
 
 .stat-label {
@@ -348,44 +363,86 @@ const heroPrinciples = principles.principles.slice(0, 2)
   }
 }
 
-/* Pillar band — slim */
-.pillar-band {
+/* Quiet section label — the h2 itself is the small stamp, so the heading
+   outline stays honest while the page stays calm. */
+.quiet-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--color-text-faint);
+  margin-bottom: var(--space-5);
+}
+
+/* Selected work — unboxed cards: screenshot, name, one line. */
+.work-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-7) var(--space-6);
   list-style: none;
   margin: 0;
   padding: 0;
-  border-top: 2px solid var(--color-text);
 }
 
-.pillar {
+.work-card {
+  position: relative;
   display: grid;
   gap: var(--space-2);
   align-content: start;
-  padding: var(--space-4) var(--space-4) var(--space-4) 0;
+  height: 100%;
 }
 
-.pillar + .pillar {
-  border-inline-start: 1px solid var(--color-border);
-  padding-inline-start: var(--space-4);
+.work-cover {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-m);
+  background: var(--color-surface);
+  transition: border-color var(--duration-fast) var(--ease-out);
 }
 
-.pillar-number {
-  color: var(--color-accent);
-  font-size: var(--text-sm);
+.work-card:hover .work-cover {
+  border-color: var(--color-border-strong);
 }
 
-.pillar h3 {
+/* start-aligned so a two-line project name keeps the badge on its first
+   line instead of floating it at half height. */
+.work-title-row {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: var(--space-1);
+}
+
+.work-title-row .status-badge {
+  margin-top: 0.15em;
+}
+
+.work-name {
   font-size: var(--text-base);
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
-.pillar-summary {
+.work-name a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.work-card:hover .work-name a {
+  color: var(--color-accent);
+}
+
+.work-oneliner {
   font-size: var(--text-sm);
   color: var(--color-text-muted);
 }
 
 .band-more {
-  margin-top: var(--space-5);
+  margin-top: var(--space-6);
 }
 
 .band-more a {
@@ -403,11 +460,6 @@ const heroPrinciples = principles.principles.slice(0, 2)
 }
 
 /* Now */
-.now-section {
-  background: var(--color-surface);
-  border-block: 1px solid var(--color-border);
-}
-
 .now-feed {
   display: grid;
   gap: var(--space-3);
@@ -434,73 +486,7 @@ const heroPrinciples = principles.principles.slice(0, 2)
   max-width: var(--prose-max);
 }
 
-/* Compact project rows under the flagship */
-.project-rows {
-  list-style: none;
-  margin: var(--space-5) 0 0;
-  padding: 0;
-  border-top: 1px solid var(--color-border);
-}
-
-.project-row {
-  display: grid;
-  grid-template-columns: 6rem 14rem 1fr auto auto;
-  align-items: center;
-  gap: var(--space-4);
-  padding: var(--space-3) 0;
-  border-bottom: 1px solid var(--color-border);
-  text-decoration: none;
-  color: var(--color-text);
-}
-
-/* Same plated treatment as .card-cover, at row scale. */
-.row-thumb {
-  width: 6rem;
-  aspect-ratio: 16 / 9;
-  object-fit: cover;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-s);
-}
-
-/* Reserves the column so names stay aligned, but draws nothing — a visible
-   empty plate reads as a broken image rather than as "no screenshot yet". */
-.row-thumb-empty {
-  border-color: transparent;
-}
-
-.row-name {
-  font-family: var(--font-display);
-  font-weight: 600;
-  /* Needed for the minmax(0, 1fr) track to actually take effect: a grid item
-     will not shrink past its own min-content unless allowed to. A bare domain
-     name has no break opportunity, hence anywhere rather than break-word. */
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-
-.row-oneliner {
-  font-size: var(--text-sm);
-  color: var(--color-text-muted);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.row-arrow {
-  color: var(--color-accent);
-  opacity: 0;
-  transition: opacity var(--duration-fast) var(--ease-out);
-}
-
-.project-row:hover .row-name {
-  color: var(--color-accent);
-}
-
-.project-row:hover .row-arrow {
-  opacity: 1;
-}
-
-/* Principles — compact row */
+/* Principles — compact row on hairlines. */
 .principles-row {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -510,7 +496,7 @@ const heroPrinciples = principles.principles.slice(0, 2)
 .principle {
   display: grid;
   gap: var(--space-1);
-  border-top: 2px solid var(--color-text);
+  border-top: 1px solid var(--color-border);
   padding-top: var(--space-3);
 }
 
@@ -530,75 +516,42 @@ const heroPrinciples = principles.principles.slice(0, 2)
   max-width: var(--prose-max);
 }
 
-/* CTA */
-.cta-panel {
+/* Contact — plain, no panel. */
+.contact-block {
   display: grid;
   gap: var(--space-4);
   justify-items: start;
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-l);
-  background: var(--color-surface);
-  padding: var(--space-7);
 }
 
-@media (max-width: 1040px) {
-  .pillar-band {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .pillar:nth-child(3) {
-    border-inline-start: none;
-    padding-inline-start: 0;
-  }
-
-  /* The one-liner column drops out; thumb, name, status, and arrow keep one row.
-     minmax(0, 1fr) for the name column: a bare 1fr keeps an auto floor, so a
-     long project name ("chamroeunhongleng.me") set its own min-content as the
-     track minimum and pushed the status badge and arrow off a 320px screen. */
-  .project-row {
-    grid-template-columns: 4.5rem minmax(0, 1fr) auto auto;
-    gap: var(--space-3);
-  }
-
-  .row-thumb {
-    width: 4.5rem;
-  }
-
-  .row-oneliner {
-    display: none;
-  }
+.contact-block .quiet-label {
+  margin-bottom: 0;
 }
 
-@media (max-width: 1040px) {
-  .hero-layout {
-    /* minmax(0, …) so a long token can never widen the track past the page. */
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--space-6);
-  }
+.contact-line {
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+  max-width: var(--prose-max);
+}
 
-  .hero-portrait {
-    order: -1;
-    width: clamp(11rem, 40vw, 14rem);
-  }
-
-  /* The portrait plate and the eyebrow render the same string — name ·
-     location. Side by side in two columns that reads as a caption; stacked,
-     the portrait moves above the text (order: -1) and the line repeats itself
-     immediately. Keep the plate only where the columns are side by side.
-     The photo keeps its alt text, so nothing is lost for assistive tech. */
-  .portrait-plate {
-    display: none;
-  }
+.contact-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
 }
 
 @media (max-width: 760px) {
-  .pillar-band,
+  .work-grid,
   .principles-row {
     grid-template-columns: 1fr;
   }
 
-  /* Narrow screens wrap the strip; a sibling-combinator border would leave a
-     dangling hairline on wrapped rows, so the separators come off entirely. */
+  .now-entry {
+    grid-template-columns: 1fr;
+    gap: var(--space-1);
+  }
+
+  /* Narrow screens wrap the strip; hairline separators come off entirely. */
   .hero-stats {
     flex-direction: column;
     gap: var(--space-3);
@@ -607,21 +560,6 @@ const heroPrinciples = principles.principles.slice(0, 2)
   .hero-stat + .hero-stat {
     border-inline-start: none;
     padding-inline-start: 0;
-  }
-
-  .pillar + .pillar {
-    border-inline-start: none;
-    padding-inline-start: 0;
-    border-top: 1px solid var(--color-border);
-  }
-
-  .now-entry {
-    grid-template-columns: 1fr;
-    gap: var(--space-1);
-  }
-
-  .cta-panel {
-    padding: var(--space-5);
   }
 }
 </style>

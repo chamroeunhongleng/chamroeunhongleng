@@ -11,6 +11,14 @@ const FULL_MATRIX = !!process.env.E2E_DEVICES || !!process.env.CI
 // and it exercises the artifact that actually deploys.
 const USE_BUILD = !!process.env.E2E_BUILD
 
+// The port is configurable because `reuseExistingServer` is on locally: if an
+// unrelated dev server already owns 3000, Playwright silently adopts it and the
+// whole suite runs against someone else's site. Override with
+//   E2E_PORT=3100 npm run test:e2e
+// tests/e2e/static-server.mjs reads the same variable.
+const PORT = Number(process.env.E2E_PORT ?? 3000)
+const ORIGIN = `http://127.0.0.1:${PORT}`
+
 // WebKit will not launch on this Windows machine (missing icuuc77.dll), so the
 // iOS/iPadOS projects run Apple *device metrics* — viewport, DPR, touch, mobile
 // UA — on the Chromium engine. That catches layout and responsive regressions,
@@ -52,7 +60,7 @@ export default defineConfig({
     // Windows, and Node can resolve "localhost" to IPv4 first — the webServer
     // health check then polls a dead address until it times out. The --host
     // flag below pins the server to the same IPv4 address this polls.
-    baseURL: 'http://127.0.0.1:3000',
+    baseURL: ORIGIN,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure'
   },
@@ -84,8 +92,8 @@ export default defineConfig({
   webServer: {
     command: USE_BUILD
       ? 'node tests/e2e/static-server.mjs'
-      : 'npm run dev -- --host 127.0.0.1 --port 3000',
-    url: 'http://127.0.0.1:3000',
+      : `npm run dev -- --host 127.0.0.1 --port ${PORT}`,
+    url: ORIGIN,
     reuseExistingServer: !process.env.CI,
     // A cold Nuxt/Vite dev start on Windows can exceed the 120s default.
     timeout: 240_000

@@ -135,6 +135,11 @@ describe('guard-bash hook', () => {
     expect(runGuard(command).blocked, `expected to be allowed: ${command}`).toBe(false)
   })
 
+  // Explicit timeout, not the 5s default: this body spawns the hook once per
+  // BLOCKED entry (44 of them at ~100ms per `node` start on Windows), so it
+  // sits right on the default budget and fails for time rather than for a
+  // real bypass. The spawns are the point — the contract under test is the
+  // subprocess exit code — so the budget moves, not the coverage.
   it('cannot be bypassed by naming .env.example elsewhere in the command', () => {
     // The original bug: the allowance was checked against the whole command
     // for every rule, so this suffix disabled all nine of them.
@@ -142,7 +147,7 @@ describe('guard-bash hook', () => {
       const smuggled = `${command} # see .env.example`
       expect(runGuard(smuggled).blocked, `bypass via .env.example: ${smuggled}`).toBe(true)
     }
-  })
+  }, 30_000)
 
   it('cannot be bypassed by moving the command off the first line', () => {
     // Several rules are single-line by construction; the hook flattens

@@ -19,7 +19,7 @@
   --color-border-strong: #c9c2b4;
   --color-text: #1c1b22; /* ~15.6:1 on bg */
   --color-text-muted: #5a5750; /* ~6.4:1 on bg */
-  --color-text-faint: #77726a; /* ~4.6:1 on bg — still AA for normal text */
+  --color-text-faint: #6d6861; /* AA on every light surface: 5.5 on white, 5.2 on bg, 4.8 on sunken (#77726a hit 4.1 on sunken — a Lighthouse failure) */
   --color-accent: #4338ca; /* deep indigo, ~7.2:1 on bg */
   --color-accent-hover: #3730a3;
   --color-accent-contrast: #ffffff;

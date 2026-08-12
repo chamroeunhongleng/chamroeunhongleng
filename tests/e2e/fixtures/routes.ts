@@ -15,7 +15,8 @@ export const STATIC_ROUTES = [
   '/journey',
   '/learning',
   '/contact',
-  '/colophon'
+  '/colophon',
+  '/cv'
 ] as const
 
 export const PROJECT_ROUTES = publishedProjects.map((p) => `/projects/${p.slug}`)

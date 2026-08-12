@@ -15,7 +15,8 @@ import {
   processSchema,
   profileSchema,
   projectSchema,
-  type Project
+  type Project,
+  type ProjectStatus
 } from '~~/shared/schemas/index'
 
 import profileJson from '~~/content/profile.json'
@@ -47,25 +48,29 @@ const projectModules = import.meta.glob('../../content/projects/*.json', {
   import: 'default'
 })
 
-const STATUS_ORDER = [
-  'Production',
-  'Pilot',
-  'Public demo',
-  'Pre-pilot',
-  'Prototype',
-  'Experiment',
-  'Research',
-  'Idea',
-  'Paused',
-  'Archived'
-]
+// Sort rank per status, keyed by the vocabulary type: renaming or adding a
+// status in shared/schemas/enums.ts is a compile error here — the previous
+// untyped string[] let a drifted status fall to indexOf() === -1 and silently
+// sort ABOVE Production.
+const STATUS_RANK: Record<ProjectStatus, number> = {
+  'Production': 0,
+  'Pilot': 1,
+  'Public demo': 2,
+  'Pre-pilot': 3,
+  'Prototype': 4,
+  'Experiment': 5,
+  'Research': 6,
+  'Idea': 7,
+  'Paused': 8,
+  'Archived': 9
+}
 
 export const projects: Project[] = Object.values(projectModules)
   .map((raw) => projectSchema.parse(raw))
   .filter((p) => p.enabled)
   .sort((a, b) => {
     if (a.featured !== b.featured) return a.featured ? -1 : 1
-    const statusDiff = STATUS_ORDER.indexOf(a.status) - STATUS_ORDER.indexOf(b.status)
+    const statusDiff = STATUS_RANK[a.status] - STATUS_RANK[b.status]
     if (statusDiff !== 0) return statusDiff
     // Editorial override before the alphabet: two projects of equal maturity
     // should not be ranked by their initials when the owner has said otherwise.

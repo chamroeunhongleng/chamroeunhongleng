@@ -32,6 +32,7 @@ export const STATIC_NAV_TARGETS: readonly NavTarget[] = [
   { path: '/learning#reading-title', what: 'Reading notes' },
   { path: '/learning#roadmap-title', what: 'Learning roadmap — now, next, later' },
   { path: '/contact', what: 'Email, contact form, socials, what he is (not) seeking' },
+  { path: '/cv', what: 'The CV as a page — education, projects, experience, awards, skills; PDF download' },
   { path: '/colophon', what: 'How this site was built and the AI-use policy' },
   { path: '/colophon#policy-title', what: 'The AI policy — what stays human, what AI assists' },
   { path: '/colophon#build-title', what: 'How the site is built technically' },

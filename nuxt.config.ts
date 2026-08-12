@@ -1,6 +1,7 @@
 import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
+import tailwindcss from '@tailwindcss/vite'
 // Explicit import (instead of Nuxt's config-time auto-import) so verification
 // scripts can import this config and compare routeRules headers to vercel.json.
 import { defineNuxtConfig } from 'nuxt/config'
@@ -27,18 +28,27 @@ const projectRoutes = existsSync(projectsDir)
       .map((p) => `/projects/${p.slug}`)
   : []
 
-const staticRoutes = ['/', '/about', '/projects', '/journey', '/learning', '/contact', '/colophon']
+// NOTE: this list is mirrored in scripts/check-seo.ts, which fails the build on
+// any sitemap route it did not expect. Adding a page means adding it in both —
+// the same load-bearing duplication as the security headers below.
+const staticRoutes = ['/', '/about', '/projects', '/journey', '/learning', '/contact', '/colophon', '/cv']
 
 export default defineNuxtConfig({
   compatibilityDate: '2026-08-01',
   devtools: { enabled: false },
   modules: ['@nuxt/eslint', '@nuxtjs/sitemap'],
   components: [{ path: '~/components', pathPrefix: false }],
+  vite: {
+    plugins: [tailwindcss()]
+  },
   css: [
     '@fontsource-variable/fraunces/index.css',
     '@fontsource-variable/inter/index.css',
     '@fontsource/ibm-plex-mono/400.css',
     '@fontsource/ibm-plex-mono/500.css',
+    // Tailwind first: where a name exists in both (--text-lg, --leading-normal,
+    // --tracking-wide, --ease-out), the token defined below wins.
+    '~/assets/css/tailwind.css',
     '~/assets/css/tokens.css',
     '~/assets/css/base.css',
     '~/assets/css/typography.css',
@@ -87,7 +97,15 @@ export default defineNuxtConfig({
           // the OS preference. Values track --color-bg in tokens.css.
           innerHTML:
             "(function(){try{var t=localStorage.getItem('theme');if(t!=='dark'&&t!=='light'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t;var m=document.querySelector('meta[name=\"theme-color\"]');if(!m){m=document.createElement('meta');m.name='theme-color';document.head.appendChild(m)}m.content=t==='dark'?'#131318':'#FAF7F2'}catch(e){}})();"
-        }
+        },
+        // Vercel Web Analytics (owner-approved; cookie-free aggregate counts).
+        // The script is served by the Vercel edge, NOT a file in the build
+        // output — so it ships only when the deploy build sets
+        // NUXT_PUBLIC_ANALYTICS=1. Local builds, check:links, and e2e never
+        // reference it (locally it would 404 and fail the console-error test).
+        ...(process.env.NUXT_PUBLIC_ANALYTICS === '1'
+          ? [{ src: '/_vercel/insights/script.js', defer: true }]
+          : [])
       ]
     }
   },

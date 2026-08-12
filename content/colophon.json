@@ -18,7 +18,7 @@
     ]
   },
   "howBuilt": [
-    "Static Nuxt 4 site with hand-written CSS design tokens; light and dark themes; no analytics, no trackers. The only runtime network call is the optional chat assistant: messages typed into it go through a site-owned serverless function to Anthropic's Claude API, are answered from this site's published content only, and are not stored by the site.",
+    "Static Nuxt 4 site with hand-written CSS design tokens, and Tailwind utilities that read those same tokens; light and dark themes; no cookies and no third-party trackers. Visits are counted by Vercel Web Analytics — cookie-free, aggregated page counts, loaded from this site's own domain and processed by Vercel. Beyond that, the only runtime network call is the optional chat assistant: messages typed into it go through a site-owned serverless function to Anthropic's Claude API, are answered from this site's published content only, and are not stored by the site.",
     "All content lives in JSON files validated by zod schemas — a claim without an evidence label fails the build, not a style review.",
     "Three content modes (demo, review, production). In production mode the build fails while any placeholder, demo project, or unverified required field remains.",
     "A single verification command (npm run verify) checks structure, secrets, content schemas, links, accessibility basics, SEO metadata, and the production gate itself."

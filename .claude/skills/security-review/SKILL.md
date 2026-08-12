@@ -9,7 +9,10 @@ description: Security posture of this site and its serverless function, and what
 Static Nuxt site PLUS one serverless function: `api/chat.ts`, which holds
 `ANTHROPIC_API_KEY` and processes untrusted visitor input. Two runtime
 dependencies (`@anthropic-ai/sdk`, `zod`) exist for it. No forms that POST,
-no analytics, no external requests from the static pages (fonts self-hosted).
+no third-party requests from the static pages (fonts self-hosted). Analytics
+is Vercel Web Analytics: one same-origin script (`/_vercel/insights/script.js`,
+served by the Vercel edge, not a build file), included only when the deploy
+build sets `NUXT_PUBLIC_ANALYTICS=1` — local builds and tests never ship it.
 
 Review that function FIRST — input validation, rate limiting, the origin
 check, prompt injection via client-supplied `history`, and what reaches the
@@ -43,7 +46,9 @@ the one that matters in production; `check-structure` fails if they drift.
 
 ## When reviewing a change
 1. `npm run check:secrets` and `npm run check:structure` pass.
-2. No new external request at runtime (check generated HTML for foreign origins).
+2. No new external request at runtime (check generated HTML for foreign
+   origins; the same-origin `/_vercel/insights/` analytics script is the one
+   sanctioned exception).
 3. No inline event handlers or v-html with content data.
 4. `npm test` passes, including `tests/hooks/guard-bash.test.ts` — the guard
    hook's rules are only as good as that file, and two of them were inert

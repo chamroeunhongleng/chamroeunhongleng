@@ -1,0 +1,78 @@
+/*
+ * Tailwind v4 — utilities only, driven by the design tokens.
+ *
+ * Two deliberate departures from a stock install:
+ *
+ * 1. NO PREFLIGHT. base.css and typography.css already own the element reset
+ *    and the heading/list/link styles for 33 components. Importing the full
+ *    `tailwindcss` entry would re-reset all of it underneath them. Only the
+ *    theme and utilities layers are imported here.
+ *
+ * 2. Tailwind reads the tokens; it never redefines them. tokens.css stays the
+ *    single source of colour, type, and space (CLAUDE.md rule 7), and this file
+ *    is the boundary that exposes it to utilities.
+ *
+ * Load order matters: this file comes FIRST in nuxt.config.ts `css`, so where a
+ * name exists in both (--text-lg, --leading-normal, --tracking-wide, --ease-out)
+ * the token wins and the utility inherits the site's scale. That is intended.
+ */
+@layer theme, base, components, utilities;
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
+
+/* Class detection starts at app/ — pages and components are the only places
+   utilities are written. Paths are relative to this file. */
+@source '../../';
+
+/* `dark:` must follow the data-theme attribute that ThemeToggle.vue sets, not
+   prefers-color-scheme — the toggle can disagree with the OS on purpose. */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+/*
+ * Runtime-swappable values: `inline` so a utility resolves the token at use
+ * time. :root[data-theme='dark'] rewrites these underneath, and the utility
+ * follows without Tailwind emitting a second copy of the palette.
+ *
+ * Names are deliberately NOT the token names. Tailwind's namespace is
+ * --color-*, so `--color-surface: var(--color-surface)` would be a circular
+ * definition that kills the token site-wide. Utility names read: bg-paper,
+ * text-ink, border-line, font-title.
+ */
+@theme inline {
+  --color-paper: var(--color-bg);
+  --color-card: var(--color-surface);
+  --color-sunken: var(--color-surface-sunken);
+  --color-line: var(--color-border);
+  --color-line-strong: var(--color-border-strong);
+
+  --color-ink: var(--color-text);
+  --color-ink-muted: var(--color-text-muted);
+  --color-ink-faint: var(--color-text-faint);
+
+  --color-brand: var(--color-accent);
+  --color-brand-hover: var(--color-accent-hover);
+  --color-brand-contrast: var(--color-accent-contrast);
+  --color-clay: var(--color-accent-2);
+
+  --color-attention: var(--color-warn);
+  --color-success: var(--color-positive);
+  --color-error: var(--color-danger);
+
+  --font-title: var(--font-display);
+  --font-text: var(--font-body);
+  --font-code: var(--font-mono);
+}
+
+/*
+ * Breakpoints are NOT inline: media queries cannot read custom properties, so
+ * Tailwind resolves these at build time. Values mirror the conventions already
+ * in tokens.css and the components — 820px in particular is a contract, asserted
+ * by tests/e2e/responsive.spec.ts (header swaps to the mobile menu at or below
+ * it). Tailwind's stock md (768px) would have straddled that line.
+ */
+@theme {
+  --breakpoint-sm: 480px;
+  --breakpoint-md: 760px;
+  --breakpoint-nav: 820px;
+  --breakpoint-lg: 1040px;
+}

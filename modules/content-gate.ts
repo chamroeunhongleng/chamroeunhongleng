@@ -17,10 +17,16 @@ import { PORTFOLIO_MODES, type PortfolioMode } from '../shared/schemas/index'
 export default defineNuxtModule({
   meta: { name: 'content-gate' },
   setup() {
-    const rawMode = process.env.NUXT_PUBLIC_PORTFOLIO_MODE ?? 'review'
-    const mode = (PORTFOLIO_MODES as readonly string[]).includes(rawMode)
-      ? (rawMode as PortfolioMode)
-      : 'review'
+    // Unset defaults to review; set-but-unrecognized fails LOUD. Falling back
+    // silently meant a typo like "producton" built in review mode — where
+    // errors are logged and ignored — and voided the gate's whole contract.
+    const rawMode = process.env.NUXT_PUBLIC_PORTFOLIO_MODE?.trim() || undefined
+    if (rawMode !== undefined && !(PORTFOLIO_MODES as readonly string[]).includes(rawMode)) {
+      throw new Error(
+        `[content-gate] Unknown NUXT_PUBLIC_PORTFOLIO_MODE "${rawMode}" — expected one of: ${PORTFOLIO_MODES.join(', ')}.`
+      )
+    }
+    const mode = (rawMode ?? 'review') as PortfolioMode
 
     const { bundle, issues } = loadContent()
     if (!bundle) {

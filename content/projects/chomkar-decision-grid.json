@@ -16,6 +16,14 @@
   "enabled": true,
   "demo": false,
   "question": "Can farm-lot assembly be made fully auditable with deterministic code, designed failure cases, and human approval gates?",
+  "cover": {
+    "src": "/images/chomkar-decision-grid-cover.jpg",
+    "width": 1600,
+    "height": 900,
+    "alt": "Illustration: a weighted decision matrix scores three farm lots — chili, cucumber, and long bean — on water, soil, market, and labour; the top-scoring row is marked “recommended”.",
+    "caption": "A designed illustration of what the engine does — deterministic weighted scores, with a human approving the recommendation. The lots and numbers shown are illustrative; the tool itself runs locally.",
+    "demo": false
+  },
   "problem": "A buyer may need one to three tonnes of produce while individual farms declare only a few hundred kilograms each. Assembling the lot manually makes pricing, route risk, and fairness impossible to audit — and an AI that invents the numbers would be worse, not better.",
   "targetUsers": "Agricultural cooperators and coordinators who assemble multi-farm lots against buyer orders, and — as an audience for the method — anyone designing decision systems where a model must never own the arithmetic.",
   "whyItMatters": "Coordination failures cost smallholder farmers real income. A recommendation system for money-adjacent decisions only deserves trust if every number can be re-derived, every refusal is honest, and a human explicitly approves the outcome.",

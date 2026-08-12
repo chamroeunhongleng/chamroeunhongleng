@@ -322,10 +322,22 @@ watch(
    Deliberately in em, not px: media-query em tracks the browser's default font
    size, so raising the Android/Chrome font-scale setting retires the name at
    the point it stops fitting — the same trigger, expressed in the user's own
-   units. 28.125em = 450px at the default 16px. */
+   units. 28.125em = 450px at the default 16px.
+
+   Visually hidden, not display:none — the monogram is aria-hidden, so the
+   name must stay in the accessibility tree or the brand link has no
+   accessible name on phones (a Lighthouse link-name failure). */
 @media (max-width: 28.125em) {
   .brand-name {
-    display: none;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
   }
 }
 </style>

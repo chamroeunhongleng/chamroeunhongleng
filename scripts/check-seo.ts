@@ -100,7 +100,8 @@ if (!existsSync(sitemapPath)) {
       return url.pathname.replace(/\/$/, '') || '/'
     })
   )
-  const staticRoutes = ['/', '/about', '/projects', '/journey', '/learning', '/contact', '/colophon']
+  // Mirrors nuxt.config.ts staticRoutes — both lists move together.
+  const staticRoutes = ['/', '/about', '/projects', '/journey', '/learning', '/contact', '/colophon', '/cv']
   const projectRoutes = readdirSync(join(root, 'content', 'projects'))
     .filter((f) => f.endsWith('.json'))
     .map((f) => JSON.parse(readFileSync(join(root, 'content', 'projects', f), 'utf8')) as { slug: string; enabled?: boolean })

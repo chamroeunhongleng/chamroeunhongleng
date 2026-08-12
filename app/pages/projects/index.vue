@@ -14,6 +14,11 @@ usePageMeta({
     'Case studies across AI, software, business, and governance — each with honest status labels and evidence-labeled claims.'
 })
 
+// Cards below the fold fade in on scroll (no-op for no-JS, reduced-motion,
+// and automated runs — see useReveal). Cards re-rendered by a filter change
+// simply appear; only the initial page load animates.
+useReveal()
+
 const pillarFilter = ref<PillarId | 'all'>('all')
 const statusFilter = ref<string>('all')
 const search = ref('')
@@ -103,7 +108,7 @@ const filtered = computed(() =>
       </p>
 
       <div v-if="filtered.length" class="project-grid">
-        <ProjectCard v-for="project in filtered" :key="project.slug" :project="project" heading-level="h2" />
+        <ProjectCard v-for="project in filtered" :key="project.slug" :project="project" heading-level="h2" data-reveal />
       </div>
       <p v-else class="empty-state">
         Nothing matches those filters — try clearing the search or picking another pillar.

@@ -37,7 +37,6 @@ function accessibleName(el: HTMLElement): string {
   return (
     el.getAttribute('aria-label')
     ?? (el.getAttribute('aria-labelledby') ? 'labelledby' : '')
-    ?? ''
   ) || el.text.trim()
 }
 

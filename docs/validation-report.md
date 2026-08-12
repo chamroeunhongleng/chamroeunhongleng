@@ -9,7 +9,10 @@
 > Several figures below have since moved: the suite is now 175 tests across
 > 12 files (was 52/7), the production gate self-test now expects and gets a
 > PASS because the placeholder content it was blocking on is resolved (was
-> "36 readable issues"), and CI has run on every push since 2026-08-05. One
+> "36 readable issues"), and CI has run on every push since 2026-08-05. Since
+> 2026-08-12 the site also publishes a `/cv` page — 14 sitemap routes, was 13 —
+> which is now the single source for the downloadable PDF, and the styling
+> layer adds Tailwind utilities that read the same design tokens. One
 > claim in it was outright wrong when written; see the correction under
 > "Also verified directly". For current status, run `npm run verify` and read
 > the CI badges in the README.

@@ -43,10 +43,12 @@ const MAX_SUGGESTED = 3
 const MAX_BODY_BYTES = (MAX_MESSAGE_LENGTH + MAX_HISTORY_ENTRIES * MAX_HISTORY_ENTRY_LENGTH) * 3 + 4096
 
 /** SDK defaults are 10 minutes and 2 retries. vercel.json caps the function at
- *  30s, so those defaults mean a slow upstream burns three billable attempts
- *  and the platform kills us before the catch block can answer — the client
- *  sees a bare 504 instead of the friendly 503. Stay inside the budget. */
-const REQUEST_TIMEOUT_MS = 20_000
+ *  30s, so the WHOLE retry budget must fit inside it, or the platform kills us
+ *  before the catch block can answer and the client sees a bare 504 instead of
+ *  the friendly 503. SDK timeouts are retried, so the worst case is
+ *  (MAX_RETRIES + 1) × REQUEST_TIMEOUT_MS plus ~1s backoff — 12s × 2 + 1s ≈ 25s,
+ *  inside the cap. The previous 20s value allowed ~41s and reintroduced the 504. */
+const REQUEST_TIMEOUT_MS = 12_000
 const MAX_RETRIES = 1
 
 /**

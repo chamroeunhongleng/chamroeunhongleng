@@ -14,8 +14,22 @@ fake dashboards, logo walls, or skill bars.
 ## Token contract
 All colors, spacing, radii, type sizes, and motion values come from
 `app/assets/css/tokens.css` custom properties. A component that hardcodes a hex
-value or pixel size is wrong. Breakpoints are 1040px and 760px, written as
-literal media queries (custom properties don't work there).
+value or pixel size is wrong.
+
+Tailwind utilities are available and read those same tokens — the bridge is
+`app/assets/css/tailwind.css`, which maps them with `@theme inline` so the dark
+swap still works at runtime. Utility names differ from token names on purpose
+(a self-referential `--color-x: var(--color-x)` would break the token):
+`bg-paper`, `bg-card`, `text-ink`, `text-ink-muted`, `text-ink-faint`,
+`text-brand`, `text-clay`, `border-line`, `font-title`, `font-text`, `font-code`.
+Preflight is deliberately not imported — base.css and typography.css own the
+element reset — so utilities add, they never re-reset.
+
+Breakpoints: `sm:` 480px, `md:` 760px, `nav:` 820px, `lg:` 1040px. These mirror
+the literal media queries already in the components (custom properties don't
+work in media queries, so Tailwind resolves them at build time). 820px is the
+header's mobile-menu contract, asserted by `tests/e2e/responsive.spec.ts`.
+`dark:` follows the `data-theme` attribute the toggle sets, not the OS.
 
 ## Contrast table (verify when touching colors — both themes)
 | Pair | Light | Dark | Minimum |

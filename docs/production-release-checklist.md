@@ -32,5 +32,13 @@ only you execute what is below it.
 - [ ] Know the rollback: Vercel → Deployments → promote previous
 
 ## Explicitly out of scope until you decide otherwise
-Analytics (none installed), a contact form (mailto by design), legal/privacy
-pages (add only with real review), third-party embeds (none).
+A contact form (mailto by design), legal/privacy pages (add only with real
+review), third-party embeds (none).
+
+## Analytics (owner-approved 2026-08-12)
+Vercel Web Analytics — cookie-free aggregate page counts. The script tag is
+included only when the deploy build sets `NUXT_PUBLIC_ANALYTICS=1` (local
+builds and tests never reference it, because `/_vercel/insights/script.js`
+exists only on Vercel's edge, not in the build output). Web Analytics must
+also be enabled on the Vercel project (Project → Analytics → Enable) or the
+live script 404s.

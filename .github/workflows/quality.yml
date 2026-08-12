@@ -39,3 +39,35 @@ jobs:
           name: site
           path: .output/public
           retention-days: 7
+
+  # The Playwright suite is the only coverage for hydration, responsive
+  # breakpoints, and the chat client contract — it must not depend on being
+  # run locally. Laptop project only: the device matrix stays an on-demand
+  # local tool (npm run test:e2e:devices).
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Install Playwright Chromium
+        run: npx playwright install chromium --with-deps
+
+      - name: End-to-end tests (prerendered build)
+        run: npm run test:e2e -- --project=laptop
+
+      - name: Upload Playwright report
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: playwright-report
+          retention-days: 7

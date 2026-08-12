@@ -21,8 +21,10 @@ The site is a prerendered Nuxt application served as static files, plus
 - **The contact form never submits anything.** It composes a `mailto:` link in
   the browser and hands it to the visitor's mail client — no endpoint, no
   third-party form service, no storage.
-- No database, no authentication, no analytics, no cookies. Fonts are
-  self-hosted, so page rendering makes no third-party requests.
+- No database, no authentication, no cookies. Analytics are Vercel Web
+  Analytics: cookie-free aggregate page counts, loaded from the site's own
+  domain. Fonts are self-hosted, so page rendering makes no third-party
+  requests.
 
 ## Dependencies and secrets
 - Two runtime dependencies, both used only by the serverless function:

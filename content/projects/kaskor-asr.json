@@ -18,6 +18,14 @@
   "enabled": true,
   "demo": false,
   "question": "Can a fully public fine-tuning pipeline — code, splits, and released weights — make Khmer speech recognition approachable with limited public data?",
+  "cover": {
+    "src": "/images/kaskor-asr-cover.jpg",
+    "width": 1600,
+    "height": 900,
+    "alt": "Illustration: an audio waveform flows into a transcript card reading “សួស្តី ខ្ញុំឈ្មោះ ចំរើន” (“Hello, my name is Chamroeun”), with the labels “Whisper-small, fine-tuned” and “open weights · CLI”.",
+    "caption": "A designed illustration of the pipeline's job — Khmer speech in, Khmer text out. Kaskor is a model and a CLI; there is no product screen to photograph.",
+    "demo": false
+  },
   "problem": "Khmer speech interfaces are held back by low-resource data, evaluation that standard word-based metrics get wrong, and research pipelines that nobody else can rerun. Most Khmer ASR work is not reproducible by a second person, which makes results hard to trust and harder to build on.",
   "targetUsers": "Developers and researchers who need Khmer speech-to-text building blocks, and — eventually — voice-first products for Khmer speakers, starting with agricultural data intake where typing is impractical.",
   "whyItMatters": "Speech is the natural interface for many Khmer-speaking users, especially in field contexts. Because the training and evaluation code is public, every future improvement in data or compute can translate into a better model instead of a new unverifiable claim — even though the raw audio itself stays private.",

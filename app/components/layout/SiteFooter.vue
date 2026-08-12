@@ -25,7 +25,10 @@ const YEAR = new Date().getFullYear()
 
     <div class="container footer-meta">
       <p>© {{ YEAR }} {{ profile.name }} · Every important claim on this site carries an evidence label.</p>
-      <NuxtLink to="/colophon" class="colophon-link">Colophon &amp; AI policy</NuxtLink>
+      <span class="footer-links">
+        <NuxtLink to="/cv" class="colophon-link">CV</NuxtLink>
+        <NuxtLink to="/colophon" class="colophon-link">Colophon &amp; AI policy</NuxtLink>
+      </span>
     </div>
   </footer>
 </template>
@@ -100,6 +103,15 @@ const YEAR = new Date().getFullYear()
   font-size: var(--text-xs);
   font-family: var(--font-mono);
   max-width: none;
+}
+
+/* Secondary pages sit here rather than in the header: a sixth item in the
+   desktop nav wraps the header onto two rows between 821px and 899px. */
+.footer-links {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--space-4);
+  flex-wrap: wrap;
 }
 
 .colophon-link {

@@ -33,8 +33,8 @@
     "src": "/images/portfolio-site.jpg",
     "width": 1600,
     "height": 900,
-    "alt": "The chamroeunhongleng.me homepage: the headline “Applied machine learning and the software around it”, an internship availability line, and a portrait photograph.",
-    "caption": "The site's own homepage — the hero, the availability line, and the evidence-labelled prose this case study describes.",
+    "alt": "The chamroeunhongleng.me homepage: name and role beside a small portrait, a strip of profile links, an internship availability line, and evidence-labelled introduction prose.",
+    "caption": "The site's own homepage — the name-first hero, the availability line, and the evidence-labelled prose this case study describes.",
     "demo": false
   },
   "problem": "Student portfolios overstate. Not usually by lying, but by leaving things comfortable and vague: a prototype reads like a product, a local script reads like a deployment, and a number appears with no source. I wanted the opposite problem — a site where being vague is harder than being accurate, because the tooling will not let a soft claim through.",
@@ -56,7 +56,7 @@
   "methods": "Deterministic tooling over trust: schema validation, one shared rule engine, unit tests, typechecking, linting, link and asset checking, structural accessibility checks, SEO metadata checks, and a self-test that asks whether a production build would pass. The site assistant is the one AI feature, and it is constrained rather than clever — its knowledge is built from the same validated content the pages render, placeholder-marked fields are dropped from what it can see, and it can only navigate to pages derived from the content.",
   "businessValue": "Not a commercial product. Its value is professional: it is the artifact I point at when I claim I can design a typed system, hold it to automated standards, and lead coding agents without losing control of what ships. It also does the ordinary job of a portfolio, which is to get me an internship interview.",
   "contractsPolicy": "The site publishes only claims I am willing to stand behind, and only personal data I have chosen to make public — a contact email, not a phone number or date of birth. Third-party material is treated carefully: no school logos, no press citation I could not verify, and no photograph of other people without consent. Documents that would expose other people's personal data stay private and are shown on request instead.",
-  "dataPrivacy": "No analytics and no trackers, so ordinary visits are not recorded at all. The one exception is stated openly: a message typed into the site assistant travels through a site-owned serverless function to the Claude API to be answered, and the site does not store it. Private evidence — certificates, rosters, private repositories — is referenced by label and never uploaded.",
+  "dataPrivacy": "No cookies and no third-party trackers. Page visits are counted by Vercel Web Analytics — cookie-free and aggregated, processed by Vercel, so no individual visitor profile exists. The other runtime call is stated just as openly: a message typed into the site assistant travels through a site-owned serverless function to the Claude API to be answered, and the site does not store it. Private evidence — certificates, rosters, private repositories — is referenced by label and never uploaded.",
   "risks": [
     "Evidence labels are only as honest as the person applying them; the tooling can enforce that a label exists, not that it is the right one",
     "A visitor may read the labels as hedging rather than rigour, and honest hedging can cost me an opportunity a bolder page would win",
@@ -81,7 +81,7 @@
   ],
   "completedWork": [
     {
-      "text": "A static Nuxt 4 site in TypeScript with schema-validated content, design tokens, light and dark themes, and no analytics or trackers — live on its own domain with HTTPS.",
+      "text": "A static Nuxt 4 site in TypeScript with schema-validated content, design tokens, light and dark themes, and cookie-free first-party analytics with no third-party trackers — live on its own domain with HTTPS.",
       "evidence": "Public evidence",
       "workState": "Completed",
       "link": "https://chamroeunhongleng.me"
@@ -155,7 +155,7 @@
       "Honest hedging over confident marketing — safer for the reader, and sometimes weaker as a sales page",
       "A strict production gate that will block my own release rather than let a vague claim through",
       "Content in JSON validated by schemas instead of a content management system — more discipline, less convenience",
-      "No analytics at all, which means no visitor data to learn from"
+      "Analytics are aggregate page counts only — still no per-visitor data to learn from"
     ]
   },
   "lessonsLearned": [
@@ -168,7 +168,7 @@
   "nextValidation": [
     "Fix the remote builds so deployment does not depend on my own machine",
     "Publish the evaluation results and model card that some claims on this site still point to as planned",
-    "Watch which pages a recruiter actually reads, without adding trackers — by asking them",
+    "Compare which pages recruiters actually read — cookie-free aggregate counts — with what they say in conversations",
     "Keep the labels current as claims strengthen: several are one document or one published result away from a stronger label"
   ],
   "publicLinks": [

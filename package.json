@@ -14,7 +14,7 @@
     "generate:production": "cross-env NUXT_PUBLIC_PORTFOLIO_MODE=production nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "typecheck": "nuxt typecheck",
+    "typecheck": "nuxt typecheck && vue-tsc -p tsconfig.tooling.json",
     "lint": "eslint .",
     "test": "vitest run",
     "test:e2e": "npm run generate && cross-env E2E_BUILD=1 playwright test",
@@ -31,6 +31,7 @@
     "check:seo": "node --import jiti/register scripts/check-seo.ts",
     "eval:chat": "node --import jiti/register scripts/eval-chat.ts",
     "assets:generate": "node --import jiti/register scripts/generate-assets.ts",
+    "cv:pdf": "npm run generate && node scripts/cv/render.mjs",
     "verify": "node --import jiti/register scripts/verify.ts"
   },
   "dependencies": {
@@ -45,6 +46,7 @@
     "@nuxtjs/sitemap": "^8.2.2",
     "@playwright/test": "^1.62.1",
     "@resvg/resvg-js": "^2.6.2",
+    "@tailwindcss/vite": "^4.3.3",
     "@types/node": "^26.1.2",
     "@vercel/node": "^5.0.0",
     "@vitejs/plugin-vue": "^6.0.0",
@@ -55,6 +57,7 @@
     "jiti": "^2.4.2",
     "node-html-parser": "^9.0.1",
     "nuxt": "^4.4.8",
+    "tailwindcss": "^4.3.3",
     "typescript": "^5.8.0",
     "vitest": "^3.1.0",
     "vue": "^3.5.39",

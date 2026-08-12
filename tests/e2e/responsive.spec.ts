@@ -183,7 +183,7 @@ test.describe('Touch targets', () => {
       [0, 16],
       [-16, 0],
       [16, 0]
-    ]) {
+    ] as const) {
       expect(
         await hitAt(page, '.evidence-link', dx, dy),
         `a tap ${dx},${dy}px from the arrow's centre missed it`
@@ -257,6 +257,9 @@ test.describe('Responsive layout', () => {
     '/',
     '/projects',
     '/about',
+    // /cv carries long unbroken URLs in a mono face and a two-column award
+    // list — both classic sources of sideways scroll on a 320px phone.
+    '/cv',
     ...publishedProjects.map((p) => `/projects/${p.slug}`)
   ]
 
