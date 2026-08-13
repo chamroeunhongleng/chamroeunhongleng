@@ -81,6 +81,21 @@ if (!loaded) console.error('chat startup: loadContent() returned no bundle — a
 
 // ── Origin gate ───────────────────────────────────────────────────────────
 /**
+ * Vercel preview hosts for this project are `<project>-<hash>-<team>.vercel.app`,
+ * alongside the `<project>.vercel.app` production alias.
+ *
+ * The team slug has to be in the pattern. `.vercel.app` is a namespace shared
+ * by every Vercel user, so a rule that only asked whether the host STARTED
+ * with "chamroeunhongleng" admitted `chamroeunhongleng-anything.vercel.app` —
+ * a name anyone can register — while its comment claimed it admitted previews
+ * of this project only. Update both constants together if the project is ever
+ * moved to another Vercel scope; previews will 403 until they match, which is
+ * the safe direction for this to fail.
+ */
+const PRODUCTION_ALIAS = 'chamroeunhongleng-portfolio.vercel.app'
+const PREVIEW_HOST = /^chamroeunhongleng-portfolio-[a-z0-9]+-chnai-lab\.vercel\.app$/
+
+/**
  * Same-origin check. The fetch spec makes browsers send Origin on every POST,
  * same-origin included, so the site's own widget always carries one and a
  * missing header means a non-browser caller — those get 403 too. That closes
@@ -90,21 +105,27 @@ if (!loaded) console.error('chat startup: loadContent() returned no bundle — a
  */
 export function isAllowedOrigin(origin: string | undefined): boolean {
   if (!origin) return false
-  let host: string
+  let url: URL
   try {
-    host = new URL(origin).hostname
+    url = new URL(origin)
   } catch {
     return false
   }
+  const { hostname, protocol } = url
+
+  // The dev server is http on an arbitrary port, so scheme and port are free
+  // here and nowhere else.
+  if (hostname === 'localhost' || hostname === '127.0.0.1') return true
+
+  // Everything else is an https site. Matching on hostname alone accepted
+  // `http://chamroeunhongleng.me` as readily as the real one.
+  if (protocol !== 'https:') return false
+
   return (
-    host === 'chamroeunhongleng.me'
-    || host === 'www.chamroeunhongleng.me'
-    // Preview deployments of THIS project only. A bare `.vercel.app` suffix
-    // test trusted every Vercel deployment on the internet, which is a wide
-    // door for a check whose whole job is narrowing one.
-    || (host.endsWith('.vercel.app') && host.startsWith('chamroeunhongleng'))
-    || host === 'localhost'
-    || host === '127.0.0.1'
+    hostname === 'chamroeunhongleng.me'
+    || hostname === 'www.chamroeunhongleng.me'
+    || hostname === PRODUCTION_ALIAS
+    || PREVIEW_HOST.test(hostname)
   )
 }
 

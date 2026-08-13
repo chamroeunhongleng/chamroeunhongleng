@@ -42,10 +42,17 @@ hardcoded in `app/pages/about.vue` — keep the two in sync by hand.
 ## Abuse controls & their limits
 
 - Message ≤ 500 chars, history ≤ 6 turns, body ≤ 16 KB, POST + same-origin
-  check (chamroeunhongleng.me / *.vercel.app / localhost). An **`Origin`
-  header is required**: browsers always send one on POST, so a request without
-  it is a non-browser caller and gets 403. Testing with curl means passing
-  `-H "Origin: https://chamroeunhongleng.me"`.
+  check. An **`Origin` header is required**: browsers always send one on POST,
+  so a request without it is a non-browser caller and gets 403. Testing with
+  curl means passing `-H "Origin: https://chamroeunhongleng.me"`.
+- The allowlist is `chamroeunhongleng.me`, `www.`, the
+  `chamroeunhongleng-portfolio.vercel.app` alias, and preview hosts matching
+  `chamroeunhongleng-portfolio-<hash>-chnai-lab.vercel.app` — all https-only;
+  `localhost`/`127.0.0.1` are allowed on any scheme and port for dev. **Not**
+  `*.vercel.app`: that namespace is shared with every Vercel user, so a
+  prefix test admitted hostnames the owner does not control. Moving the
+  project to another Vercel scope means updating `PREVIEW_HOST` in
+  `api/chat.ts`; previews 403 until it matches, which is the safe direction.
 - Rate limit: 8/min and 60/day per IP, 40/min per instance — **in-memory,
   per function instance** (Vercel Hobby, no KV). Cold starts reset it and
   parallel instances don't share buckets. Accepted trade-off; the spend

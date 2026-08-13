@@ -96,7 +96,12 @@ index; `/cv` the page is unaffected — the pattern needs the literal slash).
    model call, is the rate limiter still ahead of the API call, and does the
    error path still avoid logging message content? The `Origin` header is
    REQUIRED (missing → 403), so any new non-browser caller — including
-   `scripts/eval-chat.ts --target=live` — has to send one.
+   `scripts/eval-chat.ts --target=live` — has to send one. The allowlist is
+   exact hosts plus a preview pattern that includes the TEAM slug; never
+   widen it to a `.vercel.app` prefix or suffix test, because that namespace
+   is shared with every Vercel user. `tests/chat/handler.test.ts` pins the
+   bypasses (unowned `chamroeunhongleng-*.vercel.app`, wrong team, suffix
+   append, plain http).
 6. If the build output changed shape: `npm run check:csp` after `generate`,
    and `npm run test:e2e`, which is the only check that runs the policy
    through a real browser.

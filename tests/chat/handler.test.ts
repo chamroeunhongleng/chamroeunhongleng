@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type Anthropic from '@anthropic-ai/sdk'
-import { RateLimiter, buildMessages, clientIp, handleChat, parseModelReply } from '../../api/chat'
+import { RateLimiter, buildMessages, clientIp, handleChat, isAllowedOrigin, parseModelReply } from '../../api/chat'
 import {
   MAX_HISTORY_ENTRIES,
   MAX_HISTORY_ENTRY_LENGTH,
@@ -109,6 +109,33 @@ describe('handleChat request gate', () => {
     const capture = makeRes()
     await handleChat(makeReq({ origin: 'https://evil.example' }), capture.res, makeDeps(vi.fn()))
     expect(capture.status()).toBe(403)
+  })
+
+  // The allowlist used to be `endsWith('.vercel.app') && startsWith('chamroeunhongleng')`,
+  // which any Vercel user could satisfy by naming a project chamroeunhongleng-<anything>.
+  it.each([
+    ['https://chamroeunhongleng-attacker.vercel.app', 'unowned name in the shared vercel.app namespace'],
+    ['https://chamroeunhongleng.vercel.app', 'bare project-ish name, not this project'],
+    ['https://chamroeunhongleng-portfolio.evil.app', 'right prefix, wrong apex domain'],
+    ['https://chamroeunhongleng-portfolio-abc-someone-else.vercel.app', 'wrong team scope'],
+    ['https://chamroeunhongleng.me.evil.com', 'suffix-append'],
+    ['https://evil.chamroeunhongleng.me', 'unexpected subdomain'],
+    ['http://chamroeunhongleng.me', 'plain http against an https-only site'],
+    ['null', 'opaque origin'],
+    ['not a url', 'unparseable']
+  ])('rejects %s (%s)', (origin) => {
+    expect(isAllowedOrigin(origin)).toBe(false)
+  })
+
+  it.each([
+    'https://chamroeunhongleng.me',
+    'https://www.chamroeunhongleng.me',
+    'https://chamroeunhongleng-portfolio.vercel.app',
+    'https://chamroeunhongleng-portfolio-ifig3fi0t-chnai-lab.vercel.app',
+    'http://localhost:3000',
+    'http://127.0.0.1:3000'
+  ])('accepts %s', (origin) => {
+    expect(isAllowedOrigin(origin)).toBe(true)
   })
 
   it('rejects a request with no Origin header at all', async () => {
