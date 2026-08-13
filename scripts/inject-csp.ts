@@ -8,7 +8,7 @@
  */
 import { readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs'
 import { join, relative } from 'node:path'
-import { injectMeta, policyFor } from './lib/csp'
+import { injectMeta, policyFor, stripCspMeta } from './lib/csp'
 import { outputDirLabel, requireOutputDir } from './lib/output-dir'
 
 const root = process.cwd()
@@ -34,11 +34,15 @@ if (htmlFiles.length === 0) {
 
 const problems: string[] = []
 const uniqueHashes = new Set<string>()
+let reinjected = 0
 
 for (const file of htmlFiles) {
   const rel = relative(site, file)
   try {
-    const html = readFileSync(file, 'utf8')
+    // Strip before injecting, so re-running over an existing build directory
+    // replaces the policy instead of failing or stacking a second one.
+    const { html, removed } = stripCspMeta(readFileSync(file, 'utf8'))
+    if (removed > 0) reinjected++
     const policy = policyFor(html, rel)
     for (const hash of policy.match(/'sha256-[^']+'/g) ?? []) uniqueHashes.add(hash)
     writeFileSync(file, injectMeta(html, policy, rel), 'utf8')
@@ -52,4 +56,5 @@ if (problems.length > 0) {
   for (const p of problems) console.error(`  ERROR ${p}`)
   process.exit(1)
 }
-console.log(`inject-csp — OK (${htmlFiles.length} pages, ${uniqueHashes.size} unique script hashes)`)
+const note = reinjected > 0 ? `, ${reinjected} re-injected over a previous build` : ''
+console.log(`inject-csp — OK (${htmlFiles.length} pages, ${uniqueHashes.size} unique script hashes${note})`)

@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto'
 import { afterEach, describe, expect, it } from 'vitest'
-import { buildCsp, inlineScriptHashes, injectMeta, policyFor, readCspMeta } from '../scripts/lib/csp'
+import { buildCsp, inlineScriptHashes, injectMeta, policyFor, readCspMeta, stripCspMeta } from '../scripts/lib/csp'
 import { isVercelBuild, outputDir, outputDirLabel } from '../scripts/lib/output-dir'
 
 const sha = (source: string) => `'sha256-${createHash('sha256').update(source, 'utf8').digest('base64')}'`
@@ -129,6 +129,46 @@ describe('injectMeta', () => {
 describe('readCspMeta', () => {
   it('returns null for a page without a policy', () => {
     expect(readCspMeta(page(''))).toBeNull()
+  })
+})
+
+// A rebuild does not always rewrite every page (Nitro reuses cached prerender
+// output), so a second `vercel build` hands the injector its own earlier tag.
+// Without this the build failed with "a CSP meta tag is already present".
+describe('re-running over an existing build', () => {
+  const html = page('<script type="importmap">{}</script><script>boot()</script>')
+  const inject = (source: string) => {
+    const { html: stripped } = stripCspMeta(source)
+    return injectMeta(stripped, policyFor(stripped, 'p'), 'p')
+  }
+
+  it('is idempotent — a second pass is byte-identical to the first', () => {
+    const once = inject(html)
+    expect(inject(once)).toBe(once)
+    expect(inject(inject(once))).toBe(once)
+  })
+
+  it('leaves exactly one policy after repeated passes', () => {
+    const twice = inject(inject(html))
+    expect(twice.match(/http-equiv="Content-Security-Policy"/g)).toHaveLength(1)
+  })
+
+  it('strips back to the original document', () => {
+    expect(stripCspMeta(inject(html)).html).toBe(html)
+    expect(stripCspMeta(inject(html)).removed).toBe(1)
+  })
+
+  it('reports nothing removed for a page that never had a policy', () => {
+    expect(stripCspMeta(html)).toEqual({ html, removed: 0 })
+  })
+
+  it('recomputes hashes rather than reusing the old policy', () => {
+    const once = inject(html)
+    // The page changes after injection; the next pass must follow the scripts.
+    const edited = once.replace('boot()', 'boot(1)')
+    const again = inject(edited)
+    expect(readCspMeta(again)).toBe(policyFor(stripCspMeta(edited).html, 'p'))
+    expect(readCspMeta(again)).not.toBe(readCspMeta(once))
   })
 })
 

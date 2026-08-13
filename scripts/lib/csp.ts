@@ -97,6 +97,28 @@ export function hasCspMeta(html: string): boolean {
 }
 
 /**
+ * Remove any CSP meta tags, returning the document as it was before injection.
+ *
+ * This is what makes the injector re-runnable. A rebuild does not always
+ * rewrite every page — Nitro reuses cached prerender output — so a second
+ * `vercel build` over an existing output directory hands the injector pages
+ * carrying its own previous tag. Stripping first is safe because the hashes
+ * are recomputed from the page's scripts every time, so a fresh injection on
+ * unchanged input is byte-identical to the one it replaces.
+ *
+ * Ranges come from parsing the original string, so splice from the end
+ * backwards to keep the earlier offsets valid.
+ */
+export function stripCspMeta(html: string): { html: string; removed: number } {
+  const metas = parse(html).querySelectorAll('meta[http-equiv="Content-Security-Policy"]')
+  let out = html
+  for (const meta of [...metas].reverse()) {
+    out = out.slice(0, meta.range[0]) + out.slice(meta.range[1])
+  }
+  return { html: out, removed: metas.length }
+}
+
+/**
  * Splice the meta tag in after the viewport meta (charset as fallback).
  *
  * String splice at parser-reported offsets rather than re-serialising the
