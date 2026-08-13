@@ -56,6 +56,29 @@ for (const route of ALL_ROUTES) {
       expect(errors, `console errors on ${route}`).toEqual([])
     })
 
+    // A CSP refusal is NOT a console error — it arrives as a
+    // securitypolicyviolation event, so the assertion above cannot see it.
+    // Zod shipped a `new Function("")` capability probe to the browser and
+    // every page reported script-src blocked eval while this suite stayed
+    // green; the site worked, but DevTools showed an error on every page.
+    test('triggers no Content-Security-Policy violations', async ({ page }) => {
+      await page.addInitScript(() => {
+        const seen: string[] = []
+        ;(window as unknown as { __cspViolations: string[] }).__cspViolations = seen
+        document.addEventListener('securitypolicyviolation', (event) => {
+          seen.push(`${event.violatedDirective} blocked ${event.blockedURI || '(inline or eval)'}`)
+        })
+      })
+
+      await page.goto(route)
+      await page.waitForLoadState('networkidle')
+
+      const violations = await page.evaluate(
+        () => (window as unknown as { __cspViolations: string[] }).__cspViolations
+      )
+      expect(violations, `CSP violations on ${route}`).toEqual([])
+    })
+
     test('every image has alt text', async ({ page }) => {
       await page.goto(route)
 

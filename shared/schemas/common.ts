@@ -1,3 +1,4 @@
+import '../zod-config.js'
 import { z } from 'zod'
 import { EVIDENCE_LABELS, WORK_STATES } from './enums.js'
 

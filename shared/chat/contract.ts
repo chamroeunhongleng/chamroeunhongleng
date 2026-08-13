@@ -3,6 +3,7 @@
  * (api/chat.ts), the widget composable, and the tests, so the three can
  * never disagree about what travels over POST /api/chat.
  */
+import '../zod-config.js'
 import { z } from 'zod'
 
 /** Hard input caps — mirrored client-side so honest visitors never hit 400. */
