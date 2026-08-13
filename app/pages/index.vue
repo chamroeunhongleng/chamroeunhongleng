@@ -228,20 +228,11 @@ useReveal()
   font-size: var(--text-sm);
 }
 
-/* The link strip — plain text links, the quietest possible chrome.
-   Desktop: a right-aligned cluster in the name row (the reference-site
-   pattern); ≤760px it drops to its own full-width row under the name. */
+/* The link strip renders ONLY at phone widths — the owner's decision
+   (2026-08-13): on desktop the header (CV) and footer (socials, email)
+   already carry these, and the hero stays clean. */
 .hero-links {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-end;
-  gap: var(--space-2) var(--space-4);
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  margin-inline-start: auto;
-  max-width: 17rem;
+  display: none;
 }
 
 .hero-links a {
@@ -548,9 +539,13 @@ useReveal()
 @media (max-width: 760px) {
   /* The strip the owner likes on phones: full row under the name. */
   .hero-links {
-    justify-content: flex-start;
-    margin-inline-start: 0;
-    max-width: none;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2) var(--space-4);
+    list-style: none;
+    margin: 0;
+    padding: 0;
   }
 
   .work-grid,
