@@ -39,7 +39,7 @@ flowchart LR
     end
 
     subgraph C["Pipeline C — Verification"]
-        verify["scripts/verify.ts\n(12 phases)"]
+        verify["scripts/verify.ts\n(14 phases)"]
     end
 
     rules --> gate

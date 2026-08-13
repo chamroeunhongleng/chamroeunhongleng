@@ -14,7 +14,7 @@ Two runtime dependencies (`@anthropic-ai/sdk`, `zod`), used only by the `api/cha
 ```bash
 npm install
 npm run dev        # http://localhost:3000
-npm run verify     # the full 12-phase verification pipeline
+npm run verify     # the full 14-phase verification pipeline
 ```
 
 Full guide: [docs/local-setup.md](local-setup.md)

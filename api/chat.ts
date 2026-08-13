@@ -81,13 +81,15 @@ if (!loaded) console.error('chat startup: loadContent() returned no bundle — a
 
 // ── Origin gate ───────────────────────────────────────────────────────────
 /**
- * Soft same-origin check: browsers send Origin on cross-site POSTs, so a
- * foreign origin is an easy 403. Absent headers pass (curl, some privacy
- * setups) — this is a tripwire against casual embedding, not a wall; the
- * rate limiter and the Anthropic Console spend limit are the real bounds.
+ * Same-origin check. The fetch spec makes browsers send Origin on every POST,
+ * same-origin included, so the site's own widget always carries one and a
+ * missing header means a non-browser caller — those get 403 too. That closes
+ * the hole where `curl` walked past the gate straight onto the API budget.
+ * Still a tripwire rather than a wall (headers are forgeable off-browser);
+ * the rate limiter and the Anthropic Console spend limit are the real bounds.
  */
 export function isAllowedOrigin(origin: string | undefined): boolean {
-  if (!origin) return true
+  if (!origin) return false
   let host: string
   try {
     host = new URL(origin).hostname

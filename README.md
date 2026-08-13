@@ -42,7 +42,7 @@ That number replaced the 17.48% I had published for the same weights, and how it
 [![Production gate](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/production-gate.yml/badge.svg)](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/production-gate.yml)
 [![CodeQL](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/codeql.yml/badge.svg)](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/codeql.yml)
 
-This profile is also a live Nuxt application, not only a narrative README. Site content is JSON validated by zod schemas, and structure, claim labels, links, accessibility, SEO, and secrets are all checked by a 12-phase pipeline. Behind it sit three suites: unit tests, which run in CI and back the badges above; a Playwright end-to-end suite; and a model-behaviour eval suite for the assistant. The last two run on demand — the evals need an API key — so neither is represented by those badges.
+This profile is also a live Nuxt application, not only a narrative README. Site content is JSON validated by zod schemas, and structure, claim labels, links, accessibility, SEO, and secrets are all checked by a 14-phase pipeline. Behind it sit three suites: unit tests, which run in CI and back the badges above; a Playwright end-to-end suite; and a model-behaviour eval suite for the assistant. The last two run on demand — the evals need an API key — so neither is represented by those badges.
 
 ```bash
 npm ci

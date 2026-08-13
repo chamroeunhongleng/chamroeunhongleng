@@ -118,14 +118,22 @@ export default defineNuxtConfig({
   // These headers apply to the dev/server runtime. Static hosting on Vercel
   // ignores routeRules headers, so the same set is duplicated in vercel.json —
   // that duplication is load-bearing; check-structure.ts keeps them in sync.
+  //
+  // The CSP here carries frame-ancestors ONLY. The script-src policy is
+  // hash-based and ships as a <meta> tag injected into each generated page by
+  // scripts/inject-csp.ts, because hashes change with every build and static
+  // hosting cannot mint per-request nonces. frame-ancestors is the inverse
+  // case: <meta> cannot carry it, so it has to be a header.
   routeRules: {
     '/**': {
       headers: {
         'X-Content-Type-Options': 'nosniff',
         'X-Frame-Options': 'DENY',
         'Referrer-Policy': 'strict-origin-when-cross-origin',
-        'Permissions-Policy': 'camera=(), microphone=(), geolocation=()',
-        'Cross-Origin-Opener-Policy': 'same-origin'
+        'Permissions-Policy': 'accelerometer=(), autoplay=(), browsing-topics=(), camera=(), display-capture=(), encrypted-media=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), usb=(), xr-spatial-tracking=()',
+        'Cross-Origin-Opener-Policy': 'same-origin',
+        'Strict-Transport-Security': 'max-age=63072000; includeSubDomains',
+        'Content-Security-Policy': 'frame-ancestors \'none\''
       }
     }
   },

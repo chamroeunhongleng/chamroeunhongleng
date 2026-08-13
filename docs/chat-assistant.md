@@ -42,7 +42,10 @@ hardcoded in `app/pages/about.vue` — keep the two in sync by hand.
 ## Abuse controls & their limits
 
 - Message ≤ 500 chars, history ≤ 6 turns, body ≤ 16 KB, POST + same-origin
-  check (chamroeunhongleng.me / *.vercel.app / localhost).
+  check (chamroeunhongleng.me / *.vercel.app / localhost). An **`Origin`
+  header is required**: browsers always send one on POST, so a request without
+  it is a non-browser caller and gets 403. Testing with curl means passing
+  `-H "Origin: https://chamroeunhongleng.me"`.
 - Rate limit: 8/min and 60/day per IP, 40/min per instance — **in-memory,
   per function instance** (Vercel Hobby, no KV). Cold starts reset it and
   parallel instances don't share buckets. Accepted trade-off; the spend

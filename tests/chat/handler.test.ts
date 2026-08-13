@@ -9,16 +9,19 @@ import {
 } from '../../shared/chat/contract'
 
 // ── Test doubles ──────────────────────────────────────────────────────────
+// origin defaults to the production site (browsers always send one on POST);
+// pass origin: null to exercise the no-header case.
 function makeReq(overrides: {
   method?: string
-  origin?: string
+  origin?: string | null
   body?: unknown
   ip?: string
 } = {}): VercelRequest {
+  const origin = overrides.origin === undefined ? 'https://chamroeunhongleng.me' : overrides.origin
   return {
     method: overrides.method ?? 'POST',
     headers: {
-      ...(overrides.origin ? { origin: overrides.origin } : {}),
+      ...(origin ? { origin } : {}),
       ...(overrides.ip ? { 'x-forwarded-for': overrides.ip } : {})
     },
     body: overrides.body ?? { message: 'What are his skills?', history: [] }
@@ -106,6 +109,14 @@ describe('handleChat request gate', () => {
     const capture = makeRes()
     await handleChat(makeReq({ origin: 'https://evil.example' }), capture.res, makeDeps(vi.fn()))
     expect(capture.status()).toBe(403)
+  })
+
+  it('rejects a request with no Origin header at all', async () => {
+    const create = vi.fn()
+    const capture = makeRes()
+    await handleChat(makeReq({ origin: null }), capture.res, makeDeps(create))
+    expect(capture.status()).toBe(403)
+    expect(create).not.toHaveBeenCalled()
   })
 
   it('accepts the production origin and localhost', async () => {

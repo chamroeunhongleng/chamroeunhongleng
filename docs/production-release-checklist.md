@@ -4,7 +4,7 @@ Production is an owner decision. Claude can prepare everything above the line;
 only you execute what is below it.
 
 ## Machine-verifiable (Claude can drive these)
-- [ ] `npm run verify` — all 12 phases green
+- [ ] `npm run verify` — all 14 phases green
 - [ ] `npm run check:owner-content -- --mode=production` — zero errors
       (no markers, no enabled demo project, confirmed contact email)
 - [ ] `npm run generate:production` — builds successfully (the gate passes)

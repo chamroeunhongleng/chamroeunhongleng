@@ -207,7 +207,13 @@ const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms
 async function askLive(endpoint: string, message: string, attempt = 0): Promise<Answer> {
   const response = await fetch(endpoint, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      // The function 403s requests without an Origin. Node's fetch sends none,
+      // so derive it from the endpoint — that also keeps --endpoint= overrides
+      // (preview deploys, localhost) inside the server's allowlist.
+      'Origin': new URL(endpoint).origin
+    },
     body: JSON.stringify({ message, history: [] })
   })
 

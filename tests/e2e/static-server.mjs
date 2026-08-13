@@ -23,8 +23,14 @@
  * of servable files is fixed before the socket opens. Directory entries that
  * are symlinks are skipped rather than followed, so a link planted in the
  * build output cannot escape either.
+ *
+ * HEADERS: the response headers are read from vercel.json rather than
+ * hand-copied, so the e2e suite exercises the same set production serves.
+ * Two copies of that list already exist (vercel.json and nuxt.config
+ * routeRules, kept in sync by check-structure); a third copy here would drift
+ * silently and make the tests agree with a policy nobody ships.
  */
-import { createReadStream, existsSync, readdirSync } from 'node:fs'
+import { createReadStream, existsSync, readFileSync, readdirSync } from 'node:fs'
 import { createServer } from 'node:http'
 import { extname, join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -50,7 +56,37 @@ const TYPES = {
   '.ico': 'image/x-icon',
   '.woff2': 'font/woff2',
   '.woff': 'font/woff',
-  '.pdf': 'application/pdf'
+  '.pdf': 'application/pdf',
+  // With nosniff mirrored below, the sitemap stylesheet needs its real type
+  // or the browser refuses to apply it.
+  '.xsl': 'application/xslt+xml'
+}
+
+/**
+ * vercel.json "source" -> path predicate. Understands only the two shapes this
+ * repo uses; anything else throws rather than silently matching nothing, so a
+ * new rule in vercel.json cannot quietly go untested.
+ */
+function sourceToPredicate(source) {
+  if (source === '/(.*)') return () => true
+  const prefix = source.match(/^(\/[A-Za-z0-9._/-]*)\(\.\*\)$/)
+  if (prefix) return (path) => path.startsWith(prefix[1])
+  if (!source.includes('(')) return (path) => path === source
+  throw new Error(`[static-server] unsupported vercel.json source pattern: ${source}`)
+}
+
+const HEADER_RULES = JSON.parse(
+  readFileSync(fileURLToPath(new URL('../../vercel.json', import.meta.url)), 'utf8')
+).headers.map((rule) => ({ matches: sourceToPredicate(rule.source), headers: rule.headers }))
+
+/** Every matching rule applies, later rules winning per key — as Vercel does. */
+function headersFor(urlPath, contentType) {
+  const headers = { 'content-type': contentType }
+  for (const rule of HEADER_RULES) {
+    if (!rule.matches(urlPath)) continue
+    for (const { key, value } of rule.headers) headers[key] = value
+  }
+  return headers
 }
 
 if (!existsSync(ROOT)) {
@@ -100,17 +136,19 @@ function lookup(requestUrl) {
 const NOT_FOUND = FILES.get('/404.html') ?? null
 
 const server = createServer((req, res) => {
+  const requestPath = (req.url ?? '/').split(/[?#]/)[0]
   const file = lookup(req.url ?? '/')
 
   if (!file) {
     // Static hosts serve 404.html with a real 404 status; the "unpublished
     // project is unreachable" test depends on that status being honest.
-    res.writeHead(404, { 'content-type': 'text/html; charset=utf-8' })
+    res.writeHead(404, headersFor(requestPath, 'text/html; charset=utf-8'))
     if (NOT_FOUND) return createReadStream(NOT_FOUND).pipe(res)
     return res.end('Not found')
   }
 
-  res.writeHead(200, { 'content-type': TYPES[extname(file).toLowerCase()] ?? 'application/octet-stream' })
+  const type = TYPES[extname(file).toLowerCase()] ?? 'application/octet-stream'
+  res.writeHead(200, headersFor(requestPath, type))
   createReadStream(file).pipe(res)
 })
 

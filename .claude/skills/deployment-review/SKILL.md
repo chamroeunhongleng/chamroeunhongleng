@@ -25,6 +25,21 @@ build?" without deploying anything.
 
 ## Vercel specifics
 - Framework preset: Nuxt; output is fully static (`nuxt generate`).
+- `npm run generate` is `nuxt generate` PLUS `scripts/inject-csp.ts`, which
+  stamps the hash-based CSP into every generated page. vercel.json's
+  buildCommand is `npm run generate`, so the deploy recipe is unchanged and
+  every path that builds the site — CI, e2e, `cv:pdf`, a workstation deploy —
+  gets the policy. Never deploy output built with bare `nuxt generate`.
+- **The build output is in two different places** and any script that reads it
+  post-build must know which: `vercel build` runs with `VERCEL=1`, which
+  selects the `vercel-static` preset and writes `.vercel/output/static`;
+  everything else writes `.output/public`. `scripts/lib/output-dir.ts` decides
+  from the environment (never by probing for whichever directory exists — a
+  stale `.output/public` would otherwise absorb the CSP injection while the
+  artifact bound for production shipped bare). inject-csp hardcoded
+  `.output/public` at first and aborted the first production build; that was
+  the correct failure, and it is why the rule now lives in one tested place.
+  To audit the Vercel artifact directly: `VERCEL=1 npm run check:csp`.
 - Security headers come from `vercel.json` (routeRules don't apply to static).
 - Custom domain (chamroeunhongleng.me) is NOT serving at build time of this
   repo — DNS + domain attach are owner actions.

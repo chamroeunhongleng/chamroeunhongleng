@@ -160,3 +160,41 @@ jobs:
           done
           echo "::error::The live domain still serves $BEFORE after the deploy reported success — production did not change."
           exit 1
+
+      # Headers live in vercel.json, which only takes effect once deployed —
+      # nothing local can prove Vercel applied them. The exact CSP hashes are
+      # not asserted here (they rotate with the build id); check:csp proves the
+      # policy matches the artifacts, this proves the artifacts reached the
+      # edge with their headers intact.
+      - name: Verify live security headers
+        run: |
+          failed=0
+          head=$(curl -fsSI "https://chamroeunhongleng.me/?ci=$GITHUB_RUN_ID-headers")
+          for probe in \
+            'x-content-type-options: *nosniff' \
+            'x-frame-options: *DENY' \
+            'referrer-policy: *strict-origin-when-cross-origin' \
+            'cross-origin-opener-policy: *same-origin' \
+            'strict-transport-security:.*includeSubDomains' \
+            'content-security-policy:.*frame-ancestors' \
+            'permissions-policy:.*geolocation=()'; do
+            if ! printf '%s' "$head" | grep -qi "^$probe"; then
+              echo "::error::live response is missing header: $probe"
+              failed=1
+            fi
+          done
+
+          if ! curl -fsS "https://chamroeunhongleng.me/?ci=$GITHUB_RUN_ID-meta" \
+            | grep -q 'http-equiv="Content-Security-Policy"'; then
+            echo "::error::the live page carries no CSP meta tag — inject-csp did not run in the deployed build"
+            failed=1
+          fi
+
+          if ! curl -fsSI "https://chamroeunhongleng.me/cv/chamroeun-hongleng.pdf" \
+            | grep -qi '^x-robots-tag:.*noindex'; then
+            echo "::error::/cv/ PDFs are missing X-Robots-Tag: noindex"
+            failed=1
+          fi
+
+          [ "$failed" -eq 0 ] || exit 1
+          echo "Live security headers verified." >> "$GITHUB_STEP_SUMMARY"

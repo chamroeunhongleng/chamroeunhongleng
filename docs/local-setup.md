@@ -26,7 +26,7 @@ npm run generate:production
 
 ## Everyday commands
 ```bash
-npm run verify                 # the full 12-phase pipeline
+npm run verify                 # the full 14-phase pipeline
 npm run check:owner-content    # what content is still unfinished
 npm run test                   # vitest suite
 npm run generate               # static build to .output/public

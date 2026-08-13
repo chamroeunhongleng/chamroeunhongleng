@@ -94,7 +94,7 @@ while any marker, enabled demo project, or missing required content remains).
 ## Verification
 
 ```bash
-npm run verify          # the full 12-phase pipeline — run before "done"
+npm run verify          # the full 14-phase pipeline — run before "done"
 npm run check:owner-content -- --mode=production   # what still blocks release
 ```
 

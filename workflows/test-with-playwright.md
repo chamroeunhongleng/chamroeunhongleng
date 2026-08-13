@@ -320,7 +320,7 @@ Rules that keep tests honest here:
 
 ```bash
 npm run test:e2e:devices   # 220 tests, all seven devices, against the real build
-npm run verify             # the 12-phase pipeline (includes vitest)
+npm run verify             # the 14-phase pipeline (includes vitest)
 ```
 
 ## Not yet covered

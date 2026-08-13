@@ -21,12 +21,14 @@ const mode = process.env.NUXT_PUBLIC_PORTFOLIO_MODE ?? 'review'
 const steps: Step[] = [
   { name: 'Repository structure', command: ['run', 'check:structure'] },
   { name: 'Secret scan', command: ['run', 'check:secrets'] },
+  { name: 'Dependency audit (shipped deps)', command: ['run', 'check:audit'] },
   { name: 'Content schemas', command: ['run', 'check:content'] },
   { name: `Owner content (mode: ${mode})`, command: ['run', 'check:owner-content'] },
   { name: 'Lint', command: ['run', 'lint'] },
   { name: 'Typecheck', command: ['run', 'typecheck'] },
   { name: 'Tests', command: ['run', 'test'] },
   { name: 'Static generation', command: ['run', 'generate'] },
+  { name: 'Content-Security-Policy', command: ['run', 'check:csp'] },
   { name: 'Links & assets', command: ['run', 'check:links'] },
   { name: 'Accessibility basics', command: ['run', 'check:a11y'] },
   { name: 'SEO metadata', command: ['run', 'check:seo'] }

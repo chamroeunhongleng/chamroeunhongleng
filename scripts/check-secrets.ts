@@ -1,15 +1,20 @@
 /**
- * check-secrets — regex scan of all tracked text files for credential
+ * check-secrets — regex scan of every committable text file for credential
  * patterns. Zero network, zero dependencies. The scanner skips itself and
  * the Claude hooks (they contain the patterns by necessity).
+ *
+ * The file set comes from git: tracked files plus untracked-but-not-ignored
+ * ones — exactly what can reach the public repository. A filesystem walk
+ * used to be the source, which read gitignored trees (.vercel, .env.local,
+ * .tmp) that can never be committed while claiming to scan "tracked" files.
  */
-import { readFileSync, readdirSync, statSync } from 'node:fs'
-import { join, relative, sep } from 'node:path'
+import { spawnSync } from 'node:child_process'
+import { existsSync, readFileSync, statSync } from 'node:fs'
+import { join, sep } from 'node:path'
 
 const root = process.cwd()
-const SKIP_DIRS = new Set(['node_modules', '.nuxt', '.output', '.git', 'dist', 'coverage'])
 const SKIP_EXTS = new Set(['.png', '.ico', '.jpg', '.jpeg', '.webp', '.woff', '.woff2', '.zip', '.pdf'])
-const SELF_EXEMPT = ['scripts' + sep + 'check-secrets.ts', '.claude' + sep + 'hooks']
+const SELF_EXEMPT = ['scripts/check-secrets.ts', '.claude/hooks']
 const MAX_SIZE = 2 * 1024 * 1024
 
 // Assembled at runtime so this file never matches its own patterns.
@@ -21,6 +26,11 @@ const PATTERNS: Array<[string, RegExp]> = [
   ['Anthropic key', new RegExp('\\bsk-ant-' + '[A-Za-z0-9-]{10,}\\b')],
   ['OpenAI-style key', new RegExp('\\bsk-' + '[A-Za-z0-9]{32,}\\b')],
   ['Slack token', new RegExp('\\bxox[abp]-' + '[A-Za-z0-9-]{10,}\\b')],
+  // Two dot-separated base64url segments both opening with the base64 of '{"'
+  // is structurally a JWT header.payload — Vercel OIDC tokens, Supabase keys,
+  // session cookies. The generic pattern below cannot see these: its character
+  // class has no dot, so it stops at the first separator.
+  ['JWT', new RegExp('\\bey' + 'J[A-Za-z0-9_-]{8,}\\.ey' + 'J[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9_-]*')],
   [
     'generic credential assignment',
     new RegExp('(api[_-]?key|secret|password|token)\\s*[:=]\\s*["\'][A-Za-z0-9+/_-]{24,}["\']', 'i')
@@ -29,27 +39,29 @@ const PATTERNS: Array<[string, RegExp]> = [
 
 const findings: string[] = []
 
-function walk(dir: string) {
-  for (const name of readdirSync(dir)) {
-    const full = join(dir, name)
-    const rel = relative(root, full)
-    if (SKIP_DIRS.has(name)) continue
-    const stat = statSync(full)
-    if (stat.isDirectory()) {
-      walk(full)
-      continue
-    }
-    if (SELF_EXEMPT.some((exempt) => rel.startsWith(exempt))) continue
-    if (SKIP_EXTS.has(name.slice(name.lastIndexOf('.')).toLowerCase())) continue
-    if (stat.size > MAX_SIZE) continue
-    const text = readFileSync(full, 'utf8')
-    for (const [label, pattern] of PATTERNS) {
-      if (pattern.test(text)) findings.push(`${rel}: possible ${label}`)
-    }
-  }
+const listed = spawnSync('git', ['ls-files', '-z', '--cached', '--others', '--exclude-standard'], {
+  cwd: root,
+  encoding: 'utf8',
+  maxBuffer: 32 * 1024 * 1024
+})
+if (listed.status !== 0) {
+  console.error('check:secrets — FAILED: git ls-files did not run; refusing to guess the file set.')
+  if (listed.stderr) console.error(`  ${listed.stderr.trim()}`)
+  process.exit(1)
 }
 
-walk(root)
+// git reports POSIX separators; SELF_EXEMPT is written the same way.
+for (const rel of listed.stdout.split('\0').filter(Boolean)) {
+  if (SELF_EXEMPT.some((exempt) => rel.startsWith(exempt))) continue
+  if (SKIP_EXTS.has(rel.slice(rel.lastIndexOf('.')).toLowerCase())) continue
+  const full = join(root, rel.split('/').join(sep))
+  if (!existsSync(full)) continue // staged-but-deleted paths still appear in ls-files
+  if (statSync(full).size > MAX_SIZE) continue
+  const text = readFileSync(full, 'utf8')
+  for (const [label, pattern] of PATTERNS) {
+    if (pattern.test(text)) findings.push(`${rel}: possible ${label}`)
+  }
+}
 
 if (findings.length > 0) {
   console.error(`check:secrets — FAILED (${findings.length} finding(s))`)

@@ -110,8 +110,13 @@ const REQUIRED_FILES = [
   'scripts/check-links.ts',
   'scripts/check-a11y.ts',
   'scripts/check-seo.ts',
+  'scripts/check-audit.ts',
+  'scripts/check-csp.ts',
+  'scripts/inject-csp.ts',
   'scripts/generate-assets.ts',
   'scripts/lib/load-content.ts',
+  'scripts/lib/csp.ts',
+  'scripts/lib/output-dir.ts',
   // Docs
   'docs/local-setup.md',
   'docs/preview-deployment.md',

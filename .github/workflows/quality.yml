@@ -1,6 +1,6 @@
 name: Quality
 
-# Runs the same 12-phase pipeline the owner runs locally (`npm run verify`),
+# Runs the same 14-phase pipeline the owner runs locally (`npm run verify`),
 # on EVERY branch — the guardrails must not depend on remembering to run them.
 on:
   push:
