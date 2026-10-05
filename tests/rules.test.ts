@@ -126,6 +126,38 @@ describe('individual rules on synthetic content', () => {
     ).toBe(true)
   })
 
+  function bundleWithStack(items: ContentBundle['stack']['groups'][number]['items']): ContentBundle {
+    const real = bundle as ContentBundle
+    return { ...real, stack: { ...real.stack, groups: [{ id: 'test', title: 'Test', items }] } }
+  }
+
+  it('errors when a stack item cites a project that does not exist', () => {
+    const b = bundleWithStack([{ name: 'Python', projects: ['ghost-project'], source: 'projects' }])
+    const findings = runContentRules(b, 'review')
+    expect(
+      findings.some((f) => f.code === 'broken-project-reference' && f.path.startsWith('stack.'))
+    ).toBe(true)
+  })
+
+  it('errors when a stack item is not one of the cited project tags', () => {
+    // kaskor-asr is real content; its tags do not include "Go".
+    const b = bundleWithStack([{ name: 'Go', projects: ['kaskor-asr'], source: 'projects' }])
+    const findings = runContentRules(b, 'review')
+    expect(findings.some((f) => f.code === 'stack-item-not-a-tag' && f.severity === 'error')).toBe(true)
+  })
+
+  it('errors when a project-sourced stack item cites nothing', () => {
+    const b = bundleWithStack([{ name: 'Haskell', projects: [], source: 'projects' }])
+    const findings = runContentRules(b, 'review')
+    expect(findings.some((f) => f.code === 'stack-item-unsourced')).toBe(true)
+  })
+
+  it('accepts a skills-sourced stack item without projects', () => {
+    const b = bundleWithStack([{ name: 'English', projects: [], source: 'skills' }])
+    const findings = runContentRules(b, 'review')
+    expect(findings.some((f) => f.path.startsWith('stack.'))).toBe(false)
+  })
+
   it('errors when no enabled project is featured', () => {
     const project = projectSchema.parse(makeProject({ featured: false } as never))
     const b: ContentBundle = { ...(bundle as ContentBundle), projects: [project] }

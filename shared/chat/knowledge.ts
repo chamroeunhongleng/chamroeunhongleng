@@ -66,8 +66,18 @@ function projectSection(project: Project): string[] {
 }
 
 export function buildSystemPrompt(bundle: ContentBundle): string {
-  const { profile, education, interests, experience, learning, principles, contact, now, colophon }
-    = bundle
+  const {
+    profile,
+    education,
+    interests,
+    experience,
+    learning,
+    principles,
+    contact,
+    now,
+    colophon,
+    contributions
+  } = bundle
   const projects = chatProjects(bundle.projects)
   const email = fact(contact.email)
 
@@ -111,6 +121,13 @@ export function buildSystemPrompt(bundle: ContentBundle): string {
   )
   const proofPoints = claimLines(profile.proofPoints)
   if (proofPoints.length > 0) doc.push('Selected proof points:', ...proofPoints)
+  // What he can contribute — content/contributions.json, the same claims the
+  // homepage and /about render (first-person text, as elsewhere in FACTS).
+  doc.push('', 'WHAT HE CAN CONTRIBUTE')
+  for (const item of contributions.items) {
+    const text = fact(item.text)
+    if (text) doc.push(`- ${item.title} — ${text} [evidence: ${item.evidence}]`)
+  }
   doc.push('', SITE_FACTS, '')
 
   doc.push('## Education')
@@ -130,9 +147,9 @@ export function buildSystemPrompt(bundle: ContentBundle): string {
 
   if (experience.story) {
     doc.push(`## ${experience.story.title} (his own account, see /journey)`)
-    for (const paragraph of experience.story.paragraphs) {
-      const text = fact(paragraph)
-      if (text) doc.push(text)
+    for (const step of experience.story.steps) {
+      const text = fact(step.text)
+      if (text) doc.push(`${step.title}: ${text}`)
     }
     doc.push('')
   }
@@ -179,6 +196,8 @@ export function buildSystemPrompt(bundle: ContentBundle): string {
   doc.push('## Learning (see /learning)')
   const learningIntro = fact(learning.intro)
   if (learningIntro) doc.push(learningIntro)
+  const readingMethod = learning.readingMethod && fact(learning.readingMethod)
+  if (readingMethod) doc.push(readingMethod)
   for (const discipline of learning.disciplines) {
     doc.push(
       `- ${discipline.title}: ${fact(discipline.stance) ?? ''} Current focus: ${discipline.currentFocus.join('; ')}.`

@@ -67,7 +67,7 @@ const openPanel = async (page: Page) => {
 
 const ask = async (page: Page, text: string) => {
   await page.getByLabel('Ask about Chamroeun').fill(text)
-  await page.getByRole('button', { name: 'Send' }).click()
+  await page.getByRole('button', { name: 'Send', exact: true }).click()
 }
 
 test.describe('Chat widget shell', () => {
@@ -173,7 +173,7 @@ test.describe('Chat widget shell', () => {
     await page.goto('/')
     await openPanel(page)
 
-    const send = page.getByRole('button', { name: 'Send' })
+    const send = page.getByRole('button', { name: 'Send', exact: true })
     await expect(send).toBeDisabled()
     await page.getByLabel('Ask about Chamroeun').fill('hello')
     await expect(send).toBeEnabled()

@@ -23,6 +23,9 @@ describe('chat system prompt', () => {
     // The skills mirrored from about.vue made it in.
     expect(prompt).toContain('PyTorch')
     expect(prompt).toContain('Khmer (native)')
+    // What he can contribute now comes from content/contributions.json.
+    expect(prompt).toContain('WHAT HE CAN CONTRIBUTE')
+    expect(prompt).toContain('Shipping working software')
   })
 
   it('excludes demo projects entirely', () => {

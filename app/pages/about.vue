@@ -1,5 +1,5 @@
 ﻿<script setup lang="ts">
-import { contact, education, interests, profile } from '~/data/portfolio'
+import { contact, contributions, education, interests, profile } from '~/data/portfolio'
 
 usePageMeta({
   title: 'About',
@@ -22,69 +22,47 @@ usePageMeta({
         <div class="about-main prose">
           <h2>From mathematics to computer science</h2>
           <p>
-            I grew up in Kampong Cham and started with mathematics competitions. I was first in my
-            province in Grade 9, national runner-up in Grade 12, and I left school with four full
-            university scholarships. Competition mathematics taught me the habit that this whole
-            site is built on: an answer only counts when you can show that it is right.
+            I grew up in Kampong Cham and started with mathematics competitions: first in my
+            province in Grade 9, national runner-up in Grade 12, and four full university
+            scholarships when I left school. They taught me the habit this site is built on: an
+            answer only counts when you can show that it is right.
           </p>
           <p>
-            I now use the same habit in applied machine learning. I work on Khmer speech
-            recognition because the language I grew up speaking barely exists in the tools I use
-            every day. I work on agritech because the bok choy farmers our team interviewed in Kang
-            Meas plant their fields without knowing who will buy the harvest. In both problems,
-            careful testing matters more than an impressive demo, and the result is useful at home,
-            not only in a paper.
+            I use the same habit in my projects. I work on Khmer speech recognition because the
+            language I grew up speaking barely exists in everyday tools, and on agritech because
+            the bok choy farmers our team interviewed in Kang Meas plant their fields without
+            knowing who will buy the harvest. In both, careful testing matters more than an
+            impressive demo.
           </p>
           <p><MarkedText :text="profile.identity" /></p>
+          <p>
+            <NuxtLink to="/journey" class="pill">Read the full journey <Glyph name="arrow-right" /></NuxtLink>
+          </p>
 
           <h2>Why these interests connect</h2>
           <p><MarkedText :text="interests.connection" /></p>
           <p>
-            In practice that means the same project gets three questions instead of one: does the
-            model work, would anyone pay for it, and what do the contracts, terms, and policies
-            allow it to do? The projects on this site are my attempts to answer all three at once
-            — student-scale work, labeled honestly, receipts attached.
+            In practice, each project gets three questions instead of one: does the model work,
+            would anyone pay for it, and what do the contracts, terms, and policies allow it to do?
+            The projects here are student-scale attempts to answer all three, labeled honestly.
           </p>
 
           <h2>What I can contribute</h2>
+          <!-- content/contributions.json — shared with the homepage and the chat assistant. -->
           <ul class="skills-list" role="list">
-            <li>
-              <strong>Shipping working software</strong> — TypeScript and Python end to end: a
-              schema-validated Nuxt site whose build fails on unproven claims, a decision engine
-              with 62 unit tests and CI, and a bilingual LMS prototype.
-            </li>
-            <li>
-              <strong>Mathematical grounding</strong> — a decade of competition mathematics ending
-              as national runner-up; the habit of proving an answer right before claiming it.
-            </li>
-            <li>
-              <strong>Applied-ML practice with honest evaluation</strong> — a public Whisper
-              fine-tuning pipeline for Khmer with published weights, speaker-stratified splits,
-              and self-reported metrics labeled as exactly that.
-            </li>
-            <li>
-              <strong>Field research before code</strong> — interviews with real farmers before
-              writing anything, and a decision engine where refusal is a tested, first-class
-              output.
-            </li>
-            <li>
-              <strong>Organizing work around written standards</strong> — I lead a small
-              professional reading circle that runs on a handbook I wrote: rotating officer
-              roles, progress measured by what members produce rather than by pages read, and an
-              AI-use policy binding on me as much as on every member.
-            </li>
-            <li>
-              <strong>Bilingual delivery</strong> — products, reports, and technical content that
-              work in Khmer and English from the first draft, not as a translation pass.
+            <li v-for="item in contributions.items" :key="item.title">
+              <strong>{{ item.title }}</strong> — <MarkedText :text="item.text" />
+              <EvidenceLabel :evidence="item.evidence" :link="item.link" />
             </li>
           </ul>
 
           <h2>Skills</h2>
-          <ul class="skills-list" role="list">
+          <ul class="skills-grid" role="list">
             <li>
               <strong>Software</strong> — TypeScript, Vue/Nuxt, Next.js, Python, unit testing and
               CI, schema-validated content architectures, and AI-native development: leading
-              coding agents with explicit human review gates.
+              coding agents with explicit human review gates. Current tooling: GitHub, GitLab,
+              and AWS.
             </li>
             <li>
               <strong>Machine learning</strong> — PyTorch, Hugging Face Transformers, Whisper
@@ -184,33 +162,73 @@ usePageMeta({
 }
 
 .about-main h2 {
-  margin-top: var(--space-6);
-  padding-bottom: var(--space-2);
-  border-bottom: 1px solid var(--color-border);
+  margin-top: var(--space-10);
+  font-size: var(--text-3xl);
 }
 
 .about-main h2:first-child {
   margin-top: 0;
 }
 
+/* What I can contribute — a dash list, each point with its receipt. */
 .skills-list {
   list-style: none;
   margin: 0;
   padding: 0;
   display: grid;
-  gap: var(--space-3);
+  gap: var(--space-4);
 }
 
 .skills-list li {
+  position: relative;
   font-size: var(--text-sm);
   color: var(--color-text-muted);
-  border-inline-start: 2px solid var(--color-border-strong);
-  padding-inline-start: var(--space-3);
+  padding-inline-start: var(--space-5);
   max-width: var(--prose-max);
 }
 
-.skills-list strong {
+.skills-list li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--color-accent-2);
+}
+
+.skills-list strong,
+.skills-grid strong {
   color: var(--color-text);
+}
+
+/* Skills — four cards, the group name leading each. */
+.skills-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.skills-grid li {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: var(--space-5);
+}
+
+.skills-grid strong {
+  display: block;
+  margin-bottom: var(--space-2);
+  font-size: var(--text-base);
+}
+
+@media (max-width: 760px) {
+  .skills-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
 .about-side {
@@ -236,9 +254,9 @@ usePageMeta({
   width: 100%;
   aspect-ratio: 6 / 7;
   object-fit: cover;
-  border-radius: var(--radius-l);
-  border: 1px solid var(--color-border-strong);
-  box-shadow: var(--shadow-1);
+  border-radius: var(--radius-hero);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-raised);
 }
 
 .portrait-placeholder {
@@ -264,8 +282,9 @@ usePageMeta({
 
 .side-card {
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-l);
+  border-radius: var(--radius-card);
   background: var(--color-surface);
+  box-shadow: var(--shadow-card);
   padding: var(--space-5);
   display: grid;
   /* Same reason as .about-side — the implicit auto track must be allowed to
@@ -275,12 +294,12 @@ usePageMeta({
 }
 
 .side-card h2 {
-  font-size: var(--text-base);
+  font-size: var(--text-xs);
   font-family: var(--font-mono);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-weight: 500;
-  color: var(--color-text-muted);
+  letter-spacing: var(--tracking-eyebrow);
+  font-weight: var(--weight-strong);
+  color: var(--color-accent);
 }
 
 .side-summary {

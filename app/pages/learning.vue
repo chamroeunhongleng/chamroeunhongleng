@@ -1,5 +1,5 @@
-﻿<script setup lang="ts">
-import { learning } from '~/data/portfolio'
+<script setup lang="ts">
+import { interests, learning } from '~/data/portfolio'
 
 usePageMeta({
   title: 'Learning',
@@ -15,6 +15,8 @@ const HORIZON_WINDOWS: Record<string, string> = {
   Next: 'toward 2027',
   Later: 'beyond'
 }
+
+const pillarNumber = (id: string) => interests.pillars.find((p) => p.id === id)?.number
 </script>
 
 <template>
@@ -27,9 +29,12 @@ const HORIZON_WINDOWS: Record<string, string> = {
         <article
           v-for="discipline in learning.disciplines"
           :key="discipline.pillar"
-          class="discipline"
+          class="card discipline"
           :aria-labelledby="`discipline-${discipline.pillar}`"
         >
+          <p v-if="pillarNumber(discipline.pillar)" class="num-label">
+            Pillar {{ pillarNumber(discipline.pillar) }}
+          </p>
           <h2 :id="`discipline-${discipline.pillar}`" class="discipline-title">{{ discipline.title }}</h2>
           <p class="stance"><MarkedText :text="discipline.stance" /></p>
           <ul role="list" class="focus-list">
@@ -42,12 +47,14 @@ const HORIZON_WINDOWS: Record<string, string> = {
 
       <!-- Experiments -->
       <section class="block" aria-labelledby="experiments-title">
-        <h2 id="experiments-title" class="block-title">Experiments</h2>
-        <p class="block-note">
-          Each experiment is a falsifiable question carrying an honest state — some have full case studies.
-        </p>
+        <SectionHeading
+          id="experiments-title"
+          eyebrow="Experiments"
+          title="Questions I am testing"
+          text="Each experiment is a falsifiable question carrying an honest state — some have full case studies."
+        />
         <ul role="list" class="experiment-list">
-          <li v-for="experiment in learning.experiments" :key="experiment.title" class="experiment">
+          <li v-for="experiment in learning.experiments" :key="experiment.title" class="card experiment">
             <div>
               <p class="experiment-name">{{ experiment.title }}</p>
               <p class="experiment-question"><MarkedText :text="experiment.question" /></p>
@@ -57,9 +64,9 @@ const HORIZON_WINDOWS: Record<string, string> = {
               <NuxtLink
                 v-if="experiment.projectSlug"
                 :to="`/projects/${experiment.projectSlug}`"
-                class="experiment-link"
+                class="pill experiment-link"
               >
-                Case study →
+                Case study <Glyph name="arrow-right" />
               </NuxtLink>
             </div>
           </li>
@@ -68,23 +75,32 @@ const HORIZON_WINDOWS: Record<string, string> = {
 
       <!-- Reading notes -->
       <section v-if="learning.readingNotes.length" class="block" aria-labelledby="reading-title">
-        <h2 id="reading-title" class="block-title">Reading notes</h2>
+        <SectionHeading
+          id="reading-title"
+          eyebrow="Reading"
+          title="Reading notes"
+          :text="learning.readingMethod"
+        />
         <ul role="list" class="reading-list">
-          <li v-for="(note, i) in learning.readingNotes" :key="i" class="reading-note">
-            <p class="note-title"><MarkedText :text="note.title" /></p>
-            <p class="note-source mono"><MarkedText :text="note.source" /></p>
-            <p class="note-takeaway"><MarkedText :text="note.takeaway" /></p>
+          <li v-for="(note, i) in learning.readingNotes" :key="i" class="card reading-note">
+            <Glyph name="book" plaque />
+            <div class="note-body">
+              <p class="note-title"><MarkedText :text="note.title" /></p>
+              <p class="note-source mono"><MarkedText :text="note.source" /></p>
+              <p class="note-takeaway"><MarkedText :text="note.takeaway" /></p>
+            </div>
           </li>
         </ul>
       </section>
 
       <!-- Roadmap — a rail where the ink fades with distance -->
       <section class="block" aria-labelledby="roadmap-title">
-        <h2 id="roadmap-title" class="block-title">Roadmap</h2>
-        <p class="block-note">
-          Three horizons, drawn honestly: the further out the plan, the fainter the ink.
-          Every item still carries its own label.
-        </p>
+        <SectionHeading
+          id="roadmap-title"
+          eyebrow="Roadmap"
+          title="Now, next, and later"
+          text="Three horizons, drawn honestly: the further out the plan, the fainter the ink. Every item still carries its own label."
+        />
         <ol class="rm-track" role="list">
           <li
             v-for="stage in learning.roadmap"
@@ -116,7 +132,7 @@ const HORIZON_WINDOWS: Record<string, string> = {
 <style scoped>
 .discipline-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-5);
 }
 
@@ -124,14 +140,11 @@ const HORIZON_WINDOWS: Record<string, string> = {
   display: grid;
   gap: var(--space-3);
   align-content: start;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-l);
-  background: var(--color-surface);
-  padding: var(--space-5);
+  padding: var(--space-6);
 }
 
 .discipline-title {
-  font-size: var(--text-lg);
+  font-size: var(--text-xl);
 }
 
 .stance {
@@ -143,65 +156,51 @@ const HORIZON_WINDOWS: Record<string, string> = {
   display: grid;
   gap: var(--space-2);
   list-style: none;
-  margin: 0;
+  margin: var(--space-2) 0 0;
   padding: 0;
 }
 
 .focus-list li {
+  position: relative;
   font-size: var(--text-sm);
-  padding-inline-start: var(--space-4);
-  border-inline-start: 2px solid var(--color-border);
+  padding-inline-start: var(--space-5);
+}
+
+.focus-list li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--color-accent-2);
 }
 
 .block {
-  margin-top: var(--space-10);
-}
-
-.block-title {
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-wide);
-  color: var(--color-accent-2);
-  font-weight: 500;
-  padding-bottom: var(--space-2);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.block-note {
-  margin-top: var(--space-3);
-  color: var(--color-text-muted);
-  font-size: var(--text-sm);
+  margin-top: var(--space-14);
 }
 
 .experiment-list {
   display: grid;
   gap: var(--space-4);
   list-style: none;
-  margin: var(--space-5) 0 0;
+  margin: 0;
   padding: 0;
 }
 
 .experiment {
   display: flex;
   justify-content: space-between;
-  align-items: start;
+  align-items: center;
   gap: var(--space-5);
   flex-wrap: wrap;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-m);
-  background: var(--color-surface);
-  padding: var(--space-4) var(--space-5);
+  padding: var(--space-5) var(--space-6);
 }
 
 .experiment-name {
-  font-weight: 620;
+  font-weight: var(--weight-strong);
 }
 
 .experiment-question {
   color: var(--color-text-muted);
   font-size: var(--text-sm);
-  font-style: italic;
   margin-top: var(--space-1);
 }
 
@@ -211,38 +210,30 @@ const HORIZON_WINDOWS: Record<string, string> = {
   gap: var(--space-4);
 }
 
-.experiment-link {
-  display: inline-flex;
-  align-items: center;
-  font-size: var(--text-sm);
-  font-weight: 560;
-  text-decoration: none;
-  white-space: nowrap;
-}
-
-@media (pointer: coarse) {
-  .experiment-link {
-    min-height: 40px;
-  }
-}
-
 .reading-list {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--space-4);
   list-style: none;
-  margin: var(--space-5) 0 0;
+  margin: 0;
   padding: 0;
 }
 
 .reading-note {
   display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-4);
+  align-items: start;
+  padding: var(--space-5);
+}
+
+.note-body {
+  display: grid;
   gap: var(--space-1);
-  border-inline-start: 2px solid var(--color-border);
-  padding-inline-start: var(--space-4);
 }
 
 .note-title {
-  font-weight: 620;
+  font-weight: var(--weight-strong);
 }
 
 .note-source {
@@ -262,9 +253,9 @@ const HORIZON_WINDOWS: Record<string, string> = {
    (Next) → dashed, unfilled (Later). */
 .rm-track {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--space-6);
-  margin: var(--space-6) 0 0;
+  margin: 0;
   padding: 0;
   list-style: none;
 }
@@ -311,7 +302,7 @@ const HORIZON_WINDOWS: Record<string, string> = {
   text-transform: uppercase;
   letter-spacing: var(--tracking-wide);
   color: var(--color-text);
-  font-weight: 600;
+  font-weight: var(--weight-strong);
 }
 
 .rm-window {
@@ -343,7 +334,7 @@ const HORIZON_WINDOWS: Record<string, string> = {
   gap: var(--space-2);
   justify-items: start;
   border: 1.5px var(--zone-style) var(--zone-color);
-  border-radius: var(--radius-m);
+  border-radius: var(--radius-card);
   background: var(--color-surface);
   padding: var(--space-4);
 }
@@ -385,7 +376,7 @@ const HORIZON_WINDOWS: Record<string, string> = {
 
 @media (max-width: 1040px) {
   .rm-track {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     gap: var(--space-6);
   }
 
@@ -402,8 +393,18 @@ const HORIZON_WINDOWS: Record<string, string> = {
 }
 
 @media (max-width: 760px) {
-  .discipline-grid {
-    grid-template-columns: 1fr;
+  .discipline-grid,
+  .reading-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .discipline,
+  .experiment {
+    padding: var(--space-5);
+  }
+
+  .block {
+    margin-top: var(--space-10);
   }
 }
 </style>

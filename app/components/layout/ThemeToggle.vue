@@ -36,56 +36,41 @@ function toggle() {
 </script>
 
 <template>
+  <!-- The icon shows the theme you are in; the switch state says the same. -->
   <button
-    class="theme-toggle"
+    class="theme-toggle icon-btn"
     type="button"
     role="switch"
     :aria-checked="theme === 'dark'"
     aria-label="Dark theme"
     @click="toggle"
   >
-    <span class="track" aria-hidden="true">
-      <span class="thumb">{{ theme === 'dark' ? '☾' : '☀' }}</span>
-    </span>
+    <svg
+      v-if="theme === 'dark'"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      focusable="false"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z" />
+    </svg>
+    <svg
+      v-else
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+      focusable="false"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2.5v2M12 19.5v2M4.6 4.6l1.4 1.4M18 18l1.4 1.4M2.5 12h2M19.5 12h2M4.6 19.4 6 18M18 6l1.4-1.4" />
+    </svg>
   </button>
 </template>
-
-<style scoped>
-.theme-toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  /* The track stays 1.6rem tall; the hit area grows to a comfortable tap. */
-  min-height: 44px;
-}
-
-.track {
-  display: inline-flex;
-  align-items: center;
-  width: 3rem;
-  height: 1.6rem;
-  border: 1px solid var(--color-border-strong);
-  border-radius: 999px;
-  padding: 0 0.15rem;
-  background: var(--color-surface-sunken);
-  transition: background var(--duration-fast) var(--ease-out);
-}
-
-.thumb {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 1.2rem;
-  height: 1.2rem;
-  border-radius: 50%;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  font-size: 0.7rem;
-  line-height: 1;
-  transition: transform var(--duration-base) var(--ease-out);
-}
-
-.theme-toggle[aria-checked='true'] .thumb {
-  transform: translateX(1.35rem);
-}
-</style>

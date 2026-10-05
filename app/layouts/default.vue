@@ -11,6 +11,7 @@ const mode = usePortfolioMode()
       <slot />
     </main>
     <SiteFooter />
+    <MobileDock />
     <ChatWidget />
   </div>
 </template>
@@ -24,5 +25,19 @@ const mode = usePortfolioMode()
 
 main {
   flex: 1;
+}
+
+/* Phones: the page ends above the dock, so the last line of the footer is
+   never hidden behind it. */
+@media (max-width: 760px) {
+  .layout {
+    padding-bottom: calc(var(--dock-h) + var(--space-5) + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+@media print {
+  .layout {
+    padding-bottom: 0;
+  }
 }
 </style>

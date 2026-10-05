@@ -1,0 +1,41 @@
+{
+  "intro": "What I can bring to a team today. Each point is backed by work shown on this site.",
+  "items": [
+    {
+      "title": "Shipping working software",
+      "text": "TypeScript and Python end to end: a schema-validated Nuxt site whose build fails on unproven claims, a decision engine with 62 unit tests and CI, and a bilingual LMS prototype.",
+      "evidence": "Repository evidence",
+      "link": "https://github.com/chamroeunhongleng/chomkar-decision-grid"
+    },
+    {
+      "title": "Mathematical grounding",
+      "text": "A decade of competition mathematics ending as national runner-up; the habit of proving an answer right before claiming it.",
+      "evidence": "Owner confirmed",
+      "link": "/journey#group-milestones"
+    },
+    {
+      "title": "Applied-ML practice with honest evaluation",
+      "text": "A public Whisper fine-tuning pipeline for Khmer with published weights, speaker-stratified splits, and self-reported metrics labeled as exactly that.",
+      "evidence": "Repository evidence",
+      "link": "https://github.com/chamroeunhongleng/kaskor-asr"
+    },
+    {
+      "title": "Field research before code",
+      "text": "Interviews with real farmers before writing anything, and a decision engine where refusal is a tested, first-class output.",
+      "evidence": "Owner confirmed",
+      "link": "/projects/chomkar-orderloop"
+    },
+    {
+      "title": "Organizing work around written standards",
+      "text": "I lead a small professional reading circle that runs on a handbook I wrote: rotating officer roles, progress measured by what members produce rather than by pages read, and an AI-use policy binding on me as much as on every member.",
+      "evidence": "Document evidence",
+      "link": "/journey#group-community"
+    },
+    {
+      "title": "Bilingual delivery",
+      "text": "Products, reports, and technical content that work in Khmer and English from the first draft, not as a translation pass.",
+      "evidence": "Public evidence",
+      "link": "https://github.com/chamroeunhongleng/chamroeunhongleng/releases/tag/scholar-series-2026"
+    }
+  ]
+}

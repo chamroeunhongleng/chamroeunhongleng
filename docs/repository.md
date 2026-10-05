@@ -29,6 +29,7 @@ Full guide: [docs/local-setup.md](local-setup.md)
 | Rule engine | `shared/rules.ts` | mode-aware content rules, shared by CLI + build gate + tests |
 | Build gate | `modules/content-gate.ts` | aborts production builds while issues remain |
 | Pages | `app/pages/` | Home, Projects (+ case studies), Journey, Learning, About, Contact, Colophon, CV (also the PDF source) |
+| Design system | `app/assets/css/`, `app/components/ui/`, `app/components/home/` | tokens, `.card` / `.pill` / `.chip` / `.icon-btn`, `SectionHeading`, `TechIcon`, `Glyph`, `Scribble`, the homepage sections, the phone dock |
 | Verification | `scripts/`, `npm run verify` | structure, secrets, content, lint, types, tests, generate, links, a11y, SEO, gate self-test |
 | Claude tooling | `.claude/` | 10 commands, 10 skills, 6 reviewer agents, 3 guard hooks |
 

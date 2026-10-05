@@ -42,10 +42,14 @@ export default defineNuxtConfig({
     plugins: [tailwindcss()]
   },
   css: [
+    // Fraunces is only used by /cv (its PDF keeps the earlier serif). An
+    // @font-face rule costs a few bytes; browsers fetch the font file only
+    // where a glyph actually uses it.
     '@fontsource-variable/fraunces/index.css',
     '@fontsource-variable/inter/index.css',
     '@fontsource/ibm-plex-mono/400.css',
     '@fontsource/ibm-plex-mono/500.css',
+    '@fontsource/ibm-plex-mono/600.css',
     // Tailwind first: where a name exists in both (--text-lg, --leading-normal,
     // --tracking-wide, --ease-out), the token defined below wins.
     '~/assets/css/tailwind.css',

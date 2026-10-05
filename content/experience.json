@@ -1,10 +1,19 @@
 {
   "story": {
     "title": "From proofs on paper to systems in the field",
-    "paragraphs": [
-      "Mathematics came first. Competitions taught me that an answer is worth nothing until you can prove it — the habit that still decides what I am willing to claim. Code was the natural next step: the same rigor, but the result is something people can use.",
-      "Turing Hackathon Cycle 10 changed the plan. Building Chomkar OrderLoop with CHNAI LAB, I found the engineering was the smallest of the open questions. Who pays for this? What does a contract with a buyer actually promise? Who is accountable when a recommendation costs a farmer income? A system that works is not yet a company.",
-      "So I went after the other questions directly: computer science at Fort Hays State, IT management at AUPP, and English for Work Skills at IFL with international business as the declared major — alongside my own reading in technology law and policy. It is one plan, not three: build the system, understand the market, know the rules."
+    "steps": [
+      {
+        "title": "Proof before claim",
+        "text": "Mathematics came first. Competitions taught me that an answer is worth nothing until you can prove it. Code was the natural next step: the same rigor, but the result is something people can use."
+      },
+      {
+        "title": "A hackathon changed the plan",
+        "text": "At Turing Hackathon Cycle 10, building Chomkar OrderLoop with CHNAI LAB, I found the engineering was the smallest open question. Who pays for this? What does a contract with a buyer promise? Who is accountable when a recommendation costs a farmer income?"
+      },
+      {
+        "title": "One plan, not three",
+        "text": "So I went after those questions directly: computer science at Fort Hays State, IT management at AUPP, and English for Work Skills at IFL with international business as the declared major, alongside my own reading in technology law and policy. Build the system, understand the market, know the rules."
+      }
     ]
   },
   "groups": [
@@ -13,6 +22,14 @@
       "title": "Current roles",
       "layout": "timeline",
       "entries": [
+        {
+          "organization": "Angkor Byte",
+          "role": "Software Engineering Intern",
+          "period": "Sep 2026 — present",
+          "current": true,
+          "summary": "A software engineering internship that started in September 2026. My day-to-day tools here are GitHub, GitLab, and AWS.",
+          "contributions": []
+        },
         {
           "organization": "CHNAI LAB",
           "role": "Technology strategy & business",
@@ -37,10 +54,6 @@
               "text": "CHNAI LAB is a public student-run product studio with a published governance model (agent workflow, security policy, contribution rules); Chomkar is named there as a product track.",
               "evidence": "Public evidence",
               "link": "https://github.com/CHNAI-LAB"
-            },
-            {
-              "text": "Contributing product direction, applied-ML planning, field validation, and evidence standards across the studio's Cambodia-first experiments.",
-              "evidence": "Owner confirmed"
             }
           ],
           "links": [
@@ -191,7 +204,7 @@
           "role": "Lead",
           "period": "July 2026 — present",
           "current": true,
-          "summary": "I lead a small professional reading circle governed by a written handbook. Leadership rotates through weekly offices, and members are measured on what they produce — explanations, artifacts, applied experiments — rather than on pages read. These are the standards I set for the circle, not results it has reported.",
+          "summary": "I lead a small professional reading circle that runs on a written handbook. Leadership rotates through weekly offices, and members are measured on what they produce — explanations, artifacts, applied experiments — not on pages read. These are the standards I set, not results the circle has reported.",
           "contributions": [
             {
               "text": "Wrote and maintain the circle's governing handbook — 42 pages, Second Edition 2026 — covering the constitution, the reading method, the AI-use policy, working templates, and a twelve-month book pipeline. It is reviewed quarterly and stays internal rather than published.",
@@ -237,7 +250,7 @@
           "role": "Author & editor — six bilingual mathematics titles",
           "period": "2026",
           "current": false,
-          "summary": "Compiled, edited, and self-published six bilingual mathematics titles as First Editions (2026) under the CHNAI LAB imprint: matched Grade 6 and Grade 7 sets of an English–Khmer dictionary, an exercise book, and a full worked-solutions answer book — 1,780 pages in total, with original exercise questions and fully worked solutions, written for Cambodian students who study mathematics in English.",
+          "summary": "Compiled, edited, and self-published six bilingual mathematics titles as First Editions (2026) under the CHNAI LAB imprint: matched Grade 6 and Grade 7 sets of an English–Khmer dictionary, an exercise book, and a worked-solutions answer book. 1,780 pages in total, with original exercise questions and fully worked solutions, for Cambodian students who study mathematics in English.",
           "contributions": [
             {
               "text": "Grade 6 set: an English–Khmer Mathematics Dictionary (240 pages), a Mathematics Exercise Book (595 original questions in six levels across twenty chapters, 260 pages), and a Mathematics Answer Book with a full worked method for every question (340 pages).",

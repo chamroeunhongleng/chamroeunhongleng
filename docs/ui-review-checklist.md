@@ -12,11 +12,23 @@ for every item (toggle in the header).
       chips — never raw `[BRACKET]` text
 
 ## Home
-- [ ] Hero shows the verbatim intro + hero statement; identity line reads as a clause
-- [ ] Pillar band reads as one connected system (numbered 01–04)
-- [ ] Featured grid shows status AND deployment badges on every card
-- [ ] "Now" entries are dated; process timeline marks the three human gates
-- [ ] Evidence strip: every claim has a visible label; links open the receipts
+- [ ] Hero: name in display type, verbatim headline, CTAs, portrait with location
+      pill; no numbers strip (removed 2026-10-05)
+- [ ] Header: one line at 821–1040px with all six links; round GitHub, theme, and
+      menu buttons have names
+- [ ] About shows the verbatim intro + identity line; three principle cards
+- [ ] Now: availability pill; Now cards are dated with their evidence word
+- [ ] Mascot opens the site assistant; the hero stamp and the mascot are still
+      under reduced motion; handwritten notes read cleanly in both themes
+- [ ] Phone (≤760px): the dock sits beside the chat button and both take taps;
+      the header scrolls away; card groups swipe sideways with the next card
+      peeking in
+- [ ] Technologies: marquee pauses on hover and wraps still under reduced motion;
+      every chip has a name, icons only where a real mark exists
+- [ ] Selected work: status AND deployment badges on every card; arrows scroll one
+      card; the square button opens the live site or repository
+- [ ] Journey timeline, education cards, contribution cards, contact form — the
+      availability sentence appears once on the page
 
 ## Projects + case studies
 - [ ] Pillar filter, status filter, and search work together; result count announces

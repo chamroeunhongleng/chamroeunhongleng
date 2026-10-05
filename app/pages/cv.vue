@@ -252,6 +252,24 @@ const sections: { id: string; heading: string; entries: CvEntry[] }[] = [
  * Colours are hardcoded rather than tokenised so a visitor printing in dark
  * mode still gets ink on white.
  */
+
+/*
+ * The CV keeps the earlier serif typography on purpose: public/cv/*.pdf is
+ * rendered from this page and must not change when the site restyles.
+ * `.cv-page :where(h…)` has specificity (0,1,0): it beats the global h1–h4
+ * rule in typography.css and loses, by source order, to the print rules
+ * below — so the printed geometry is exactly what it was.
+ */
+.cv-page {
+  --font-display: 'Fraunces Variable', georgia, 'Times New Roman', serif;
+}
+
+.cv-page :where(h1, h2, h3, h4) {
+  font-weight: 560;
+  line-height: var(--leading-tight);
+  letter-spacing: -0.015em;
+}
+
 @page {
   size: A4;
   margin: 14mm 15mm 12mm;

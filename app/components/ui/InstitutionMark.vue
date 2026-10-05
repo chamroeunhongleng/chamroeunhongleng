@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { institutionAbbreviation } from '../../utils/institution'
 
 /**
  * Typographic stand-in for an institutional logo: the school's abbreviation
@@ -17,25 +18,7 @@ import { computed } from 'vue'
  */
 const props = defineProps<{ institution: string }>()
 
-// Words that carry no identity in an institution name.
-const MINOR_WORDS = new Set(['of', 'the', 'for', 'and', 'at', 'in'])
-
-const abbreviation = computed(() => {
-  // Prefer an abbreviation the content already states: "… (AUPP)".
-  const stated = props.institution.match(/\(([A-Za-z]{2,6})\)/)
-  if (stated?.[1]) return stated[1].toUpperCase()
-
-  // Otherwise build initials from the significant words of the leading clause,
-  // so "Fort Hays State University" reads FHSU.
-  const leadClause = props.institution.split(',')[0] ?? props.institution
-  return leadClause
-    .split(/\s+/)
-    .filter((word) => /^[A-Za-z]/.test(word) && !MINOR_WORDS.has(word.toLowerCase()))
-    .map((word) => word[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 4)
-})
+const abbreviation = computed(() => institutionAbbreviation(props.institution))
 </script>
 
 <template>

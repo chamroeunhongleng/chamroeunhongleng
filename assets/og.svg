@@ -1,17 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- Colours are the light-theme token values from app/assets/css/tokens.css.
+       Rendered by scripts/generate-assets.ts (resvg, system fonts). -->
   <rect width="1200" height="630" fill="#faf7f2"/>
-  <rect x="28" y="28" width="1144" height="574" fill="none" stroke="#e4dfd6" stroke-width="2"/>
-  <rect x="40" y="40" width="1120" height="550" fill="none" stroke="#1c1b22" stroke-width="2"/>
+  <rect x="40" y="40" width="1120" height="550" rx="28" fill="#ffffff" stroke="#e4dfd6" stroke-width="2"/>
 
-  <text x="92" y="150" font-family="Consolas, 'Courier New', monospace" font-size="26" letter-spacing="6" fill="#a14d28">01 · AI  02 · SOFTWARE  03 · BUSINESS  04 · GOVERNANCE</text>
+  <text x="96" y="134" font-family="Consolas, 'Cascadia Mono', 'Courier New', monospace" font-size="22" font-weight="700" letter-spacing="5" fill="#4338ca">CHNAI LAB · SOFTWARE · APPLIED ML</text>
 
-  <text x="92" y="280" font-family="Georgia, 'Times New Roman', serif" font-size="86" font-weight="700" fill="#1c1b22">Chamroeun Hongleng</text>
+  <text x="96" y="246" font-family="'Segoe UI', Inter, Arial, sans-serif" font-size="92" font-weight="800" letter-spacing="-3" fill="#1c1b22">Chamroeun Hongleng</text>
 
-  <text x="92" y="360" font-family="Georgia, 'Times New Roman', serif" font-size="38" font-style="italic" fill="#5a5750">Building intelligent systems with technical depth,</text>
-  <text x="92" y="412" font-family="Georgia, 'Times New Roman', serif" font-size="38" font-style="italic" fill="#5a5750">business understanding, and responsible governance.</text>
+  <text x="96" y="318" font-family="'Segoe UI', Inter, Arial, sans-serif" font-size="46" font-weight="800" letter-spacing="-1.5" fill="#a14d28">Software &amp; applied-ML student</text>
 
-  <line x1="92" y1="480" x2="1108" y2="480" stroke="#c9c2b4" stroke-width="2"/>
+  <text x="96" y="392" font-family="'Segoe UI', Inter, Arial, sans-serif" font-size="30" fill="#5a5750">Web systems, decision engines, and Khmer speech recognition —</text>
+  <text x="96" y="436" font-family="'Segoe UI', Inter, Arial, sans-serif" font-size="30" fill="#5a5750">with an evidence label on every claim.</text>
 
-  <text x="92" y="536" font-family="Consolas, 'Courier New', monospace" font-size="26" fill="#4338ca">chamroeunhongleng.me</text>
-  <text x="1108" y="536" text-anchor="end" font-family="Consolas, 'Courier New', monospace" font-size="26" fill="#77726a">AI · ML · Product · Policy</text>
+  <line x1="96" y1="490" x2="1104" y2="490" stroke="#e4dfd6" stroke-width="2"/>
+
+  <text x="96" y="542" font-family="Consolas, 'Cascadia Mono', 'Courier New', monospace" font-size="24" font-weight="700" fill="#4338ca">chamroeunhongleng.me</text>
+  <text x="1104" y="542" text-anchor="end" font-family="Consolas, 'Cascadia Mono', 'Courier New', monospace" font-size="22" fill="#6d6861">Phnom Penh · intern at Angkor Byte</text>
 </svg>

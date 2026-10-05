@@ -1,5 +1,6 @@
 {
-  "intro": "A public study log, honest about being one: what I am actively learning, what I have already tested in real projects, and what is still planned. The through-line is deliberate practice — fundamentals before frameworks, evaluation before claims, and critical review of anything my AI tools produce before it ships. The reading runs on a written method I now lead a professional circle on: brief a book before page one, recall each chapter closed-book, ship an explanation or a one-week experiment in real work, then review at 48 hours, 7 days, and 30 days.",
+  "intro": "A public study log: what I am learning now, what I have tested in real projects, and what is still planned. Fundamentals before frameworks, evaluation before claims, and a critical review of anything my AI tools produce before it ships.",
+  "readingMethod": "The reading runs on a written method I now lead a professional circle on: brief a book before page one, recall each chapter closed-book, ship an explanation or a one-week experiment in real work, then review at 48 hours, 7 days, and 30 days.",
   "disciplines": [
     {
       "pillar": "ai-ml",

@@ -27,3 +27,19 @@ themes, reduced-motion sanity, zoom to 200%.
 - `[id]` elements have `scroll-margin-top` so the sticky header never hides
   an anchor target.
 - `prefers-reduced-motion` reset lives at the end of `motion.css`.
+- Technology marquee: the moving duplicate is `aria-hidden` + `inert` and exists
+  only while animating; row labels are `h3`s.
+- Icon-only buttons (header GitHub, theme, menu, carousel arrows) take their name
+  from `aria-label` or visually-hidden text; the menu toggle's name is exactly
+  "Menu" / "Close".
+- `ContactForm` ids come from `useId()`, so the homepage and /contact can both
+  render it without duplicate ids.
+- Phone dock: `nav[aria-label="Quick navigation"]`, real links with visible
+  labels, `aria-current="page"`, 48px tall; `display: none` above 760px so it
+  never doubles the header nav for assistive technology.
+- Hero mascot: a real `<button aria-label="Open the site assistant">`; its
+  bubble, tile, and handwritten note are `aria-hidden`.
+- Handwritten notes, pen strokes, the hero stamp, and the footer wordmark are
+  decoration: `aria-hidden`, and never the only place a fact appears.
+- `SectionHeading mark` wraps a phrase for the underline but leaves the
+  heading's text intact.

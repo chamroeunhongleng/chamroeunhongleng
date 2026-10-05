@@ -10,10 +10,13 @@ const props = withDefaults(
     tone?: 'accent' | 'muted'
     /** Icon-only presentation: the label stays for screen readers. */
     iconOnly?: boolean
+    /** Round icon button (header tools, footer) — use with iconOnly. */
+    round?: boolean
   }>(),
   {
     tone: 'accent',
-    iconOnly: false
+    iconOnly: false,
+    round: false
   }
 )
 
@@ -39,7 +42,10 @@ const platform = computed<SocialPlatform>(() => {
     target="_blank"
     rel="noopener"
     class="social-profile-link"
-    :class="[`social-profile-link--${tone}`, { 'social-profile-link--icon-only': iconOnly }]"
+    :class="[
+      `social-profile-link--${tone}`,
+      { 'social-profile-link--icon-only': iconOnly, 'social-profile-link--round': round }
+    ]"
     :data-platform="platform"
     :aria-label="`${label} (opens in a new tab)`"
   >
@@ -143,6 +149,34 @@ const platform = computed<SocialPlatform>(() => {
 .social-profile-link--icon-only .social-profile-link__icon {
   width: 1.25rem;
   height: 1.25rem;
+}
+
+/* Round variant — the same circle as the global .icon-btn. */
+.social-profile-link--round {
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  background: var(--color-surface);
+  border-color: var(--color-border);
+  border-radius: 50%;
+}
+
+.social-profile-link--round:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.social-profile-link--round .social-profile-link__icon {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+@media (pointer: coarse) {
+  .social-profile-link--round {
+    width: 44px;
+    height: 44px;
+  }
 }
 
 .social-profile-link__external {

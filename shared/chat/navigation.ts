@@ -21,7 +21,8 @@ export interface NavTarget {
 export const STATIC_NAV_TARGETS: readonly NavTarget[] = [
   { path: '/', what: 'Homepage — who he is, featured projects, current focus' },
   { path: '/#now', what: 'What is in motion right now (current activity feed)' },
-  { path: '/#process', what: 'Rules he works by — the idea-to-production process' },
+  { path: '/#process', what: 'Rules he works by — three working principles on the homepage' },
+  { path: '/#stack', what: 'Technologies he has used, grouped, each traced to a case study or his skills' },
   { path: '/about', what: 'His story, skills, what he brings, education' },
   { path: '/about#education-title', what: 'Education — degrees, scholarships, institutions' },
   { path: '/about#links-title', what: 'Public profiles (GitHub, LinkedIn, X) and email' },

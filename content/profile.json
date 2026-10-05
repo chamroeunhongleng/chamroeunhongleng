@@ -11,7 +11,7 @@
     "text": "Phnom Penh, Cambodia",
     "evidence": "Public evidence"
   },
-  "availability": "Actively looking for a software engineering internship — full-stack, backend, or data and ML tooling — remote or Phnom Penh.",
+  "availability": "Software Engineering Intern at Angkor Byte since September 2026.",
   "links": [
     {
       "label": "GitHub",
@@ -35,25 +35,6 @@
       "label": "X",
       "url": "https://x.com/hongleng_dev",
       "kind": "profile",
-      "evidence": "Owner confirmed"
-    }
-  ],
-  "metrics": [
-    {
-      "award": "3.74% CER",
-      "event": "Khmer ASR, validation split, speakers seen in training (self-reported)",
-      "evidence": "Repository evidence",
-      "link": "https://github.com/chamroeunhongleng/kaskor-asr"
-    },
-    {
-      "award": "62 tests",
-      "event": "Deterministic farm decision engine",
-      "evidence": "Repository evidence",
-      "link": "https://github.com/chamroeunhongleng/chomkar-decision-grid"
-    },
-    {
-      "award": "Top 2",
-      "event": "Turing Hackathon Cycle 10",
       "evidence": "Owner confirmed"
     }
   ],

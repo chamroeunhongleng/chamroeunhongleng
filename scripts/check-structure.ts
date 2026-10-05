@@ -88,6 +88,8 @@ const REQUIRED_FILES = [
   'content/process.json',
   'content/now.json',
   'content/colophon.json',
+  'content/stack.json',
+  'content/contributions.json',
   'content/projects/kaskor-asr.json',
   'content/projects/chomkar-decision-grid.json',
   'content/projects/chomkar-orderloop.json',

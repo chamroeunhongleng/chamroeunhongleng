@@ -10,11 +10,13 @@ import { publishedProjects } from './fixtures/projects'
  * Writes a full-page screenshot of every key page at every device size into
  * .tmp/screenshots/<device>/, so the UI can be reviewed as it actually renders
  * on a phone, tablet, and laptop. Excluded from normal runs (see testIgnore in
- * playwright.config.ts); run with `npm run test:e2e:shots`.
+ * playwright.config.ts); run with `npm run test:e2e:shots`. Set E2E_THEME=dark
+ * to capture the dark theme into .tmp/screenshots/<device>-dark/.
  *
  * .tmp/ is disposable by convention — regenerate rather than commit.
  */
 const OUT = fileURLToPath(new URL('../../.tmp/screenshots', import.meta.url))
+const DARK = process.env.E2E_THEME === 'dark'
 
 const PAGES: Array<{ name: string, path: string }> = [
   { name: 'home', path: '/' },
@@ -23,13 +25,32 @@ const PAGES: Array<{ name: string, path: string }> = [
   { name: 'journey', path: '/journey' },
   { name: 'learning', path: '/learning' },
   { name: 'contact', path: '/contact' },
+  { name: 'colophon', path: '/colophon' },
+  { name: 'cv', path: '/cv' },
   ...publishedProjects.map((p) => ({ name: `project-${p.slug}`, path: `/projects/${p.slug}` }))
 ]
 
+function outDir(projectName: string): string {
+  const dir = join(OUT, DARK ? `${projectName}-dark` : projectName)
+  mkdirSync(dir, { recursive: true })
+  return dir
+}
+
+test.beforeEach(async ({ page }) => {
+  if (!DARK) return
+  // The theme bootstrap reads localStorage before first paint.
+  await page.addInitScript(() => {
+    try {
+      localStorage.setItem('theme', 'dark')
+    } catch {
+      /* storage unavailable — capture proceeds in the default theme */
+    }
+  })
+})
+
 for (const target of PAGES) {
   test(`capture ${target.name}`, async ({ page }, testInfo) => {
-    const dir = join(OUT, testInfo.project.name)
-    mkdirSync(dir, { recursive: true })
+    const dir = outDir(testInfo.project.name)
 
     await page.goto(target.path)
     // Fonts and lazy images settle before the shot, or the capture shows a
@@ -77,13 +98,12 @@ for (const target of PAGES) {
 }
 
 // The mobile menu is invisible in a normal capture, so it gets its own shot on
-// the viewports that actually have one.
+// the viewports that actually have one (820px and below — see SiteHeader.vue).
 test('capture mobile menu open', async ({ page }, testInfo) => {
   const width = page.viewportSize()?.width ?? 0
-  test.skip(width > 760, 'this viewport shows the inline desktop nav')
+  test.skip(width > 820, 'this viewport shows the inline desktop nav')
 
-  const dir = join(OUT, testInfo.project.name)
-  mkdirSync(dir, { recursive: true })
+  const dir = outDir(testInfo.project.name)
 
   await page.goto('/')
   const toggle = page.getByRole('button', { name: /^(Menu|Close)$/ })

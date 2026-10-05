@@ -67,9 +67,11 @@ The floating "Ask" widget is the site's only runtime backend: one Vercel
 function at `api/chat.ts` (the Nuxt build stays fully static). Rules:
 
 - Its knowledge derives from `content/*.json` (via the same zod loader) plus
-  `shared/chat/site-facts.ts`, which mirrors the Skills / "What I bring"
-  prose hardcoded in `app/pages/about.vue` — **change both in the same
+  `shared/chat/site-facts.ts`, which mirrors the Skills prose and background
+  story hardcoded in `app/pages/about.vue` — **change both in the same
   commit**. No regex sync-check (rule 3); the comment marks the duty.
+  "What I can contribute" lives in `content/contributions.json` and needs no
+  mirroring.
 - Navigation targets derive from project content (rule 4) in
   `shared/chat/navigation.ts`; the server validates every `navigateTo`
   against that allowlist.

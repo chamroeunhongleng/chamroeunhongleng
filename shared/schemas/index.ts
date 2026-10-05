@@ -2,6 +2,7 @@ import type { z } from 'zod'
 import {
   colophonSchema,
   contactSchema,
+  contributionsSchema,
   educationSchema,
   experienceSchema,
   interestsSchema,
@@ -9,7 +10,8 @@ import {
   nowSchema,
   principlesSchema,
   processSchema,
-  profileSchema
+  profileSchema,
+  stackSchema
 } from './site.js'
 import { projectSchema } from './project.js'
 
@@ -34,7 +36,9 @@ export const contentManifest = [
   { file: 'contact.json', key: 'contact', schema: contactSchema },
   { file: 'process.json', key: 'process', schema: processSchema },
   { file: 'now.json', key: 'now', schema: nowSchema },
-  { file: 'colophon.json', key: 'colophon', schema: colophonSchema }
+  { file: 'colophon.json', key: 'colophon', schema: colophonSchema },
+  { file: 'stack.json', key: 'stack', schema: stackSchema },
+  { file: 'contributions.json', key: 'contributions', schema: contributionsSchema }
 ] as const
 
 /** Projects live one-file-per-case-study under content/projects/. */
@@ -51,5 +55,7 @@ export interface ContentBundle {
   process: z.infer<typeof processSchema>
   now: z.infer<typeof nowSchema>
   colophon: z.infer<typeof colophonSchema>
+  stack: z.infer<typeof stackSchema>
+  contributions: z.infer<typeof contributionsSchema>
   projects: Array<z.infer<typeof projectSchema>>
 }

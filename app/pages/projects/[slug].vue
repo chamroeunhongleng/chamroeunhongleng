@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { getProject, profile, projects } from '~/data/portfolio'
+import { getProject, profile, projects, tagItemsFor } from '~/data/portfolio'
 import { PILLAR_TITLES } from '~~/shared/schemas/index'
 import { stripMarkers } from '~~/shared/markers'
+import { ldJson } from '~~/shared/ld-json'
 
 const route = useRoute()
 const project = getProject(route.params.slug as string)
@@ -33,14 +34,18 @@ usePageMeta({
 
 // Per-project structured data: projects with a public repository are
 // SoftwareSourceCode, the rest CreativeWork. The payload comes from
-// zod-validated content JSON, so inline serialization is safe.
+// zod-validated content JSON — but the schemas do not forbid a script
+// close-tag sequence in a name or description, so it serializes through
+// ldJson() rather than JSON.stringify(). (Writing that sequence out even
+// inside this comment would end the SFC's script block — which is the whole
+// hazard, demonstrated.)
 const repo = project.publicLinks.find((l) => l.kind === 'repository')
 const { siteUrl } = useRuntimeConfig().public
 useHead({
   script: [
     {
       type: 'application/ld+json',
-      innerHTML: JSON.stringify({
+      innerHTML: ldJson({
         '@context': 'https://schema.org',
         '@type': repo ? 'SoftwareSourceCode' : 'CreativeWork',
         'name': stripMarkers(project.name),
@@ -115,6 +120,11 @@ useHead({
             <dd class="mono">{{ project.timeline.label }}</dd>
           </div>
         </dl>
+
+        <div class="case-stack">
+          <p class="case-stack-label">Stack</p>
+          <TagList :tags="project.tags" :items="tagItemsFor(project)" :max="12" />
+        </div>
 
         <div class="header-links">
           <a
@@ -254,7 +264,7 @@ useHead({
       <section :id="'reflection'" class="case-section">
         <h2>What limits it, and what I learned</h2>
         <div class="limitations-grid">
-          <div>
+          <div class="limit-card">
             <h3>Constraints <span class="hint">(imposed)</span></h3>
             <ul>
               <li v-for="(item, i) in project.limitations.constraints" :key="i">
@@ -262,7 +272,7 @@ useHead({
               </li>
             </ul>
           </div>
-          <div>
+          <div class="limit-card">
             <h3>Tradeoffs <span class="hint">(chosen)</span></h3>
             <ul>
               <li v-for="(item, i) in project.limitations.tradeoffs" :key="i">
@@ -313,8 +323,6 @@ useHead({
 <style scoped>
 .case-header {
   padding-block: var(--space-8) var(--space-6);
-  border-bottom: 1px solid var(--color-border);
-  background: var(--color-surface);
 }
 
 .case-header .container {
@@ -324,11 +332,12 @@ useHead({
      header wider than the viewport. Items stay content-width via
      justify-items: start, so this changes nothing visually. */
   grid-template-columns: minmax(0, 1fr);
-  gap: var(--space-4);
+  gap: var(--space-5);
   justify-items: start;
 }
 
 .case-header h1 {
+  font-size: var(--text-h1);
   /* A project title can be a bare domain ("chamroeunhongleng.me") with no
      space to wrap at. `anywhere` — not `break-word` — because only `anywhere`
      also shrinks the element's min-content width, which is what stops the
@@ -339,9 +348,14 @@ useHead({
 .back-link {
   display: inline-flex;
   align-items: center;
+  padding: 0.4rem 0.9rem;
   font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
   text-decoration: none;
   color: var(--color-text-muted);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
 }
 
 @media (pointer: coarse) {
@@ -353,31 +367,36 @@ useHead({
 
 .back-link:hover {
   color: var(--color-accent);
+  border-color: var(--color-accent);
 }
 
 .case-question {
-  font-family: var(--font-display);
-  font-style: italic;
   font-size: var(--text-lg);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-snug);
   color: var(--color-accent-2);
   max-width: var(--prose-max);
+  padding-inline-start: var(--space-4);
+  border-inline-start: 3px solid var(--color-accent-2);
 }
 
 .header-outcomes {
   display: grid;
   gap: var(--space-3);
   max-width: var(--prose-max);
-  padding: var(--space-4) var(--space-5);
+  padding: var(--space-5) var(--space-6);
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-m);
-  background: var(--color-surface-sunken);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
 }
 
 .outcomes-label {
   font-size: var(--text-xs);
+  font-weight: var(--weight-strong);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--color-text-faint);
+  letter-spacing: var(--tracking-eyebrow);
+  color: var(--color-accent);
 }
 
 /* Lead block — one column normally, two when a portrait is present. */
@@ -390,7 +409,7 @@ useHead({
 
 .case-lead[data-portrait] {
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: var(--space-9);
+  gap: var(--space-10);
   align-items: center;
 }
 
@@ -401,8 +420,7 @@ useHead({
   max-width: 52rem;
 }
 
-/* Same archival plate as the homepage portrait: offset accent backplate,
-   hairline frame, mono caption plate with a terracotta tick. */
+/* Offset accent backplate, hairline frame, mono caption plate. */
 .case-portrait {
   position: relative;
   margin: 0;
@@ -413,7 +431,7 @@ useHead({
   position: absolute;
   inset: 0;
   transform: translate(var(--space-3), var(--space-3));
-  border-radius: var(--radius-l);
+  border-radius: var(--radius-hero);
   background: var(--color-accent-tint);
   border: 1px solid var(--color-accent);
   z-index: 0;
@@ -425,9 +443,9 @@ useHead({
   width: 100%;
   aspect-ratio: 3 / 4;
   object-fit: cover;
-  border-radius: var(--radius-l);
-  border: 1px solid var(--color-border-strong);
-  box-shadow: var(--shadow-2);
+  border-radius: var(--radius-hero);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-raised);
 }
 
 .portrait-plate {
@@ -438,7 +456,7 @@ useHead({
   gap: var(--space-2);
   margin-top: var(--space-4);
   font-size: var(--text-xs);
-  line-height: 1.5;
+  line-height: var(--leading-snug);
   color: var(--color-text-faint);
 }
 
@@ -452,7 +470,7 @@ useHead({
 
 .case-cover {
   margin: 0;
-  max-width: 52rem;
+  max-width: 60rem;
 }
 
 .case-cover img {
@@ -460,11 +478,12 @@ useHead({
   aspect-ratio: 16 / 9;
   object-fit: cover;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-m);
+  border-radius: var(--radius-hero);
+  box-shadow: var(--shadow-raised);
 }
 
 .case-cover figcaption {
-  margin-top: var(--space-2);
+  margin-top: var(--space-3);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   color: var(--color-text-faint);
@@ -485,35 +504,57 @@ useHead({
   width: 100%;
   height: auto;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-m);
+  border-radius: var(--radius-card);
 }
 
 .case-gallery figcaption {
   margin-top: var(--space-2);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
-  line-height: 1.5;
+  line-height: var(--leading-snug);
   color: var(--color-text-faint);
 }
 
+/* Status, deployment, and timeline — three small tiles in a row. */
 .case-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--space-6);
+  gap: var(--space-3);
   margin: 0;
+}
+
+.case-meta > div {
+  display: grid;
+  gap: var(--space-1);
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-m);
 }
 
 .case-meta dt {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
+  letter-spacing: var(--tracking-wide);
   color: var(--color-text-faint);
-  margin-bottom: var(--space-1);
 }
 
 .case-meta dd {
   margin: 0;
+}
+
+.case-stack {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.case-stack-label {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wide);
+  color: var(--color-text-faint);
 }
 
 .header-links {
@@ -523,24 +564,32 @@ useHead({
   gap: var(--space-4);
 }
 
+/* The section nav floats under the header as a second, smaller pill. */
 .case-nav {
   position: sticky;
-  top: 4rem;
+  top: calc(var(--header-offset) + var(--header-h) + var(--space-3));
   z-index: 40;
-  background: color-mix(in srgb, var(--color-bg) 92%, transparent);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--color-border);
+  pointer-events: none;
 }
 
 .case-nav ul {
+  pointer-events: auto;
   display: flex;
-  gap: var(--space-5);
+  gap: var(--space-1);
+  width: fit-content;
+  max-width: 100%;
   list-style: none;
   margin: 0;
-  padding: var(--space-1) 0;
+  padding: var(--space-1);
   overflow-x: auto;
   overscroll-behavior-x: contain;
   scrollbar-width: none;
+  background: color-mix(in srgb, var(--color-surface) 90%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-header);
 }
 
 .case-nav ul::-webkit-scrollbar {
@@ -550,24 +599,38 @@ useHead({
 .case-nav a {
   display: flex;
   align-items: center;
-  min-height: 44px;
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  min-height: 2.25rem;
+  padding-inline: var(--space-3);
+  border-radius: var(--radius-pill);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
   text-decoration: none;
   color: var(--color-text-muted);
   white-space: nowrap;
 }
 
+@media (pointer: coarse) {
+  .case-nav a {
+    min-height: 44px;
+  }
+}
+
+/* Phones: the header scrolls away, so the section nav sticks near the top. */
+@media (max-width: 760px) {
+  .case-nav {
+    top: var(--space-2);
+  }
+}
+
 .case-nav a:hover {
-  color: var(--color-accent);
+  color: var(--color-text);
+  background: var(--color-surface-sunken);
 }
 
 .case-body {
   display: grid;
-  gap: var(--space-10);
-  padding-block: var(--space-8);
+  gap: var(--space-12);
+  padding-block: var(--space-10) var(--space-8);
 }
 
 .case-section {
@@ -575,10 +638,11 @@ useHead({
   gap: var(--space-5);
   max-width: 52rem;
   /* Clear both sticky bars (header + section nav) when jumping to an anchor. */
-  scroll-margin-top: 8.5rem;
+  scroll-margin-top: 9.5rem;
 }
 
 .case-section > h2 {
+  font-size: var(--text-3xl);
   padding-bottom: var(--space-3);
   border-bottom: 1px solid var(--color-border);
 }
@@ -588,16 +652,11 @@ useHead({
   margin-top: var(--space-2);
 }
 
-.sub {
-  font-family: var(--font-display);
-}
-
 .hint {
   font-family: var(--font-body);
   font-size: var(--text-sm);
   font-weight: 400;
   color: var(--color-text-faint);
-  font-style: italic;
 }
 
 .workflow {
@@ -608,22 +667,25 @@ useHead({
 
 .approval-panel,
 .ai-panel {
-  border: 1px solid var(--color-accent);
-  border-radius: var(--radius-l);
-  padding: var(--space-5);
-  background: var(--color-accent-tint);
   display: grid;
   gap: var(--space-3);
+  padding: var(--space-5) var(--space-6);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-inline-start: 3px solid var(--color-accent);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
 }
 
 .approval-panel h3,
 .ai-panel h3 {
   margin: 0;
-  font-size: var(--text-base);
   font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-strong);
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  font-weight: 500;
+  letter-spacing: var(--tracking-eyebrow);
+  color: var(--color-accent);
 }
 
 .approval-panel ul {
@@ -638,7 +700,7 @@ useHead({
 }
 
 .ai-more a {
-  font-weight: 560;
+  font-weight: var(--weight-strong);
 }
 
 /* Alone on its own line, so it can take the full target height without
@@ -658,8 +720,20 @@ useHead({
 
 .limitations-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-6);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.limit-card {
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+}
+
+.limit-card h3 {
+  margin-top: 0;
 }
 
 .limitations-grid ul {
@@ -678,13 +752,23 @@ useHead({
   padding-top: var(--space-8);
 }
 
+.next-project {
+  display: grid;
+  gap: var(--space-2);
+}
+
 .next-link {
   display: inline-flex;
   align-items: center;
-  font-family: var(--font-display);
-  font-size: var(--text-xl);
-  font-weight: 600;
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-heading);
+  letter-spacing: var(--tracking-heading);
   text-decoration: none;
+  color: var(--color-text);
+}
+
+.next-link:hover {
+  color: var(--color-accent);
 }
 
 .case-cta {
@@ -710,11 +794,15 @@ useHead({
 
 @media (max-width: 760px) {
   .limitations-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .case-header {
     padding-block: var(--space-6) var(--space-5);
+  }
+
+  .case-section > h2 {
+    font-size: var(--text-2xl);
   }
 
   .approval-panel,

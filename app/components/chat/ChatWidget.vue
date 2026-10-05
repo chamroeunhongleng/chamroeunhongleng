@@ -222,6 +222,16 @@ watch(
   display: grid;
   justify-items: end;
   gap: var(--space-3);
+  /* On phones this box spans the full width of the screen, and an invisible
+     box that takes taps would cover the dock beside the launcher. Only the
+     three real parts below receive pointer events. */
+  pointer-events: none;
+}
+
+.chat-scrim,
+.chat-toggle,
+.chat-panel {
+  pointer-events: auto;
 }
 
 /* Full-viewport, but a child of .chat-widget so it sits inside that stacking

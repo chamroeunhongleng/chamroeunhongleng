@@ -1,5 +1,5 @@
 ﻿<script setup lang="ts">
-import { projects } from '~/data/portfolio'
+import { projects, tagItemsFor } from '~/data/portfolio'
 import {
   PILLAR_TITLES,
   PILLARS,
@@ -22,6 +22,16 @@ useReveal()
 const pillarFilter = ref<PillarId | 'all'>('all')
 const statusFilter = ref<string>('all')
 const search = ref('')
+
+// /projects?q=PyTorch pre-fills the search. Read after mount: the prerendered
+// page has no query string, so reading it during render would mismatch.
+const route = useRoute()
+onMounted(() => {
+  const q = route.query.q
+  if (typeof q === 'string') search.value = q
+})
+
+const pad = (n: number) => String(n).padStart(2, '0')
 
 const activeStatuses = computed(() => {
   const present = new Set(projects.map((p) => p.status))
@@ -63,7 +73,7 @@ const filtered = computed(() =>
         <div class="filter-group" role="group" aria-label="Filter by pillar">
           <button
             type="button"
-            class="chip"
+            class="filter-chip"
             :aria-pressed="pillarFilter === 'all'"
             @click="pillarFilter = 'all'"
           >
@@ -73,7 +83,7 @@ const filtered = computed(() =>
             v-for="id in PILLARS"
             :key="id"
             type="button"
-            class="chip"
+            class="filter-chip"
             :aria-pressed="pillarFilter === id"
             @click="pillarFilter = id"
           >
@@ -108,7 +118,15 @@ const filtered = computed(() =>
       </p>
 
       <div v-if="filtered.length" class="project-grid">
-        <ProjectCard v-for="project in filtered" :key="project.slug" :project="project" heading-level="h2" data-reveal />
+        <ProjectCard
+          v-for="(project, i) in filtered"
+          :key="project.slug"
+          :project="project"
+          :index="pad(i + 1)"
+          :tag-items="tagItemsFor(project)"
+          heading-level="h2"
+          data-reveal
+        />
       </div>
       <p v-else class="empty-state">
         Nothing matches those filters — try clearing the search or picking another pillar.
@@ -130,7 +148,7 @@ const filtered = computed(() =>
   gap: var(--space-2);
 }
 
-.chip {
+.filter-chip {
   display: inline-flex;
   align-items: center;
   font-size: var(--text-sm);
@@ -146,12 +164,12 @@ const filtered = computed(() =>
     color var(--duration-fast) var(--ease-out);
 }
 
-.chip:hover {
+.filter-chip:hover {
   border-color: var(--color-accent);
   color: var(--color-accent);
 }
 
-.chip[aria-pressed='true'] {
+.filter-chip[aria-pressed='true'] {
   background: var(--color-accent);
   border-color: var(--color-accent);
   color: var(--color-accent-contrast);
@@ -192,7 +210,7 @@ input[type='search'] {
 }
 
 @media (pointer: coarse) {
-  .chip,
+  .filter-chip,
   select,
   input[type='search'] {
     min-height: 44px;

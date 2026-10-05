@@ -61,6 +61,19 @@
   --font-title: var(--font-display);
   --font-text: var(--font-body);
   --font-code: var(--font-mono);
+  --font-km: var(--font-khmer);
+
+  --color-glow: var(--color-accent-glow);
+  --color-success-tint: var(--color-positive-tint);
+  --color-clay-tint: var(--color-accent-2-tint);
+
+  --radius-tile: var(--radius-card);
+  --shadow-tile: var(--shadow-card);
+  --shadow-lift: var(--shadow-raised);
+  --shadow-halo: var(--shadow-glow);
+
+  --font-weight-display: var(--weight-display);
+  --font-weight-heading: var(--weight-heading);
 }
 
 /*

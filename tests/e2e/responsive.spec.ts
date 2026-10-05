@@ -7,6 +7,11 @@ import { publishedProjects } from './fixtures/projects'
 // which puts iPad portrait (810px) on the mobile menu, by design.
 const MOBILE_BREAKPOINT = 820
 
+// Must match the breakpoint in app/components/layout/MobileDock.vue (and the
+// chat widget's phone layout). At or below this width the bottom dock exists
+// and the header scrolls away with the page.
+const PHONE_BREAKPOINT = 760
+
 type Page = import('@playwright/test').Page
 type Locator = import('@playwright/test').Locator
 
@@ -115,6 +120,55 @@ test.describe('Responsive header', () => {
     await expect(page).toHaveURL(/\/projects/)
     // A menu left open over the new page is the classic SPA bug.
     await expect(mobileNav).toBeHidden()
+  })
+})
+
+test.describe('Phone dock', () => {
+  test('exists on phones only, beside the chat launcher rather than under it', async ({ page }) => {
+    await page.goto('/')
+    const dock = page.getByRole('navigation', { name: 'Quick navigation' })
+
+    if (widthOf(page) > PHONE_BREAKPOINT) {
+      await expect(dock).toBeHidden()
+      return
+    }
+
+    await expect(dock).toBeVisible()
+    const launcher = page.getByRole('button', { name: 'Chat about this site' })
+    const [dockBox, launcherBox] = await Promise.all([dock.boundingBox(), launcher.boundingBox()])
+    expect(dockBox && launcherBox, 'dock or launcher has no box').toBeTruthy()
+    expect(
+      dockBox!.x + dockBox!.width,
+      'the dock runs underneath the chat launcher'
+    ).toBeLessThanOrEqual(launcherBox!.x)
+
+    // Thumb-sized: every dock link clears the 44px floor (1px tolerance for
+    // device-emulation rounding, as elsewhere in this file).
+    const short = await dock.locator('a').evaluateAll((links) =>
+      links.map((a) => +a.getBoundingClientRect().height.toFixed(1)).filter((h) => h < 43)
+    )
+    expect(short, `dock links under 44px: ${JSON.stringify(short)}`).toEqual([])
+  })
+
+  // The chat widget's box spans the whole bottom strip on a phone. Before it
+  // was made click-through it swallowed every tap meant for the dock — so this
+  // is a real click, which Playwright refuses if anything else would take it.
+  test('a dock link is tappable, navigates, and marks the current page', async ({ page }) => {
+    await page.goto('/')
+    test.skip(widthOf(page) > PHONE_BREAKPOINT, 'no dock at this width')
+
+    const dock = page.getByRole('navigation', { name: 'Quick navigation' })
+    await dock.getByRole('link', { name: 'Projects' }).click()
+    await expect(page).toHaveURL(/\/projects/)
+    await expect(dock.getByRole('link', { name: 'Projects' })).toHaveAttribute('aria-current', 'page')
+  })
+
+  test('the header scrolls away on phones and stays put on wider screens', async ({ page }) => {
+    await page.goto('/')
+    const position = await page.evaluate(
+      () => getComputedStyle(document.querySelector('.site-header')!).position
+    )
+    expect(position).toBe(widthOf(page) > PHONE_BREAKPOINT ? 'sticky' : 'relative')
   })
 })
 
@@ -246,6 +300,21 @@ test.describe('Touch targets', () => {
     )
     expect(short, `chat controls under 44px: ${JSON.stringify(short)}`).toEqual([])
   })
+
+  // The restyle added pill buttons and round icon buttons — every one of them
+  // is something a thumb has to hit.
+  test('homepage buttons, pills, and icon buttons meet the 44px target floor', async ({ page }) => {
+    await page.goto('/')
+    await skipUnlessTouch(page)
+
+    const short = await page.evaluate(() =>
+      [...document.querySelectorAll('.btn, a.pill, button.pill, .icon-btn, .social-profile-link--round, .story-link, .thanks-link')]
+        .filter((el) => el.getBoundingClientRect().height > 0)
+        .map((el) => ({ el: el.className || el.tagName, h: +el.getBoundingClientRect().height.toFixed(1) }))
+        .filter((c) => c.h < 43)
+    )
+    expect(short, `targets under 44px: ${JSON.stringify(short)}`).toEqual([])
+  })
 })
 
 test.describe('Responsive layout', () => {
@@ -260,6 +329,10 @@ test.describe('Responsive layout', () => {
     // /cv carries long unbroken URLs in a mono face and a two-column award
     // list — both classic sources of sideways scroll on a 320px phone.
     '/cv',
+    '/journey',
+    '/learning',
+    '/contact',
+    '/colophon',
     ...publishedProjects.map((p) => `/projects/${p.slug}`)
   ]
 

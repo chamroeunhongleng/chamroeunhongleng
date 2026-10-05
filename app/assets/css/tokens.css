@@ -2,9 +2,11 @@
  * Design tokens — the only place colors, spacing, and type sizes are
  * defined. Components consume tokens; they never hardcode values.
  *
- * Identity: "ink on warm paper" — editorial, typography-led. Light is the
- * default register (fits the governance/business positioning); dark is a
- * first-class alternate, toggled via data-theme on <html>.
+ * Identity: "bold sans on warm paper" — Inter Variable at heavy weights for
+ * display and headings, Inter for body, IBM Plex Mono for the audit-trail
+ * register. Own palette: indigo accent, terracotta second accent. Light is
+ * the default register; dark is a first-class alternate, toggled via
+ * data-theme on <html>.
  *
  * Contrast contract (checked in review): body text pairs >= 4.5:1,
  * large text and UI accents >= 3:1, in both themes.
@@ -20,20 +22,29 @@
   --color-text: #1c1b22; /* ~15.6:1 on bg */
   --color-text-muted: #5a5750; /* ~6.4:1 on bg */
   --color-text-faint: #6d6861; /* AA on every light surface: 5.5 on white, 5.2 on bg, 4.8 on sunken (#77726a hit 4.1 on sunken — a Lighthouse failure) */
-  --color-accent: #4338ca; /* deep indigo, ~7.2:1 on bg */
+  --color-accent: #4338ca; /* deep indigo, ~7.2:1 on bg, 8.6:1 on surface */
   --color-accent-hover: #3730a3;
   --color-accent-contrast: #ffffff;
   --color-accent-tint: rgba(67, 56, 202, 0.08);
+  --color-accent-glow: rgba(67, 56, 202, 0.28);
   --color-accent-2: #a14d28; /* terracotta, ~5.9:1 on bg */
+  --color-accent-2-tint: rgba(161, 77, 40, 0.1);
   --color-focus: #4338ca;
   --color-warn: #8a5a00;
-  --color-positive: #196c43;
+  --color-positive: #196c43; /* ~6.3:1 on positive-tint over surface */
+  --color-positive-tint: rgba(25, 108, 67, 0.1);
   --color-danger: #a02c2c;
 
   /* Type */
-  --font-display: 'Fraunces Variable', georgia, 'Times New Roman', serif;
+  --font-display: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-body: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, 'Cascadia Code', consolas, monospace;
+  /* Neither webfont carries Khmer glyphs; the few visible Khmer words use the
+     platform's Khmer face instead of shipping a subset for one greeting. */
+  --font-khmer: 'Khmer UI', 'Leelawadee UI', 'Khmer Sangam MN', 'Noto Sans Khmer', sans-serif;
+  /* The handwritten register: a few margin notes and sign-offs, never body
+     text. A 17 KB basic-Latin subset of Caveat (app/assets/fonts/). */
+  --font-hand: 'Caveat Hand', 'Segoe Print', 'Bradley Hand', cursive;
 
   --text-xs: 0.75rem;
   --text-sm: 0.875rem;
@@ -43,12 +54,30 @@
   --text-2xl: clamp(1.5rem, 1.3rem + 1vw, 2rem);
   --text-3xl: clamp(1.9rem, 1.5rem + 1.8vw, 2.75rem);
   --text-4xl: clamp(2.4rem, 1.8rem + 2.8vw, 3.6rem);
+  /* Display scale — the bold editorial register */
+  --text-display: clamp(2.75rem, 1.2rem + 6vw, 6rem); /* hero name; the floor keeps "Chamroeun" inside a 320px screen */
+  --text-display-sm: clamp(1.625rem, 1.1rem + 2.4vw, 3rem); /* hero role line */
+  --text-h1: clamp(2.25rem, 1.5rem + 3vw, 3.75rem); /* inner-page h1 via SectionHeading */
+  --text-h2: clamp(1.875rem, 1.3rem + 2.2vw, 3rem); /* section h2 via SectionHeading */
+  --text-hand: clamp(1.3rem, 1.15rem + 0.6vw, 1.6rem); /* handwriting runs small; this reads like --text-base */
 
+  --weight-display: 800;
+  --weight-heading: 700;
+  --weight-strong: 600;
+  --weight-medium: 500;
+
+  --leading-display: 1.04;
+  --leading-heading: 1.12;
   --leading-tight: 1.15;
   --leading-snug: 1.35;
   --leading-normal: 1.6;
   --leading-relaxed: 1.75;
+
+  --tracking-display: -0.03em;
+  --tracking-heading: -0.022em;
+  --tracking-snug: -0.012em;
   --tracking-wide: 0.12em;
+  --tracking-eyebrow: 0.14em;
 
   /* Space — 4px base */
   --space-1: 0.25rem;
@@ -61,24 +90,40 @@
   --space-8: 3rem;
   --space-10: 4rem;
   --space-12: 5rem;
-  --section-gap: clamp(4rem, 9vw, 6.5rem);
+  --space-14: 6rem;
+  --section-gap: clamp(4.5rem, 10vw, 7rem);
 
   /* Layout */
   --container-max: 72rem;
+  --container-pad: clamp(1.25rem, 4vw, 2.5rem);
   --prose-max: 65ch;
+  --header-h: 3.5rem;
+  --header-offset: 0.75rem;
+  --dock-h: 3.5rem; /* the phone dock; matches the chat launcher's height */
   /* Breakpoint conventions (custom properties don't work in media queries):
-     wide 1040px, narrow 760px. Keep media queries on those two values. */
+     wide 1040px, header 820px, narrow 760px, small 480px. */
 
   /* Shape & elevation */
   --radius-s: 6px;
   --radius-m: 10px;
+  --radius-card: 14px;
   --radius-l: 16px;
+  --radius-hero: 24px;
+  --radius-pill: 999px;
   --shadow-1: 0 1px 2px rgba(38, 33, 22, 0.06), 0 2px 8px rgba(38, 33, 22, 0.05);
   --shadow-2: 0 2px 4px rgba(38, 33, 22, 0.07), 0 10px 28px rgba(38, 33, 22, 0.09);
+  --shadow-card: 0 1px 2px rgba(38, 33, 22, 0.04), 0 6px 20px rgba(38, 33, 22, 0.06);
+  --shadow-raised: 0 4px 10px rgba(38, 33, 22, 0.07), 0 18px 40px rgba(38, 33, 22, 0.12);
+  --shadow-header: 0 1px 2px rgba(38, 33, 22, 0.05), 0 8px 24px rgba(38, 33, 22, 0.08);
+  --shadow-glow: 0 8px 24px -6px var(--color-accent-glow);
+  --shadow-glow-hover: 0 12px 30px -6px var(--color-accent-glow);
 
   /* Motion */
   --duration-fast: 150ms;
   --duration-base: 220ms;
+  --duration-marquee: 40s;
+  --duration-float: 6s;
+  --duration-spin: 40s;
   --ease-out: cubic-bezier(0.2, 0, 0, 1);
 }
 
@@ -95,12 +140,18 @@
   --color-accent-hover: #c0c8ff;
   --color-accent-contrast: #131318;
   --color-accent-tint: rgba(165, 176, 255, 0.1);
+  --color-accent-glow: rgba(165, 176, 255, 0.22);
   --color-accent-2: #e0a183;
+  --color-accent-2-tint: rgba(224, 161, 131, 0.14);
   --color-focus: #a5b0ff;
   --color-warn: #e3b341;
   --color-positive: #6fcf97;
+  --color-positive-tint: rgba(111, 207, 151, 0.14);
   --color-danger: #ef8f8f;
 
   --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.25);
   --shadow-2: 0 2px 4px rgba(0, 0, 0, 0.35), 0 10px 28px rgba(0, 0, 0, 0.4);
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.35), 0 6px 20px rgba(0, 0, 0, 0.3);
+  --shadow-raised: 0 4px 10px rgba(0, 0, 0, 0.4), 0 18px 40px rgba(0, 0, 0, 0.5);
+  --shadow-header: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.45);
 }

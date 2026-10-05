@@ -9,8 +9,15 @@ import StatusBadge from '../ui/StatusBadge.vue'
 import TagList from '../ui/TagList.vue'
 
 const props = withDefaults(
-  defineProps<{ project: Project; headingLevel?: 'h2' | 'h3' }>(),
-  { headingLevel: 'h3' }
+  defineProps<{
+    project: Project
+    headingLevel?: 'h2' | 'h3'
+    /** Position label ("01") shown in the card's corner. */
+    index?: string
+    /** Tags with technology marks (tagItemsFor); falls back to plain tags. */
+    tagItems?: ReadonlyArray<{ name: string; icon?: string }>
+  }>(),
+  { headingLevel: 'h3', index: undefined, tagItems: undefined }
 )
 
 const pillarNames = computed(() =>
@@ -26,52 +33,60 @@ const liveLink = computed(() =>
 
 <template>
   <article class="project-card" :data-demo="project.demo || undefined">
-    <img
-      v-if="project.cover"
-      :src="project.cover.src"
-      :alt="project.cover.alt"
-      class="card-cover"
-      loading="lazy"
-    >
-    <div class="card-top">
-      <StatusBadge :status="project.status" />
-      <DeploymentBadge :deployment="project.deployment" />
-      <span class="year mono">{{ project.timeline.label }}</span>
+    <div v-if="project.cover" class="card-media">
+      <img
+        :src="project.cover.src"
+        :alt="project.cover.alt"
+        :width="project.cover.width"
+        :height="project.cover.height"
+        class="card-cover"
+        loading="lazy"
+        decoding="async"
+      >
     </div>
 
-    <component :is="headingLevel" class="card-title">
-      <NuxtLink :to="`/projects/${project.slug}`" class="card-link">
-        <MarkedText :text="project.name" />
-      </NuxtLink>
-    </component>
+    <div class="card-body">
+      <div class="card-top">
+        <span v-if="index" class="card-index" aria-hidden="true">{{ index }}</span>
+        <StatusBadge :status="project.status" />
+        <DeploymentBadge :deployment="project.deployment" />
+        <span class="year mono">{{ project.timeline.label }}</span>
+      </div>
 
-    <p class="card-pillars">{{ pillarNames }}</p>
-    <p class="card-summary"><MarkedText :text="project.oneLiner" /></p>
+      <component :is="headingLevel" class="card-title">
+        <NuxtLink :to="`/projects/${project.slug}`" class="card-link">
+          <MarkedText :text="project.name" />
+        </NuxtLink>
+      </component>
 
-    <div v-if="proof" class="card-proof">
-      <p class="proof-label">Proof</p>
-      <p v-if="proof.link" class="proof-text">
-        <a :href="proof.link" target="_blank" rel="noopener" class="proof-link">
-          <MarkedText :text="proof.text" />
-          <span aria-hidden="true">↗</span>
-        </a>
-      </p>
-      <p v-else class="proof-text"><MarkedText :text="proof.text" /></p>
-      <EvidenceLabel :evidence="proof.evidence" :link="proof.link" />
-    </div>
+      <p class="card-pillars">{{ pillarNames }}</p>
+      <p class="card-summary"><MarkedText :text="project.oneLiner" /></p>
 
-    <div class="card-bottom">
-      <TagList :tags="project.tags" :max="4" />
-      <span class="card-actions">
-        <a
-          v-if="liveLink"
-          :href="liveLink.url"
-          target="_blank"
-          rel="noopener"
-          class="live-link"
-        >Visit site<span aria-hidden="true"> ↗</span></a>
-        <span class="card-action" aria-hidden="true">Case study →</span>
-      </span>
+      <div v-if="proof" class="card-proof">
+        <p class="proof-label">Proof</p>
+        <p v-if="proof.link" class="proof-text">
+          <a :href="proof.link" target="_blank" rel="noopener" class="proof-link">
+            <MarkedText :text="proof.text" />
+            <span aria-hidden="true">↗</span>
+          </a>
+        </p>
+        <p v-else class="proof-text"><MarkedText :text="proof.text" /></p>
+        <EvidenceLabel :evidence="proof.evidence" :link="proof.link" />
+      </div>
+
+      <div class="card-bottom">
+        <TagList :tags="project.tags" :items="tagItems" :max="4" />
+        <span class="card-actions">
+          <a
+            v-if="liveLink"
+            :href="liveLink.url"
+            target="_blank"
+            rel="noopener"
+            class="live-link"
+          >Visit site<span aria-hidden="true"> ↗</span></a>
+          <span class="card-action" aria-hidden="true">Case study →</span>
+        </span>
+      </div>
     </div>
   </article>
 </template>
@@ -81,20 +96,20 @@ const liveLink = computed(() =>
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
-  padding: var(--space-5);
+  overflow: hidden;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-l);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
   transition:
     border-color var(--duration-fast) var(--ease-out),
-    box-shadow var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out),
     transform var(--duration-base) var(--ease-out);
 }
 
 .project-card:hover {
   border-color: var(--color-border-strong);
-  box-shadow: var(--shadow-2);
+  box-shadow: var(--shadow-raised);
   transform: translateY(-2px);
 }
 
@@ -102,12 +117,31 @@ const liveLink = computed(() =>
   border-style: dashed;
 }
 
+.card-media {
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--color-surface-sunken);
+  border-bottom: 1px solid var(--color-border);
+}
+
 .card-cover {
   width: 100%;
-  aspect-ratio: 16 / 9;
+  height: 100%;
   object-fit: cover;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-m);
+  object-position: top;
+  transition: transform var(--duration-base) var(--ease-out);
+}
+
+.project-card:hover .card-cover {
+  transform: scale(1.02);
+}
+
+.card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-3);
+  padding: var(--space-5) var(--space-6) var(--space-6);
 }
 
 .card-top {
@@ -117,6 +151,14 @@ const liveLink = computed(() =>
   gap: var(--space-2);
 }
 
+.card-index {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-strong);
+  color: var(--color-text-faint);
+  margin-inline-end: var(--space-1);
+}
+
 .year {
   margin-inline-start: auto;
   color: var(--color-text-faint);
@@ -124,7 +166,7 @@ const liveLink = computed(() =>
 }
 
 .card-title {
-  font-size: var(--text-xl);
+  font-size: var(--text-2xl);
 }
 
 .card-title a {
@@ -134,16 +176,11 @@ const liveLink = computed(() =>
 
 /* The stretched card link.
  *
- * It was designed in but never written: .project-card already carries the
- * `position: relative` this needs, .live-link already lifts itself to z-index 2
- * "above the stretched card link", and "Case study →" is an aria-hidden span
- * rather than a link — all of which only make sense if the card itself is the
- * target. Without it the sole way into a case study was the title text, which
- * measures 25px tall on a phone: a thin line to hit with a thumb, with the rest
- * of the card inert despite the hover state advertising otherwise.
- *
- * The <a> keeps the accessible name and stays the single tab stop; the overlay
- * only extends where a pointer counts as hitting it.
+ * .project-card carries the `position: relative` this needs, .live-link lifts
+ * itself to z-index 2 "above the stretched card link", and "Case study →" is an
+ * aria-hidden span rather than a link — the card itself is the target. The <a>
+ * keeps the accessible name and stays the single tab stop; the overlay only
+ * extends where a pointer counts as hitting it.
  */
 .card-link::after {
   content: '';
@@ -167,7 +204,7 @@ const liveLink = computed(() =>
 .card-pillars {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
-  letter-spacing: 0.04em;
+  letter-spacing: var(--tracking-wide);
   text-transform: uppercase;
   color: var(--color-accent-2);
 }
@@ -209,7 +246,9 @@ const liveLink = computed(() =>
   display: inline-flex;
   align-items: center;
   gap: 0.3em;
-  transition: all 0.2s ease;
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    text-decoration-color var(--duration-fast) var(--ease-out);
 }
 
 .proof-link:hover {
@@ -241,7 +280,7 @@ const liveLink = computed(() =>
 
 .card-action {
   font-size: var(--text-sm);
-  font-weight: 560;
+  font-weight: var(--weight-strong);
   color: var(--color-accent);
   white-space: nowrap;
 }
@@ -253,11 +292,11 @@ const liveLink = computed(() =>
   display: inline-flex;
   align-items: center;
   font-size: var(--text-sm);
-  font-weight: 560;
+  font-weight: var(--weight-strong);
   white-space: nowrap;
   text-decoration: none;
   border: 1px solid var(--color-accent);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 0.45em 0.95em;
   color: var(--color-accent);
   transition:
@@ -273,6 +312,12 @@ const liveLink = computed(() =>
 @media (pointer: coarse) {
   .live-link {
     min-height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  .card-body {
+    padding: var(--space-4) var(--space-5) var(--space-5);
   }
 }
 </style>

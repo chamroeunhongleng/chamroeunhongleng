@@ -18,16 +18,18 @@ function goHome() {
   <NuxtLayout>
     <div class="error-page">
       <div class="container">
-        <p class="eyebrow">{{ error.statusCode }}</p>
-        <h1>{{ is404 ? 'Page not found' : 'Something went wrong' }}</h1>
+        <p class="error-code">{{ error.statusCode }}</p>
+        <p class="eyebrow">{{ is404 ? 'Not found' : 'Error' }}</p>
+        <h1>{{ is404 ? 'This page is not here' : 'Something went wrong' }}</h1>
         <p class="lede">
           {{
             is404
-              ? 'The page you were looking for does not exist — it may have moved, or the link was mistyped.'
-              : 'An unexpected error occurred while rendering this page.'
+              ? 'Sorry about that. The page may have moved, or the link has a typo in it.'
+              : 'Sorry about that. Something broke while this page was loading.'
           }}
         </p>
-        <button type="button" class="btn btn-primary" @click="goHome">Back to home</button>
+        <p class="hand" aria-hidden="true">the rest of the site still works, I promise</p>
+        <button type="button" class="btn btn-primary" @click="goHome">Take me home</button>
       </div>
     </div>
   </NuxtLayout>
@@ -46,5 +48,18 @@ function goHome() {
   gap: var(--space-4);
   justify-items: start;
   padding-block: var(--space-12);
+}
+
+.error-code {
+  font-family: var(--font-mono);
+  font-size: var(--text-display);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-display);
+  letter-spacing: var(--tracking-display);
+  color: var(--color-border-strong);
+}
+
+.error-page h1 {
+  font-size: var(--text-h1);
 }
 </style>

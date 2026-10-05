@@ -1,14 +1,23 @@
-/* Small utility layer — layout primitives shared across pages. */
+/* Utility layer — layout primitives and the shared component grammar every
+   page uses: cards, pills, chips, icon buttons, section heads, stats.
+   Tokens only; no raw colours or type sizes. */
 
 .container {
   width: 100%;
   max-width: var(--container-max);
   margin-inline: auto;
-  padding-inline: clamp(1.25rem, 4vw, 2.5rem);
+  padding-inline: var(--container-pad);
 }
 
 .section {
   padding-block: calc(var(--section-gap) / 2);
+}
+
+/* A horizontal scroll row that runs to the screen edge while its first item
+   still lines up with the container. */
+.bleed {
+  margin-inline: calc(var(--container-pad) * -1);
+  padding-inline: var(--container-pad);
 }
 
 .visually-hidden {
@@ -36,33 +45,48 @@
   z-index: 1;
 }
 
+/* Buttons — pill-shaped. */
 .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: var(--space-2);
-  font-weight: 560;
+  font-weight: var(--weight-strong);
   font-size: var(--text-sm);
-  padding: 0.65rem 1.2rem;
-  border-radius: var(--radius-m);
+  line-height: var(--leading-tight);
+  padding: 0.7rem 1.25rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
   text-decoration: none;
   transition:
     background var(--duration-fast) var(--ease-out),
     color var(--duration-fast) var(--ease-out),
-    border-color var(--duration-fast) var(--ease-out);
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out),
+    transform var(--duration-base) var(--ease-out);
+}
+
+.btn .glyph {
+  width: 1rem;
+  height: 1rem;
 }
 
 .btn-primary {
   background: var(--color-accent);
   color: var(--color-accent-contrast);
+  box-shadow: var(--shadow-glow);
 }
 
 .btn-primary:hover {
   background: var(--color-accent-hover);
   color: var(--color-accent-contrast);
+  box-shadow: var(--shadow-glow-hover);
+  transform: translateY(-1px);
 }
 
 .btn-secondary {
-  border: 1px solid var(--color-border-strong);
+  background: var(--color-surface);
+  border-color: var(--color-border-strong);
   color: var(--color-text);
 }
 
@@ -76,5 +100,269 @@
 @media (pointer: coarse) {
   .btn {
     min-height: 44px;
+  }
+}
+
+/* Cards — surface, hairline, soft shadow. */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  transition:
+    transform var(--duration-base) var(--ease-out),
+    box-shadow var(--duration-base) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out);
+}
+
+.card-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-raised);
+  border-color: var(--color-border-strong);
+}
+
+/* Pills — small outline links and status statements. */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 0.4rem 0.9rem;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-strong);
+  line-height: var(--leading-tight);
+  color: var(--color-text);
+  text-decoration: none;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-pill);
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    background var(--duration-fast) var(--ease-out);
+}
+
+.pill .glyph {
+  width: 1rem;
+  height: 1rem;
+}
+
+a.pill:hover,
+button.pill:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.pill-filled {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-accent-contrast);
+}
+
+a.pill-filled:hover,
+button.pill-filled:hover {
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+  color: var(--color-accent-contrast);
+}
+
+/* A true, current statement (availability, "Current"). Long text wraps. */
+.pill-live {
+  background: var(--color-positive-tint);
+  border-color: transparent;
+  color: var(--color-positive);
+  font-weight: var(--weight-medium);
+}
+
+.pill .dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: currentColor;
+  flex: 0 0 auto;
+}
+
+@media (pointer: coarse) {
+  a.pill,
+  button.pill {
+    min-height: 44px;
+  }
+}
+
+/* Round icon buttons (header tools, carousel arrows). The accessible name
+   comes from aria-label or visually-hidden text, never the icon. */
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 2.5rem;
+  height: 2.5rem;
+  color: var(--color-text-muted);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  text-decoration: none;
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    background var(--duration-fast) var(--ease-out);
+}
+
+.icon-btn:hover {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.icon-btn svg {
+  width: 1.125rem;
+  height: 1.125rem;
+}
+
+.icon-btn-square {
+  border-radius: var(--radius-m);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-accent-contrast);
+}
+
+.icon-btn-square:hover {
+  background: var(--color-accent-hover);
+  border-color: var(--color-accent-hover);
+  color: var(--color-accent-contrast);
+}
+
+@media (pointer: coarse) {
+  .icon-btn {
+    width: 44px;
+    height: 44px;
+  }
+}
+
+/* Chips — non-interactive hairline pills naming a tool or topic. */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.35em 0.8em;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-tight);
+  color: var(--color-text-muted);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+}
+
+/* Card rows — a grid of cards on tablets and up; on a phone the same list
+   becomes one swipeable row with the next card peeking in, so a section is one
+   thumb-swipe wide instead of six screens tall. Set the column count with
+   data-cols, and data-mid="2" for two columns between 761px and 1040px. */
+.card-row {
+  display: grid;
+  gap: var(--space-5);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.card-row[data-cols='2'] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.card-row[data-cols='3'] {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 1040px) {
+  .card-row[data-cols='3'][data-mid='2'] {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .card-row {
+    display: flex;
+    gap: var(--space-3);
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--container-pad);
+    /* Bleed to the screen edges; the padding keeps the first card on the
+       container line and leaves room for card shadows and the reveal shift. */
+    margin-inline: calc(var(--container-pad) * -1);
+    margin-bottom: calc(var(--space-4) * -1);
+    padding: var(--space-2) var(--container-pad) var(--space-6);
+    scrollbar-width: none;
+  }
+
+  .card-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .card-row > * {
+    flex: 0 0 84%;
+    scroll-snap-align: start;
+  }
+}
+
+/* Section head — eyebrow + bold heading on the left, the supporting
+   paragraph on the right (SectionHeading renders this). Top-aligned: the
+   aside starts level with the heading, below the eyebrow, however long the
+   paragraph runs. */
+.section-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: var(--space-5) var(--space-10);
+  align-items: start;
+  margin-bottom: var(--space-8);
+}
+
+.section-head-title {
+  display: grid;
+  gap: var(--space-3);
+  align-content: start;
+}
+
+.section-head h1 {
+  font-size: var(--text-h1);
+}
+
+.section-head h2 {
+  font-size: var(--text-h2);
+}
+
+.section-head-aside {
+  display: grid;
+  gap: var(--space-4);
+  justify-items: start;
+  align-content: start;
+  padding-top: var(--space-6);
+}
+
+.section-head-aside > p {
+  font-size: var(--text-lg);
+  line-height: var(--leading-relaxed);
+  color: var(--color-text-muted);
+}
+
+.section-head[data-layout='stack'] {
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+}
+
+.section-head[data-layout='stack'] .section-head-aside {
+  padding-top: 0;
+}
+
+@media (max-width: 760px) {
+  .section-head {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+
+  .section-head-aside {
+    padding-top: 0;
   }
 }

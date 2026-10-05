@@ -4,9 +4,9 @@
   "responseExpectation": "I check this inbox daily and usually reply within 24 hours.",
   "inquiryTypes": [
     {
-      "title": "Research & internships",
-      "description": "Applied-ML research assistance, internships, or student research collaborations — especially around low-resource languages and evaluation.",
-      "subject": "Research or internship opportunity"
+      "title": "Research",
+      "description": "Applied-ML research assistance or student research collaborations — especially around low-resource languages and evaluation.",
+      "subject": "Research collaboration"
     },
     {
       "title": "Product collaboration",
@@ -26,7 +26,7 @@
   ],
   "boundaries": {
     "seeking": [
-      "Applied-ML research and internships",
+      "Applied-ML research collaborations",
       "Product collaborations with honest scope",
       "Mentorship in ML evaluation, product strategy, or technology law",
       "Chances to practice governance reviews on real products"

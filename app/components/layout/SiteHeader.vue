@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { profile } from '~/data/portfolio'
 
 const route = useRoute()
@@ -14,13 +14,27 @@ function closeMenu() {
   menuToggle.value?.focus()
 }
 
+// Six items is what one line holds (see the 821–1040px band below). "Now" is
+// a homepage section; Learning and the colophon live in the footer.
 const NAV = [
   { label: 'Projects', to: '/projects' },
-  { label: 'Journey', to: '/journey' },
-  { label: 'Learning', to: '/learning' },
+  { label: 'Now', to: '/#now' },
   { label: 'About', to: '/about' },
+  { label: 'Journey', to: '/journey' },
+  { label: 'CV', to: '/cv' },
   { label: 'Contact', to: '/contact' }
 ]
+
+// The one profile surfaced as a header button — found by host, not label.
+const github = computed(() =>
+  profile.links.find((link) => {
+    try {
+      return new URL(link.url).hostname.replace(/^www\./, '') === 'github.com'
+    } catch {
+      return false
+    }
+  })
+)
 
 function isCurrent(to: string): boolean {
   if (to.includes('#')) return false
@@ -37,13 +51,63 @@ watch(
 
 <template>
   <header class="site-header" @keydown.escape="closeMenu">
-    <div class="container header-row">
-      <NuxtLink to="/" class="brand">
-        <span class="monogram" aria-hidden="true">{{ profile.monogram }}</span>
-        <span class="brand-name">{{ profile.name }}</span>
-      </NuxtLink>
+    <div class="container header-shell">
+      <div class="header-row">
+        <NuxtLink to="/" class="brand">
+          <span class="monogram" aria-hidden="true">{{ profile.monogram }}</span>
+          <span class="brand-name">{{ profile.name }}</span>
+        </NuxtLink>
 
-      <nav class="desktop-nav" aria-label="Main navigation">
+        <nav class="desktop-nav" aria-label="Main navigation">
+          <ul role="list">
+            <li v-for="item in NAV" :key="item.to">
+              <NuxtLink
+                :to="item.to"
+                :aria-current="isCurrent(item.to) ? 'page' : undefined"
+                class="nav-link"
+              >
+                {{ item.label }}
+              </NuxtLink>
+            </li>
+          </ul>
+        </nav>
+
+        <div class="header-tools">
+          <SocialProfileLink
+            v-if="github"
+            :label="github.label"
+            :url="github.url"
+            tone="muted"
+            icon-only
+            round
+          />
+          <ThemeToggle />
+          <button
+            ref="menuToggle"
+            type="button"
+            class="menu-toggle icon-btn"
+            :aria-expanded="menuOpen"
+            aria-controls="mobile-nav"
+            @click="menuOpen = !menuOpen"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+              focusable="false"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+            >
+              <path v-if="menuOpen" d="M6 6l12 12M18 6 6 18" />
+              <path v-else d="M4 7h16M4 12h16M4 17h16" />
+            </svg>
+            <span class="visually-hidden">{{ menuOpen ? 'Close' : 'Menu' }}</span>
+          </button>
+        </div>
+      </div>
+
+      <nav v-show="menuOpen" id="mobile-nav" class="mobile-nav" aria-label="Mobile navigation">
         <ul role="list">
           <li v-for="item in NAV" :key="item.to">
             <NuxtLink
@@ -56,49 +120,24 @@ watch(
           </li>
         </ul>
       </nav>
-
-      <div class="header-tools">
-        <a v-if="profile.cv" :href="profile.cv.url" class="cv-link mono" target="_blank" rel="noopener">
-          {{ profile.cv.label }}
-        </a>
-        <ThemeToggle />
-        <button
-          ref="menuToggle"
-          type="button"
-          class="menu-toggle"
-          :aria-expanded="menuOpen"
-          aria-controls="mobile-nav"
-          @click="menuOpen = !menuOpen"
-        >
-          {{ menuOpen ? 'Close' : 'Menu' }}
-        </button>
-      </div>
     </div>
-
-    <nav v-show="menuOpen" id="mobile-nav" class="mobile-nav" aria-label="Mobile navigation">
-      <ul role="list" class="container">
-        <li v-for="item in NAV" :key="item.to">
-          <NuxtLink
-            :to="item.to"
-            :aria-current="isCurrent(item.to) ? 'page' : undefined"
-            class="nav-link"
-          >
-            {{ item.label }}
-          </NuxtLink>
-        </li>
-      </ul>
-    </nav>
   </header>
 </template>
 
 <style scoped>
+/* A floating pill: the header itself is transparent and lets clicks through
+   its gutters; only the bar and the open menu take pointer events. */
 .site-header {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: color-mix(in srgb, var(--color-bg) 88%, transparent);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid var(--color-border);
+  padding-top: var(--header-offset);
+  pointer-events: none;
+}
+
+.header-row,
+.mobile-nav {
+  pointer-events: auto;
 }
 
 .header-row {
@@ -106,11 +145,17 @@ watch(
   align-items: center;
   justify-content: space-between;
   gap: var(--space-2) var(--space-4);
-  min-height: 4rem;
+  min-height: var(--header-h);
   /* At a large OS font scale or high browser zoom the row reflows onto two
      lines instead of the brand and the controls colliding. */
   flex-wrap: wrap;
-  padding-block: var(--space-2);
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
+  background: color-mix(in srgb, var(--color-surface) 88%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-l);
+  box-shadow: var(--shadow-header);
 }
 
 .brand {
@@ -122,30 +167,27 @@ watch(
   min-width: 0;
 }
 
-.monogram,
-.menu-toggle,
-.theme-toggle {
-  flex: 0 0 auto;
-}
-
 .monogram {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex: 0 0 auto;
   width: 2.1rem;
   height: 2.1rem;
-  border: 1.5px solid var(--color-text);
-  border-radius: var(--radius-s);
+  border-radius: var(--radius-m);
+  background: var(--color-text);
+  color: var(--color-bg);
   font-family: var(--font-display);
-  font-weight: 600;
+  font-weight: var(--weight-display);
   font-size: var(--text-sm);
+  letter-spacing: var(--tracking-heading);
 }
 
 .brand-name {
   font-family: var(--font-display);
-  font-weight: 560;
+  font-weight: var(--weight-heading);
   font-size: var(--text-base);
-  letter-spacing: -0.01em;
+  letter-spacing: var(--tracking-heading);
   /* Never break across two lines (it doubles the header height) and never
      paint over the controls: when the row runs out of room the name clips. */
   white-space: nowrap;
@@ -156,7 +198,8 @@ watch(
 
 .desktop-nav ul {
   display: flex;
-  gap: var(--space-5);
+  align-items: center;
+  gap: var(--space-1);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -165,14 +208,27 @@ watch(
 .nav-link {
   display: inline-flex;
   align-items: center;
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius-pill);
   text-decoration: none;
   color: var(--color-text-muted);
   font-size: var(--text-sm);
-  font-weight: 500;
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+  transition:
+    color var(--duration-fast) var(--ease-out),
+    background var(--duration-fast) var(--ease-out);
 }
 
 .nav-link:hover {
-  color: var(--color-accent);
+  color: var(--color-text);
+  background: var(--color-surface-sunken);
+}
+
+.nav-link[aria-current='page'] {
+  color: var(--color-text);
+  background: var(--color-surface-sunken);
+  font-weight: var(--weight-strong);
 }
 
 @media (pointer: coarse) {
@@ -182,68 +238,26 @@ watch(
   }
 }
 
-.nav-link[aria-current='page'] {
-  color: var(--color-text);
-  font-weight: 620;
-  text-decoration: underline;
-  text-decoration-color: var(--color-accent);
-  text-decoration-thickness: 2px;
-  text-underline-offset: 0.4em;
-}
-
 .header-tools {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
-}
-
-/* CV pill — renders only when profile.cv is set (see shared/schemas/site.ts). */
-.cv-link {
-  display: inline-flex;
-  align-items: center;
-  font-size: var(--text-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--color-accent);
-  text-decoration: none;
-  border: 1px solid var(--color-accent);
-  border-radius: 999px;
-  padding: 0.35em 0.9em;
-  white-space: nowrap;
-}
-
-.cv-link:hover {
-  background: var(--color-accent);
-  color: var(--color-accent-contrast);
-}
-
-@media (pointer: coarse) {
-  .cv-link {
-    min-height: 44px;
-  }
+  gap: var(--space-2);
 }
 
 .menu-toggle {
   display: none;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--font-mono);
-  font-size: var(--text-sm);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--color-text);
-  padding: var(--space-2) var(--space-3);
-  min-height: 44px;
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-s);
 }
 
 .mobile-nav {
   display: none;
-  border-top: 1px solid var(--color-border);
-  background: var(--color-bg);
+  margin-top: var(--space-2);
+  padding: var(--space-2);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-l);
+  box-shadow: var(--shadow-header);
   /* A long menu stays reachable on short landscape viewports. */
-  max-height: calc(100dvh - 4rem);
+  max-height: calc(100dvh - 6rem);
   overflow-y: auto;
   overscroll-behavior: contain;
 }
@@ -252,24 +266,43 @@ watch(
   display: grid;
   gap: var(--space-1);
   list-style: none;
-  padding-block: var(--space-3);
   margin: 0;
+  padding: 0;
 }
 
 .mobile-nav .nav-link {
   display: flex;
-  align-items: center;
   min-height: 44px;
+  padding-inline: var(--space-4);
+  border-radius: var(--radius-m);
   font-size: var(--text-base);
 }
 
-/* 820px, not 760px: measured, the desktop header (brand + five nav links + CV
-   pill + theme toggle) only fits on one line from ~815px up. Switching to the
-   desktop nav at 760px meant every width from 761–815px — including iPad
-   portrait at 810px — rendered a wrapped, double-height header with the CV
-   pill and theme toggle pushed onto a second row. The breakpoint now sits
-   where the layout actually fits. Guarded by the header-height assertion in
-   responsive.spec.ts; keep MOBILE_BREAKPOINT there in sync. */
+/* Between the mobile menu and the wide layout the six links, the brand, and
+   two icon buttons still fit on one line — with tighter link padding. Measured
+   at 821px: ~676px of a ~755px row. Guarded by the header-height assertion in
+   responsive.spec.ts. */
+@media (min-width: 821px) and (max-width: 1040px) {
+  .header-row {
+    gap: var(--space-3);
+  }
+
+  .desktop-nav ul {
+    gap: 0;
+  }
+
+  .nav-link {
+    padding-inline: var(--space-2);
+  }
+
+  .brand-name {
+    font-size: var(--text-sm);
+  }
+}
+
+/* 820px, not 760px: iPad portrait (810px) gets the menu, so no width ever
+   renders a wrapped, double-height header. Keep MOBILE_BREAKPOINT in
+   responsive.spec.ts in sync. */
 @media (max-width: 820px) {
   .desktop-nav {
     display: none;
@@ -283,25 +316,13 @@ watch(
     display: block;
   }
 
-  /* Tighten the row so brand + controls stay on one line down to 360px — the
-     most common Android width, where the default spacing overshot by 2px and
-     tipped the row onto a second line. space-between still holds them apart
-     whenever there is room; this only lowers the minimum. */
   .header-row {
     gap: var(--space-2);
-  }
-
-  .header-tools {
-    gap: var(--space-3);
-  }
-
-  .menu-toggle {
-    padding-inline: var(--space-2);
+    padding-inline-start: var(--space-3);
   }
 
   .brand {
     gap: var(--space-2);
-    min-width: 0;
   }
 
   .brand-name {
@@ -309,20 +330,21 @@ watch(
   }
 }
 
-/* Below 450px the full name cannot share the row with both controls, so the
-   monogram carries the brand on its own.
+/* Phones: the header scrolls away with the page. The dock at the bottom of
+   the screen (MobileDock) is the navigation that stays, and a phone has no
+   room for two fixed bars. */
+@media (max-width: 760px) {
+  .site-header {
+    position: relative;
+  }
+}
 
-   Measured, not guessed: sweeping the viewport 320–520px, the header row is
-   64px tall (one line) up to 448px and 102px (two lines) from 360–448px with
-   the name shown — it only fits again at 450px. The previous 22.4em (358px)
-   threshold therefore left every common phone width (360, 375, 390, 393, 412,
-   428) rendering a double-height header, which is exactly what it was meant to
-   prevent. Covered by the header-height assertion in responsive.spec.ts.
+/* Below 450px the full name cannot share the row with three controls, so the
+   monogram carries the brand on its own.
 
    Deliberately in em, not px: media-query em tracks the browser's default font
    size, so raising the Android/Chrome font-scale setting retires the name at
-   the point it stops fitting — the same trigger, expressed in the user's own
-   units. 28.125em = 450px at the default 16px.
+   the point it stops fitting. 28.125em = 450px at the default 16px.
 
    Visually hidden, not display:none — the monogram is aria-hidden, so the
    name must stay in the accessibility tree or the brand link has no

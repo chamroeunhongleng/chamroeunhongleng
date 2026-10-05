@@ -38,4 +38,10 @@
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+
+  /* Hover lifts are movement too. */
+  .card-lift:hover,
+  .btn-primary:hover {
+    transform: none;
+  }
 }

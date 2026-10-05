@@ -1,16 +1,33 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import TechIcon from './TechIcon.vue'
 
-/** Tech/topic chips with an overflow counter instead of endless wrapping. */
-const props = withDefaults(defineProps<{ tags: readonly string[]; max?: number }>(), { max: 5 })
+/**
+ * Tech/topic chips with an overflow counter instead of endless wrapping.
+ * Pass `items` (name + optional Simple Icons slug) for chips with marks;
+ * plain `tags` still work.
+ */
+const props = withDefaults(
+  defineProps<{
+    tags?: readonly string[]
+    items?: ReadonlyArray<{ name: string; icon?: string }>
+    max?: number
+  }>(),
+  { tags: () => [], items: undefined, max: 5 }
+)
 
-const visible = computed(() => props.tags.slice(0, props.max))
-const overflow = computed(() => props.tags.length - props.max)
+const all = computed(() =>
+  props.items && props.items.length > 0 ? props.items : props.tags.map((name) => ({ name, icon: undefined }))
+)
+const visible = computed(() => all.value.slice(0, props.max))
+const overflow = computed(() => all.value.length - props.max)
 </script>
 
 <template>
   <ul class="tag-list" role="list">
-    <li v-for="tag in visible" :key="tag" class="tag">{{ tag }}</li>
+    <li v-for="item in visible" :key="item.name" class="tag">
+      <TechIcon v-if="item.icon" :icon="item.icon" brand />{{ item.name }}
+    </li>
     <li v-if="overflow > 0" class="tag tag-more">+{{ overflow }}</li>
   </ul>
 </template>
@@ -26,12 +43,17 @@ const overflow = computed(() => props.tags.length - props.max)
 }
 
 .tag {
-  font-family: var(--font-mono);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4em;
   font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-tight);
   color: var(--color-text-muted);
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 999px;
-  padding: 0.15em 0.7em;
+  border-radius: var(--radius-pill);
+  padding: 0.3em 0.75em;
   white-space: nowrap;
 }
 

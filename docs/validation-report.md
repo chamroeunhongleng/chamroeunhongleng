@@ -55,7 +55,7 @@ Also verified directly:
   hook as a subprocess and asserts the exit code for every rule. The claim is
   now held up by a test rather than by this sentence — which is the only
   reason it belongs in a validation report at all.
-- OG image renders correctly (1200×630, editorial serif on warm paper).
+- OG image renders correctly (1200×630, bold sans on warm paper since the 2026-09-14 restyle).
 
 ## Not verified here (environment limits — honest gaps)
 

@@ -1,0 +1,54 @@
+{
+  "intro": "Every name here comes from a case study on this site or from the skills list on the About page.",
+  "groups": [
+    {
+      "id": "ml-data",
+      "title": "ML & data",
+      "items": [
+        { "name": "Python", "icon": "python", "projects": ["kaskor-asr", "chomkar-decision-grid"] },
+        { "name": "PyTorch", "icon": "pytorch", "projects": ["kaskor-asr"] },
+        { "name": "Hugging Face", "icon": "huggingface", "projects": ["kaskor-asr"] },
+        { "name": "Whisper", "projects": ["kaskor-asr"] },
+        { "name": "Speech recognition", "projects": ["kaskor-asr"] },
+        { "name": "CER/WER evaluation design", "source": "skills" },
+        { "name": "Decision intelligence", "projects": ["chomkar-decision-grid"] },
+        { "name": "Unit testing", "projects": ["chomkar-decision-grid"] }
+      ]
+    },
+    {
+      "id": "software",
+      "title": "Software",
+      "items": [
+        { "name": "TypeScript", "icon": "typescript", "projects": ["portfolio-site", "lms"] },
+        { "name": "Nuxt 4", "icon": "nuxt", "projects": ["portfolio-site"] },
+        { "name": "Vue", "icon": "vuedotjs", "source": "skills" },
+        { "name": "Next.js", "icon": "nextdotjs", "projects": ["phsaros", "lms"] },
+        { "name": "Prisma", "icon": "prisma", "projects": ["phsaros"] },
+        { "name": "Postgres", "icon": "postgresql", "projects": ["phsaros"] },
+        { "name": "Zod", "icon": "zod", "projects": ["portfolio-site"] },
+        { "name": "GitHub", "icon": "github", "source": "skills" },
+        { "name": "GitLab", "icon": "gitlab", "source": "skills" },
+        { "name": "AWS", "icon": "amazonwebservices", "source": "skills" },
+        { "name": "CI", "icon": "githubactions", "projects": ["portfolio-site", "chomkar-decision-grid"] },
+        { "name": "AI-native development", "icon": "claude", "projects": ["portfolio-site"] },
+        { "name": "Multi-tenant", "projects": ["phsaros"] },
+        { "name": "Accessibility", "projects": ["portfolio-site"] },
+        { "name": "Design tokens", "projects": ["portfolio-site"] }
+      ]
+    },
+    {
+      "id": "product-languages",
+      "title": "Product & languages",
+      "items": [
+        { "name": "Field research", "projects": ["chomkar-orderloop"] },
+        { "name": "Product strategy", "projects": ["chomkar-orderloop"] },
+        { "name": "Product design", "projects": ["lms"] },
+        { "name": "Agritech", "projects": ["chomkar-orderloop", "chomkar-decision-grid"] },
+        { "name": "Digital marketing", "source": "skills" },
+        { "name": "CapCut", "source": "skills" },
+        { "name": "Khmer", "projects": ["kaskor-asr", "lms", "chomkar-orderloop"] },
+        { "name": "English", "source": "skills" }
+      ]
+    }
+  ]
+}

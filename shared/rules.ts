@@ -74,7 +74,9 @@ export function runContentRules(
     ['contact', bundle.contact],
     ['process', bundle.process],
     ['now', bundle.now],
-    ['colophon', bundle.colophon]
+    ['colophon', bundle.colophon],
+    ['stack', bundle.stack],
+    ['contributions', bundle.contributions]
   ]
   for (const project of bundle.projects) {
     // Disabled projects ship nothing — no route, no listing — so their dormant
@@ -199,6 +201,47 @@ export function runContentRules(
         `learning.experiments[${i}]`,
         `Experiment references unknown or disabled project "${experiment.projectSlug}".`
       )
+    }
+  }
+
+  // 6b. Stack items trace to real work: a project-sourced item must cite at
+  // least one enabled project AND be one of that project's tags, so the
+  // homepage technology list can never name a tool no case study used.
+  const tagsBySlug = new Map(
+    bundle.projects
+      .filter((p) => p.enabled)
+      .map((p) => [p.slug, new Set(p.tags.map((t) => t.toLowerCase()))])
+  )
+  for (const group of bundle.stack.groups) {
+    for (const [i, item] of group.items.entries()) {
+      if (item.source === 'skills') continue
+      const path = `stack.groups.${group.id}.items[${i}]`
+      if (item.projects.length === 0) {
+        add(
+          'error',
+          'stack-item-unsourced',
+          path,
+          `"${item.name}" cites no enabled project and is not marked source: "skills".`
+        )
+      }
+      for (const slug of item.projects) {
+        const tags = tagsBySlug.get(slug)
+        if (!tags) {
+          add(
+            'error',
+            'broken-project-reference',
+            path,
+            `Stack item "${item.name}" references unknown or disabled project "${slug}".`
+          )
+        } else if (!tags.has(item.name.toLowerCase())) {
+          add(
+            'error',
+            'stack-item-not-a-tag',
+            path,
+            `"${item.name}" is not one of the tags of project "${slug}".`
+          )
+        }
+      }
     }
   }
 

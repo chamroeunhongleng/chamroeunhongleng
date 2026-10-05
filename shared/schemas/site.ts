@@ -5,8 +5,7 @@ import { claimSchema, hrefSchema, imageRefSchema, linkSchema, slugSchema } from 
 // ── shared shapes ────────────────────────────────────────────────────────
 /**
  * One result as a single scannable line: "award — event". Used for the
- * competition lists on /journey and the hero metrics strip on the homepage.
- * The evidence label is data on every line; the UI stamps it visibly only
+ * competition lists on /journey. The evidence label is data on every line; the UI stamps it visibly only
  * when a public link backs it (same pattern as the education card, where
  * labels live in JSON without rendering per-row chips).
  */
@@ -39,17 +38,12 @@ export const profileSchema = z.strictObject({
   availability: z.string().min(1),
   links: z.array(linkSchema).min(1),
   /**
-   * Canonical labeled claims about the owner. No longer rendered as a
-   * homepage section (the hero `metrics` strip replaced it); still feeds
-   * the chat assistant's knowledge document.
+   * Canonical labeled claims about the owner. Not rendered as a homepage
+   * section; feeds the chat assistant's knowledge document. (The hero numbers
+   * strip that once restated three of these was removed at the owner's
+   * request, 2026-10-05.)
    */
   proofPoints: z.array(claimSchema).min(3),
-  /**
-   * Hero metrics strip — at most four numbers a recruiter can scan in
-   * seconds. Each line restates a claim that already exists elsewhere on
-   * the site with the same evidence label; keep the values verbatim.
-   */
-  metrics: z.array(resultLineSchema).max(4).optional(),
   /** One-line AI-native working-style statement. */
   aiWorkingStyle: z.string().min(1),
   /**
@@ -130,11 +124,16 @@ export const experienceSchema = z.strictObject({
    * The through-line the timeline cannot show: why a mathematics competitor
    * chose computer science, and what the hackathon added to that plan.
    * Personal motivation, so plain prose — not Claim objects with labels.
+   * Told as a few short steps, each under its own heading, so /journey can
+   * set them side by side instead of as a wall of paragraphs (owner request,
+   * 2026-10-05). The first step's text is the pull-quote on the homepage.
    */
   story: z
     .strictObject({
       title: z.string().min(1),
-      paragraphs: z.array(z.string().min(1)).min(1)
+      steps: z
+        .array(z.strictObject({ title: z.string().min(1), text: z.string().min(1) }))
+        .min(1)
     })
     .optional(),
   groups: z
@@ -154,6 +153,8 @@ export type Experience = z.infer<typeof experienceSchema>
 // ── learning.json ────────────────────────────────────────────────────────
 export const learningSchema = z.strictObject({
   intro: z.string().min(1),
+  /** How the reading is done — the lede of the Reading notes section. */
+  readingMethod: z.string().min(1).optional(),
   disciplines: z
     .array(
       z.strictObject({
@@ -274,3 +275,59 @@ export const colophonSchema = z.strictObject({
   noteForAgents: z.string().min(1)
 })
 export type Colophon = z.infer<typeof colophonSchema>
+
+// ── stack.json (the technologies named on the homepage) ──────────────────
+/**
+ * One technology chip. Every item must trace to real work: either the tags of
+ * at least one enabled case study (shared/rules.ts checks that the name IS one
+ * of those tags) or the Skills list on the About page (`source: 'skills'`).
+ * Nothing is listed because it sounds good.
+ */
+export const stackItemSchema = z.strictObject({
+  name: z.string().min(1),
+  /** Simple Icons slug, resolved by app/data/tech-icons.ts. Omit when no mark exists. */
+  icon: z
+    .string()
+    .regex(/^[a-z0-9]+$/, 'icon must be a Simple Icons slug')
+    .optional(),
+  projects: z.array(slugSchema).default([]),
+  source: z.enum(['projects', 'skills']).default('projects')
+})
+export type StackItem = z.infer<typeof stackItemSchema>
+
+export const stackSchema = z.strictObject({
+  intro: z.string().min(1),
+  groups: z
+    .array(
+      z.strictObject({
+        id: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/),
+        title: z.string().min(1),
+        items: z.array(stackItemSchema).min(3)
+      })
+    )
+    .min(1)
+    .max(4)
+})
+export type Stack = z.infer<typeof stackSchema>
+
+// ── contributions.json ("What I can contribute") ─────────────────────────
+/**
+ * What he can bring to a team, each statement an evidence-labeled claim.
+ * Rendered on the homepage and /about and read by the chat assistant — one
+ * source, instead of prose hardcoded in a template and mirrored by hand.
+ */
+export const contributionsSchema = z.strictObject({
+  intro: z.string().min(1),
+  items: z
+    .array(
+      z.strictObject({
+        title: z.string().min(1),
+        text: z.string().min(1),
+        evidence: z.enum(EVIDENCE_LABELS),
+        link: hrefSchema.optional()
+      })
+    )
+    .min(4)
+    .max(6)
+})
+export type Contributions = z.infer<typeof contributionsSchema>

@@ -6,6 +6,7 @@
 import {
   colophonSchema,
   contactSchema,
+  contributionsSchema,
   educationSchema,
   experienceSchema,
   interestsSchema,
@@ -15,6 +16,7 @@ import {
   processSchema,
   profileSchema,
   projectSchema,
+  stackSchema,
   type Project,
   type ProjectStatus
 } from '~~/shared/schemas/index'
@@ -29,6 +31,8 @@ import contactJson from '~~/content/contact.json'
 import processJson from '~~/content/process.json'
 import nowJson from '~~/content/now.json'
 import colophonJson from '~~/content/colophon.json'
+import stackJson from '~~/content/stack.json'
+import contributionsJson from '~~/content/contributions.json'
 
 export const profile = profileSchema.parse(profileJson)
 export const education = educationSchema.parse(educationJson)
@@ -42,6 +46,8 @@ export const contact = contactSchema.parse(contactJson)
 export const processContent = processSchema.parse(processJson)
 export const now = nowSchema.parse(nowJson)
 export const colophon = colophonSchema.parse(colophonJson)
+export const stack = stackSchema.parse(stackJson)
+export const contributions = contributionsSchema.parse(contributionsJson)
 
 const projectModules = import.meta.glob('../../content/projects/*.json', {
   eager: true,
@@ -79,6 +85,17 @@ export const projects: Project[] = Object.values(projectModules)
   })
 
 export const featuredProjects = projects.filter((p) => p.featured)
+
+const stackIconByName = new Map(
+  stack.groups
+    .flatMap((group) => group.items)
+    .flatMap((item) => (item.icon ? [[item.name.toLowerCase(), item.icon] as const] : []))
+)
+
+/** A project's own tags, with a technology mark wherever content/stack.json names one. */
+export function tagItemsFor(project: Project): Array<{ name: string; icon?: string }> {
+  return project.tags.map((name) => ({ name, icon: stackIconByName.get(name.toLowerCase()) }))
+}
 
 export function getProject(slug: string): Project | undefined {
   return projects.find((p) => p.slug === slug)
