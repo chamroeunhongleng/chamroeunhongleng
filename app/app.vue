@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { profile } from '~/data/portfolio'
+import { ldJson } from '~~/shared/ld-json'
 
 const config = useRuntimeConfig()
 const siteUrl = config.public.siteUrl
@@ -10,7 +11,7 @@ useHead({
   script: [
     {
       type: 'application/ld+json',
-      innerHTML: JSON.stringify({
+      innerHTML: ldJson({
         '@context': 'https://schema.org',
         '@type': 'Person',
         'name': profile.name,
@@ -21,7 +22,7 @@ useHead({
     },
     {
       type: 'application/ld+json',
-      innerHTML: JSON.stringify({
+      innerHTML: ldJson({
         '@context': 'https://schema.org',
         '@type': 'WebSite',
         'name': profile.name,
