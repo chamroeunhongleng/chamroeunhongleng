@@ -1,7 +1,15 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import type Anthropic from '@anthropic-ai/sdk'
-import { RateLimiter, buildMessages, clientIp, handleChat, isAllowedOrigin, parseModelReply } from '../../api/chat'
+import Anthropic from '@anthropic-ai/sdk'
+import {
+  RateLimiter,
+  buildMessages,
+  clientIp,
+  describeUpstreamError,
+  handleChat,
+  isAllowedOrigin,
+  parseModelReply
+} from '../../api/chat'
 import {
   MAX_HISTORY_ENTRIES,
   MAX_HISTORY_ENTRY_LENGTH,
@@ -98,6 +106,29 @@ afterEach(() => {
 })
 
 // ── Tests ─────────────────────────────────────────────────────────────────
+// The function log is the only place an upstream failure is explained, and
+// `error.name` is "Error" for all of them.
+describe('describeUpstreamError', () => {
+  const apiError = (status: number, type: string, message: string) =>
+    Anthropic.APIError.generate(status, { type: 'error', error: { type, message } }, undefined, new Headers())
+
+  it('names the status and the API error type', () => {
+    expect(describeUpstreamError(apiError(401, 'authentication_error', 'invalid x-api-key')))
+      .toBe('status=401 type=authentication_error')
+  })
+
+  it('marks an empty credit balance without logging the message', () => {
+    const line = describeUpstreamError(
+      apiError(400, 'invalid_request_error', 'Your credit balance is too low to access the Anthropic API.')
+    )
+    expect(line).toBe('status=400 type=invalid_request_error reason=credit')
+  })
+
+  it('says so when the failure is not an API response', () => {
+    expect(describeUpstreamError(new TypeError('fetch failed'))).toBe('TypeError (not an API response)')
+  })
+})
+
 describe('handleChat request gate', () => {
   it('rejects non-POST methods', async () => {
     const capture = makeRes()

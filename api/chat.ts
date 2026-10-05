@@ -339,6 +339,23 @@ const FALLBACK_REPLY: ChatReply = {
   suggested: []
 }
 
+/**
+ * What to log when the upstream call fails. `error.name` is plain "Error" for
+ * every SDK failure, which left an expired key, an empty credit balance, and a
+ * malformed request indistinguishable in the function log. The HTTP status and
+ * the API's own error type tell them apart. Never the error message: it is
+ * only tested for the one phrase that marks an empty balance, not logged.
+ */
+export function describeUpstreamError(error: unknown): string {
+  if (!(error instanceof Anthropic.APIError)) {
+    return error instanceof Error ? `${error.name} (not an API response)` : 'unknown'
+  }
+  const body = error.error as { error?: { type?: unknown } } | undefined
+  const type = typeof body?.error?.type === 'string' ? body.error.type : 'none'
+  const credit = /credit balance/i.test(error.message) ? ' reason=credit' : ''
+  return `status=${error.status ?? 'none'} type=${type}${credit}`
+}
+
 // ── Handler ───────────────────────────────────────────────────────────────
 interface HandlerDeps {
   client: () => Anthropic
@@ -425,7 +442,7 @@ export async function handleChat(
       res.status(503).json({ error: 'The assistant is briefly unavailable — please try again shortly.' })
       return
     }
-    console.error(`chat error: ${error instanceof Error ? error.name : 'unknown'}`)
+    console.error(`chat error: ${describeUpstreamError(error)}`)
     res.status(502).json({ error: 'The assistant could not answer — please try again or email instead.' })
   }
 }
