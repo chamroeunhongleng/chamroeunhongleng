@@ -26,7 +26,7 @@ PhsarOS is my own build. Chomkar is team work at [CHNAI LAB](https://github.com/
 - Dual degree: Computer Science at Fort Hays State University and IT Management at AUPP · B.A. English for Work Skills at IFL, Royal University of Phnom Penh
 - National runner-up in mathematics, Cambodia, 2025 · Grade A, Bac II 2025
 - Silver Award, Hong Kong International Mathematical Olympiad 2024 ([official results](https://www.hongkongimo.com/uploads/2/8/9/2/28923219/hkimo_2024_heat_round_ss.pdf))
-- Two full (100%) university scholarships: AUPP, and a four-year Ministry of Justice award for RUPP
+- Four full university scholarships on leaving school, including AUPP (as second-place laureate in mathematics) and a four-year Ministry of Justice award for RUPP
 - Author of six bilingual mathematics books, about 1,780 pages ([free download](https://github.com/chamroeunhongleng/chamroeunhongleng/releases/tag/scholar-series-2026))
 - Lead of the FounderOS Professional Circle, a small reading and practice group
 
