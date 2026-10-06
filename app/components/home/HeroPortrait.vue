@@ -3,20 +3,7 @@ import { useId } from 'vue'
 import type { Profile } from '~~/shared/schemas/index'
 import { useMotionAllowed } from '../../composables/useMotionAllowed'
 
-/**
- * The hero portrait.
- *
- * Wide screens: a large, slightly tilted photo on an offset backplate, with a
- * round stamp naming the current role on its corner and a location label.
- * Phones: a compact profile row — small photo, location, and the same role as
- * a plain label — so the name stays on the first screen.
- *
- * The stamp is decorative (aria-hidden): the same fact is real text in the Now
- * section (profile.availability). It said "open to internships" until the
- * owner started at Angkor Byte and asked for that message to go (2026-10-05).
- * It turns slowly only when ambient motion is allowed. Alt text comes from
- * content.
- */
+// The stamp is aria-hidden: the same fact is real text in the Now section (profile.availability).
 defineProps<{ photo: NonNullable<Profile['photo']>; location: string }>()
 
 const motion = useMotionAllowed()
@@ -75,7 +62,7 @@ const ringId = `stamp-ring-${useId()}`
   margin: 0;
 }
 
-/* An offset sheet behind the photo, like a print laid on a second print. */
+/* The offset backplate behind the photo. */
 .portrait::before {
   content: '';
   position: absolute;
@@ -143,7 +130,7 @@ const ringId = `stamp-ring-${useId()}`
   font-size: var(--text-xs);
 }
 
-/* The stamp: a paper sticker pressed onto the photo's corner. */
+/* The role stamp on the photo's corner. */
 .stamp {
   position: absolute;
   left: -2.75rem;

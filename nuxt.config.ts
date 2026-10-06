@@ -2,23 +2,17 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import tailwindcss from '@tailwindcss/vite'
-// Explicit import (instead of Nuxt's config-time auto-import) so verification
-// scripts can import this config and compare routeRules headers to vercel.json.
+// Explicit import so check-structure.ts can import this config and compare its headers to vercel.json.
 import { defineNuxtConfig } from 'nuxt/config'
 
 const SITE_NAME = 'Chamroeun Hongleng'
 
-// NUXT_PUBLIC_SITE_URL overrides at build time. chamroeunhongleng.me is the
-// live production domain (Namecheap registration, Vercel nameservers).
 const siteUrl = process.env.NUXT_PUBLIC_SITE_URL || 'https://chamroeunhongleng.me'
 
 // demo | review | production — baked in at generate time (static site).
 const portfolioMode = process.env.NUXT_PUBLIC_PORTFOLIO_MODE || 'review'
 
-// Prerender routes are DERIVED from the content directory. Never hardcode a
-// project route list here — a JSON file added to content/projects/ must build
-// without touching this config (the old build's hardcoded list was a
-// maintenance trap; check-content.ts asserts slug === filename).
+// Never hardcode project routes: a JSON added to content/projects/ must build without touching this config.
 const projectsDir = fileURLToPath(new URL('./content/projects', import.meta.url))
 const projectRoutes = existsSync(projectsDir)
   ? readdirSync(projectsDir)
@@ -28,9 +22,7 @@ const projectRoutes = existsSync(projectsDir)
       .map((p) => `/projects/${p.slug}`)
   : []
 
-// NOTE: this list is mirrored in scripts/check-seo.ts, which fails the build on
-// any sitemap route it did not expect. Adding a page means adding it in both —
-// the same load-bearing duplication as the security headers below.
+// Mirrored in scripts/check-seo.ts, which fails on any sitemap route it did not expect.
 const staticRoutes = ['/', '/about', '/projects', '/journey', '/learning', '/contact', '/colophon', '/cv']
 
 export default defineNuxtConfig({
@@ -42,16 +34,13 @@ export default defineNuxtConfig({
     plugins: [tailwindcss()]
   },
   css: [
-    // Fraunces is only used by /cv (its PDF keeps the earlier serif). An
-    // @font-face rule costs a few bytes; browsers fetch the font file only
-    // where a glyph actually uses it.
+    // Fraunces is used only by /cv; the font file is fetched only where a glyph uses it.
     '@fontsource-variable/fraunces/index.css',
     '@fontsource-variable/inter/index.css',
     '@fontsource/ibm-plex-mono/400.css',
     '@fontsource/ibm-plex-mono/500.css',
     '@fontsource/ibm-plex-mono/600.css',
-    // Tailwind first: where a name exists in both (--text-lg, --leading-normal,
-    // --tracking-wide, --ease-out), the token defined below wins.
+    // Tailwind first so tokens.css wins where a name exists in both (--text-lg, --ease-out…).
     '~/assets/css/tailwind.css',
     '~/assets/css/tokens.css',
     '~/assets/css/base.css',
@@ -61,7 +50,6 @@ export default defineNuxtConfig({
   ],
   runtimeConfig: {
     public: {
-      // NUXT_PUBLIC_PORTFOLIO_MODE / NUXT_PUBLIC_SITE_URL override these.
       portfolioMode,
       siteUrl
     }
@@ -89,24 +77,13 @@ export default defineNuxtConfig({
       ],
       script: [
         {
-          // Anti-FOUC theme bootstrap: run before first paint. Light is the
-          // default; localStorage then prefers-color-scheme decide.
-          //
-          // It also carries the resolved theme into <meta name="theme-color">,
-          // which is what tints the browser chrome on phones — Android Chrome's
-          // address bar and the iOS Safari toolbars. Left at the static light
-          // value, a dark-theme visitor on a phone got a warm-white bar sitting
-          // directly above a near-black page. A CSS media query cannot do this
-          // job: the theme follows data-theme, which the toggle can set against
-          // the OS preference. Values track --color-bg in tokens.css.
+          // Anti-FOUC theme bootstrap, run before first paint. It also sets <meta name="theme-color">,
+          // which CSS cannot do because the theme follows data-theme; values track --color-bg in tokens.css.
           innerHTML:
             "(function(){try{var t=localStorage.getItem('theme');if(t!=='dark'&&t!=='light'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'}document.documentElement.dataset.theme=t;document.documentElement.style.colorScheme=t;var m=document.querySelector('meta[name=\"theme-color\"]');if(!m){m=document.createElement('meta');m.name='theme-color';document.head.appendChild(m)}m.content=t==='dark'?'#131318':'#FAF7F2'}catch(e){}})();"
         },
-        // Vercel Web Analytics (owner-approved; cookie-free aggregate counts).
-        // The script is served by the Vercel edge, NOT a file in the build
-        // output — so it ships only when the deploy build sets
-        // NUXT_PUBLIC_ANALYTICS=1. Local builds, check:links, and e2e never
-        // reference it (locally it would 404 and fail the console-error test).
+        // Vercel Web Analytics is served by the Vercel edge, not the build output, so it ships
+        // only when the deploy build sets NUXT_PUBLIC_ANALYTICS=1; locally it would 404 and fail e2e.
         ...(process.env.NUXT_PUBLIC_ANALYTICS === '1'
           ? [{ src: '/_vercel/insights/script.js', defer: true }]
           : [])
@@ -119,15 +96,8 @@ export default defineNuxtConfig({
       routes: [...staticRoutes, ...projectRoutes]
     }
   },
-  // These headers apply to the dev/server runtime. Static hosting on Vercel
-  // ignores routeRules headers, so the same set is duplicated in vercel.json —
-  // that duplication is load-bearing; check-structure.ts keeps them in sync.
-  //
-  // The CSP here carries frame-ancestors ONLY. The script-src policy is
-  // hash-based and ships as a <meta> tag injected into each generated page by
-  // scripts/inject-csp.ts, because hashes change with every build and static
-  // hosting cannot mint per-request nonces. frame-ancestors is the inverse
-  // case: <meta> cannot carry it, so it has to be a header.
+  // Static hosting ignores routeRules, so vercel.json duplicates these and check-structure.ts
+  // keeps them in sync. CSP here is frame-ancestors only: <meta> cannot carry it; script-src is injected per build.
   routeRules: {
     '/**': {
       headers: {

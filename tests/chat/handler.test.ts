@@ -17,6 +17,7 @@ import {
 } from '../../shared/chat/contract'
 
 // ── Test doubles ──────────────────────────────────────────────────────────
+
 // origin defaults to the production site (browsers always send one on POST);
 // pass origin: null to exercise the no-header case.
 function makeReq(overrides: {
@@ -106,6 +107,7 @@ afterEach(() => {
 })
 
 // ── Tests ─────────────────────────────────────────────────────────────────
+
 // The function log is the only place an upstream failure is explained, and
 // `error.name` is "Error" for all of them.
 describe('describeUpstreamError', () => {
@@ -142,8 +144,6 @@ describe('handleChat request gate', () => {
     expect(capture.status()).toBe(403)
   })
 
-  // The allowlist used to be `endsWith('.vercel.app') && startsWith('chamroeunhongleng')`,
-  // which any Vercel user could satisfy by naming a project chamroeunhongleng-<anything>.
   it.each([
     ['https://chamroeunhongleng-attacker.vercel.app', 'unowned name in the shared vercel.app namespace'],
     ['https://chamroeunhongleng.vercel.app', 'bare project-ish name, not this project'],
@@ -289,18 +289,14 @@ describe('handleChat model round-trip', () => {
       (call) => (call[0] as { system: Array<{ text: string, cache_control: unknown }> }).system[0]
     )
     expect(first!.text).toBe(second!.text)
-    // 1h TTL: the prompt is ~15k tokens and portfolio traffic does not sustain
-    // a cache hit every five minutes, so the default TTL billed the write far
-    // more often than it served a read.
+    // 1h TTL: traffic is too sparse for a cache hit every five minutes, so the
+    // default TTL billed the write far more often than it served a read.
     expect(first!.cache_control).toEqual({ type: 'ephemeral', ttl: '1h' })
   })
 })
 
 describe('hardening regressions', () => {
   it('does not spend global quota on a request it is already refusing', () => {
-    // The bug: every bucket was incremented before any was tested, so a client
-    // ignoring its 429s still burned the instance-wide daily budget and could
-    // take the assistant offline for everyone.
     let now = 0
     const limiter = new RateLimiter(
       { ipPerMinute: 2, ipPerDay: 100, globalPerMinute: 100, globalPerDay: 6 },
@@ -308,8 +304,6 @@ describe('hardening regressions', () => {
     )
     for (let i = 0; i < 50; i++) limiter.check('noisy')
 
-    // A different IP in a fresh minute must still be served: the refused
-    // requests above should have consumed no global quota at all.
     now += 61_000
     expect(limiter.check('polite')).toBeNull()
   })
@@ -341,8 +335,7 @@ describe('hardening regressions', () => {
   })
 
   it('accepts the largest legal Khmer conversation the contract allows', async () => {
-    // Khmer is 3 UTF-8 bytes per character; the old 16KB ceiling measured in
-    // UTF-16 units sat below the contract's own maximum.
+    // Khmer is 3 UTF-8 bytes per character, so a byte-measured body limit is stressed hardest here.
     const khmer = 'ក'.repeat(MAX_MESSAGE_LENGTH)
     const history = Array.from({ length: MAX_HISTORY_ENTRIES }, (_, index) => ({
       role: index % 2 === 0 ? 'user' : 'assistant',

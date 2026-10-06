@@ -1,14 +1,6 @@
-// Words that carry no identity in an institution name.
 const MINOR_WORDS = new Set(['of', 'the', 'for', 'and', 'at', 'in'])
 
-/**
- * The short form of an institution name, e.g. "AUPP" or "FHSU".
- *
- * Prefers an abbreviation the content already states ("… (AUPP)"); otherwise
- * builds initials from the significant words of the leading clause, so
- * "Fort Hays State University" reads FHSU. Used by InstitutionMark, the
- * typographic plaque that stands in for a school logo.
- */
+/** A stated "(AUPP)" wins; otherwise initials of the leading clause ("Fort Hays State University" → FHSU). */
 export function institutionAbbreviation(institution: string): string {
   const stated = institution.match(/\(([A-Za-z]{2,6})\)/)
   if (stated?.[1]) return stated[1].toUpperCase()

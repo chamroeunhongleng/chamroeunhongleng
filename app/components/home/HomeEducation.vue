@@ -13,8 +13,6 @@ import { education } from '~/data/portfolio'
         :text="education.summary"
       />
 
-      <!-- A typographic plaque instead of school logos (owner decision). No
-           status chips or graduation years — see about.vue for the same rule. -->
       <ul class="card-row" data-cols="3" data-mid="2">
         <li v-for="entry in education.entries" :key="entry.institution" class="card edu-card" data-reveal>
           <div class="edu-head">

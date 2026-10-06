@@ -2,11 +2,7 @@ import '../zod-config.js'
 import { z } from 'zod'
 import { EVIDENCE_LABELS, WORK_STATES } from './enums.js'
 
-/**
- * Allowed link targets: absolute https, mailto, or root-relative internal
- * paths. Anything else (http, example.com, '#', empty) is caught by the
- * content rule engine with mode-dependent severity.
- */
+/** Placeholder links (example.com, '#', http) pass here; shared/rules.ts flags them with mode-dependent severity. */
 export const hrefSchema = z
   .string()
   .min(1)
@@ -18,7 +14,6 @@ export const hrefSchema = z
 export const linkSchema = z.strictObject({
   label: z.string().min(1),
   url: hrefSchema,
-  /** What kind of receipt this is, shown on artifact link strips. */
   kind: z
     .enum(['repository', 'demo', 'docs', 'dataset', 'website', 'profile', 'other'])
     .default('other'),
@@ -26,17 +21,12 @@ export const linkSchema = z.strictObject({
 })
 export type Link = z.infer<typeof linkSchema>
 
-/**
- * A Claim is the only way important statements enter the site. The evidence
- * label is REQUIRED at the schema level, so "claim without an evidence label"
- * is a parse error, not a style problem.
- */
+/** The only way important statements enter the site. The evidence label is required at the
+ *  schema level, so a claim without one is a parse error, not a style problem. */
 export const claimSchema = z.strictObject({
   text: z.string().min(1),
   evidence: z.enum(EVIDENCE_LABELS),
-  /** Optional receipt backing the claim. */
   link: hrefSchema.optional(),
-  /** Optional work-state for execution items (Completed, Planned, …). */
   workState: z.enum(WORK_STATES).optional()
 })
 export type Claim = z.infer<typeof claimSchema>
@@ -45,11 +35,7 @@ export const imageRefSchema = z.strictObject({
   src: z.string().min(1),
   alt: z.string().min(3),
   caption: z.string().optional(),
-  /**
-   * Intrinsic pixel size. Rendered as the img width/height attributes so the
-   * browser reserves the correct box before the file loads — without them a
-   * landscape photo pops out of a portrait-shaped hole on first paint.
-   */
+  /** Rendered as the img width/height attributes so the browser reserves the box before the file loads. */
   width: z.number().int().positive().optional(),
   height: z.number().int().positive().optional(),
   /** Demo images are fatal in production mode. */

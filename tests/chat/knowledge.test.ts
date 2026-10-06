@@ -20,10 +20,8 @@ describe('chat system prompt', () => {
     expect(prompt).toContain('Chamroeun Hongleng')
     expect(prompt).toContain('kaskor-asr')
     expect(prompt).toContain('chamroeunhongleng825@gmail.com')
-    // The skills mirrored from about.vue made it in.
     expect(prompt).toContain('PyTorch')
     expect(prompt).toContain('Khmer (native)')
-    // What he can contribute now comes from content/contributions.json.
     expect(prompt).toContain('WHAT HE CAN CONTRIBUTE')
     expect(prompt).toContain('Shipping working software')
   })
@@ -33,7 +31,6 @@ describe('chat system prompt', () => {
   })
 
   it('preserves honesty qualifiers from the content', () => {
-    // The kaskor-asr metric claim must keep its self-reported hedge.
     expect(prompt.toLowerCase()).toContain('self-report')
   })
 
@@ -51,7 +48,6 @@ describe('chat system prompt', () => {
   })
 
   it('locks the scope guard in: off-topic use must be declined', () => {
-    // The assistant is a portfolio guide, never a free general-purpose AI.
     expect(prompt).toContain('SCOPE')
     expect(prompt).toContain('DECLINE everything else')
     expect(prompt).toContain('homework')

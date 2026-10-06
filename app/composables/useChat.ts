@@ -1,8 +1,4 @@
-﻿/**
- * Chat assistant state + transport. State lives at module scope so the
- * conversation survives client-side navigation (the widget stays mounted in
- * the default layout, but remounts must not reset history either).
- */
+﻿// State lives at module scope so the conversation survives navigation and remounts.
 import { nextTick, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import {
@@ -18,15 +14,10 @@ export interface ChatBubble {
   suggested?: string[]
   /** Set when this answer moved the visitor — powers the undo affordance. */
   navigatedTo?: string
-  /** Where the visitor was before that move, so they can return. */
   returnTo?: string
 }
 
-/**
- * Welcome bubble; its chips double as the starter questions. The AI +
- * privacy disclosure lives in the widget's persistent footer, so this stays
- * short. Local text — never sent to or produced by the API.
- */
+// Local welcome bubble: never sent to or produced by the API.
 const SEED_BUBBLE: ChatBubble = {
   role: 'assistant',
   text:
@@ -65,11 +56,8 @@ export function useChat() {
     open.value = false
   }
 
-  /**
-   * Answer + auto-navigate: push the route the assistant chose (already
-   * allowlist-validated server-side) while the panel stays open, then scroll
-   * to the section anchor once the 220ms page transition has settled.
-   */
+  // The destination is allowlist-validated server-side. The delayed scroll waits
+  // for the page transition to settle before targeting the section anchor.
   async function navigate(destination: string): Promise<void> {
     const [rawPath = '', fragment] = destination.split('#')
     const path = rawPath || '/'
@@ -128,8 +116,7 @@ export function useChat() {
       if (typeof reply.navigateTo === 'string' && reply.navigateTo.startsWith('/')) {
         const from = router.currentRoute.value.fullPath
         await navigate(reply.navigateTo)
-        // Only offer the undo when the visitor actually left the page they
-        // were reading — an in-page scroll needs no way back.
+        // An in-page scroll needs no way back; only a real page change gets the undo.
         if (router.currentRoute.value.fullPath !== from) {
           bubble.navigatedTo = reply.navigateTo
           bubble.returnTo = from
@@ -142,24 +129,12 @@ export function useChat() {
     }
   }
 
-  /**
-   * Start over: drop the transcript back to the welcome bubble.
-   *
-   * State is module-scoped so a conversation survives navigation, which also
-   * means it survives closing the panel — without this the only way to clear a
-   * long or wrong-turn thread is a full page reload. History sent to the API
-   * derives from `messages`, so this genuinely resets the context too.
-   */
   function reset(): void {
     if (pending.value) return
     messages.value = [SEED_BUBBLE]
   }
 
-  /**
-   * Undo one assistant-triggered jump: return the visitor to the page they
-   * were reading, with the conversation untouched. The affordance clears
-   * afterwards so the chat never becomes a back-and-forth toggle.
-   */
+  // The affordance clears first so the chat never becomes a back-and-forth toggle.
   async function goBack(bubble: ChatBubble): Promise<void> {
     if (!bubble.returnTo) return
     const destination = bubble.returnTo

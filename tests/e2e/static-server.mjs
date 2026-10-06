@@ -1,35 +1,5 @@
-/**
- * Minimal static file server for E2E runs against the generated site.
- *
- * Why this exists: the Nuxt DEV server intermittently stalls under sustained
- * parallel load on Windows — navigations hang until the test timeout and die
- * with "net::ERR_ABORTED; maybe frame was detached?", on a different route
- * each run. Serving the prerendered output removes compilation from the loop
- * entirely and tests the artifact that actually deploys.
- *
- * `nuxt preview` is not used because it expects a nitro server build and
- * parses `--host` as a positional rootDir. Zero dependencies on purpose.
- *
- * Binds 127.0.0.1 explicitly — see playwright.config.ts on the IPv4/IPv6 trap.
- *
- * SERVING MODEL: the request path is never joined onto a filesystem path.
- * `.output/public` is walked once at startup into a URL -> absolute-path map,
- * and a request is a plain Map lookup; anything not in the map is a 404. The
- * earlier version joined the decoded URL onto ROOT and guarded the result with
- * normalize() + startsWith(), which CodeQL flagged as path injection (5 High
- * alerts) and which is genuinely hard to prove correct — it has to be right
- * about percent-encoding, null bytes, Windows vs POSIX separators, and
- * symlinks all at once. An allowlist has none of those failure modes: the set
- * of servable files is fixed before the socket opens. Directory entries that
- * are symlinks are skipped rather than followed, so a link planted in the
- * build output cannot escape either.
- *
- * HEADERS: the response headers are read from vercel.json rather than
- * hand-copied, so the e2e suite exercises the same set production serves.
- * Two copies of that list already exist (vercel.json and nuxt.config
- * routeRules, kept in sync by check-structure); a third copy here would drift
- * silently and make the tests agree with a policy nobody ships.
- */
+// Static server for E2E runs against the prerendered output: the Nuxt dev server
+// stalls under parallel load on Windows, and this tests the artifact that deploys.
 import { createReadStream, existsSync, readFileSync, readdirSync } from 'node:fs'
 import { createServer } from 'node:http'
 import { extname, join } from 'node:path'
@@ -57,16 +27,12 @@ const TYPES = {
   '.woff2': 'font/woff2',
   '.woff': 'font/woff',
   '.pdf': 'application/pdf',
-  // With nosniff mirrored below, the sitemap stylesheet needs its real type
-  // or the browser refuses to apply it.
+  // With nosniff mirrored from vercel.json, the sitemap stylesheet needs its real type.
   '.xsl': 'application/xslt+xml'
 }
 
-/**
- * vercel.json "source" -> path predicate. Understands only the two shapes this
- * repo uses; anything else throws rather than silently matching nothing, so a
- * new rule in vercel.json cannot quietly go untested.
- */
+// vercel.json "source" -> path predicate. Only the two shapes this repo uses; anything
+// else throws rather than silently matching nothing, so a new rule cannot go untested.
 function sourceToPredicate(source) {
   if (source === '/(.*)') return () => true
   const prefix = source.match(/^(\/[A-Za-z0-9._/-]*)\(\.\*\)$/)
@@ -75,6 +41,7 @@ function sourceToPredicate(source) {
   throw new Error(`[static-server] unsupported vercel.json source pattern: ${source}`)
 }
 
+// Read from vercel.json rather than hand-copied, so the suite serves the headers production does.
 const HEADER_RULES = JSON.parse(
   readFileSync(fileURLToPath(new URL('../../vercel.json', import.meta.url)), 'utf8')
 ).headers.map((rule) => ({ matches: sourceToPredicate(rule.source), headers: rule.headers }))
@@ -94,12 +61,8 @@ if (!existsSync(ROOT)) {
   process.exit(1)
 }
 
-/**
- * Walk the prerendered output once and return every servable URL path mapped
- * to its absolute file path. Prerendered routes are directories holding
- * index.html, so each of those is registered under `/route`, `/route/` and
- * `/route/index.html` — the three forms a browser or test may ask for.
- */
+// Walk the output once into a URL -> file allowlist, so a request is a plain Map lookup
+// and the request path is never joined onto a filesystem path (no path injection).
 function indexOutput(directory, urlPrefix = '') {
   const files = new Map()
   for (const entry of readdirSync(directory, { withFileTypes: true })) {
@@ -108,8 +71,7 @@ function indexOutput(directory, urlPrefix = '') {
     if (entry.isDirectory()) {
       for (const [key, value] of indexOutput(absolute, urlPath)) files.set(key, value)
     } else if (entry.isFile()) {
-      // isFile() is false for symlinks (Dirent reflects lstat), so links are
-      // skipped rather than followed out of the tree.
+      // isFile() is false for symlinks (Dirent reflects lstat), so links are never followed out of the tree.
       files.set(urlPath, absolute)
       if (entry.name === 'index.html') {
         files.set(urlPrefix === '' ? '/' : urlPrefix, absolute)
@@ -140,8 +102,7 @@ const server = createServer((req, res) => {
   const file = lookup(req.url ?? '/')
 
   if (!file) {
-    // Static hosts serve 404.html with a real 404 status; the "unpublished
-    // project is unreachable" test depends on that status being honest.
+    // Static hosts serve 404.html with a real 404 status; the unpublished-project test depends on it.
     res.writeHead(404, headersFor(requestPath, 'text/html; charset=utf-8'))
     if (NOT_FOUND) return createReadStream(NOT_FOUND).pipe(res)
     return res.end('Not found')

@@ -1,19 +1,10 @@
+// Explicit Vue imports: leaf components using this must mount in vitest without Nuxt.
 import { onMounted, ref, type Ref } from 'vue'
 
 export type MotionState = 'unknown' | 'allowed' | 'static'
 
-/**
- * Whether ambient motion (the technology marquee, the mascot float) may run.
- *
- * The same gates as useReveal: prefers-reduced-motion, and navigator.webdriver
- * so Playwright e2e and screenshot runs see a still, deterministic page. The
- * answer arrives after mount — prerendered HTML is identical for everyone and
- * never ships a mid-animation state, so there is nothing to mismatch on
- * hydration. Components render their static layout for 'unknown' and 'static'.
- *
- * Vue APIs are imported explicitly so leaf components using this still mount
- * in vitest without Nuxt.
- */
+// navigator.webdriver is gated too, so Playwright e2e and screenshot runs see a
+// still, deterministic page. Decided after mount: prerendered HTML never animates.
 export function useMotionAllowed(): Ref<MotionState> {
   const state = ref<MotionState>('unknown')
 

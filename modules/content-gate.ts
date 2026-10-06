@@ -3,23 +3,13 @@ import { loadContent } from '../scripts/lib/load-content'
 import { formatFindings, runContentRules } from '../shared/rules'
 import { PORTFOLIO_MODES, type PortfolioMode } from '../shared/schemas/index'
 
-/**
- * The production content gate. Runs inside every `nuxt build|generate|dev`
- * — it cannot be bypassed by calling nuxt directly, unlike an npm prebuild
- * chain. It uses the SAME rule engine as `npm run check:owner-content`,
- * so the CLI and the build can never disagree.
- *
- * demo/review: findings are logged, the build proceeds.
- * production:  any error finding (placeholder markers, enabled demo
- *              projects, missing required content, placeholder links)
- *              ABORTS the build with the full violation list.
- */
+// Runs inside every `nuxt build|generate|dev`, so unlike an npm prebuild chain it cannot be
+// bypassed by calling nuxt directly. Same rule engine as check:owner-content, so they never disagree.
 export default defineNuxtModule({
   meta: { name: 'content-gate' },
   setup() {
-    // Unset defaults to review; set-but-unrecognized fails LOUD. Falling back
-    // silently meant a typo like "producton" built in review mode — where
-    // errors are logged and ignored — and voided the gate's whole contract.
+    // Unrecognised modes fail loudly: a typo like "producton" would otherwise build in
+    // review mode, where errors are only logged, and void the gate.
     const rawMode = process.env.NUXT_PUBLIC_PORTFOLIO_MODE?.trim() || undefined
     if (rawMode !== undefined && !(PORTFOLIO_MODES as readonly string[]).includes(rawMode)) {
       throw new Error(

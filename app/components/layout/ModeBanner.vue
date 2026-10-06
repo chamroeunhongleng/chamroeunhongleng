@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import type { PortfolioMode } from '~~/shared/schemas/index'
 
-/**
- * Demo-mode banner. Wording is fixed by the portfolio spec; review and
- * production modes render nothing (review-mode gaps are shown inline by
- * PlaceholderTag chips instead of a site-wide banner).
- */
+// The wording is fixed by the portfolio spec. Review-mode gaps show inline as
+// PlaceholderTag chips instead of a banner.
 defineProps<{ mode: PortfolioMode }>()
 </script>
 

@@ -1,8 +1,4 @@
-/**
- * The app-side content loader. Every JSON file is validated against the
- * shared zod schemas at build time — invalid content fails `nuxt generate`
- * in any mode. (Mode-dependent rules run separately in the content gate.)
- */
+// Every JSON file is parsed against the shared schemas here, so invalid content fails `nuxt generate`.
 import {
   colophonSchema,
   contactSchema,
@@ -54,10 +50,7 @@ const projectModules = import.meta.glob('../../content/projects/*.json', {
   import: 'default'
 })
 
-// Sort rank per status, keyed by the vocabulary type: renaming or adding a
-// status in shared/schemas/enums.ts is a compile error here — the previous
-// untyped string[] let a drifted status fall to indexOf() === -1 and silently
-// sort ABOVE Production.
+// Keyed by the vocabulary type so a renamed or added status is a compile error here.
 const STATUS_RANK: Record<ProjectStatus, number> = {
   'Production': 0,
   'Pilot': 1,
@@ -78,8 +71,6 @@ export const projects: Project[] = Object.values(projectModules)
     if (a.featured !== b.featured) return a.featured ? -1 : 1
     const statusDiff = STATUS_RANK[a.status] - STATUS_RANK[b.status]
     if (statusDiff !== 0) return statusDiff
-    // Editorial override before the alphabet: two projects of equal maturity
-    // should not be ranked by their initials when the owner has said otherwise.
     if (a.order !== b.order) return a.order - b.order
     return a.name.localeCompare(b.name)
   })
@@ -92,7 +83,6 @@ const stackIconByName = new Map(
     .flatMap((item) => (item.icon ? [[item.name.toLowerCase(), item.icon] as const] : []))
 )
 
-/** A project's own tags, with a technology mark wherever content/stack.json names one. */
 export function tagItemsFor(project: Project): Array<{ name: string; icon?: string }> {
   return project.tags.map((name) => ({ name, icon: stackIconByName.get(name.toLowerCase()) }))
 }

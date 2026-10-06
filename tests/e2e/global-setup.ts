@@ -1,16 +1,7 @@
 import { ALL_ROUTES } from './fixtures/routes'
 
-/**
- * Warm every route once, sequentially, before the test workers start.
- *
- * The Nuxt DEV server compiles a route on its first request. Without this,
- * parallel workers all trigger first-compiles at once and the server drops
- * requests — tests die with "net::ERR_ABORTED; maybe frame was detached?"
- * while passing fine in isolation. One serial pass primes the compile cache so
- * the parallel run only ever hits warm routes.
- *
- * Route list derives from content (CLAUDE.md rule 4) — see fixtures/routes.ts.
- */
+// Warm every route once before the workers start: the Nuxt dev server compiles a
+// route on first request, and parallel first-compiles drop requests (net::ERR_ABORTED).
 export default async function globalSetup() {
   const baseURL = 'http://127.0.0.1:3000'
   const routes = ALL_ROUTES
@@ -25,8 +16,7 @@ export default async function globalSetup() {
       await res.arrayBuffer()
       warmed++
     } catch (error) {
-      // Never fail the run on a warmup miss — the route may legitimately 404,
-      // or the server may not be reachable yet. Tests will surface real issues.
+      // A warmup miss is not a failure; the tests will surface real issues.
       console.warn(`[warmup] ${route} failed: ${(error as Error).message}`)
     }
   }

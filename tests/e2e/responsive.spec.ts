@@ -1,15 +1,12 @@
 import { test, expect } from '@playwright/test'
 import { publishedProjects } from './fixtures/projects'
 
-// Must match the breakpoint in app/components/layout/SiteHeader.vue.
-// At or below this width the desktop nav is hidden and the Menu toggle appears.
-// 820px is where the desktop header measurably stops fitting on one line —
-// which puts iPad portrait (810px) on the mobile menu, by design.
+// Must match SiteHeader.vue: at or below this width the Menu toggle replaces the
+// desktop nav. 820 puts iPad portrait (810px) on the mobile menu, by design.
 const MOBILE_BREAKPOINT = 820
 
-// Must match the breakpoint in app/components/layout/MobileDock.vue (and the
-// chat widget's phone layout). At or below this width the bottom dock exists
-// and the header scrolls away with the page.
+// Must match MobileDock.vue and the chat widget's phone layout: at or below this
+// width the bottom dock exists and the header scrolls away with the page.
 const PHONE_BREAKPOINT = 760
 
 type Page = import('@playwright/test').Page
@@ -21,18 +18,8 @@ function widthOf(page: Page): number {
   return size.width
 }
 
-/**
- * Open the mobile menu, tolerating hydration.
- *
- * The header is server-rendered, so the Menu button exists and is clickable
- * before Vue attaches its handler — a click that lands in that window is
- * silently swallowed and the menu never opens. (Confirmed: the failure
- * snapshot showed the button still reading "Menu" after a successful click.)
- * Dev mode makes the window wide enough to hit reliably.
- *
- * Retrying is safe because the click is guarded by the current aria-expanded
- * state: it never toggles an already-open menu shut.
- */
+// The header is server-rendered, so an early click is swallowed before Vue attaches
+// its handler. Retry, guarded by aria-expanded so it never toggles an open menu shut.
 async function openMobileMenu(page: Page, toggle: Locator, mobileNav: Locator) {
   await expect(async () => {
     if ((await toggle.getAttribute('aria-expanded')) !== 'true') {
@@ -53,7 +40,6 @@ test.describe('Responsive header', () => {
       await expect(desktopNav).toBeHidden()
       await expect(toggle).toBeVisible()
     } else {
-      // Includes both iPad orientations — 810px portrait is above the breakpoint.
       await expect(desktopNav).toBeVisible()
       await expect(toggle).toBeHidden()
     }
@@ -72,10 +58,7 @@ test.describe('Responsive header', () => {
       }
     })
 
-    // A wrapped header is roughly double height. The brand name is supposed to
-    // drop out below 450px so the row still fits on one line — before that was
-    // fixed, every phone width from 360px up rendered a 102px double-height
-    // header instead of 64px.
+    // A wrapped header is roughly double height, hence the 1.8 factor.
     expect(
       rowHeight,
       `header wrapped to two lines (row ${rowHeight}px vs tallest control ${tallestControl}px)`
@@ -100,8 +83,6 @@ test.describe('Responsive header', () => {
       'true'
     )
 
-    // The Escape handler must also hand focus back, or keyboard users are
-    // stranded where the panel used to be.
     await page.keyboard.press('Escape')
     await expect(mobileNav).toBeHidden()
     await expect(page.getByRole('button', { name: 'Menu' })).toBeFocused()
@@ -118,7 +99,6 @@ test.describe('Responsive header', () => {
 
     await mobileNav.getByRole('link', { name: 'Projects' }).click()
     await expect(page).toHaveURL(/\/projects/)
-    // A menu left open over the new page is the classic SPA bug.
     await expect(mobileNav).toBeHidden()
   })
 })
@@ -142,17 +122,15 @@ test.describe('Phone dock', () => {
       'the dock runs underneath the chat launcher'
     ).toBeLessThanOrEqual(launcherBox!.x)
 
-    // Thumb-sized: every dock link clears the 44px floor (1px tolerance for
-    // device-emulation rounding, as elsewhere in this file).
+    // 44px touch floor, with 1px tolerance for device-emulation rounding.
     const short = await dock.locator('a').evaluateAll((links) =>
       links.map((a) => +a.getBoundingClientRect().height.toFixed(1)).filter((h) => h < 43)
     )
     expect(short, `dock links under 44px: ${JSON.stringify(short)}`).toEqual([])
   })
 
-  // The chat widget's box spans the whole bottom strip on a phone. Before it
-  // was made click-through it swallowed every tap meant for the dock — so this
-  // is a real click, which Playwright refuses if anything else would take it.
+  // A real click on purpose: the chat widget's box spans the bottom strip and once
+  // swallowed dock taps; Playwright refuses the click if anything else would take it.
   test('a dock link is tappable, navigates, and marks the current page', async ({ page }) => {
     await page.goto('/')
     test.skip(widthOf(page) > PHONE_BREAKPOINT, 'no dock at this width')
@@ -173,23 +151,13 @@ test.describe('Phone dock', () => {
 })
 
 test.describe('Touch targets', () => {
-  /**
-   * These run only where the pointer is actually coarse — the fixes they guard
-   * are all inside `@media (pointer: coarse)`, so on the laptop project there
-   * is nothing to assert.
-   */
+  /** The rules under test live inside `@media (pointer: coarse)`; a fine pointer has nothing to assert. */
   async function skipUnlessTouch(page: Page) {
     const coarse = await page.evaluate(() => matchMedia('(pointer: coarse)').matches)
     test.skip(!coarse, 'fine pointer — the touch rules do not apply')
   }
 
-  /**
-   * Open the chat panel, tolerating hydration — the same contract as
-   * openMobileMenu above. The launcher is server-rendered and clickable before
-   * Vue attaches its handler, and a click that lands in that window is
-   * silently swallowed. Retrying is safe because the panel's own visibility
-   * guards it: an already-open panel is never clicked shut.
-   */
+  /** Same hydration race as openMobileMenu: retry, guarded by the panel's own visibility. */
   async function openChat(page: Page) {
     const launcher = page.getByRole('button', { name: 'Chat about this site' })
     const panel = page.locator('#chat-panel')
@@ -205,12 +173,8 @@ test.describe('Touch targets', () => {
       ([sel, x, y]) => {
         const el = document.querySelector(sel as string)
         if (!el) return 'MISSING'
-        // 'instant' is required, not tidiness: base.css sets
-        // `html { scroll-behavior: smooth }`, which scrollIntoView inherits
-        // when no behavior is given. The scroll then animates, and the
-        // getBoundingClientRect below reads pre-scroll coordinates — so
-        // elementFromPoint probes a spot the target has not reached yet and
-        // every hit test reports "nothing".
+        // 'instant' is required: base.css sets `html { scroll-behavior: smooth }`, and a
+        // smooth scroll leaves getBoundingClientRect reading pre-scroll coordinates.
         el.scrollIntoView({ block: 'center', behavior: 'instant' })
         const r = el.getBoundingClientRect()
         const hit = document.elementFromPoint(
@@ -223,10 +187,8 @@ test.describe('Touch targets', () => {
     )
   }
 
-  // The evidence arrow is a ~16px glyph repeated ~30 times sitewide, and it is
-  // the site's whole "check this claim yourself" affordance. It cannot grow
-  // without pushing inline text apart, so the hit area is an invisible pad —
-  // which means only a hit test can prove it is there.
+  // The arrow's hit area is an invisible pad (the ~16px glyph cannot grow without
+  // pushing inline text apart), so only a hit test can prove it is there.
   test('the evidence arrow is tappable past the edge of its glyph', async ({ page }) => {
     await page.goto('/projects')
     await skipUnlessTouch(page)
@@ -245,10 +207,8 @@ test.describe('Touch targets', () => {
     }
   })
 
-  // The card title is 25px tall on a phone. The card is meant to be the target
-  // (hence .project-card's `position: relative`, .live-link's z-index, and the
-  // aria-hidden "Case study →" span) — assert it really is, and that the links
-  // layered above it did not get swallowed.
+  // The whole card is the target (hence .project-card's `position: relative` and
+  // .live-link's z-index); the links layered above it must not get swallowed.
   test('the project card body opens the case study', async ({ page }) => {
     await page.goto('/projects')
     await skipUnlessTouch(page)
@@ -265,9 +225,7 @@ test.describe('Touch targets', () => {
     }
   })
 
-  // iOS Safari zooms the page in when a focused field is under 16px and never
-  // zooms back out. projects/index.vue already guards its filter controls;
-  // the chat field was the one that still tripped it.
+  // iOS Safari zooms in on a focused field under 16px and never zooms back out.
   test('no focusable field is small enough to trigger iOS zoom', async ({ page }) => {
     await page.goto('/')
     await skipUnlessTouch(page)
@@ -283,8 +241,6 @@ test.describe('Touch targets', () => {
     expect(tooSmall, `fields under 16px: ${JSON.stringify(tooSmall)}`).toEqual([])
   })
 
-  // The controls that drive the assistant. They were 29px (chips) and 40px
-  // (field, Send) — the smallest targets on the site after the arrows.
   test('the chat controls meet the 44px target floor', async ({ page }) => {
     await page.goto('/')
     await skipUnlessTouch(page)
@@ -294,15 +250,12 @@ test.describe('Touch targets', () => {
     const short = await page.evaluate(() =>
       [...document.querySelectorAll('.chat-chip, .chat-input, .chat-send, .chat-action')]
         .map((el) => ({ el: el.className, h: +el.getBoundingClientRect().height.toFixed(1) }))
-        // Device emulation scales rects a shade under the CSS value, so the
-        // floor is asserted with a 1px tolerance rather than exactly 44.
+        // Device emulation scales rects a shade under the CSS value: 1px tolerance.
         .filter((c) => c.h < 43)
     )
     expect(short, `chat controls under 44px: ${JSON.stringify(short)}`).toEqual([])
   })
 
-  // The restyle added pill buttons and round icon buttons — every one of them
-  // is something a thumb has to hit.
   test('homepage buttons, pills, and icon buttons meet the 44px target floor', async ({ page }) => {
     await page.goto('/')
     await skipUnlessTouch(page)
@@ -318,16 +271,10 @@ test.describe('Touch targets', () => {
 })
 
 test.describe('Responsive layout', () => {
-  // The most common real-device regression: one wide element forces the whole
-  // page to scroll sideways. Runs on every project, so a phone-only overflow
-  // is caught by the phone projects. Case-study pages are included because
-  // they carry the widest content (tables, code, long links).
   const paths = [
     '/',
     '/projects',
     '/about',
-    // /cv carries long unbroken URLs in a mono face and a two-column award
-    // list — both classic sources of sideways scroll on a 320px phone.
     '/cv',
     '/journey',
     '/learning',

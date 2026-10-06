@@ -2,11 +2,6 @@
 import { computed } from 'vue'
 import TechIcon from './TechIcon.vue'
 
-/**
- * Tech/topic chips with an overflow counter instead of endless wrapping.
- * Pass `items` (name + optional Simple Icons slug) for chips with marks;
- * plain `tags` still work.
- */
 const props = withDefaults(
   defineProps<{
     tags?: readonly string[]

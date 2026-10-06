@@ -77,7 +77,6 @@ describe('ProjectCard', () => {
       global: { stubs: { NuxtLink: NuxtLinkStub } }
     })
     expect(wrapper.text()).toContain('Proof')
-    // Evidence claims are displayed; if a link exists, it becomes clickable
     const proofBlock = wrapper.find('.card-proof')
     expect(proofBlock.exists()).toBe(true)
     expect(proofBlock.text()).toContain('It parses')
@@ -96,13 +95,6 @@ describe('ProjectCard', () => {
 })
 
 describe('RepoTree', () => {
-  //  fixture-repo/
-  //  ├── CLAUDE.md
-  //  ├── .claude/
-  //  │   ├── commands/
-  //  │   │   └── run.md
-  //  │   └── settings.json
-  //  └── tools/
   const structure = repoStructureSchema.parse({
     root: 'fixture-repo/',
     description: 'The layout is the claim.',

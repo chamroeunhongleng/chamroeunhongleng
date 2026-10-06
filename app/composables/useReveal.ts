@@ -1,10 +1,5 @@
-// Scroll-reveal, as progressive enhancement only. The prerendered HTML never
-// contains a hidden state: elements are hidden (reveal-pending) on the client,
-// after hydration, and only when every gate below allows it — so no-JS
-// visitors, reduced-motion users, and automated runs (Playwright e2e and
-// screenshots set navigator.webdriver) all see the page fully visible.
-//
-// Motion contract (motion.css): opacity/transform only, 150–250ms, reducible.
+// Progressive enhancement only: the prerendered HTML never contains a hidden state,
+// and reduced-motion users and automated runs (navigator.webdriver) see everything.
 export function useReveal(selector = '[data-reveal]') {
   onMounted(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
@@ -12,15 +7,13 @@ export function useReveal(selector = '[data-reveal]') {
     if (!('IntersectionObserver' in window)) return
 
     const all = Array.from(document.querySelectorAll<HTMLElement>(selector))
-    // Anything already on screen at mount stays put — hiding it after paint
-    // would flash. Only content below the fold gets the treatment.
+    // Hiding anything already on screen after paint would flash.
     const below = all.filter((el) => el.getBoundingClientRect().top > window.innerHeight)
     if (below.length === 0) return
 
     const observer = new IntersectionObserver(
       (entries) => {
-        // Elements entering in the same frame stagger by 45ms, capped so a
-        // dense batch never keeps late items waiting.
+        // The stagger is capped so a dense batch never keeps late items waiting.
         let order = 0
         for (const entry of entries) {
           if (!entry.isIntersecting) continue

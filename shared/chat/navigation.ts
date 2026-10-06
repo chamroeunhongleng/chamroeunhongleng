@@ -1,13 +1,5 @@
-/**
- * The chat assistant's navigation map — every destination the model may
- * send a visitor to, and the validator that guarantees nothing outside
- * this list ever reaches the router.
- *
- * Project destinations are DERIVED from the loaded project content, never
- * hardcoded (CLAUDE.md rule 4) — adding a case-study JSON file makes it
- * navigable without touching this module. Static page anchors are listed
- * literally because they are literals in the page templates.
- */
+/** The assistant's navigation map and its validator. Project destinations are derived from
+ *  loaded content, never hardcoded (CLAUDE.md rule 4); static anchors mirror the page templates. */
 import type { Project } from '../schemas/index.js'
 
 export interface NavTarget {
@@ -52,7 +44,6 @@ export const PROJECT_SECTION_ANCHORS: ReadonlyArray<{ id: string; what: string }
   { id: 'reflection', what: 'limitations, lessons, next validation' }
 ]
 
-/** Which projects the assistant may talk about and navigate to. */
 export function chatProjects(projects: Project[]): Project[] {
   return projects.filter((p) => p.enabled && !p.demo)
 }
@@ -78,11 +69,8 @@ export function buildNavAllowlist(projects: Project[]): ReadonlySet<string> {
   return new Set(buildNavTargets(projects).map((t) => t.path))
 }
 
-/**
- * The only gate between model output and the visitor's router: exact-match
- * against the allowlist or null. External URLs, unknown paths, javascript:
- * schemes, and invented anchors all collapse to null (no navigation).
- */
+/** The only gate between model output and the router: exact allowlist match or null, so
+ *  external URLs, javascript: schemes and invented anchors never navigate. */
 export function validateNavigateTo(
   value: unknown,
   allowlist: ReadonlySet<string>

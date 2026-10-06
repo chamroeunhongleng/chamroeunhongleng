@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { contact, profile } from '~/data/portfolio'
 
-// One word per line in the display register; the space between the spans
-// keeps the heading's accessible name "Chamroeun Hongleng".
+// The space between the spans keeps the heading's accessible name intact.
 const nameWords = profile.name.split(' ')
 </script>
 
@@ -23,7 +22,6 @@ const nameWords = profile.name.split(' ')
 
         <p class="hero-role">Software &amp; <span class="nowrap">applied-ML</span> student</p>
 
-        <!-- The owner-approved statement, verbatim. -->
         <p class="hero-statement">{{ profile.headline }}</p>
 
         <div class="hero-ctas">
@@ -32,8 +30,7 @@ const nameWords = profile.name.split(' ')
           <a :href="`mailto:${contact.email}`" class="btn btn-secondary"><Glyph name="mail" /> Email me</a>
         </div>
 
-        <!-- Profile links render on phones only (owner decision, 2026-08-13):
-             on wider screens the header and footer carry them. -->
+        <!-- Phones only: on wider screens the header and footer carry these links. -->
         <ul class="hero-links" role="list" aria-label="Profiles">
           <li v-for="link in profile.links" :key="link.url">
             <a :href="link.url" target="_blank" rel="noopener">
@@ -170,9 +167,8 @@ const nameWords = profile.name.split(' ')
   }
 }
 
-/* Phones: one designed column. The copy block dissolves (display: contents)
-   so the profile row can lead and everything else follows in reading order:
-   photo and location, then the name, the role, the statement, the actions. */
+/* Phones: .hero-copy dissolves (display: contents) so the portrait can lead and
+   the rest follows in the order set below. */
 @media (max-width: 760px) {
   .hero {
     padding-block: var(--space-5) var(--space-6);
@@ -228,7 +224,6 @@ const nameWords = profile.name.split(' ')
     order: 5;
   }
 
-  /* One wide primary action, two secondary actions sharing the next row. */
   .hero-ctas {
     order: 6;
     display: grid;

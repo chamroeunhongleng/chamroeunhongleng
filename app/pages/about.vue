@@ -48,7 +48,6 @@ usePageMeta({
           </p>
 
           <h2>What I can contribute</h2>
-          <!-- content/contributions.json — shared with the homepage and the chat assistant. -->
           <ul class="skills-list" role="list">
             <li v-for="item in contributions.items" :key="item.title">
               <strong>{{ item.title }}</strong> — <MarkedText :text="item.text" />
@@ -152,10 +151,8 @@ usePageMeta({
 <style scoped>
 .about-grid {
   display: grid;
-  /* minmax(0, …) rather than a bare 3fr/2fr: `Nfr` means `minmax(auto, Nfr)`,
-     and that `auto` floor refuses to shrink below the content's min-content
-     width — so one long token inside can push the track wider than the page.
-     See the stacked rule below, where it was doing exactly that. */
+  /* minmax(0, …), not bare fr: `Nfr` is `minmax(auto, Nfr)`, and that auto floor
+     will not shrink below min-content, so one long token can widen the track. */
   grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
   gap: var(--space-10);
   align-items: start;
@@ -170,7 +167,6 @@ usePageMeta({
   margin-top: 0;
 }
 
-/* What I can contribute — a dash list, each point with its receipt. */
 .skills-list {
   list-style: none;
   margin: 0;
@@ -199,7 +195,6 @@ usePageMeta({
   color: var(--color-text);
 }
 
-/* Skills — four cards, the group name leading each. */
 .skills-grid {
   list-style: none;
   margin: 0;
@@ -233,16 +228,13 @@ usePageMeta({
 
 .about-side {
   display: grid;
-  /* An implicit grid track is auto-sized, and `auto` will not shrink below its
-     items' min-content — so .side-card's padding + border + content floor
-     (302px) pushed this track past its own 280px box on a 320px phone. */
+  /* The implicit auto track will not shrink below its items' min-content. */
   grid-template-columns: minmax(0, 1fr);
   gap: var(--space-5);
   position: sticky;
   top: 5.5rem;
 }
 
-/* Portrait — editorial frame: hairline border, warm mat, mono caption */
 .portrait {
   margin: 0;
   display: grid;
@@ -287,8 +279,7 @@ usePageMeta({
   box-shadow: var(--shadow-card);
   padding: var(--space-5);
   display: grid;
-  /* Same reason as .about-side — the implicit auto track must be allowed to
-     shrink, or long content inside the card widens the card itself. */
+  /* Same reason as .about-side: long content must not widen the card. */
   grid-template-columns: minmax(0, 1fr);
   gap: var(--space-4);
 }
@@ -307,9 +298,8 @@ usePageMeta({
   color: var(--color-text-muted);
 }
 
-/* 18px tall otherwise, and it is how a recruiter reaches him from this page.
-   Inline padding grows the hit box without changing the card's spacing —
-   same treatment as .footer-email. */
+/* Touch target: the link is 18px tall otherwise; block padding grows the hit
+   box without changing the card's spacing. */
 @media (pointer: coarse) {
   .side-email-line a {
     padding-block: 0.85rem;
@@ -324,7 +314,6 @@ usePageMeta({
   padding: 0;
 }
 
-/* Institution plaque beside the degree, in place of a school logo. */
 .education-entry {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -354,15 +343,11 @@ usePageMeta({
   color: var(--color-text-muted);
 }
 
-/* Named major inside a programme — accented so it reads as a track, not
-   a second institution line. */
 .edu-specialization {
   font-size: var(--text-sm);
   color: var(--color-accent-2);
 }
 
-/* The funding award is the strongest signal in this card — a school chose to
-   pay for the place — so it carries the accent and the only added weight. */
 .edu-scholarship {
   font-size: var(--text-sm);
   font-weight: 560;
@@ -384,9 +369,7 @@ usePageMeta({
 
 @media (max-width: 1040px) {
   .about-grid {
-    /* minmax(0, 1fr), not 1fr — stacked at 320px the auto floor let content
-       force the column to 302px inside a 280px container, scrolling the page
-       sideways by 2px. */
+    /* minmax(0, 1fr), not 1fr: stacked, the auto floor overflowed a 320px screen. */
     grid-template-columns: minmax(0, 1fr);
   }
 
@@ -394,8 +377,7 @@ usePageMeta({
     position: static;
   }
 
-  /* Stacked, the aside spans the full width — the portrait must not follow it
-     up to a 950px-wide headshot on an iPad. */
+  /* Stacked, the aside is full-width; the portrait must not grow with it. */
   .portrait {
     max-width: 20rem;
   }

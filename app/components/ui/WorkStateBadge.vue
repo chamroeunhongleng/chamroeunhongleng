@@ -2,7 +2,6 @@
 import { computed } from 'vue'
 import type { WorkState } from '~~/shared/schemas/index'
 
-/** State label for individual work items inside a case study. */
 const props = defineProps<{ state: WorkState }>()
 
 const slug = computed(() => props.state.toLowerCase())

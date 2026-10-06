@@ -3,15 +3,8 @@ import { computed } from 'vue'
 import { useMotionAllowed } from '../../composables/useMotionAllowed'
 import TechIcon from '../ui/TechIcon.vue'
 
-/**
- * One row of technology chips that slowly scrolls.
- *
- * The prerendered page — and anyone with reduced motion, and automated runs —
- * gets a still, wrapped list with every chip visible. Only after mount, when
- * motion is allowed, does the row become a single line with a second copy of
- * the list (aria-hidden and inert, so it is never read or focused twice) and
- * slide by exactly one copy. Hover pauses it.
- */
+// A still, wrapped list until mount allows motion; the animated clone is aria-hidden
+// and inert so nothing is read or focused twice.
 const props = withDefaults(
   defineProps<{
     label: string
@@ -84,7 +77,6 @@ const style = computed(() => ({ '--marquee-duration': `${props.speed}s` }))
   padding: 0;
 }
 
-/* Big, tactile chips — the tool's mark in its own colour, then its name. */
 .marquee-list .chip {
   gap: 0.65em;
   padding: 0.85em 1.35em;
@@ -105,8 +97,7 @@ const style = computed(() => ({ '--marquee-duration': `${props.speed}s` }))
   height: 1.35em;
 }
 
-/* Animated: one line, two copies, sliding by exactly one copy. The edge fade
-   is an alpha mask — the keyword colours below only carry opacity. */
+/* The edge fade is an alpha mask: the keyword colours below only carry opacity. */
 .marquee-row[data-animate] .marquee {
   overflow: hidden;
   padding-block: 2px;

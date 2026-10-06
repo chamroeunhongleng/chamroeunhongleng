@@ -1,8 +1,3 @@
-/**
- * check-content — zod-validates every content file through the shared
- * manifest and enforces structural invariants (slug↔filename, featured
- * coverage, cross-references). Run: npm run check:content
- */
 import { hasTechIcon } from '../app/data/tech-icons'
 import { loadContent, printIssues } from './lib/load-content'
 
@@ -37,8 +32,6 @@ for (const pillar of bundle.interests.pillars) {
   }
 }
 
-// Every stack icon must be a mark the app actually ships. (Whether each item
-// traces to a project's tags is a rule-engine check in shared/rules.ts.)
 for (const group of bundle.stack.groups) {
   for (const item of group.items) {
     if (item.icon && !hasTechIcon(item.icon)) {

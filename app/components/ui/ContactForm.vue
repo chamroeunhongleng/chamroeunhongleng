@@ -3,17 +3,8 @@ import { computed, reactive, useId } from 'vue'
 import { contact, profile } from '~/data/portfolio'
 import { hasMarker } from '~~/shared/markers'
 
-/**
- * The contact form, shared by /contact and the homepage.
- *
- * Backend-free by design: submitting composes the email in the visitor's own
- * mail app. The form itself sends nothing to any server. (The site's one
- * runtime network call is the separate chat assistant, disclosed in the widget
- * and on /colophon.)
- *
- * Control ids come from useId(), so two forms on one page can never produce
- * duplicate ids (check:a11y fails on those).
- */
+// Backend-free by design: submitting opens the visitor's own mail app; nothing is sent to a server.
+// Control ids come from useId() so two forms on one page never produce duplicate ids.
 const uid = useId()
 const ids = {
   name: `${uid}-name`,
@@ -22,8 +13,7 @@ const ids = {
   message: `${uid}-message`
 }
 
-// Privacy-safe contact: the email publishes only after the owner confirms it.
-// Until then, GitHub is the contact path.
+// The email publishes only once the owner confirms it; until then GitHub is the contact path.
 const emailReady = computed(() => !hasMarker(contact.email))
 const github = computed(() => profile.links.find((l) => l.label === 'GitHub'))
 

@@ -1,10 +1,5 @@
-/**
- * check-structure — asserts the repository contract:
- *  - every required file exists (pages, content, schemas, docs, .claude tooling, CI)
- *  - no .env file is committed / .gitignore covers secrets and build output
- *  - vercel.json security headers stay in sync with nuxt.config routeRules
- *    (the duplication is load-bearing: static hosting ignores routeRules)
- */
+// Asserts the repository contract: required files, secret hygiene, and that vercel.json
+// headers match nuxt.config routeRules (static hosting ignores routeRules, so both must exist).
 import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 
@@ -26,16 +21,12 @@ const REQUIRED_FILES = [
   '.editorconfig',
   'README.md',
   'CLAUDE.md',
-  // OWNER_INPUT.md is deliberately NOT required: it is a private working
-  // questionnaire, gitignored so half-answered personal notes never ship
-  // in a public repo. It still lives in the working tree locally.
+  // OWNER_INPUT.md is deliberately absent: it is gitignored so private notes never ship.
   'SECURITY.md',
   'CODE_OF_CONDUCT.md',
   'CONTRIBUTING.md',
   'LICENSE',
-  // NOTICE carries the content-rights scope that LICENSE deliberately does not:
-  // MIT covers the code, the personal content is reserved. Losing it would make
-  // the repository read as if everything were MIT.
+  // NOTICE reserves the personal content; without it the repo reads as if everything were MIT.
   'NOTICE',
   // App
   'app/app.vue',

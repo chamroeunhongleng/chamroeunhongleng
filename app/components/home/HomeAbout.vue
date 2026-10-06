@@ -1,14 +1,10 @@
 <script setup lang="ts">
 import { experience, interests, principles, profile } from '~/data/portfolio'
 
-// The first three working principles; all five live in principles.json and
-// the full process is on the colophon.
 const principleCards = principles.principles.slice(0, 3)
 
-// The opening of his own account on /journey — quoted, not rewritten.
 const storyOpening = experience.story?.steps[0]?.text
 
-// One sentence naming the four pillars; the full story lives on /about.
 const pillarLine = interests.pillars
   .map((p, i, all) => (i === all.length - 1 ? `and ${p.title.toLowerCase()}` : p.title.toLowerCase()))
   .join(', ')
@@ -69,7 +65,7 @@ const pad = (n: number) => String(n).padStart(2, '0')
 </template>
 
 <style scoped>
-/* The pull-quote: his own words, set a little askew like a note pinned up. */
+/* The pull-quote. */
 .story {
   position: relative;
   display: grid;
@@ -149,7 +145,6 @@ const pad = (n: number) => String(n).padStart(2, '0')
   transform: rotate(-100deg) translateX(-0.5rem);
 }
 
-/* Each card takes one colour of the palette in turn. */
 .principle {
   --card-accent: var(--color-accent);
   display: grid;
@@ -175,7 +170,6 @@ const pad = (n: number) => String(n).padStart(2, '0')
   color: var(--card-accent);
 }
 
-/* Outlined numerals where the browser can draw them; solid colour otherwise. */
 @supports (-webkit-text-stroke: 1px black) {
   .principle-num {
     color: transparent;
@@ -192,7 +186,6 @@ const pad = (n: number) => String(n).padStart(2, '0')
   color: var(--color-text-muted);
 }
 
-/* The short rule under each card, in the card's colour. */
 .principle::after {
   content: '';
   width: 2rem;
@@ -202,8 +195,6 @@ const pad = (n: number) => String(n).padStart(2, '0')
   background: var(--card-accent);
 }
 
-/* On wide screens the cards sit slightly out of line, like index cards laid
-   on a desk; hovering one straightens it. */
 @media (min-width: 761px) {
   .principle:nth-child(3n + 1) {
     rotate: -0.7deg;

@@ -22,11 +22,7 @@ describe('ldJson', () => {
     expect(ldJson({ a: LS, b: PS })).toBe('{"a":"\\u2028","b":"\\u2029"}')
   })
 
-  /**
-   * The whole point of using \uXXXX escapes rather than stripping or
-   * entity-encoding: a JSON-LD consumer must see exactly the object the site
-   * meant to publish, or the escaping would be a silent SEO regression.
-   */
+  // Why \uXXXX escapes rather than stripping: a consumer must see exactly the published object.
   it('round-trips to the identical object', () => {
     const payload = {
       '@context': 'https://schema.org',

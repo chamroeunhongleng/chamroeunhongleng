@@ -13,15 +13,8 @@ export interface ProjectFile {
 
 const dir = fileURLToPath(new URL('../../../content/projects', import.meta.url))
 
-/**
- * Rule 4 (CLAUDE.md): never hardcode a project route list. These derive from
- * the same directory `nuxt.config.ts` builds its prerender routes from, so a
- * new project JSON file gains E2E coverage automatically — and a project that
- * is switched off is automatically asserted to be unreachable.
- *
- * The published set uses `enabled` truthiness to match the runtime loader in
- * app/data/portfolio.ts, which is what decides whether a page renders at all.
- */
+// Derived from the same directory nuxt.config.ts prerenders from, so a new project
+// gains coverage automatically; `enabled` truthiness matches app/data/portfolio.ts.
 const all: ProjectFile[] = readdirSync(dir)
   .filter((f) => f.endsWith('.json'))
   .map((f) => JSON.parse(readFileSync(join(dir, f), 'utf8')) as ProjectFile)

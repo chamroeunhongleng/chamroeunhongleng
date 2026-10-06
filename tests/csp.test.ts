@@ -14,9 +14,8 @@ function page(head: string): string {
 
 describe('inlineScriptHashes', () => {
   it('hashes bare inline scripts against a known vector', () => {
-    // Vector computed outside this codebase, so it pins the format a browser
-    // expects rather than agreeing with whatever the implementation does:
-    //   printf 'var x = 1;' | openssl dgst -sha256 -binary | openssl base64
+    // Vector from `printf 'var x = 1;' | openssl dgst -sha256 -binary | openssl base64`,
+    // so it pins the browser's format rather than agreeing with the implementation.
     expect(inlineScriptHashes(page('<script>var x = 1;</script>'), 'p'))
       .toEqual([`'sha256-9nfWt3DNT14o+tZCP3YilfLwTrhLI98eqbN689B7ajY='`])
   })
@@ -134,7 +133,6 @@ describe('readCspMeta', () => {
 
 // A rebuild does not always rewrite every page (Nitro reuses cached prerender
 // output), so a second `vercel build` hands the injector its own earlier tag.
-// Without this the build failed with "a CSP meta tag is already present".
 describe('re-running over an existing build', () => {
   const html = page('<script type="importmap">{}</script><script>boot()</script>')
   const inject = (source: string) => {
@@ -164,7 +162,6 @@ describe('re-running over an existing build', () => {
 
   it('recomputes hashes rather than reusing the old policy', () => {
     const once = inject(html)
-    // The page changes after injection; the next pass must follow the scripts.
     const edited = once.replace('boot()', 'boot(1)')
     const again = inject(edited)
     expect(readCspMeta(again)).toBe(policyFor(stripCspMeta(edited).html, 'p'))
@@ -172,9 +169,6 @@ describe('re-running over an existing build', () => {
   })
 })
 
-// The injector hardcoded .output/public and aborted the first production
-// build, because `vercel build` runs the vercel-static preset and writes
-// .vercel/output/static. These pin the rule that replaced it.
 describe('outputDir', () => {
   const savedVercel = process.env.VERCEL
   const savedPreset = process.env.NITRO_PRESET
@@ -215,8 +209,7 @@ describe('outputDir', () => {
   })
 
   it('decides from the environment, never from which directory exists', () => {
-    // A stale .output/public must not absorb the injection while the artifact
-    // bound for production ships with no policy.
+    // A stale .output/public must not absorb the policy meant for the production artifact.
     withEnv({ VERCEL: '1' })
     const chosen = outputDir(process.cwd())
     expect(chosen).toContain('.vercel')

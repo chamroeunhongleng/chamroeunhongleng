@@ -1,22 +1,15 @@
-/**
- * inject-csp — stamps a hash-based Content-Security-Policy into every page of
- * the GENERATED site. Runs as the second half of `npm run generate`, so the
- * deploy recipe, the e2e suite, and the CV renderer all pick it up unchanged.
- *
- * Why post-build rather than a header: see scripts/lib/csp.ts. Hashes rotate
- * with the buildId, so they must be derived from the artifacts every time.
- */
+// Stamps a hash-based CSP <meta> into every generated page. Runs as the second half of
+// `npm run generate`, so the deploy recipe, e2e suite and CV renderer all pick it up.
 import { readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs'
 import { join, relative } from 'node:path'
 import { injectMeta, policyFor, stripCspMeta } from './lib/csp'
 import { outputDirLabel, requireOutputDir } from './lib/output-dir'
 
 const root = process.cwd()
-// Not a fixed path: `vercel build` writes .vercel/output/static. See lib/output-dir.
+// Not a fixed path: `vercel build` writes .vercel/output/static.
 const site = requireOutputDir(root, 'inject-csp')
 
-// Every .html in the tree, including the 200/404 SPA shells — they carry the
-// same inline bootstrap scripts and are served as real pages.
+// Includes the 200/404 SPA shells: they carry the same inline bootstrap scripts.
 const htmlFiles: string[] = []
 function walk(dir: string) {
   for (const name of readdirSync(dir)) {
@@ -39,8 +32,7 @@ let reinjected = 0
 for (const file of htmlFiles) {
   const rel = relative(site, file)
   try {
-    // Strip before injecting, so re-running over an existing build directory
-    // replaces the policy instead of failing or stacking a second one.
+    // Strip first so a re-run over an existing build replaces the policy instead of stacking one.
     const { html, removed } = stripCspMeta(readFileSync(file, 'utf8'))
     if (removed > 0) reinjected++
     const policy = policyFor(html, rel)

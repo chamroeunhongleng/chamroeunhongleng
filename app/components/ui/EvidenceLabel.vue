@@ -33,14 +33,8 @@ defineProps<{ evidence: EvidenceLabel; link?: string }>()
   color: var(--color-accent);
 }
 
-/* The glyph measures ~16px square — a thumb-hostile target, and it sits inline
-   beside a badge on 30-odd spots sitewide, so it cannot simply grow to 44px
-   without pushing those lines apart. Instead the visual size is left alone and
-   an invisible pad extends the hit area outward from the centre. It is a
-   pseudo-element, so it takes no layout space and shifts nothing.
-
-   The pad is not applied on mouse pointers: overlapping pads on adjacent
-   claims would swallow clicks meant for the text around them. */
+/* A 44px hit pad as a pseudo-element, so it takes no layout space. Not on mouse
+   pointers: overlapping pads on adjacent claims would swallow clicks on the text. */
 @media (pointer: coarse) {
   .evidence-link::after {
     content: '';

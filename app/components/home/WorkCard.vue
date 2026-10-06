@@ -7,11 +7,6 @@ import MarkedText from '../ui/MarkedText.vue'
 import StatusBadge from '../ui/StatusBadge.vue'
 import TagList from '../ui/TagList.vue'
 
-/**
- * A homepage project card: screenshot, both honesty labels, one line, stack
- * chips. The whole card opens the case study (one real link, stretched); the
- * square button opens the live product or repository on its own.
- */
 const props = defineProps<{
   project: Project
   tags: ReadonlyArray<{ name: string; icon?: string }>
@@ -27,9 +22,8 @@ const external = computed(
 <template>
   <article class="work-card card card-lift">
     <div class="work-cover">
-      <!-- alt is empty on purpose: the project name sits right below, so a
-           description here would only pad the link's accessible name. The full
-           alt rides the same image on the case study. -->
+      <!-- alt is empty on purpose: the project name sits right below, and a
+           description here would only pad the link's accessible name. -->
       <img
         v-if="project.cover"
         :src="project.cover.src"

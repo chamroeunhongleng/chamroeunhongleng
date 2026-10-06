@@ -1,10 +1,5 @@
-/**
- * verify — the one-command verification pipeline: npm run verify
- *
- * Order matters: cheap static checks first, then lint/types/tests, then the
- * full static generation, then checks that inspect the generated output,
- * and finally a self-test proving the production gate actually gates.
- */
+// Order matters: cheap static checks, then lint/types/tests, then static generation,
+// then checks over the generated output, and finally the gate self-test.
 import { spawnSync } from 'node:child_process'
 import { loadContent } from './lib/load-content'
 import { runContentRules } from '../shared/rules'

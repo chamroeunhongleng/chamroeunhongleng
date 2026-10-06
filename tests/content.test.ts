@@ -40,8 +40,7 @@ describe('shipped content invariants', () => {
     const metricClaim = kaskor.results.find((r) => /\d+\.\d+% CER/.test(r.text))
     expect(metricClaim).toBeDefined()
     expect(metricClaim!.text.toLowerCase()).toContain('self-report')
-    // The measurement conditions travel with the number: a CER is only meaningful
-    // alongside the split it was measured on (see the 225-token decode-cap correction).
+    // A CER is only meaningful alongside the split it was measured on.
     expect(metricClaim!.text.toLowerCase()).toContain('validation split')
   })
 

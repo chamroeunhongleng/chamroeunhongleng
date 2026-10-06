@@ -14,9 +14,7 @@ usePageMeta({
     'Case studies across AI, software, business, and governance — each with honest status labels and evidence-labeled claims.'
 })
 
-// Cards below the fold fade in on scroll (no-op for no-JS, reduced-motion,
-// and automated runs — see useReveal). Cards re-rendered by a filter change
-// simply appear; only the initial page load animates.
+// Only the initial page load animates; cards re-rendered by a filter change simply appear.
 useReveal()
 
 const pillarFilter = ref<PillarId | 'all'>('all')

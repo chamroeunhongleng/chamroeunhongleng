@@ -20,8 +20,7 @@ describe('navigation allowlist', () => {
 
   it('derives a page and all section anchors for every enabled non-demo project', () => {
     const real = chatProjects(bundle!.projects)
-    // Matches the prerendered routes: enabled, non-demo case studies only
-    // (disabled projects like ai-layer have no page to navigate to).
+    // Must match the prerendered routes: a disabled project has no page to navigate to.
     expect(real.length).toBe(bundle!.projects.filter((p) => p.enabled && !p.demo).length)
     expect(real.length).toBeGreaterThan(0)
     for (const project of real) {

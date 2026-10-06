@@ -1,22 +1,15 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-/**
- * Hand-drawn pen strokes — an underline under a word, a curved arrow beside a
- * margin note, a loop around something worth a second look. They are what
- * makes the page feel written by a person. Always decorative (aria-hidden) and
- * always in currentColor, so they take whatever token colour surrounds them.
- */
+// Hand-drawn pen strokes: always decorative (aria-hidden) and drawn in currentColor.
 type Variant = 'underline' | 'arrow' | 'loop'
 
 const SHAPES: Record<Variant, { box: string; d: string; stretch: boolean }> = {
-  // Two passes of the pen, slightly out of line with each other.
   underline: {
     box: '0 0 200 16',
     d: 'M3 7C34 2 62 11 96 6s58-5 101 1M22 13c40-4 92-3 150 0',
     stretch: true
   },
-  // From the lower right up to the upper left, ending in an arrowhead.
   arrow: {
     box: '0 0 64 48',
     d: 'M58 44C52 24 36 11 11 8M23 2 10 8l8 13',

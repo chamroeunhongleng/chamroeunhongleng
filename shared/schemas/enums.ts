@@ -1,12 +1,5 @@
-/**
- * Canonical vocabularies for the whole site. Everything — app components,
- * content JSON, verification scripts, the build gate, and tests — imports
- * these arrays, so a label that isn't defined here cannot ship.
- *
- * Erasable-syntax TypeScript only (`as const` + type aliases, no TS enums):
- * these files run under Node's native type stripping via jiti as well as
- * under Vite.
- */
+// Canonical vocabularies for the whole site — a label not defined here cannot ship.
+// Erasable syntax only (`as const`, no TS enums): these run under Node type stripping as well as Vite.
 
 /** Project lifecycle. Never label non-production work as Production. */
 export const PROJECT_STATUSES = [
@@ -23,10 +16,7 @@ export const PROJECT_STATUSES = [
 ] as const
 export type ProjectStatus = (typeof PROJECT_STATUSES)[number]
 
-/**
- * Deployment reality — deliberately separate from lifecycle status so a
- * polished prototype can never read as a shipped product.
- */
+/** Deliberately separate from lifecycle status, so a polished prototype can never read as shipped. */
 export const DEPLOYMENT_REALITIES = [
   'Deployed',
   'Public demo',
@@ -49,11 +39,8 @@ export const EVIDENCE_LABELS = [
 ] as const
 export type EvidenceLabel = (typeof EVIDENCE_LABELS)[number]
 
-/**
- * Evidence labels strong enough to support a Production status claim.
- * `satisfies` pins every entry to the vocabulary above, so renaming a label
- * there is a compile error here instead of a silently weakened rule.
- */
+/** Labels strong enough to support a Production status. `satisfies` pins each entry to the
+ *  vocabulary above, so renaming a label there is a compile error instead of a weakened rule. */
 export const HARD_EVIDENCE_LABELS = [
   'Owner confirmed',
   'Public evidence',
@@ -61,7 +48,6 @@ export const HARD_EVIDENCE_LABELS = [
   'Document evidence'
 ] as const satisfies readonly EvidenceLabel[]
 
-/** State of an individual piece of work inside a case study. */
 export const WORK_STATES = [
   'Completed',
   'Demonstrated',
@@ -72,11 +58,9 @@ export const WORK_STATES = [
 ] as const
 export type WorkState = (typeof WORK_STATES)[number]
 
-/** Site content modes. See .env.example for semantics. */
 export const PORTFOLIO_MODES = ['demo', 'review', 'production'] as const
 export type PortfolioMode = (typeof PORTFOLIO_MODES)[number]
 
-/** The four connected pillars of the portfolio. */
 export const PILLARS = [
   'ai-ml',
   'software-product',

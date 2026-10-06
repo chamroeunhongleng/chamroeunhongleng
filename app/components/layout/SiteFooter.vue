@@ -4,7 +4,6 @@ import { contact, profile } from '~/data/portfolio'
 // Baked at prerender; recomputed identically at hydration. Advances on redeploy.
 const YEAR = new Date().getFullYear()
 
-// The header holds six items; the footer carries every page, Learning included.
 const FOOTER_NAV = [
   { label: 'Projects', to: '/projects' },
   { label: 'About', to: '/about' },
@@ -56,8 +55,7 @@ const FOOTER_NAV = [
       <NuxtLink to="/colophon" class="colophon-link">Colophon &amp; AI policy</NuxtLink>
     </div>
 
-    <!-- The name once more, very large and very faint — a signature, not a
-         heading. Decorative: hidden from assistive technology. -->
+    <!-- A decorative signature, not a heading: hidden from assistive technology. -->
     <p class="footer-wordmark" aria-hidden="true">{{ profile.preferredName }}</p>
   </footer>
 </template>
@@ -249,8 +247,7 @@ const FOOTER_NAV = [
   }
 }
 
-/* Sized to the screen, centred even when it is wider than the screen, and
-   cut off by the footer's bottom edge. */
+/* Centred even when wider than the screen; the footer's overflow clips it. */
 .footer-wordmark {
   display: flex;
   justify-content: center;

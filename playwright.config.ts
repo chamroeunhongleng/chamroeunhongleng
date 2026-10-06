@@ -1,29 +1,19 @@
 import { defineConfig, devices } from '@playwright/test'
 
-// Single device by default (fast loop); the full device matrix on demand:
-//   npm run test:e2e            -> laptop only
-//   npm run test:e2e:devices    -> laptop + phones + iPads
+// Laptop only by default; E2E_DEVICES (or CI) runs the full phone and iPad matrix.
 const FULL_MATRIX = !!process.env.E2E_DEVICES || !!process.env.CI
 
-// E2E_BUILD=1 tests the prerendered site in .output/public instead of the dev
-// server. Slower to start (a ~13s `npm run generate` first) but it removes
-// on-demand compilation, which is what makes long dev-server runs flaky here —
-// and it exercises the artifact that actually deploys.
+// E2E_BUILD=1 tests the prerendered .output/public: no on-demand compilation, which is what
+// makes long dev-server runs flaky, and it is the artifact that actually deploys.
 const USE_BUILD = !!process.env.E2E_BUILD
 
-// The port is configurable because `reuseExistingServer` is on locally: if an
-// unrelated dev server already owns 3000, Playwright silently adopts it and the
-// whole suite runs against someone else's site. Override with
-//   E2E_PORT=3100 npm run test:e2e
-// tests/e2e/static-server.mjs reads the same variable.
+// With reuseExistingServer on, an unrelated server on 3000 would be silently adopted;
+// E2E_PORT overrides it, and tests/e2e/static-server.mjs reads the same variable.
 const PORT = Number(process.env.E2E_PORT ?? 3000)
 const ORIGIN = `http://127.0.0.1:${PORT}`
 
-// WebKit will not launch on this Windows machine (missing icuuc77.dll), so the
-// iOS/iPadOS projects run Apple *device metrics* — viewport, DPR, touch, mobile
-// UA — on the Chromium engine. That catches layout and responsive regressions,
-// which is what these projects are for. It does NOT catch Safari engine bugs.
-// See workflows/test-with-playwright.md for the real-Safari options.
+// WebKit will not launch on this machine (missing icuuc77.dll), so the Apple projects run
+// device metrics on Chromium: layout regressions are caught, Safari engine bugs are not.
 const appleMetricsOnChromium = (device: typeof devices[string]) => ({
   ...device,
   browserName: 'chromium' as const
@@ -36,30 +26,20 @@ const LAPTOP = {
 
 export default defineConfig({
   testDir: './tests/e2e',
-  // The screenshot capture run is a review tool, not a pass/fail check — it
-  // writes ~100 images and would slow every ordinary run. Opt in with
-  // `npm run test:e2e:shots`.
+  // The screenshot run writes ~100 images and is a review tool, not a check; opt in with E2E_SHOTS.
   testIgnore: process.env.E2E_SHOTS ? [] : ['**/screenshots.spec.ts'],
-  // Compiles every route once, serially, so parallel workers never race the
-  // Nuxt dev server's first-request compile. See tests/e2e/global-setup.ts.
+  // Compiles every route once, serially, so workers never race the dev server's first-request compile.
   globalSetup: './tests/e2e/global-setup.ts',
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  // The Nuxt DEV server compiles each route on first request. With the full
-  // matrix at default concurrency (8 workers here), simultaneous first-hits on
-  // uncompiled routes overwhelm it and requests die with
-  // "net::ERR_ABORTED; maybe frame was detached?" — whole projects fail while
-  // the same tests pass in isolation. Capping concurrency keeps it stable.
-  // The static server handles full concurrency fine; only the dev server needs
-  // throttling (it stalls under sustained parallel load on Windows).
+  // The dev server compiles routes on first request and dies under 8 simultaneous first hits
+  // ("net::ERR_ABORTED; maybe frame was detached?"); the static server handles full concurrency.
   workers: process.env.CI ? 1 : FULL_MATRIX && !USE_BUILD ? 2 : undefined,
   reporter: process.env.CI ? 'html' : 'list',
   use: {
-    // 127.0.0.1, not "localhost": Nuxt dev binds IPv6 (::1) only by default on
-    // Windows, and Node can resolve "localhost" to IPv4 first — the webServer
-    // health check then polls a dead address until it times out. The --host
-    // flag below pins the server to the same IPv4 address this polls.
+    // 127.0.0.1, not localhost: Nuxt dev binds ::1 only on Windows and Node may resolve localhost
+    // to IPv4 first, so the health check would poll a dead address; --host below pins the server to match.
     baseURL: ORIGIN,
     trace: 'on-first-retry',
     screenshot: 'only-on-failure'
@@ -68,12 +48,9 @@ export default defineConfig({
   projects: FULL_MATRIX
     ? [
         LAPTOP,
-        // 320x568 — the narrowest realistic phone. Below SiteHeader's 22.4em
-        // (~358px) rule, so the brand NAME should be hidden and the monogram
-        // alone carries the brand.
+        // 320x568 — below SiteHeader's 22.4em (~358px) rule, so the monogram alone carries the brand.
         { name: 'mobile-small', use: appleMetricsOnChromium(devices['iPhone SE']) },
-        // 360x740 — what SiteHeader.vue calls "the most common Android width",
-        // and the width its header-row spacing was tuned against.
+        // 360x740 — the width SiteHeader's header-row spacing was tuned against.
         { name: 'mobile-android-compact', use: { ...devices['Galaxy S8'] } },
         // 393x851 — below the 760px breakpoint, so: mobile menu.
         { name: 'mobile-android', use: { ...devices['Pixel 5'] } },

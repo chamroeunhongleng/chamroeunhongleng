@@ -4,7 +4,6 @@ import EvidenceLabel from './EvidenceLabel.vue'
 import MarkedText from './MarkedText.vue'
 import WorkStateBadge from './WorkStateBadge.vue'
 
-/** Evidence-labeled claims — the only way important statements render. */
 defineProps<{ claims: readonly Claim[] }>()
 </script>
 

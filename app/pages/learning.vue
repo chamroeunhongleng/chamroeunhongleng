@@ -7,9 +7,7 @@ usePageMeta({
     'A live log of what Chamroeun Hongleng is studying across AI, software, business, and governance — curiosity with progress, not claimed expertise.'
 })
 
-// Presentational time windows for the three roadmap horizons — deliberately
-// loose (no fake month precision). The visual treatment (solid ink →
-// terracotta → dashed) encodes the same certainty decay.
+// Deliberately loose windows — no fake month precision.
 const HORIZON_WINDOWS: Record<string, string> = {
   Now: '2026 · this term',
   Next: 'toward 2027',
@@ -24,7 +22,6 @@ const pillarNumber = (id: string) => interests.pillars.find((p) => p.id === id)?
     <div class="container">
       <SectionHeading as="h1" eyebrow="Learning" title="Studying in public" :text="learning.intro" />
 
-      <!-- Disciplines -->
       <div class="discipline-grid">
         <article
           v-for="discipline in learning.disciplines"
@@ -45,7 +42,6 @@ const pillarNumber = (id: string) => interests.pillars.find((p) => p.id === id)?
         </article>
       </div>
 
-      <!-- Experiments -->
       <section class="block" aria-labelledby="experiments-title">
         <SectionHeading
           id="experiments-title"
@@ -73,7 +69,6 @@ const pillarNumber = (id: string) => interests.pillars.find((p) => p.id === id)?
         </ul>
       </section>
 
-      <!-- Reading notes -->
       <section v-if="learning.readingNotes.length" class="block" aria-labelledby="reading-title">
         <SectionHeading
           id="reading-title"
@@ -93,7 +88,6 @@ const pillarNumber = (id: string) => interests.pillars.find((p) => p.id === id)?
         </ul>
       </section>
 
-      <!-- Roadmap — a rail where the ink fades with distance -->
       <section class="block" aria-labelledby="roadmap-title">
         <SectionHeading
           id="roadmap-title"
@@ -246,11 +240,7 @@ const pillarNumber = (id: string) => interests.pillars.find((p) => p.id === id)?
   font-size: var(--text-sm);
 }
 
-/* Roadmap — release-roadmap treatment: each zone owns a colored axis
-   segment; every item hangs from it as a framed card on a connector stem.
-   Zones cascade downward left-to-right (time flows down as well as right),
-   and certainty decays with distance: solid indigo (Now) → terracotta
-   (Next) → dashed, unfilled (Later). */
+/* Roadmap — certainty decays with distance: solid indigo → terracotta → dashed. */
 .rm-track {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -275,7 +265,6 @@ const pillarNumber = (id: string) => interests.pillars.find((p) => p.id === id)?
   --zone-style: dashed;
 }
 
-/* Zone head doubles as the axis segment: label + window on a colored rule. */
 .rm-zonehead {
   display: flex;
   align-items: center;
@@ -311,7 +300,6 @@ const pillarNumber = (id: string) => interests.pillars.find((p) => p.id === id)?
   color: var(--color-text-faint);
 }
 
-/* Cards hang from the axis on stems; the cascade deepens per zone. */
 .rm-cards {
   display: grid;
   gap: var(--space-4);
@@ -343,7 +331,6 @@ const pillarNumber = (id: string) => interests.pillars.find((p) => p.id === id)?
   background: transparent;
 }
 
-/* Connector stems: from each card up through the gap above it. */
 .rm-card::before {
   content: '';
   position: absolute;
@@ -365,9 +352,6 @@ const pillarNumber = (id: string) => interests.pillars.find((p) => p.id === id)?
   font-size: var(--text-sm);
 }
 
-/* The block note promises every item carries a label — so render it. The
-   evidence label is icon-only site-wide (it shows only when a claim links to
-   its receipt), which is why the work state is what a reader actually sees. */
 .rm-labels {
   display: flex;
   align-items: center;
@@ -380,7 +364,6 @@ const pillarNumber = (id: string) => interests.pillars.find((p) => p.id === id)?
     gap: var(--space-6);
   }
 
-  /* Stacked: the cascade resets; stems stay uniform. */
   .rm-zone[data-horizon='next'] .rm-cards,
   .rm-zone[data-horizon='later'] .rm-cards {
     margin-top: var(--space-4);

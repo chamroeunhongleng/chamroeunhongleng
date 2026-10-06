@@ -1,36 +1,5 @@
-/**
- * Chat assistant evaluation harness — `npm run eval:chat`.
- *
- * The unit tests in `tests/chat/` prove the plumbing (validation, rate limits,
- * allowlist, parsing) without touching the network. They cannot prove the part
- * that actually keeps the assistant honest: that the SYSTEM PROMPT still makes
- * the model decline off-topic requests, resist pretexts, and preserve the
- * site's hedges. That behaviour lives in the model, so it needs real calls.
- *
- * This runner replays `tests/chat/evals/cases.jsonl` against the real prompt
- * with the same model and output contract the deployed function uses, then
- * grades each answer:
- *
- *   - structural checks (deterministic): navigateTo inside the allowlist,
- *     null on declines, substring facts present or absent, reply non-empty
- *   - behavioural check (LLM judge): did it decline / stay grounded?
- *
- * Exits non-zero when any case fails, so CI can gate on it.
- *
- * Two targets:
- *   --target=api   (default) call Anthropic directly with the locally built
- *                  system prompt. Grades the prompt as it exists in this
- *                  working tree — what CI wants, so a regression is caught
- *                  BEFORE it deploys. Needs ANTHROPIC_API_KEY.
- *   --target=live  POST to the deployed /api/chat instead. Grades what
- *                  visitors actually get, including the function's own
- *                  validation and allowlist. Needs no key for the answers,
- *                  only for the judge (use --no-judge without one).
- *
- *   npm run eval:chat
- *   npm run eval:chat -- --filter=pretext
- *   npm run eval:chat -- --target=live --no-judge --json=report.json
- */
+// Replays tests/chat/evals/cases.jsonl against the real model and grades each answer: the unit
+// tests cannot prove what the system prompt makes the model do. --target=api (default) | live.
 import { readFileSync, writeFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import Anthropic from '@anthropic-ai/sdk'
@@ -39,21 +8,13 @@ import { buildSystemPrompt } from '../shared/chat/knowledge.js'
 import { buildNavAllowlist, validateNavigateTo } from '../shared/chat/navigation.js'
 import { CHAT_REPLY_JSON_SCHEMA, chatReplySchema } from '../shared/chat/contract.js'
 
-/**
- * Imported from api/chat.ts, not copied. "Kept in step with api/chat.ts" was a
- * comment, and a comment cannot fail — the eval could quietly grade a
- * different model or token budget than the one that ships. Importing makes
- * drift impossible.
- */
+// Imported, not copied: the eval must grade the exact model and token budget that ships.
 import { CHAT_MODEL, MAX_OUTPUT_TOKENS } from '../api/chat.js'
 
-/** The judge is deliberately named separately: grading with the same model
- *  being graded is the weakest possible configuration, and calling that out
- *  here is more useful than hiding it behind a shared constant. */
+/** Deliberately not CHAT_MODEL: a model grading itself is the weakest possible configuration. */
 const JUDGE_MODEL = 'claude-haiku-4-5'
 /** Concurrency stays modest: the function's own limiter allows 8/ip/minute. */
 const CONCURRENCY = 4
-/** Longest pause worth taking on a live 429 before calling the day spent. */
 const MAX_LIVE_BACKOFF_MS = 90_000
 
 type Expectation = 'decline' | 'answer' | 'decline_or_unknown'
@@ -67,7 +28,6 @@ interface EvalCase {
   must_include?: string[]
   /** Substrings the reply must NOT contain (case-insensitive). */
   must_not_include?: string[]
-  /** Allowed navigateTo values; `null` is written as JSON null. */
   expect_nav?: (string | null)[]
   note?: string
 }
@@ -161,7 +121,6 @@ interface Answer {
   failures: string[]
 }
 
-/** Ask the model directly, with the prompt built from this working tree. */
 async function askApi(
   client: Anthropic,
   systemPrompt: string,
@@ -197,21 +156,15 @@ async function askApi(
 
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms))
 
-/**
- * Ask the deployed function — the whole production path, as a visitor.
- *
- * The live endpoint rate-limits to 8 requests per IP per minute, so a full
- * sweep WILL be throttled. That is the limiter working, not a failure: honour
- * Retry-After and try again rather than reporting a false regression.
- */
+// The live endpoint limits 8 requests/ip/minute, so a full sweep WILL be throttled; that is
+// the limiter working, not a failure, so honour Retry-After instead of reporting a regression.
 async function askLive(endpoint: string, message: string, attempt = 0): Promise<Answer> {
   const response = await fetch(endpoint, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      // The function 403s requests without an Origin. Node's fetch sends none,
-      // so derive it from the endpoint — that also keeps --endpoint= overrides
-      // (preview deploys, localhost) inside the server's allowlist.
+      // The function 403s requests without an Origin and Node's fetch sends none; deriving it
+      // from the endpoint also keeps --endpoint= overrides inside the server's allowlist.
       'Origin': new URL(endpoint).origin
     },
     body: JSON.stringify({ message, history: [] })
@@ -220,9 +173,8 @@ async function askLive(endpoint: string, message: string, attempt = 0): Promise<
   if (response.status === 429) {
     const retryAfter = Number(response.headers.get('Retry-After') ?? 30)
     const wait = (Number.isFinite(retryAfter) ? retryAfter : 30) * 1000 + 1000
-    // A Retry-After longer than the per-minute window means the DAILY budget
-    // is gone (60/ip/day). Waiting that out would hang the run for hours, so
-    // stop and say so plainly.
+    // A Retry-After longer than the per-minute window means the daily budget (60/ip/day)
+    // is gone; waiting it out would hang the run for hours.
     if (wait > MAX_LIVE_BACKOFF_MS) {
       return {
         reply: '',
@@ -282,7 +234,6 @@ async function runCase(
   return { id: testCase.id, category: testCase.category, pass: failures.length === 0, failures, reply, navigateTo, judgeReason }
 }
 
-/** Simple worker pool — keeps the request rate below the function's limiter. */
 async function pool<T, R>(items: T[], size: number, worker: (item: T) => Promise<R>): Promise<R[]> {
   const results = new Array<R>(items.length)
   let cursor = 0
@@ -356,8 +307,7 @@ async function main(): Promise<void> {
       : `eval:chat — ${cases.length} cases, model ${CHAT_MODEL}, prompt ${systemPrompt.length} chars${noJudge ? ' (structural checks only)' : ''}\n`
   )
 
-  // Against the live site, stay serial so the per-IP limiter is not fighting
-  // the harness; against the API directly, run the pool.
+  // Serial against the live site so the per-IP limiter is not fighting the harness.
   const concurrency = target === 'live' ? 1 : CONCURRENCY
   const started = Date.now()
   const results = await pool(cases, concurrency, (testCase) =>

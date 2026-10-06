@@ -2,12 +2,8 @@ import type { ContentBundle, PortfolioMode } from './schemas/index'
 import { collectMarkers } from './markers'
 import type { MarkerType } from './markers'
 
-/**
- * The mode-aware content rule engine — the ONE implementation shared by
- * `npm run check:owner-content`, the build gate (modules/content-gate.ts),
- * and the tests. CLI and gate can never disagree because they call the
- * same function.
- */
+/** The mode-aware content rule engine — the one implementation behind `check:owner-content`,
+ *  the build gate (modules/content-gate.ts) and the tests, so CLI and gate cannot disagree. */
 
 export type Severity = 'info' | 'warning' | 'error'
 
@@ -25,11 +21,8 @@ export interface RuleOptions {
 
 const PLACEHOLDER_URL_RE = /example\.(com|org|net)|localhost|127\.0\.0\.1|your-domain|CHANGE_ME/i
 
-/**
- * Achievement-shaped numbers (percentages, money, user/test/sample counts)
- * are only allowed inside evidence-labeled Claims — never in loose prose.
- * Technical parameters ("16 kHz", "v0.0") do not match this pattern.
- */
+/** Achievement-shaped numbers (percentages, money, user/test/sample counts) are only allowed
+ *  inside evidence-labeled Claims. Technical parameters ("16 kHz", "v0.0") do not match. */
 const NUMERIC_CLAIM_RE
   = /\d[\d,.]*\s*(%|percent|users?\b|customers?\b|farmers?\b|samples?\b|tests?\b|interviews?\b|downloads?\b|stars?\b)|\$\s?\d/i
 
@@ -79,9 +72,8 @@ export function runContentRules(
     ['contributions', bundle.contributions]
   ]
   for (const project of bundle.projects) {
-    // Disabled projects ship nothing — no route, no listing — so their dormant
-    // content does not gate production. Rule 2's own remedy ("Disable or
-    // replace it before production") depends on this.
+    // Disabled projects ship nothing, so their dormant content does not gate production;
+    // rule 2's remedy ("Disable or replace it before production") depends on this.
     if (project.enabled) sections.push([`projects/${project.slug}`, project])
   }
 
@@ -204,9 +196,8 @@ export function runContentRules(
     }
   }
 
-  // 6b. Stack items trace to real work: a project-sourced item must cite at
-  // least one enabled project AND be one of that project's tags, so the
-  // homepage technology list can never name a tool no case study used.
+  // 6b. Stack items trace to real work: a project-sourced item must cite an enabled project
+  // AND be one of its tags, so the homepage can never name a tool no case study used.
   const tagsBySlug = new Map(
     bundle.projects
       .filter((p) => p.enabled)

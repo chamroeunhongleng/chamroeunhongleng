@@ -20,12 +20,8 @@ export * from './common.js'
 export * from './project.js'
 export * from './site.js'
 
-/**
- * The single file → schema map. The app loader, the check-content script,
- * the build gate, and the tests all iterate THIS manifest — content
- * validation can never disagree with what the app actually loads.
- * Never validate content by regexing source text.
- */
+/** The single file → schema map that the app loader, check-content, the build gate and the tests
+ *  all iterate, so validation cannot disagree with what the app loads. Never regex source text. */
 export const contentManifest = [
   { file: 'profile.json', key: 'profile', schema: profileSchema },
   { file: 'education.json', key: 'education', schema: educationSchema },
@@ -41,7 +37,6 @@ export const contentManifest = [
   { file: 'contributions.json', key: 'contributions', schema: contributionsSchema }
 ] as const
 
-/** Projects live one-file-per-case-study under content/projects/. */
 export const projectsDirectory = { dir: 'projects', schema: projectSchema } as const
 
 export interface ContentBundle {

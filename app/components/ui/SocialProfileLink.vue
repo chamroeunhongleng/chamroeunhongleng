@@ -10,7 +10,7 @@ const props = withDefaults(
     tone?: 'accent' | 'muted'
     /** Icon-only presentation: the label stays for screen readers. */
     iconOnly?: boolean
-    /** Round icon button (header tools, footer) — use with iconOnly. */
+    /** Round icon button — use with iconOnly. */
     round?: boolean
   }>(),
   {

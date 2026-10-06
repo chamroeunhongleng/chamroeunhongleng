@@ -7,8 +7,7 @@ usePageMeta({
     'The journey so far — from high school in Kampong Cham to dual degrees, studio work, competitions, and field research, labeled with the evidence that exists.'
 })
 
-// A plaque glyph per group id in content/experience.json; unknown ids fall
-// back to the book, so a new group never renders without one.
+// Keys are the group ids in content/experience.json.
 type GroupGlyph = 'briefcase' | 'medal' | 'users' | 'graduation-cap' | 'book'
 const GROUP_GLYPH: Record<string, GroupGlyph> = {
   current: 'briefcase',
@@ -29,8 +28,6 @@ const GROUP_GLYPH: Record<string, GroupGlyph> = {
         text="Current work first, then competitions, field research, and milestones — each kind in its own group."
       />
 
-      <!-- The through-line the grouped timeline cannot show: why this shape.
-           Three short steps side by side, so it reads at a glance. -->
       <section v-if="experience.story" class="story" aria-labelledby="story-title">
         <h2 id="story-title" class="story-title">{{ experience.story.title }}</h2>
         <ol class="story-steps" role="list">
@@ -129,8 +126,6 @@ const GROUP_GLYPH: Record<string, GroupGlyph> = {
 </template>
 
 <style scoped>
-/* Three ruled columns, not boxes — the page already carries many bordered
-   cards and one more would read as another entry. */
 .story {
   display: grid;
   gap: var(--space-5);
@@ -210,7 +205,6 @@ const GROUP_GLYPH: Record<string, GroupGlyph> = {
   border-color: var(--color-accent);
 }
 
-/* Section jump-pills are the whole navigation for a long page on a phone. */
 @media (pointer: coarse) {
   .group-nav a {
     min-height: 44px;
@@ -254,8 +248,6 @@ const GROUP_GLYPH: Record<string, GroupGlyph> = {
   border-color: var(--color-border-strong);
 }
 
-/* Timeline groups hang their cards from a rail, one dot per entry — filled
-   for the roles that are still running. */
 .entries[data-layout='timeline'] {
   position: relative;
   padding-inline-start: var(--space-7);
@@ -345,8 +337,6 @@ const GROUP_GLYPH: Record<string, GroupGlyph> = {
   align-content: start;
 }
 
-/* Cards carry the photographic entries: prose on the left, the photograph
-   held in a rail on the right, so neither has to squeeze past the other. */
 .entries[data-layout='cards'] .entry[data-figure] .entry-body {
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
   gap: var(--space-6);
@@ -415,7 +405,6 @@ const GROUP_GLYPH: Record<string, GroupGlyph> = {
   box-shadow: var(--shadow-card);
 }
 
-/* In the rail the photograph owns its column outright. */
 .entries[data-layout='cards'] .entry-figure img {
   max-width: 100%;
 }
@@ -427,7 +416,6 @@ const GROUP_GLYPH: Record<string, GroupGlyph> = {
   line-height: var(--leading-snug);
 }
 
-/* The receipt grid closes the card, ruled off from the story above it. */
 .entries[data-layout='cards'] .entry-links {
   padding-block-start: var(--space-4);
   border-block-start: 1px solid var(--color-border);

@@ -3,19 +3,6 @@ import { useChat } from '../../composables/useChat'
 import { useMotionAllowed } from '../../composables/useMotionAllowed'
 import Scribble from '../ui/Scribble.vue'
 
-/**
- * The small greeter beside the hero name: the site assistant's mark on a
- * tilted tile, saying hello in Khmer and English. It is also the friendliest
- * way into the assistant — one tap opens the chat panel, the same panel the
- * launcher in the corner opens.
- *
- * Still unless ambient motion is allowed (reduced motion and automated runs
- * get a static tile).
- *
- * The art is the chat assistant's logo until the owner supplies a mascot:
- * drop a square, transparent PNG (≥256px, ≤40 KB) at public/images/mascot.png
- * and pass src="/images/mascot.png".
- */
 withDefaults(defineProps<{ src?: string }>(), { src: '/images/chat-assistant.png' })
 
 const motion = useMotionAllowed()
@@ -113,7 +100,6 @@ function openAssistant() {
   font-weight: var(--weight-medium);
 }
 
-/* The handwritten nudge under the tile, with a pen arrow pointing up at it. */
 .mascot-note {
   position: absolute;
   top: calc(100% + var(--space-1));
@@ -156,9 +142,8 @@ function openAssistant() {
     margin-top: var(--space-6);
   }
 
-  /* On a phone the mascot can sit against the right edge of the screen, so
-     the bubble grows leftward from the mascot's right edge instead of
-     hanging past it (it pushed a 390px page 12px sideways). */
+  /* The mascot can sit against the right screen edge, so the bubble grows
+     leftward instead of hanging past it and widening the page. */
   .mascot-bubble {
     left: auto;
     right: 0;

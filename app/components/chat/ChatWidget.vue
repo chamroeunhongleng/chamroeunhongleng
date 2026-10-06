@@ -1,12 +1,6 @@
 <script setup lang="ts">
-/**
- * Floating site-assistant widget: a labeled toggle in the bottom-right
- * corner and a non-modal dialog panel. Only the toggle exists in the
- * prerendered HTML (`v-if` panel), keeping the static output lean and
- * check:a11y-clean. Escape closes and returns focus to the toggle — the
- * same keyboard contract as the mobile menu in SiteHeader. The AI +
- * privacy disclosure is a persistent footer, always visible while chatting.
- */
+// Only the launcher is in the prerendered HTML (the panel is v-if), which keeps
+// the static output lean and check:a11y-clean.
 import { computed, nextTick, ref, watch } from 'vue'
 import ChatMessage from './ChatMessage.vue'
 import { useChat } from '~/composables/useChat'
@@ -18,7 +12,6 @@ const inputField = ref<HTMLInputElement | null>(null)
 const messageList = ref<HTMLElement | null>(null)
 const draft = ref('')
 
-/** Chips shown under the newest assistant bubble only. */
 const chips = computed(() => {
   const last = messages.value[messages.value.length - 1]
   return last?.role === 'assistant' && last.suggested?.length ? last.suggested : []
@@ -27,10 +20,8 @@ const chips = computed(() => {
 async function closeAndRefocus(): Promise<void> {
   if (!open.value) return
   close()
-  // The launcher is removed while the panel is open, so it does not exist to
-  // focus until the close has rendered. Without this await the ref is still
-  // null and focus is silently dropped, stranding keyboard users where the
-  // panel used to be.
+  // The launcher is v-if'd away while open: without this await the ref is still
+  // null and focus is silently dropped.
   await nextTick()
   toggleButton.value?.focus()
 }
@@ -48,7 +39,6 @@ watch(open, async (isOpen) => {
   inputField.value?.focus()
 })
 
-// Keep the newest message in view as the conversation grows.
 watch(
   () => [messages.value.length, pending.value],
   async () => {
@@ -66,10 +56,8 @@ watch(
 
 <template>
   <div class="chat-widget" @keydown.escape="closeAndRefocus">
-    <!-- Dims the page behind an open panel, so the header and content recede
-         and the conversation is clearly the thing in focus. Decorative and
-         hidden from assistive tech: Escape and the Close button already do
-         this job for keyboard and screen-reader users. -->
+    <!-- Decorative and aria-hidden: Escape and the Close button already dismiss
+         for keyboard and screen-reader users. -->
     <Transition name="chat-scrim">
       <div
         v-if="open"
@@ -79,10 +67,8 @@ watch(
       />
     </Transition>
 
-    <!-- Hidden while the panel is open: it would float over the panel with
-         nothing useful to do, since the header's Close button and Escape both
-         already dismiss. Reappears on close, and closeAndRefocus() awaits that
-         render before returning focus to it. -->
+    <!-- Removed while the panel is open; closeAndRefocus() awaits its re-render
+         before returning focus to it. -->
     <Transition name="chat-launch">
       <button
         v-if="!open"
@@ -222,9 +208,8 @@ watch(
   display: grid;
   justify-items: end;
   gap: var(--space-3);
-  /* On phones this box spans the full width of the screen, and an invisible
-     box that takes taps would cover the dock beside the launcher. Only the
-     three real parts below receive pointer events. */
+  /* On phones this box spans the screen and would cover the dock beside the
+     launcher; only the three real parts below take pointer events. */
   pointer-events: none;
 }
 
@@ -234,25 +219,16 @@ watch(
   pointer-events: auto;
 }
 
-/* Full-viewport, but a child of .chat-widget so it sits inside that stacking
-   context (z-index 60) and therefore covers the sticky header at z-index 50.
-   position: fixed takes it out of the grid flow, so it does not affect the
-   widget's track sizing.
-
-   Deliberately NO body scroll lock: the assistant navigates the visitor and
-   scrolls to section anchors while the panel stays open, and locking scroll
-   would break that. */
+/* A child of .chat-widget so it covers the sticky header (z-index 50) from inside
+   the z-index 60 context. No body scroll lock: the assistant scrolls the page while open. */
 .chat-scrim {
   position: fixed;
   inset: 0;
-  /* Light enough that the page reads as receded rather than blacked out. */
   background: rgb(0 0 0 / 0.25);
   cursor: pointer;
 }
 
-/* On a near-black page (--color-bg is #131318) a 25% black veil is almost
-   invisible, so the panel would appear to float over an undimmed page. Dark
-   theme needs more of it to produce the same perceived separation. */
+/* A 25% black veil is almost invisible on the near-black dark background. */
 :root[data-theme='dark'] .chat-scrim {
   background: rgb(0 0 0 / 0.5);
 }
@@ -267,7 +243,6 @@ watch(
   opacity: 0;
 }
 
-/* The launcher swaps out for the panel rather than vanishing abruptly. */
 .chat-launch-enter-active,
 .chat-launch-leave-active {
   transition: opacity var(--duration-fast) var(--ease-out),
@@ -292,8 +267,7 @@ watch(
 .chat-toggle {
   display: grid;
   place-items: center;
-  /* Positioned so it paints above the scrim, which is itself positioned —
-     a static element would render underneath it and become unclickable. */
+  /* Must be positioned to paint above the scrim; a static element renders under it. */
   position: relative;
   z-index: 1;
   width: 3.5rem;
@@ -320,7 +294,6 @@ watch(
   outline-offset: 2px;
 }
 
-/* Line-art logo: contained with breathing room, never cropped. */
 .chat-toggle-icon {
   width: 68%;
   height: 68%;
@@ -328,8 +301,7 @@ watch(
   display: block;
 }
 
-/* Panel entrance: opacity/transform only, per the motion contract.
-   motion.css's reduced-motion reset collapses it automatically. */
+/* motion.css's reduced-motion reset collapses this transition automatically. */
 .chat-pop-enter-active,
 .chat-pop-leave-active {
   transition: opacity var(--duration-base) var(--ease-out),
@@ -367,9 +339,6 @@ watch(
   background: var(--color-surface-sunken);
 }
 
-/* Rounded-square tile rather than a circle — reads as a product mark, not a
-   person. The tint is derived from the site accent so it stays on-palette in
-   both themes; swap --color-accent-tint for --color-positive to go mint. */
 .chat-avatar {
   width: 2.25rem;
   height: 2.25rem;
@@ -388,8 +357,6 @@ watch(
   flex: 1;
 }
 
-/* Sentence case at body size, not uppercase mono: this is the assistant's
-   name, so it should read as a name rather than as a system label. */
 .chat-title {
   font-size: var(--text-sm);
   font-weight: 620;
@@ -405,7 +372,6 @@ watch(
   text-overflow: ellipsis;
 }
 
-/* Shared by the reset and close controls so they stay optically identical. */
 .chat-action {
   display: grid;
   place-items: center;
@@ -427,7 +393,6 @@ watch(
   cursor: not-allowed;
 }
 
-/* Reset is the secondary action — quieter than close until hovered. */
 .chat-action:not(:disabled):hover {
   background: var(--color-surface);
   color: var(--color-text);
@@ -440,8 +405,7 @@ watch(
   }
 }
 
-/* Both header controls, not just close — a reset button with no visible focus
-   ring is unreachable-looking for keyboard users. */
+/* Both header controls: a reset button with no focus ring looks unreachable to keyboard users. */
 .chat-action:focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: 1px;
@@ -457,8 +421,7 @@ watch(
   overscroll-behavior: contain;
 }
 
-/* Navigation receipt + undo — the visitor is never stranded on a page the
-   assistant chose for them. */
+/* Navigation receipt + undo. */
 .chat-nav-note {
   display: flex;
   flex-wrap: wrap;
@@ -495,7 +458,7 @@ watch(
   border-radius: var(--radius-s);
 }
 
-/* Typing indicator — three softly pulsing dots. */
+/* Typing indicator. */
 .chat-typing {
   display: inline-flex;
   align-items: center;
@@ -592,7 +555,6 @@ watch(
   color: var(--color-text-faint);
 }
 
-/* Primary action — same accent register as .btn-primary. */
 .chat-send {
   border: none;
   border-radius: var(--radius-m);
@@ -637,10 +599,7 @@ watch(
   color: var(--color-accent);
 }
 
-/* Touch sizing for the panel's own controls. The header's reset/close buttons
-   are already handled above; these are the ones a visitor actually drives the
-   conversation with, and at 29px (chips) and 40px (field and Send) they were
-   the smallest interactive targets on the site after the evidence arrows. */
+/* Touch sizing for the panel's own controls. */
 @media (pointer: coarse) {
   .chat-chip {
     min-height: 44px;
@@ -652,23 +611,19 @@ watch(
     min-height: 44px;
   }
 
-  /* Same rule projects/index.vue already applies to its filter controls: iOS
-     Safari zooms the whole page in when a focused field is under 16px, and it
-     does not zoom back out afterwards. --text-sm is 14px, so the chat field
-     was the one place on the site that still triggered it. */
+  /* 16px: iOS Safari zooms the page into any smaller focused field and never zooms back out. */
   .chat-input {
     font-size: var(--text-base);
   }
 }
 
-/* Narrow breakpoint (760px, per tokens.css convention): full-width sheet. */
+/* Phones: full-width sheet. */
 @media (max-width: 760px) {
   .chat-widget {
     right: var(--space-3);
     bottom: var(--space-3);
     left: var(--space-3);
-    /* Clear of the iPhone home indicator: at a flat 12px the launcher sat
-       inside the gesture strip, where a tap can be taken as a swipe-up. */
+    /* Clears the iPhone home indicator, where a tap can be taken as a swipe-up. */
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 

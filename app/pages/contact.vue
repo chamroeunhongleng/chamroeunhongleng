@@ -18,8 +18,6 @@ async function copyEmail() {
     copyState.value = 'copied'
     setTimeout(() => (copyState.value = 'idle'), 2500)
   } catch {
-    // Clipboard access can be denied (permissions, insecure context) — say so
-    // instead of failing silently; the address itself stays selectable.
     copyState.value = 'failed'
   }
 }
@@ -126,7 +124,6 @@ async function copyEmail() {
   align-content: start;
 }
 
-/* Direct contact — the reliable path, directly under the form. */
 .direct-contact {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
@@ -172,7 +169,6 @@ async function copyEmail() {
   min-height: 1.2em;
 }
 
-/* The same live region carries the failure message — it must not read green. */
 .copy-status.failed {
   color: var(--color-danger);
 }
@@ -182,7 +178,6 @@ async function copyEmail() {
   color: var(--color-text-faint);
 }
 
-/* Side panel */
 .contact-side {
   display: grid;
   gap: var(--space-4);

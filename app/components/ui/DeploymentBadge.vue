@@ -2,10 +2,7 @@
 import { computed } from 'vue'
 import type { DeploymentReality } from '~~/shared/schemas/index'
 
-/**
- * Deployment-reality badge — deliberately separate from lifecycle status
- * so a polished prototype can never read as a shipped product.
- */
+// Kept separate from lifecycle status so a polished prototype never reads as shipped.
 const props = defineProps<{ deployment: DeploymentReality }>()
 
 const slug = computed(() => props.deployment.toLowerCase().replaceAll(' ', '-'))

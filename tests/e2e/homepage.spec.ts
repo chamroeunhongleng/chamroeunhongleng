@@ -4,17 +4,11 @@ test.describe('Homepage', () => {
   test('should load and display main content', async ({ page }) => {
     await page.goto('/')
 
-    // Check page title
     await expect(page).toHaveTitle(/Chamroeun|portfolio/i)
 
-    // Verify main heading exists
     const heading = page.locator('h1')
     await expect(heading).toBeVisible()
   })
-
-  // Navigation is viewport-dependent (desktop nav vs. Menu toggle at 820px,
-  // the dock at 760px), so those assertions live in responsive.spec.ts where
-  // they run per device. This file stays device-agnostic.
 
   test('should have no console errors', async ({ page }) => {
     const errors: string[] = []
@@ -36,9 +30,8 @@ test.describe('Homepage', () => {
     }
   })
 
-  // Playwright sets navigator.webdriver, and the marquee, the mascot, and the
-  // hero stamp use the same gate as useReveal — which is what keeps screenshot
-  // runs deterministic.
+  // Playwright sets navigator.webdriver; the marquee, mascot and hero stamp gate on it
+  // (as useReveal does), which is what keeps screenshot runs deterministic.
   test('keeps ambient motion still in automated runs', async ({ page }) => {
     await page.goto('/')
     await page.waitForLoadState('networkidle')
@@ -49,7 +42,6 @@ test.describe('Homepage', () => {
     await expect(page.locator('.stamp[data-animate]')).toHaveCount(0)
   })
 
-  // The greeter beside the name is the friendliest way into the assistant.
   test('the hero mascot opens the site assistant', async ({ page }) => {
     await page.goto('/')
     const mascot = page.getByRole('button', { name: 'Open the site assistant' })
@@ -63,9 +55,7 @@ test.describe('Homepage', () => {
     }).toPass({ timeout: 20_000 })
   })
 
-  // The interactive map that once sat in the Now section was removed at the
-  // owner's request (2026-10-05); the section is its heading, the availability
-  // statement, and the dated cards.
+  // Guards against: the removed interactive map returning to the Now section.
   test('the Now section is plain content, with no canvas', async ({ page }) => {
     await page.goto('/')
     await expect(page.locator('#now canvas')).toHaveCount(0)

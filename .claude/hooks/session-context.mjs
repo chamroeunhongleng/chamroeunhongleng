@@ -1,8 +1,5 @@
 #!/usr/bin/env node
-/**
- * SessionStart context: prints the current portfolio mode and how much
- * owner content is still outstanding, so every session starts oriented.
- */
+// SessionStart hook: prints the portfolio mode and how much owner content is still outstanding.
 import { readFileSync, readdirSync, existsSync } from 'node:fs'
 import { join } from 'node:path'
 

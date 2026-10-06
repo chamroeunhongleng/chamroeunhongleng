@@ -32,13 +32,8 @@ usePageMeta({
   description: project.seoDescription ?? stripMarkers(project.oneLiner)
 })
 
-// Per-project structured data: projects with a public repository are
-// SoftwareSourceCode, the rest CreativeWork. The payload comes from
-// zod-validated content JSON — but the schemas do not forbid a script
-// close-tag sequence in a name or description, so it serializes through
-// ldJson() rather than JSON.stringify(). (Writing that sequence out even
-// inside this comment would end the SFC's script block — which is the whole
-// hazard, demonstrated.)
+// Serialize through ldJson(), not JSON.stringify(): the zod schemas do not forbid
+// a script close-tag sequence in a name or description.
 const repo = project.publicLinks.find((l) => l.kind === 'repository')
 const { siteUrl } = useRuntimeConfig().public
 useHead({
@@ -65,8 +60,6 @@ useHead({
       <div class="container">
         <NuxtLink to="/projects" class="back-link">← All projects</NuxtLink>
 
-        <!-- Two columns when a portrait exists: the argument on one side, the
-             photograph on the other — the homepage hero's arrangement. -->
         <div class="case-lead" :data-portrait="project.portrait ? '' : undefined">
           <div class="case-lead-text">
             <p class="eyebrow">
@@ -327,10 +320,8 @@ useHead({
 
 .case-header .container {
   display: grid;
-  /* minmax(0, 1fr), not the implicit auto track: an auto track grows to its
-     items' min-content width, so one unbreakable token could drag the whole
-     header wider than the viewport. Items stay content-width via
-     justify-items: start, so this changes nothing visually. */
+  /* minmax(0, 1fr), not the implicit auto track: auto grows to min-content, so
+     one unbreakable token could drag the header wider than the viewport. */
   grid-template-columns: minmax(0, 1fr);
   gap: var(--space-5);
   justify-items: start;
@@ -338,10 +329,8 @@ useHead({
 
 .case-header h1 {
   font-size: var(--text-h1);
-  /* A project title can be a bare domain ("chamroeunhongleng.me") with no
-     space to wrap at. `anywhere` — not `break-word` — because only `anywhere`
-     also shrinks the element's min-content width, which is what stops the
-     grid track from overflowing a 393px phone. */
+  /* A title can be a bare domain with no space to wrap at. `anywhere`, not
+     `break-word`: only `anywhere` also shrinks min-content, so the track fits a phone. */
   overflow-wrap: anywhere;
 }
 
@@ -399,7 +388,6 @@ useHead({
   color: var(--color-accent);
 }
 
-/* Lead block — one column normally, two when a portrait is present. */
 .case-lead {
   width: 100%;
   display: grid;
@@ -420,7 +408,6 @@ useHead({
   max-width: 52rem;
 }
 
-/* Offset accent backplate, hairline frame, mono caption plate. */
 .case-portrait {
   position: relative;
   margin: 0;
@@ -515,7 +502,6 @@ useHead({
   color: var(--color-text-faint);
 }
 
-/* Status, deployment, and timeline — three small tiles in a row. */
 .case-meta {
   display: flex;
   flex-wrap: wrap;
@@ -564,7 +550,6 @@ useHead({
   gap: var(--space-4);
 }
 
-/* The section nav floats under the header as a second, smaller pill. */
 .case-nav {
   position: sticky;
   top: calc(var(--header-offset) + var(--header-h) + var(--space-3));
@@ -703,8 +688,7 @@ useHead({
   font-weight: var(--weight-strong);
 }
 
-/* Alone on its own line, so it can take the full target height without
-   disturbing anything around it. */
+/* The link sits alone on its line, so a 44px target disturbs nothing around it. */
 @media (pointer: coarse) {
   .ai-more a {
     display: inline-flex;

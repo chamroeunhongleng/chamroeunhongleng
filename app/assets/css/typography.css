@@ -1,9 +1,4 @@
-/* Typographic system: Inter Variable at heavy weights for display and
-   headings, Inter for body, Plex Mono for the audit-trail register (labels,
-   badges, facts, eyebrows), and a handwritten face for a few margin notes. */
-
-/* Caveat SemiBold, subset to basic Latin with kerning only (17 KB instead of
-   51 KB). SIL Open Font License — see app/assets/fonts/OFL-Caveat.txt. */
+/* Subset to basic Latin only (17 KB); licence in app/assets/fonts/OFL-Caveat.txt. */
 @font-face {
   font-family: 'Caveat Hand';
   font-style: normal;
@@ -61,7 +56,6 @@ p {
   letter-spacing: var(--tracking-display);
 }
 
-/* Mono eyebrow above a heading — the archival stamp register. */
 .eyebrow {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
@@ -71,7 +65,6 @@ p {
   color: var(--color-accent);
 }
 
-/* Numbered labels on cards ("01", "Principle 01", dates). */
 .num-label {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
@@ -81,7 +74,6 @@ p {
   color: var(--color-text-faint);
 }
 
-/* Quiet instructions under an interactive element. */
 .hint {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
@@ -95,8 +87,7 @@ p {
   font-size: var(--text-sm);
 }
 
-/* Handwritten margin notes — short, friendly, never a claim. Decorative ones
-   are aria-hidden; anything that carries meaning also exists as real text. */
+/* Decorative uses are aria-hidden; anything that carries meaning also exists as real text. */
 .hand {
   font-family: var(--font-hand);
   font-size: var(--text-hand);

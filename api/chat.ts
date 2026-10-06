@@ -1,17 +1,5 @@
-/**
- * POST /api/chat — the site assistant's only backend.
- *
- * A Vercel serverless function deployed ALONGSIDE the static site (the Nuxt
- * build stays `nuxt generate`; this file is the whole runtime surface).
- * Flow: validate → rate-limit → ask Claude (system prompt composed from the
- * same zod-validated content the site renders, prompt-cached, structured
- * JSON output) → validate the model's navigation target against the
- * allowlist → respond.
- *
- * Privacy contract (disclosed in the widget and on /colophon): visitor
- * messages pass through this function to Anthropic's API; nothing is stored
- * here and message content is never logged — counters only.
- */
+/** POST /api/chat — the site assistant's only backend, a Vercel function beside the static site.
+ *  Privacy promise (widget and /colophon): nothing is stored, message content is never logged. */
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import Anthropic from '@anthropic-ai/sdk'
 import { loadContent } from '../scripts/lib/load-content.js'
@@ -32,30 +20,17 @@ export const CHAT_MODEL = 'claude-haiku-4-5'
 export const MAX_OUTPUT_TOKENS = 1024
 const MAX_SUGGESTED = 3
 
-/**
- * Derived from the contract rather than guessed, and counted in BYTES.
- * A Khmer character is one UTF-16 unit but three UTF-8 bytes, so a hand-picked
- * 16 KB limit measured with `.length` sat BELOW the largest legal Khmer
- * conversation this endpoint is contractually required to accept — it would
- * have started rejecting valid Khmer on a site that treats Khmer as
- * first-class. Contract maximum plus room for JSON structure.
- */
+/** In BYTES: a Khmer character is one UTF-16 unit but three UTF-8 bytes, so a limit measured
+ *  with `.length` rejects legal Khmer conversations. Contract maximum plus room for JSON. */
 const MAX_BODY_BYTES = (MAX_MESSAGE_LENGTH + MAX_HISTORY_ENTRIES * MAX_HISTORY_ENTRY_LENGTH) * 3 + 4096
 
-/** SDK defaults are 10 minutes and 2 retries. vercel.json caps the function at
- *  30s, so the WHOLE retry budget must fit inside it, or the platform kills us
- *  before the catch block can answer and the client sees a bare 504 instead of
- *  the friendly 503. SDK timeouts are retried, so the worst case is
- *  (MAX_RETRIES + 1) × REQUEST_TIMEOUT_MS plus ~1s backoff — 12s × 2 + 1s ≈ 25s,
- *  inside the cap. The previous 20s value allowed ~41s and reintroduced the 504. */
+/** vercel.json caps the function at 30s: (MAX_RETRIES + 1) × timeout + ~1s backoff must fit
+ *  inside it, or the platform kills us before the catch block answers (bare 504, not 503). */
 const REQUEST_TIMEOUT_MS = 12_000
 const MAX_RETRIES = 1
 
-/**
- * Content is loaded once per (cold) instance. `loadContent()` resolves from
- * process.cwd(): locally that is the repo root; on Vercel it is /var/task,
- * where vercel.json's `includeFiles: "content/**"` places the JSON files.
- */
+/** Loaded once per cold instance. loadContent() resolves from process.cwd(): on Vercel that is
+ *  /var/task, where vercel.json's `includeFiles: "content/**"` places the JSON files. */
 const loaded = (() => {
   try {
     const { bundle } = loadContent()
@@ -65,9 +40,7 @@ const loaded = (() => {
       allowlist: buildNavAllowlist(bundle.projects)
     }
   } catch (error) {
-    // Silence here meant one bad content file took the assistant offline in
-    // production with no log line to explain it. loadContent() also returns a
-    // null bundle on any single schema error, so this is not a rare path.
+    // Never silent: loadContent() nulls the bundle on any single schema error.
     console.error(
       `chat startup: content failed to load — assistant will answer 503. ${
         error instanceof Error ? error.name : 'unknown error'
@@ -80,29 +53,13 @@ const loaded = (() => {
 if (!loaded) console.error('chat startup: loadContent() returned no bundle — assistant is offline.')
 
 // ── Origin gate ───────────────────────────────────────────────────────────
-/**
- * Vercel preview hosts for this project are `<project>-<hash>-<team>.vercel.app`,
- * alongside the `<project>.vercel.app` production alias.
- *
- * The team slug has to be in the pattern. `.vercel.app` is a namespace shared
- * by every Vercel user, so a rule that only asked whether the host STARTED
- * with "chamroeunhongleng" admitted `chamroeunhongleng-anything.vercel.app` —
- * a name anyone can register — while its comment claimed it admitted previews
- * of this project only. Update both constants together if the project is ever
- * moved to another Vercel scope; previews will 403 until they match, which is
- * the safe direction for this to fail.
- */
+/** The team slug must stay in the preview pattern: `.vercel.app` is a shared namespace, so a
+ *  prefix-only match admits `chamroeunhongleng-anything.vercel.app`, which anyone can register. */
 const PRODUCTION_ALIAS = 'chamroeunhongleng-portfolio.vercel.app'
 const PREVIEW_HOST = /^chamroeunhongleng-portfolio-[a-z0-9]+-chnai-lab\.vercel\.app$/
 
-/**
- * Same-origin check. The fetch spec makes browsers send Origin on every POST,
- * same-origin included, so the site's own widget always carries one and a
- * missing header means a non-browser caller — those get 403 too. That closes
- * the hole where `curl` walked past the gate straight onto the API budget.
- * Still a tripwire rather than a wall (headers are forgeable off-browser);
- * the rate limiter and the Anthropic Console spend limit are the real bounds.
- */
+/** Browsers send Origin on every POST, so a missing header means a non-browser caller: 403.
+ *  A tripwire, not a wall — the rate limiter and the Console spend limit are the real bounds. */
 export function isAllowedOrigin(origin: string | undefined): boolean {
   if (!origin) return false
   let url: URL
@@ -113,12 +70,10 @@ export function isAllowedOrigin(origin: string | undefined): boolean {
   }
   const { hostname, protocol } = url
 
-  // The dev server is http on an arbitrary port, so scheme and port are free
-  // here and nowhere else.
+  // The dev server is http on an arbitrary port: scheme and port are free here and nowhere else.
   if (hostname === 'localhost' || hostname === '127.0.0.1') return true
 
-  // Everything else is an https site. Matching on hostname alone accepted
-  // `http://chamroeunhongleng.me` as readily as the real one.
+  // Hostname alone would accept `http://chamroeunhongleng.me` as readily as the real origin.
   if (protocol !== 'https:') return false
 
   return (
@@ -130,13 +85,8 @@ export function isAllowedOrigin(origin: string | undefined): boolean {
 }
 
 // ── Rate limiting ─────────────────────────────────────────────────────────
-/**
- * In-memory token buckets. On Vercel's Hobby plan each function instance has
- * its own memory, so these limits are per-instance and reset on cold starts
- * — a determined abuser can exceed them. Accepted trade-off (no KV store);
- * the hard cost ceiling is the owner's spend limit in the Anthropic Console
- * plus MAX_OUTPUT_TOKENS per request.
- */
+/** In-memory, so per function instance and reset on cold starts — a determined abuser can
+ *  exceed them. Accepted (no KV store); the hard ceiling is the Anthropic Console spend limit. */
 interface Window {
   count: number
   resetAt: number
@@ -149,12 +99,7 @@ export interface RateLimits {
   ipPerMinute: number
   ipPerDay: number
   globalPerMinute: number
-  /**
-   * Per-INSTANCE daily ceiling. Vercel runs one instance per concurrent
-   * request, so this bounds a single instance's spend, not the account's —
-   * it is not a defence against distributed abuse and must not be described
-   * as one. The account-level ceiling is the Anthropic Console spend limit.
-   */
+  /** Per instance, not per account: no defence against distributed abuse, and not to be described as one. */
   globalPerDay: number
 }
 
@@ -179,16 +124,8 @@ export class RateLimiter {
     this.limits = { ...DEFAULT_LIMITS, ...limits }
   }
 
-  /**
-   * Returns retry-after seconds when limited, or null when allowed.
-   *
-   * Decide first, consume second. The previous version incremented every
-   * bucket — including the two global ones — before testing any of them, so a
-   * request that was ALREADY being refused still spent global quota. One
-   * client ignoring its 429s could burn `globalPerDay` and take the assistant
-   * offline for every legitimate visitor for the rest of the day, without ever
-   * reaching the model. A refused request must cost nothing.
-   */
+  /** Retry-after seconds when limited, or null when allowed. Decide first, consume second: a
+   *  refused request must cost no quota, or one client ignoring 429s could drain globalPerDay. */
   check(ip: string): number | null {
     const now = this.clock()
     this.prune(now)
@@ -217,7 +154,6 @@ export class RateLimiter {
     return null
   }
 
-  /** The current window for an IP, created empty when absent. Never consumes. */
   private windowFor(map: Map<string, Window>, ip: string, now: number, span: number): Window {
     const current = map.get(ip)
     if (!current || now >= current.resetAt) {
@@ -228,14 +164,8 @@ export class RateLimiter {
     return current
   }
 
-  /**
-   * Bounded sweep. Deleting only EXPIRED entries past a threshold meant that
-   * with 24h day-windows the map could never shrink, so once past the
-   * threshold every request walked the whole map, forever, while it kept
-   * growing. Now expired entries go first and a hard cap is enforced after,
-   * dropping oldest-inserted (Map preserves insertion order) so the walk and
-   * the memory are both bounded.
-   */
+  /** Expired entries first, then a hard cap dropping oldest-inserted (Map keeps insertion
+   *  order), so with 24h windows both the walk and the memory stay bounded. */
   private prune(now: number): void {
     this.sweep(this.perIpMinute, now, 2_000)
     this.sweep(this.perIpDay, now, 10_000)
@@ -252,16 +182,8 @@ export class RateLimiter {
   }
 }
 
-/**
- * The client's address, from a header the client cannot choose.
- *
- * Taking `x-forwarded-for[0]` was wrong: proxies APPEND, so position 0 is the
- * value the caller supplied. Anyone could rotate it and get a fresh per-IP
- * budget on every request. Vercel's own `x-vercel-forwarded-for` is set by the
- * platform edge and is the value to trust; `x-real-ip` next; and if only
- * `x-forwarded-for` exists, the LAST element is the hop nearest us and the
- * only one a caller cannot forge.
- */
+/** Proxies APPEND to x-forwarded-for, so position 0 is caller-chosen and would buy a fresh per-IP
+ *  budget per request. Trust the platform header first; failing that, the LAST hop. */
 export function clientIp(req: VercelRequest): string {
   const header = (name: string): string | undefined => {
     const value = req.headers[name]
@@ -285,14 +207,8 @@ export function validateRequest(body: unknown): ChatRequest | null {
   return result.success ? result.data : null
 }
 
-/**
- * The Messages API requires the conversation to open on a `user` turn. The
- * contract permits any role order, so a client sending an assistant-first
- * history produced an upstream 400 that surfaced as a generic 502 — after the
- * request had already passed the rate limiter and cost a round trip. Drop
- * leading assistant turns rather than rejecting: the history is a hint from
- * the client, not something to litigate with the visitor.
- */
+/** The Messages API requires the first turn to be `user`; the contract permits any order.
+ *  Leading assistant turns are dropped, not rejected — the history is a hint, not a contract. */
 export function buildMessages(request: ChatRequest): Anthropic.MessageParam[] {
   const history = [...request.history]
   while (history.length > 0 && history[0]!.role !== 'user') history.shift()
@@ -302,10 +218,6 @@ export function buildMessages(request: ChatRequest): Anthropic.MessageParam[] {
   ]
 }
 
-/**
- * Parse and sanitize the model's structured output. Anything malformed and
- * any navigation target outside the allowlist degrades safely (null / []).
- */
 export function parseModelReply(
   response: Anthropic.Message,
   allowlist: ReadonlySet<string>
@@ -324,9 +236,7 @@ export function parseModelReply(
   return {
     reply: result.data.reply,
     navigateTo: validateNavigateTo(result.data.navigateTo, allowlist),
-    // Filter BEFORE slicing: slicing first meant one empty suggestion in the
-    // model's first three silently cost a chip that a later valid one could
-    // have filled.
+    // Filter before slicing, or an empty suggestion among the first three costs a chip.
     suggested: result.data.suggested
       .filter((suggestion) => suggestion.length > 0 && suggestion.length <= 200)
       .slice(0, MAX_SUGGESTED)
@@ -339,13 +249,8 @@ const FALLBACK_REPLY: ChatReply = {
   suggested: []
 }
 
-/**
- * What to log when the upstream call fails. `error.name` is plain "Error" for
- * every SDK failure, which left an expired key, an empty credit balance, and a
- * malformed request indistinguishable in the function log. The HTTP status and
- * the API's own error type tell them apart. Never the error message: it is
- * only tested for the one phrase that marks an empty balance, not logged.
- */
+/** `error.name` is "Error" for every SDK failure; status + API error type tell an expired key,
+ *  an empty balance and a malformed request apart. The message is tested, never logged. */
 export function describeUpstreamError(error: unknown): string {
   if (!(error instanceof Anthropic.APIError)) {
     return error instanceof Error ? `${error.name} (not an API response)` : 'unknown'
@@ -386,7 +291,6 @@ export async function handleChat(
     res.status(403).json({ error: 'Forbidden.' })
     return
   }
-  // Byte length, not UTF-16 length: Khmer is 3 bytes per character.
   if (Buffer.byteLength(JSON.stringify(req.body ?? ''), 'utf8') > MAX_BODY_BYTES) {
     res.status(400).json({ error: 'Request too large.' })
     return
@@ -396,8 +300,7 @@ export async function handleChat(
     res.status(400).json({ error: 'Invalid request.' })
     return
   }
-  // Offline check BEFORE the limiter: an assistant that cannot answer should
-  // not also spend the visitor's quota telling them so.
+  // Before the limiter: an offline assistant must not also spend the visitor's quota.
   if (!process.env.ANTHROPIC_API_KEY || !loaded) {
     res.status(503).json({ error: 'The assistant is offline right now — please email instead.' })
     return
@@ -417,11 +320,8 @@ export async function handleChat(
         {
           type: 'text',
           text: loaded.systemPrompt,
-          // 1h, not the 5-minute default. The prompt is ~15k tokens and
-          // portfolio traffic does not sustain a hit every five minutes, so
-          // the short TTL was paying the 1.25x write on most requests and
-          // reading back on few — a surcharge dressed as an optimisation.
-          // Watch `cached=` in the log line below to confirm.
+          // 1h, not the 5-minute default: portfolio traffic cannot sustain a hit every five
+          // minutes, so the short TTL paid the 1.25x cache write on most requests and read on few.
           cache_control: { type: 'ephemeral', ttl: '1h' }
         }
       ],
@@ -429,9 +329,8 @@ export async function handleChat(
       output_config: { format: { type: 'json_schema', schema: CHAT_REPLY_JSON_SCHEMA } }
     })
 
-    // Counters only — never message content (privacy promise on /colophon).
-    // `stop=` matters: a max_tokens stop silently becomes FALLBACK_REPLY while
-    // still costing a full generation, and used to be logged as plain "ok".
+    // Counters only — never message content (privacy promise on /colophon). `stop=` shows a
+    // max_tokens stop, which becomes FALLBACK_REPLY while still costing a full generation.
     console.log(
       `chat ok len=${request.message.length} in=${response.usage.input_tokens} out=${response.usage.output_tokens} cached=${response.usage.cache_read_input_tokens ?? 0} stop=${response.stop_reason ?? 'none'}`
     )

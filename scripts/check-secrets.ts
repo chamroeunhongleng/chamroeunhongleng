@@ -1,13 +1,5 @@
-/**
- * check-secrets — regex scan of every committable text file for credential
- * patterns. Zero network, zero dependencies. The scanner skips itself and
- * the Claude hooks (they contain the patterns by necessity).
- *
- * The file set comes from git: tracked files plus untracked-but-not-ignored
- * ones — exactly what can reach the public repository. A filesystem walk
- * used to be the source, which read gitignored trees (.vercel, .env.local,
- * .tmp) that can never be committed while claiming to scan "tracked" files.
- */
+// Scans every committable file (git ls-files: tracked plus untracked-not-ignored) for credential
+// patterns. Exempts itself and the Claude hooks, which carry the patterns by necessity.
 import { spawnSync } from 'node:child_process'
 import { existsSync, readFileSync, statSync } from 'node:fs'
 import { join, sep } from 'node:path'
@@ -26,10 +18,8 @@ const PATTERNS: Array<[string, RegExp]> = [
   ['Anthropic key', new RegExp('\\bsk-ant-' + '[A-Za-z0-9-]{10,}\\b')],
   ['OpenAI-style key', new RegExp('\\bsk-' + '[A-Za-z0-9]{32,}\\b')],
   ['Slack token', new RegExp('\\bxox[abp]-' + '[A-Za-z0-9-]{10,}\\b')],
-  // Two dot-separated base64url segments both opening with the base64 of '{"'
-  // is structurally a JWT header.payload — Vercel OIDC tokens, Supabase keys,
-  // session cookies. The generic pattern below cannot see these: its character
-  // class has no dot, so it stops at the first separator.
+  // Two dot-separated base64url segments both opening with the base64 of '{"' is a JWT header.payload
+  // (Vercel OIDC, Supabase keys); the generic pattern below has no dot in its class and misses them.
   ['JWT', new RegExp('\\bey' + 'J[A-Za-z0-9_-]{8,}\\.ey' + 'J[A-Za-z0-9_-]{8,}\\.[A-Za-z0-9_-]*')],
   [
     'generic credential assignment',

@@ -1,8 +1,4 @@
-/**
- * The chat assistant's wire contract — shared by the serverless function
- * (api/chat.ts), the widget composable, and the tests, so the three can
- * never disagree about what travels over POST /api/chat.
- */
+/** The chat assistant's wire contract, shared by api/chat.ts, the widget composable and the tests. */
 import '../zod-config.js'
 import { z } from 'zod'
 
@@ -32,12 +28,8 @@ export const chatReplySchema = z.object({
 })
 export type ChatReply = z.infer<typeof chatReplySchema>
 
-/**
- * The structured-output JSON Schema sent to the Claude API. Must stay in
- * agreement with chatReplySchema above. Kept free of unsupported keywords
- * (minLength/maxItems) — soft limits ride in the descriptions and the
- * server truncates on the way out.
- */
+/** Must stay in agreement with chatReplySchema. Kept free of keywords structured output rejects
+ *  (minLength/maxItems): soft limits ride in the descriptions and the server truncates. */
 export const CHAT_REPLY_JSON_SCHEMA = {
   type: 'object',
   properties: {

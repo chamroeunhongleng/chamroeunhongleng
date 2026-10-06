@@ -3,13 +3,7 @@ import { computed } from 'vue'
 import type { RepoStructure } from '~~/shared/schemas/index'
 import MarkedText from '../ui/MarkedText.vue'
 
-/**
- * Renders a repository's file tree as the architecture evidence itself —
- * the layout a reader can inspect, not a paragraph describing one.
- *
- * The connectors are computed, never authored: content stores depth only, so
- * a row cannot claim a shape the tree does not have.
- */
+// Connectors are computed, never authored: content stores depth only.
 const props = defineProps<{ structure: RepoStructure }>()
 
 const rows = computed(() => {
@@ -53,9 +47,8 @@ const rows = computed(() => {
       <p class="repo-evidence mono">{{ structure.evidence }}</p>
     </figcaption>
 
-    <!-- Scrollable regions must be reachable without a mouse, hence tabindex
-         and the group label; the connectors themselves are decoration, so a
-         screen reader hears "tools/ — deterministic core", not box-drawing. -->
+    <!-- tabindex and the group label keep the scrollable region keyboard-reachable;
+         the connectors are aria-hidden so a screen reader never hears box-drawing. -->
     <div
       class="tree-scroll"
       tabindex="0"
@@ -116,8 +109,7 @@ figcaption {
   color: var(--color-text-faint);
 }
 
-/* The tree is long by nature — scroll it in place rather than let one file
-   listing set the rhythm of the whole case study. */
+/* Scrolls in place so one long listing never sets the rhythm of the case study. */
 .tree-scroll {
   max-height: clamp(22rem, 55vh, 34rem);
   overflow: auto;
@@ -134,7 +126,6 @@ ul {
   list-style: none;
   margin: 0;
   padding: 0;
-  /* Two aligned columns — path, then the reason it exists. */
   display: grid;
   grid-template-columns: max-content minmax(12rem, 1fr);
   column-gap: var(--space-5);
@@ -197,8 +188,7 @@ li[data-dir] .path {
   }
 }
 
-/* Phones: one column. The note drops under its path and the tree stops
-   forcing a horizontal scroll just to read the annotations. */
+/* Phones: one column, so the annotations never force a horizontal scroll. */
 @media (max-width: 760px) {
   ul {
     display: block;

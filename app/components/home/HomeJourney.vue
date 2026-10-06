@@ -1,13 +1,7 @@
 <script setup lang="ts">
 import { experience } from '~/data/portfolio'
 
-/**
- * A preview of /journey: current roles first, then the competition, then the
- * finished community work. The school-year results and the field research stay
- * on the Journey page. Group ids are the ids in content/experience.json; if the
- * preview would come out empty, it falls back to the first entries of every
- * group rather than rendering nothing.
- */
+// Group ids are the ids in content/experience.json.
 function pick(groupId: string, current: boolean) {
   const group = experience.groups.find((g) => g.id === groupId)
   if (!group) return []
@@ -28,7 +22,6 @@ const items
     ? preferred
     : experience.groups.map((g) => ({ entry: g.entries[0]!, category: g.title, groupId: g.id }))
 
-// The first contribution that carries a public receipt, for the verify arrow.
 function receiptFor(entry: (typeof items)[number]['entry']) {
   return entry.contributions.find((c) => c.link)
 }
@@ -200,9 +193,8 @@ function receiptFor(entry: (typeof items)[number]['entry']) {
   height: 1rem;
 }
 
-/* Phones: this is a preview, so each summary shows its first lines only —
-   the whole text is one tap away on the Journey page (and still in the page
-   for screen readers). */
+/* Phones: summaries clamp to three lines; the full text is on the Journey page
+   and still in the DOM for screen readers. */
 @media (max-width: 760px) {
   .tl-summary {
     display: -webkit-box;

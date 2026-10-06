@@ -1,13 +1,5 @@
 <script setup lang="ts">
-/**
- * The phone dock: four destinations a thumb can reach, fixed to the bottom of
- * the screen beside the chat launcher. It exists only at phone widths (760px
- * and below) — wider screens have the header navigation.
- *
- * On a phone the header scrolls away with the page (see SiteHeader), so this
- * is the navigation that is always there. It sits below the chat widget's
- * stacking context: an open chat panel and its scrim cover it.
- */
+// On a phone the header scrolls away with the page, so this is the navigation that stays.
 type DockGlyph = 'home' | 'grid' | 'user' | 'mail'
 
 const ITEMS: Array<{ label: string; to: string; glyph: DockGlyph }> = [

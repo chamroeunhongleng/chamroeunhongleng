@@ -3,7 +3,6 @@ import type { Stack } from '~~/shared/schemas/index'
 import { useMotionAllowed } from '../../composables/useMotionAllowed'
 import ChipMarquee from './ChipMarquee.vue'
 
-/** The technology panel: one scrolling row per group in content/stack.json. */
 defineProps<{ groups: Stack['groups'] }>()
 
 // Slightly different loop lengths so the rows never lock into step.
@@ -29,7 +28,6 @@ const motion = useMotionAllowed()
 </template>
 
 <style scoped>
-/* A wide, rounded panel that reaches past the text column on large screens. */
 .stack-panel {
   padding: var(--space-2) var(--space-8);
   border-radius: var(--radius-hero);
@@ -43,7 +41,6 @@ const motion = useMotionAllowed()
   transform: rotate(-2deg);
 }
 
-/* Nothing to hover on a touch screen. */
 @media (hover: none) {
   .stack-hint {
     display: none;

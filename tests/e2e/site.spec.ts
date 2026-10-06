@@ -1,16 +1,10 @@
 import { test, expect } from '@playwright/test'
 import { ALL_ROUTES, routeLabel } from './fixtures/routes'
 
-/**
- * Whole-site health: every published route, checked for the things that are
- * embarrassing in public and easy to regress silently.
- *
- * Content and metadata do not vary by device, so this runs on `laptop` only.
- * The per-device concerns (header wrap, horizontal overflow) live in
- * responsive.spec.ts and do run everywhere.
- */
-// The directive must stay on ONE line: a wrapped `--` description makes the
-// next line the comment itself, and the hook below goes unguarded.
+// Whole-site health on every published route. Content and metadata do not vary by
+// device, so this runs on laptop only; per-device concerns live in responsive.spec.ts.
+
+// Keep the directive on ONE line: a wrapped description would become the comment, leaving the hook unguarded.
 // eslint-disable-next-line no-empty-pattern -- Playwright's documented form for a hook that needs testInfo but no fixtures.
 test.beforeEach(({}, testInfo) => {
   test.skip(testInfo.project.name !== 'laptop', 'site content is device-independent')
@@ -24,9 +18,7 @@ for (const route of ALL_ROUTES) {
       const response = await page.goto(route)
       expect(response?.status(), 'route did not return 200').toBe(200)
 
-      // Search results and link previews use these two; an empty one is a
-      // silent SEO regression that nothing else in the pipeline catches
-      // per-route.
+      // An empty title or description is a silent SEO regression nothing else catches per-route.
       const title = await page.title()
       expect(title.trim().length, 'empty <title>').toBeGreaterThan(0)
 
@@ -38,8 +30,6 @@ for (const route of ALL_ROUTES) {
 
     test('has exactly one h1', async ({ page }) => {
       await page.goto(route)
-      // More than one <h1> breaks the document outline for screen readers;
-      // zero leaves the page without an accessible name.
       await expect(page.locator('h1')).toHaveCount(1)
     })
 
@@ -56,11 +46,8 @@ for (const route of ALL_ROUTES) {
       expect(errors, `console errors on ${route}`).toEqual([])
     })
 
-    // A CSP refusal is NOT a console error — it arrives as a
-    // securitypolicyviolation event, so the assertion above cannot see it.
-    // Zod shipped a `new Function("")` capability probe to the browser and
-    // every page reported script-src blocked eval while this suite stayed
-    // green; the site worked, but DevTools showed an error on every page.
+    // A CSP refusal is not a console error: it arrives as a securitypolicyviolation
+    // event, so the assertion above cannot see it.
     test('triggers no Content-Security-Policy violations', async ({ page }) => {
       await page.addInitScript(() => {
         const seen: string[] = []
@@ -82,8 +69,7 @@ for (const route of ALL_ROUTES) {
     test('every image has alt text', async ({ page }) => {
       await page.goto(route)
 
-      // A decorative image should carry alt="" explicitly; a missing attribute
-      // makes a screen reader announce the file name instead.
+      // alt="" is fine for decoration; a missing attribute makes a screen reader announce the file name.
       const missing = await page.locator('img:not([alt])').evaluateAll((imgs) =>
         imgs.map((img) => (img as HTMLImageElement).src)
       )
@@ -99,8 +85,6 @@ for (const route of ALL_ROUTES) {
 
 test.describe('Site-wide navigation', () => {
   test('every internal link resolves', async ({ page, request }) => {
-    // Collect internal hrefs across all routes, then check each once. A 404
-    // behind a nav or footer link is invisible until someone clicks it.
     const targets = new Set<string>()
 
     for (const route of ALL_ROUTES) {
@@ -126,8 +110,6 @@ test.describe('Site-wide navigation', () => {
   test('the skip link reaches main content', async ({ page }) => {
     await page.goto('/')
 
-    // First Tab must land on the skip link, or keyboard users have to traverse
-    // the whole header on every page.
     await page.keyboard.press('Tab')
     const skip = page.getByRole('link', { name: /skip to main/i })
     await expect(skip).toBeFocused()
@@ -156,10 +138,8 @@ test.describe('Theme', () => {
 
     const before = await themeOf()
 
-    // The toggle is server-rendered, so it is clickable before Vue attaches
-    // its handler and an early click is silently swallowed — the same race as
-    // openMobileMenu() and openPanel(). Retry until the theme actually moves,
-    // guarded by the current value so it never toggles back.
+    // The toggle is server-rendered, so an early click is swallowed before Vue attaches
+    // its handler. Retry, guarded by the current value so it never toggles back.
     await expect(async () => {
       if ((await themeOf()) === before) await toggle.click()
       expect(await themeOf()).not.toBe(before)
@@ -167,7 +147,6 @@ test.describe('Theme', () => {
 
     const after = await themeOf()
     await page.reload()
-    // A theme that resets on reload reads as a bug to anyone who chose dark.
     expect(await themeOf(), 'theme did not persist across reload').toBe(after)
   })
 })

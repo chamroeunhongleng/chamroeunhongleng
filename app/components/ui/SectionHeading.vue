@@ -3,19 +3,7 @@ import { computed } from 'vue'
 import MarkedText from './MarkedText.vue'
 import Scribble from './Scribble.vue'
 
-/**
- * Section heading: a mono eyebrow over a bold heading, with the supporting
- * paragraph (and anything in the `aside` slot, such as a call to action) in a
- * right-hand column on wide screens. The `below` slot sits under the heading
- * in the left column.
- *
- * Pass as="h1" for the page-level heading so every page has exactly one h1
- * with no skipped levels below it. layout="stack" keeps the paragraph under
- * the heading — for headings followed directly by a form or a long list.
- *
- * `mark` underlines one phrase of the title with a pen stroke. It must be an
- * exact substring; when it is not found the title renders plain.
- */
+// as="h1" is for the page-level heading, so every page has exactly one h1.
 const props = withDefaults(
   defineProps<{
     eyebrow: string

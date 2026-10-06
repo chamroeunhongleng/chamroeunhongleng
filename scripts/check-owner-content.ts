@@ -1,12 +1,5 @@
-/**
- * check-owner-content — runs the shared mode-aware rule engine over the
- * loaded content. The SAME engine runs inside the build gate
- * (modules/content-gate.ts), so this CLI can never disagree with the build.
- *
- * Usage:
- *   npm run check:owner-content                 (mode from env, default review)
- *   npm run check:owner-content -- --mode=production
- */
+// Shares the rule engine with the build gate (modules/content-gate.ts), so this CLI can
+// never disagree with the build. Usage: npm run check:owner-content -- --mode=production
 import { loadContent, printIssues } from './lib/load-content'
 import { formatFindings, runContentRules, worstSeverity } from '../shared/rules'
 import { PORTFOLIO_MODES, type PortfolioMode } from '../shared/schemas/index'

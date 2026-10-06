@@ -3,19 +3,14 @@ import { EVIDENCE_LABELS, PILLARS, WORK_STATES } from './enums.js'
 import { claimSchema, hrefSchema, imageRefSchema, linkSchema, slugSchema } from './common.js'
 
 // ── shared shapes ────────────────────────────────────────────────────────
-/**
- * One result as a single scannable line: "award — event". Used for the
- * competition lists on /journey. The evidence label is data on every line; the UI stamps it visibly only
- * when a public link backs it (same pattern as the education card, where
- * labels live in JSON without rendering per-row chips).
- */
+/** One result as a scannable "award — event" line for /journey. The evidence label is data on
+ *  every line; the UI stamps it only when a public link backs it (same as the education card). */
 export const resultLineSchema = z.strictObject({
-  /** The outcome, e.g. "Gold Medal", "No. 1", "Top 2", "17.48% CER". */
+  /** The outcome, e.g. "Gold Medal", "No. 1", "Top 2". */
   award: z.string().min(1),
-  /** The competition, examination, or context the number comes from. */
+  /** The competition, examination, or context the outcome comes from. */
   event: z.string().min(1),
   evidence: z.enum(EVIDENCE_LABELS),
-  /** Optional public receipt; rendered as a link on the line. */
   link: hrefSchema.optional()
 })
 export type ResultLine = z.infer<typeof resultLineSchema>
@@ -25,7 +20,6 @@ export const profileSchema = z.strictObject({
   name: z.string().min(1),
   monogram: z.string().min(1).max(3),
   preferredName: z.string().min(1),
-  /** Short hero statement. */
   headline: z.string().min(1),
   /** Current identity line (degree as clause, not headline). */
   identity: z.string().min(1),
@@ -37,22 +31,12 @@ export const profileSchema = z.strictObject({
   }),
   availability: z.string().min(1),
   links: z.array(linkSchema).min(1),
-  /**
-   * Canonical labeled claims about the owner. Not rendered as a homepage
-   * section; feeds the chat assistant's knowledge document. (The hero numbers
-   * strip that once restated three of these was removed at the owner's
-   * request, 2026-10-05.)
-   */
+  /** Feeds the chat assistant only, not a homepage section: the hero numbers strip that showed
+   *  these was removed at the owner's request and must not come back. */
   proofPoints: z.array(claimSchema).min(3),
-  /** One-line AI-native working-style statement. */
   aiWorkingStyle: z.string().min(1),
-  /**
-   * Optional CV download. Header and contact links render only when this is
-   * set, and check:links fails the build if the referenced file is missing —
-   * so the link can never ship before the PDF does.
-   */
+  /** check:links fails the build if the referenced file is missing, so the link never ships before the PDF. */
   cv: z.strictObject({ label: z.string().min(1), url: hrefSchema }).optional(),
-  /** Optional portrait; About renders a placeholder frame until provided. */
   photo: imageRefSchema.optional()
 })
 export type Profile = z.infer<typeof profileSchema>
@@ -68,9 +52,7 @@ export const educationSchema = z.strictObject({
         program: z.string().min(1),
         /** Degree type spelled out formally, e.g. "Bachelor of Science". */
         credential: z.string().min(1),
-        /** Optional named major/track within the programme. */
         specialization: z.string().min(1).optional(),
-        /** Optional funding award carrying the enrolment, e.g. a scholarship. */
         scholarship: z.string().min(1).optional(),
         period: z.string().min(1),
         status: z.enum(['In progress', 'Completed', 'Planned', 'Paused']),
@@ -92,13 +74,11 @@ export const interestsSchema = z.strictObject({
         title: z.string().min(1),
         summary: z.string().min(1),
         topics: z.array(z.string().min(1)).min(3),
-        /** What real study or work grounds this pillar. */
         groundedIn: z.string().min(1),
         projects: z.array(slugSchema)
       })
     )
     .length(4),
-  /** The connective narrative — why these are one system, not four interests. */
   connection: z.string().min(1)
 })
 export type Interests = z.infer<typeof interestsSchema>
@@ -111,23 +91,15 @@ export const experienceEntrySchema = z.strictObject({
   current: z.boolean(),
   summary: z.string().min(1),
   contributions: z.array(claimSchema),
-  /** Compact one-line results rendered as a scannable award list. */
   results: z.array(resultLineSchema).optional(),
   links: z.array(linkSchema).optional(),
-  /** Optional photographic evidence (e.g. medals, certificates). */
   image: imageRefSchema.optional()
 })
 export type ExperienceEntry = z.infer<typeof experienceEntrySchema>
 
 export const experienceSchema = z.strictObject({
-  /**
-   * The through-line the timeline cannot show: why a mathematics competitor
-   * chose computer science, and what the hackathon added to that plan.
-   * Personal motivation, so plain prose — not Claim objects with labels.
-   * Told as a few short steps, each under its own heading, so /journey can
-   * set them side by side instead of as a wall of paragraphs (owner request,
-   * 2026-10-05). The first step's text is the pull-quote on the homepage.
-   */
+  /** Personal motivation, so plain prose rather than labeled Claims. Told as short steps so
+   *  /journey can set them side by side; the first step's text is the homepage pull-quote. */
   story: z
     .strictObject({
       title: z.string().min(1),
@@ -153,7 +125,6 @@ export type Experience = z.infer<typeof experienceSchema>
 // ── learning.json ────────────────────────────────────────────────────────
 export const learningSchema = z.strictObject({
   intro: z.string().min(1),
-  /** How the reading is done — the lede of the Reading notes section. */
   readingMethod: z.string().min(1).optional(),
   disciplines: z
     .array(
@@ -241,7 +212,6 @@ export const processSchema = z.strictObject({
       })
     )
     .min(10),
-  /** Decisions that always remain with humans. */
   humanControls: z.array(z.string().min(1)).min(5),
   aiSupport: z.string().min(1)
 })
@@ -277,12 +247,8 @@ export const colophonSchema = z.strictObject({
 export type Colophon = z.infer<typeof colophonSchema>
 
 // ── stack.json (the technologies named on the homepage) ──────────────────
-/**
- * One technology chip. Every item must trace to real work: either the tags of
- * at least one enabled case study (shared/rules.ts checks that the name IS one
- * of those tags) or the Skills list on the About page (`source: 'skills'`).
- * Nothing is listed because it sounds good.
- */
+/** Every item must trace to real work: the tags of an enabled case study (shared/rules.ts checks
+ *  the name IS one of them) or the Skills list on the About page (`source: 'skills'`). */
 export const stackItemSchema = z.strictObject({
   name: z.string().min(1),
   /** Simple Icons slug, resolved by app/data/tech-icons.ts. Omit when no mark exists. */
@@ -311,11 +277,7 @@ export const stackSchema = z.strictObject({
 export type Stack = z.infer<typeof stackSchema>
 
 // ── contributions.json ("What I can contribute") ─────────────────────────
-/**
- * What he can bring to a team, each statement an evidence-labeled claim.
- * Rendered on the homepage and /about and read by the chat assistant — one
- * source, instead of prose hardcoded in a template and mirrored by hand.
- */
+/** One source for the homepage, /about and the chat assistant, instead of template prose mirrored by hand. */
 export const contributionsSchema = z.strictObject({
   intro: z.string().min(1),
   items: z

@@ -2,8 +2,6 @@
 import { ref } from 'vue'
 import { featuredProjects, tagItemsFor } from '~/data/portfolio'
 
-// The flagship (flagship: true in the project JSON) leads; the rest keep the
-// loader's status-ranked order.
 const flagship = featuredProjects.find((p) => p.flagship)
 const workProjects = flagship
   ? [flagship, ...featuredProjects.filter((p) => p !== flagship)]

@@ -24,8 +24,6 @@ const pillarNames = computed(() =>
   props.project.pillars.map((p) => PILLAR_TITLES[p]).join(' · ')
 )
 const proof = computed(() => props.project.evidence[0])
-// A clickable live product/demo link, surfaced so recruiters reach the real
-// thing in one click (sits above the stretched card link).
 const liveLink = computed(() =>
   props.project.publicLinks.find((l) => l.kind === 'demo' || l.kind === 'website')
 )
@@ -174,14 +172,8 @@ const liveLink = computed(() =>
   text-decoration: none;
 }
 
-/* The stretched card link.
- *
- * .project-card carries the `position: relative` this needs, .live-link lifts
- * itself to z-index 2 "above the stretched card link", and "Case study →" is an
- * aria-hidden span rather than a link — the card itself is the target. The <a>
- * keeps the accessible name and stays the single tab stop; the overlay only
- * extends where a pointer counts as hitting it.
- */
+/* The stretched card link: the whole card is the target while the <a> keeps the
+   accessible name and stays the single tab stop. .project-card is its positioning context. */
 .card-link::after {
   content: '';
   position: absolute;
@@ -189,8 +181,7 @@ const liveLink = computed(() =>
   border-radius: inherit;
 }
 
-/* Anything genuinely separate must sit above the overlay or it stops being
-   clickable. .live-link handles itself; these two are covered by it. */
+/* Must sit above the stretched-link overlay or they stop being clickable. */
 .proof-link,
 .card-proof .evidence-link {
   position: relative;

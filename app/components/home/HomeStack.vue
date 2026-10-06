@@ -18,7 +18,6 @@ import { stack } from '~/data/portfolio'
 </template>
 
 <style scoped>
-/* A soft arc of sunken paper behind the panel. */
 .stack-section {
   position: relative;
   isolation: isolate;

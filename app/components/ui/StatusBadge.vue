@@ -2,7 +2,6 @@
 import { computed } from 'vue'
 import type { ProjectStatus } from '~~/shared/schemas/index'
 
-/** Lifecycle status badge — one of two independent honesty axes. */
 const props = defineProps<{ status: ProjectStatus }>()
 
 const slug = computed(() => props.status.toLowerCase().replaceAll(' ', '-'))

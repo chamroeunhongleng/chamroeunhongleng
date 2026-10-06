@@ -1,8 +1,4 @@
-/**
- * generate-assets — renders the authored SVGs into the PNG assets the site
- * ships (OG image + PNG favicons). Outputs are committed; rerun only when
- * assets/og.svg or public/icon.svg change:  npm run assets:generate
- */
+// Outputs are committed; rerun only when assets/og.svg or public/icon.svg change.
 import { readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { Resvg } from '@resvg/resvg-js'

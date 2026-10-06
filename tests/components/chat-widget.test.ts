@@ -35,8 +35,7 @@ describe('ChatWidget', () => {
   it('opens the panel with the AI disclosure and starter chips', async () => {
     const wrapper = mountWidget()
     await wrapper.get('button.chat-toggle').trigger('click')
-    // The launcher is removed while the panel is open — it would float over
-    // the panel with nothing useful to do. Close and Escape dismiss instead.
+    // The launcher is removed while the panel is open; it would only float over the panel.
     expect(wrapper.find('button.chat-toggle').exists()).toBe(false)
     const panel = wrapper.get('#chat-panel')
     expect(panel.attributes('role')).toBe('dialog')
@@ -50,8 +49,7 @@ describe('ChatWidget', () => {
     const wrapper = mountWidget()
     expect(wrapper.find('#chat-panel').exists()).toBe(true) // still open from the previous test
     await wrapper.get('#chat-panel').trigger('keydown', { key: 'Escape' })
-    // closeAndRefocus awaits a render before focusing, because the launcher
-    // does not exist until the close has been applied.
+    // Focus moves only after the close renders, because the launcher does not exist until then.
     await flushPromises()
     expect(wrapper.find('#chat-panel').exists()).toBe(false)
     expect(wrapper.get('button.chat-toggle').attributes('aria-expanded')).toBe('false')
@@ -81,21 +79,17 @@ describe('ChatWidget', () => {
     await wrapper.get('form.chat-form').trigger('submit')
     await flushPromises()
 
-    // The visitor was moved, and the chat says so.
     expect(router.currentRoute.value.fullPath).toBe('/about')
     const note = wrapper.get('.chat-nav-note')
     expect(note.text()).toContain('/about')
 
-    // One click returns them to the page they were reading.
     await note.get('button.chat-back').trigger('click')
     await flushPromises()
     expect(router.currentRoute.value.fullPath).toBe('/projects')
-    // The conversation survives the trip; the undo does not linger.
     expect(wrapper.find('.chat-nav-note').exists()).toBe(false)
     expect(wrapper.text()).toContain('He studies at AUPP and Fort Hays State.')
 
     // Leave the shared widget state closed for the next test in the sequence.
-    // The launcher is gone while open, so close via the header button.
     await wrapper.get('button.chat-close').trigger('click')
     await flushPromises()
     vi.unstubAllGlobals()

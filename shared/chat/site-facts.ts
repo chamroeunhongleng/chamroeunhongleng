@@ -1,14 +1,5 @@
-/**
- * KEEP IN SYNC with app/pages/about.vue — the "Skills" section and the
- * background story are owner-approved prose hardcoded in that template, not
- * content JSON, so the chat assistant mirrors them here. When the About page
- * skills change, change this file in the same commit (and vice versa). A regex
- * sync-check over the .vue source is deliberately NOT added — CLAUDE.md
- * rule 3 bans regex-over-source validation.
- *
- * "What I can contribute" is no longer mirrored here: since 2026-09-14 it lives
- * in content/contributions.json and knowledge.ts reads it from the bundle.
- */
+// KEEP IN SYNC with app/pages/about.vue: Skills and the background story are owner-approved prose
+// hardcoded there, not content JSON. No regex sync-check over the .vue source (CLAUDE.md rule 3).
 
 export const SITE_FACTS = `SKILLS
 - Software: TypeScript, Vue/Nuxt, Next.js, Python, unit testing and CI, schema-validated content architectures, and AI-native development — leading coding agents with explicit human review gates. Current tooling: GitHub, GitLab, and AWS.

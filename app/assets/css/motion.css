@@ -10,9 +10,8 @@
   opacity: 0;
 }
 
-/* Scroll reveal — classes are applied by useReveal() on the client only, so
-   prerendered HTML never hides content. Guarded by prefers-reduced-motion here
-   AND in the composable (which also skips automated/webdriver runs). */
+/* Applied by useReveal() on the client only, so prerendered HTML never hides
+   content; the composable repeats the reduced-motion guard. */
 @media (prefers-reduced-motion: no-preference) {
   .reveal-pending {
     opacity: 0;
@@ -28,7 +27,6 @@
   }
 }
 
-/* Full reduced-motion reset — content must work without any animation. */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

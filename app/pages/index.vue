@@ -5,15 +5,12 @@ usePageMeta({
     'Chamroeun Hongleng — software engineering student in Phnom Penh building web and data systems, with applied-ML work in Khmer speech. Interning at Angkor Byte.'
 })
 
-// Below-fold cards fade in as they enter the viewport (no-op for no-JS,
-// reduced-motion, and automated runs — see useReveal). Child sections mount
-// before this page, so every [data-reveal] element exists by then.
+// Child sections mount before this page, so every [data-reveal] element exists by now.
 useReveal()
 </script>
 
 <template>
-  <!-- Every section renders content/*.json through app/data/portfolio.ts;
-       the order is the homepage narrative (see .claude/skills/portfolio-ia). -->
+  <!-- Section order is the homepage narrative defined in .claude/skills/portfolio-ia. -->
   <div class="home">
     <HomeHero />
     <HomeAbout />

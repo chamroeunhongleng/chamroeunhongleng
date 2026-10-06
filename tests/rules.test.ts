@@ -21,8 +21,6 @@ describe('real content through the rule engine', () => {
   it('review mode: no errors on real content', () => {
     const findings = runContentRules(bundle as ContentBundle, 'review')
     expect(findings.filter((f) => f.severity === 'error')).toEqual([])
-    // The demonstration project is disabled by owner decision (2026-08-04),
-    // so the demo-project rule must stay silent on real content.
     expect(findings.some((f) => f.code === 'demo-project-enabled')).toBe(false)
   })
 

@@ -18,10 +18,8 @@ describe('SectionHeading', () => {
       props: { eyebrow: 'About', title: 'A bit about me', mark: 'about me' }
     })
     const heading = wrapper.get('h2')
-    // Screen readers and search engines still get the plain sentence.
     expect(heading.text()).toBe('A bit about me')
     expect(heading.get('.heading-mark').text()).toBe('about me')
-    // The pen stroke is decoration only.
     expect(heading.get('.heading-mark svg').attributes('aria-hidden')).toBe('true')
   })
 

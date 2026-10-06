@@ -39,7 +39,6 @@ const pad = (n: number) => String(n).padStart(2, '0')
 </template>
 
 <style scoped>
-/* Each card takes one colour of the palette in turn. */
 .contribute-card {
   --card-accent: var(--color-accent);
   display: grid;

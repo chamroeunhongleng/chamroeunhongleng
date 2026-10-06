@@ -48,10 +48,7 @@ function parseFile<T>(file: string, schema: ZodType<T>, issues: LoadIssue[]): T 
   return result.data
 }
 
-/**
- * Load and zod-validate the entire content directory via the shared
- * manifest — the same schemas the app imports. Never regex over source.
- */
+/** Same schemas the app imports, via the shared manifest; never regex over source. */
 export function loadContent(): LoadResult {
   const issues: LoadIssue[] = []
   const sections: Record<string, unknown> = {}

@@ -1,23 +1,5 @@
-/**
- * Render the site's /cv page to a print-ready A4 PDF.
- *
- *   npm run generate && node scripts/cv/render.mjs [outputPath]
- *   npm run cv:pdf                                   # both steps
- *
- * Defaults to public/cv/chamroeun-hongleng.pdf — the file the site links from
- * the header pill and the contact page.
- *
- * The source is app/pages/cv.vue, the same page a visitor reads at /cv; its
- * @media print block owns the page geometry (@page size and margins), and
- * preferCSSPageSize honours it. There is no separate CV template to keep in
- * sync any more.
- *
- * Why a server instead of file://: a prerendered Nuxt page requests /_nuxt/*
- * by absolute path, which resolves to the filesystem root under file:// and
- * loads nothing. tests/e2e/static-server.mjs already serves .output/public
- * from a fixed allowlist, so this reuses it on an ephemeral port rather than
- * introducing a second server.
- */
+// Renders the built /cv page to public/cv/chamroeun-hongleng.pdf (npm run cv:pdf). Served over
+// HTTP rather than file:// because the prerendered page requests /_nuxt/* by absolute path.
 import { spawn } from 'node:child_process'
 import { copyFileSync, existsSync, mkdirSync } from 'node:fs'
 import { createServer } from 'node:net'
@@ -34,7 +16,6 @@ if (!existsSync(built)) {
   process.exit(1)
 }
 
-/** Ask the OS for a free port, then hand it to the server. */
 function freePort() {
   return new Promise((resolve, reject) => {
     const probe = createServer()
@@ -61,10 +42,7 @@ async function waitForServer(url, timeoutMs = 20_000) {
   }
 }
 
-/**
- * The bundled Chromium intermittently fails to spawn on this machine
- * ("spawn UNKNOWN"). Installed Edge is the same engine and prints identically.
- */
+/** Bundled Chromium intermittently fails to spawn here ("spawn UNKNOWN"); Edge is the same engine. */
 async function launchBrowser() {
   try {
     return await chromium.launch()
@@ -102,9 +80,8 @@ try {
   server.kill()
 }
 
-// Keep the current build's copy in step: `generate` copied public/ before this
-// script overwrote the PDF, so without this the just-built site still carries
-// the previous revision.
+// `generate` copied public/ before this overwrote the PDF; without this copy the just-built
+// site would still carry the previous revision.
 const inBuild = path.join(root, '.output', 'public', path.relative(path.join(root, 'public'), output))
 if (output.startsWith(path.join(root, 'public')) && existsSync(path.dirname(inBuild))) {
   copyFileSync(output, inBuild)

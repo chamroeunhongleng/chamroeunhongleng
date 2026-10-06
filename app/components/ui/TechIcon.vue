@@ -2,16 +2,8 @@
 import { computed } from 'vue'
 import { isDarkMark, techIcon } from '../../data/tech-icons'
 
-/**
- * A technology mark. Decorative: the tool's name always sits next to it.
- *
- * By default it is drawn in currentColor. With `brand`, it takes the tool's own
- * colour (owner request, 2026-09-14) through a custom property rather than a
- * fill attribute; near-black marks switch back to the text colour in the dark
- * theme so they never disappear. An unknown slug renders nothing visible — a
- * stale content file never breaks a page, and check:content fails the build
- * for unknown slugs.
- */
+// Decorative: the tool's name always sits next to it. An unknown slug renders an
+// empty fallback instead of breaking the page; check:content fails the build for it.
 const props = withDefaults(defineProps<{ icon?: string; brand?: boolean }>(), {
   icon: undefined,
   brand: false

@@ -1,9 +1,3 @@
-/**
- * check-seo — validates SEO metadata on the GENERATED site: unique titles,
- * description lengths, canonical URLs, Open Graph and Twitter tags, JSON-LD,
- * robots.txt, the OG image's actual pixel size, and that sitemap.xml matches
- * exactly the route set derived from content.
- */
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
 import { parse } from 'node-html-parser'
@@ -68,14 +62,13 @@ for (const file of htmlFiles) {
   }
 }
 
-// robots.txt
 const robotsPath = join(site, 'robots.txt')
 if (!existsSync(robotsPath)) problems.push('robots.txt missing from generated output')
 else if (!readFileSync(robotsPath, 'utf8').includes('Sitemap:')) {
   problems.push('robots.txt does not reference the sitemap')
 }
 
-// OG image real dimensions (PNG IHDR: width/height at bytes 16–24)
+// PNG IHDR stores width/height at bytes 16–24.
 const ogPath = join(site, 'og.png')
 if (!existsSync(ogPath)) {
   problems.push('og.png missing from generated output')
@@ -88,7 +81,6 @@ if (!existsSync(ogPath)) {
   }
 }
 
-// sitemap.xml must contain exactly the derived route set
 const sitemapPath = join(site, 'sitemap.xml')
 if (!existsSync(sitemapPath)) {
   problems.push('sitemap.xml missing from generated output')

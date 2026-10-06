@@ -1,9 +1,6 @@
 ﻿#!/usr/bin/env node
-/**
- * PostToolUse check for Write/Edit: warns when a written file looks like it
- * contains credentials or is an .env file. Warning only (exit 0) — the
- * hard gate is scripts/check-secrets.ts in `npm run verify`.
- */
+// PostToolUse hook for Write/Edit: warns (exit 0, never blocks) when a written file looks
+// like a secret or an .env file; the hard gate is scripts/check-secrets.ts.
 import { readFileSync } from 'node:fs'
 import { basename } from 'node:path'
 

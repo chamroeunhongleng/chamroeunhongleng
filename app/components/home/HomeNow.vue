@@ -35,7 +35,6 @@ const pad = (n: number) => String(n).padStart(2, '0')
 </template>
 
 <style scoped>
-/* A long statement in a pill: it wraps, so the corners soften. */
 .now-availability {
   white-space: normal;
   border-radius: var(--radius-card);

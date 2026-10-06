@@ -1,12 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-/**
- * Small hand-drawn stroke glyphs for interface furniture (card plaques, arrows,
- * contact rows). Drawn here rather than pulled from an icon CDN — the CSP
- * allows img-src 'self' only — and decorative by design: every glyph sits next
- * to text that carries the meaning.
- */
+// Inline rather than from an icon CDN (the CSP allows img-src 'self' only), and
+// decorative: every glyph sits next to text that carries the meaning.
 type GlyphName =
   | 'arrow-right'
   | 'arrow-left'

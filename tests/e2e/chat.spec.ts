@@ -1,20 +1,9 @@
 import { test, expect, type Page, type Route } from '@playwright/test'
 
-/**
- * Chat assistant — the site's only runtime backend (api/chat.ts).
- *
- * Every test mocks POST /api/chat at the network boundary. Two reasons:
- * the static build under test has no serverless function at all, and the real
- * endpoint costs Anthropic credits and needs an owner-managed key
- * (CLAUDE.md rule 6). Mocking also makes error paths testable on demand.
- *
- * What this covers is the CLIENT contract: that the widget sends what
- * api/chat.ts expects, and renders what it returns — including the failure
- * replies. The server's own logic is unit-tested in tests/chat/.
- */
+// Every test mocks POST /api/chat at the network boundary: the static build under
+// test has no serverless function, and the real endpoint costs Anthropic credits.
 
-// Runs on a desktop and a phone: the panel is responsive and the phone case is
-// where a full-screen overlay would trap a visitor.
+// A desktop and a phone: the phone is where a full-screen overlay would trap a visitor.
 const DEVICES = ['laptop', 'mobile-android']
 
 // eslint-disable-next-line no-empty-pattern
@@ -46,15 +35,8 @@ function mockChat(page: Page, reply: Partial<ChatReply>, status = 200) {
   return page.route('**/api/chat', handler).then(() => requests)
 }
 
-/**
- * Open the panel, tolerating hydration.
- *
- * The launcher is server-rendered, so it is clickable before Vue attaches its
- * handler and a click landing in that window is silently swallowed — the same
- * race as openMobileMenu() in responsive.spec.ts. Retrying is safe because the
- * click is guarded by the panel's current visibility, so it never toggles an
- * already-open panel shut.
- */
+// The launcher is server-rendered and clickable before Vue attaches its handler, so an
+// early click is swallowed. Retry, guarded by panel visibility so it never closes it.
 const openPanel = async (page: Page) => {
   const launcher = page.getByRole('button', { name: 'Chat about this site' })
   const panel = page.getByRole('dialog', { name: 'Portfolio assistant' })
@@ -82,8 +64,6 @@ test.describe('Chat widget shell', () => {
     await openPanel(page)
 
     await expect(page.locator('.chat-messages')).toContainText('I answer questions about Chamroeun')
-    // The starter chips are the discoverability affordance — an empty panel
-    // gives a visitor nothing to click.
     await expect(page.locator('.chat-chip').first()).toBeVisible()
   })
 
@@ -104,8 +84,7 @@ test.describe('Chat widget shell', () => {
     await openPanel(page)
     await expect(scrim).toBeVisible()
 
-    // The scrim must cover the sticky header (z-index 50), or the site logo
-    // stays bright behind an open conversation — the whole point of it.
+    // The scrim must also cover the sticky header (z-index 50), or the logo stays bright behind it.
     const covers = await page.evaluate(() => {
       const s = document.querySelector('.chat-scrim')!.getBoundingClientRect()
       const h = document.querySelector('.site-header')!.getBoundingClientRect()
@@ -131,9 +110,8 @@ test.describe('Chat widget shell', () => {
     await page.mouse.wheel(0, 600)
     await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(before)
 
-    // No body scroll lock on purpose: the assistant navigates the visitor and
-    // scrolls to section anchors while the panel stays open, so locking scroll
-    // would break its own navigation feature.
+    // No body scroll lock on purpose: the assistant scrolls to section anchors while
+    // the panel stays open, so locking scroll would break its own navigation.
     await expect(page.getByRole('dialog', { name: 'Portfolio assistant' })).toBeVisible()
   })
 
@@ -154,9 +132,7 @@ test.describe('Chat widget shell', () => {
     await page.goto('/')
     await openPanel(page)
 
-    // The launcher does not exist while the panel is open, so focus can only
-    // return after the close has rendered. A synchronous focus() call here
-    // silently does nothing and strands the keyboard user.
+    // Guards against: a synchronous focus() on a launcher that has not rendered yet.
     await page.keyboard.press('Escape')
     await expect(page.getByRole('button', { name: 'Chat about this site' })).toBeFocused()
   })
@@ -183,8 +159,6 @@ test.describe('Chat widget shell', () => {
     await page.goto('/')
     await openPanel(page)
 
-    // The subtitle is a claim about how the assistant behaves; it sits in the
-    // header precisely so a visitor sees it before asking anything.
     await expect(page.locator('.chat-title')).toHaveText('Portfolio assistant')
     await expect(page.locator('.chat-subtitle')).toContainText('Published evidence only')
     await expect(page.locator('.chat-subtitle')).toContainText('read-only')
@@ -200,8 +174,6 @@ test.describe('Chat widget shell', () => {
 
     await page.getByRole('button', { name: 'Start a new conversation' }).click()
 
-    // Conversation state is module-scoped and survives navigation and closing,
-    // so without a reset the only way to clear a thread is a page reload.
     await expect(page.locator('.chat-messages')).not.toContainText('tell me about Kaskor')
     await expect(page.locator('.chat-messages')).not.toContainText('A specific answer about Kaskor.')
     await expect(page.locator('.chat-messages')).toContainText('I answer questions about Chamroeun')
@@ -220,16 +192,13 @@ test.describe('Chat widget shell', () => {
     await ask(page, 'second question')
     await expect.poll(() => requests.length).toBe(2)
 
-    // A reset that only clears the visible transcript would still leak the old
-    // thread into the model's context.
     expect(requests[1]?.history ?? []).toEqual([])
   })
 
   test('the input caps length at the contract maximum', async ({ page }) => {
     await page.goto('/')
     await openPanel(page)
-    // MAX_MESSAGE_LENGTH in shared/chat/contract.ts — the server 400s above it,
-    // so the client must never let an honest visitor exceed it.
+    // 500 is MAX_MESSAGE_LENGTH in shared/chat/contract.ts; the server 400s above it.
     await expect(page.getByLabel('Ask about Chamroeun')).toHaveAttribute('maxlength', '500')
   })
 })
@@ -265,8 +234,6 @@ test.describe('Chat conversation', () => {
     await ask(page, 'two')
     await expect.poll(() => requests.length).toBe(2)
 
-    // The seed bubble is local text the API must never see; leaking it would
-    // put words in the assistant's mouth as if it had said them.
     const history = requests[1]?.history ?? []
     expect(history.some((h) => h.content.includes('I answer questions about Chamroeun'))).toBe(false)
     expect(history[0]).toEqual({ role: 'user', content: 'one' })
@@ -298,7 +265,6 @@ test.describe('Chat navigation', () => {
     await ask(page, 'show me projects')
 
     await expect(page).toHaveURL(/\/projects$/)
-    // The panel must survive the jump, or the conversation is lost.
     await expect(page.getByRole('dialog', { name: 'Portfolio assistant' })).toBeVisible()
 
     const back = page.getByRole('button', { name: /Back to where you were/ })
@@ -320,8 +286,7 @@ test.describe('Chat navigation', () => {
     await ask(page, 'go somewhere')
 
     await expect(page.locator('.chat-messages')).toContainText('Careful.')
-    // The client only follows values starting with "/" — an absolute URL from
-    // a compromised or confused reply must not move the visitor off-site.
+    // Only values starting with "/" are followed, so a hostile reply cannot move the visitor off-site.
     await expect(page).toHaveURL(/^http:\/\/127\.0\.0\.1:\d+\/$/)
   })
 })
@@ -335,7 +300,6 @@ test.describe('Chat failure handling', () => {
     await ask(page, 'hello')
 
     await expect(page.locator('.chat-messages')).toContainText('could not reach the assistant')
-    // The visitor must still be able to try again.
     await expect(page.getByLabel('Ask about Chamroeun')).toBeEnabled()
   })
 

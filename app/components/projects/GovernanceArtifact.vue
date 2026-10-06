@@ -3,11 +3,6 @@ import type { GovernanceArtifact } from '~~/shared/schemas/index'
 import EvidenceLabel from '../ui/EvidenceLabel.vue'
 import MarkedText from '../ui/MarkedText.vue'
 
-/**
- * Renders a governance artifact (model card, authority matrix, policy
- * control map) as the deliverable itself — a labeled table, not a
- * description of one.
- */
 defineProps<{ artifact: GovernanceArtifact }>()
 </script>
 

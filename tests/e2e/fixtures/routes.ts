@@ -1,13 +1,7 @@
 import { publishedProjects } from './projects'
 
-/**
- * Every route the site publishes. Mirrors the staticRoutes + projectRoutes
- * split in nuxt.config.ts — project routes derive from content (CLAUDE.md
- * rule 4), so adding a project JSON file extends coverage automatically.
- *
- * Shared by global-setup.ts (route warm-up) and site.spec.ts (whole-site
- * assertions) so the two can never drift apart.
- */
+// Mirrors the staticRoutes + projectRoutes split in nuxt.config.ts; shared by
+// global-setup.ts and site.spec.ts so the two can never drift apart.
 export const STATIC_ROUTES = [
   '/',
   '/about',

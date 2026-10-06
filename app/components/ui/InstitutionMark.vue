@@ -2,20 +2,8 @@
 import { computed } from 'vue'
 import { institutionAbbreviation } from '../../utils/institution'
 
-/**
- * Typographic stand-in for an institutional logo: the school's abbreviation
- * set in this site's own display face inside a hairline plaque, matching the
- * header monogram.
- *
- * Deliberately NOT the institution's logo. Naming where you study is a fact;
- * reproducing a trademarked mark on a personal site reads as endorsement, and
- * a borrowed-authority graphic would undercut a portfolio whose whole argument
- * is evidence over titles. The plaque gives the visual anchor without either
- * problem — and it renders correctly in both themes.
- *
- * Decorative by design: the full institution name sits beside it in the
- * markup, so screen readers should not spell the abbreviation out twice.
- */
+// Deliberately a typographic plaque, never the institution's trademarked logo.
+// aria-hidden: the full institution name is real text beside it in the markup.
 const props = defineProps<{ institution: string }>()
 
 const abbreviation = computed(() => institutionAbbreviation(props.institution))

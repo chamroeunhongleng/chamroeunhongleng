@@ -3,11 +3,7 @@ import { computed } from 'vue'
 import { segmentText } from '~~/shared/markers'
 import PlaceholderTag from './PlaceholderTag.vue'
 
-/**
- * Renders a content string, replacing placeholder markers with visible
- * chips. All prose from content JSON should render through this component
- * so unfinished fields are impossible to miss during review.
- */
+// All prose from content JSON renders through this so unfinished fields are impossible to miss in review.
 const props = withDefaults(defineProps<{ text: string; tag?: string }>(), { tag: 'span' })
 
 const segments = computed(() => segmentText(props.text))

@@ -1,15 +1,5 @@
-/**
- * check-csp — proves the generated site actually carries the policy it should.
- *
- * inject-csp writes the meta tag; this re-derives it from the same artifact
- * bytes and demands an exact match. That catches a page the injector skipped,
- * a policy that drifted after a Nuxt upgrade, and any post-injection edit to
- * an inline script (which would leave a hash that no longer matches and a page
- * that silently fails to hydrate in the browser).
- *
- * It also enforces the posture claim that this site loads nothing off-origin:
- * every script and stylesheet reference must be root-relative.
- */
+// Re-derives the policy from the artifact bytes and demands an exact match with the injected
+// tag; also enforces that every script and stylesheet reference is root-relative.
 import { readFileSync, readdirSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
 import { parse } from 'node-html-parser'
@@ -17,8 +7,7 @@ import { policyFor, readCspMeta } from './lib/csp'
 import { outputDirLabel, requireOutputDir } from './lib/output-dir'
 
 const root = process.cwd()
-// Matches inject-csp, so `VERCEL=1 npm run check:csp` audits the artifact the
-// Vercel CLI just built rather than a stale local one.
+// Same directory choice as inject-csp, so `VERCEL=1 npm run check:csp` audits the Vercel artifact.
 const site = requireOutputDir(root, 'check:csp')
 
 const htmlFiles: string[] = []
@@ -36,8 +25,7 @@ if (htmlFiles.length === 0) {
   process.exit(1)
 }
 
-// rel values that pull a subresource. Excludes canonical/alternate, which are
-// URLs the page points at rather than resources it loads.
+// Excludes canonical/alternate: the page points at those rather than loading them.
 const SUBRESOURCE_RELS = new Set([
   'stylesheet',
   'preload',

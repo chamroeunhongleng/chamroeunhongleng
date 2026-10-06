@@ -1,10 +1,5 @@
-/**
- * check-links — validates the GENERATED site (.output/public) with zero
- * network calls: internal hrefs must resolve to generated files, anchors
- * must resolve to element ids, asset references must exist, and external
- * links must be https/mailto with no placeholder domains.
- * Run after `npm run generate`.
- */
+// Validates the generated site offline: internal hrefs, anchors and assets must resolve to
+// generated files; external links are only checked for https and placeholder domains.
 import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
 import { parse } from 'node-html-parser'
@@ -63,7 +58,6 @@ for (const file of htmlFiles) {
   const rel = relative(site, file)
   const doc = loadDoc(file)
 
-  // Hyperlinks
   for (const a of doc.querySelectorAll('a[href]')) {
     const href = a.getAttribute('href') ?? ''
     if (href.startsWith('mailto:')) continue
@@ -92,7 +86,6 @@ for (const file of htmlFiles) {
     }
   }
 
-  // Asset references
   const assetRefs: string[] = []
   for (const img of doc.querySelectorAll('img[src]')) assetRefs.push(img.getAttribute('src') ?? '')
   for (const link of doc.querySelectorAll('link[href]')) {

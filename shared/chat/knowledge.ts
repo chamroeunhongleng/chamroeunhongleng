@@ -1,22 +1,11 @@
-/**
- * Composes the chat assistant's system prompt from the validated content
- * bundle — the same zod-parsed JSON the site renders, so the assistant can
- * never know something the site does not say.
- *
- * The output MUST be byte-stable for identical content (no timestamps, no
- * randomness, fixed section order): the serverless function sends it with
- * cache_control and any byte drift would silently kill prompt caching.
- */
+/** Composes the assistant's system prompt from the validated content bundle. The output must be
+ *  byte-stable for identical content (no timestamps, fixed order) or prompt caching silently dies. */
 import type { Claim, ContentBundle, Project } from '../schemas/index.js'
 import { hasMarker, stripMarkers } from '../markers.js'
 import { buildNavTargets, chatProjects } from './navigation.js'
 import { SITE_FACTS } from './site-facts.js'
 
-/**
- * A content string becomes a prompt fact only when it carries no unresolved
- * placeholder. Fields still waiting on the owner are dropped entirely —
- * the assistant answers "I don't know" instead of reading a marker aloud.
- */
+/** Fields still carrying an owner placeholder are dropped so the model never reads a marker aloud. */
 function fact(value: string | undefined | null): string | null {
   if (!value) return null
   if (hasMarker(value, 'OWNER_INPUT_REQUIRED') || hasMarker(value, 'PLACEHOLDER')) return null
@@ -121,8 +110,6 @@ export function buildSystemPrompt(bundle: ContentBundle): string {
   )
   const proofPoints = claimLines(profile.proofPoints)
   if (proofPoints.length > 0) doc.push('Selected proof points:', ...proofPoints)
-  // What he can contribute — content/contributions.json, the same claims the
-  // homepage and /about render (first-person text, as elsewhere in FACTS).
   doc.push('', 'WHAT HE CAN CONTRIBUTE')
   for (const item of contributions.items) {
     const text = fact(item.text)
