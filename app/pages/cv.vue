@@ -1,17 +1,6 @@
 <script setup lang="ts">
-/**
- * The CV — one source, two outputs.
- *
- * On screen this is a responsive page styled from the design tokens through
- * Tailwind utilities. In print it is the A4 document that scripts/cv/render.mjs
- * turns into public/cv/chamroeun-hongleng.pdf: the @media print block below
- * restores the exact pt/mm geometry the standalone template used, so the PDF
- * did not change when the template became a page.
- *
- * Content is deliberately literal here rather than in content/*.json — a CV is
- * one document with one shape, and every line already appears on the site under
- * its own evidence label. See app/pages/about.vue for the same precedent.
- */
+// Content is literal here, not in content/*.json: a CV is one document with one
+// shape, and every line already appears on the site under its own evidence label.
 interface CvEntry {
   title: string
   sub?: string
@@ -99,6 +88,12 @@ const projects: CvEntry[] = [
 ]
 
 const experience: CvEntry[] = [
+  {
+    title: 'Angkor Byte',
+    sub: '— Software Engineering Intern',
+    dates: 'Sep 2026 — present',
+    points: ['Software engineering internship; day-to-day tools are GitHub, GitLab, and AWS.']
+  },
   {
     title: 'CHNAI LAB',
     sub: '— Technology strategy & business',
@@ -243,23 +238,10 @@ const sections: { id: string; heading: string; entries: CvEntry[] }[] = [
 </template>
 
 <style>
-/*
- * Print: the A4 document. These rules are the standalone template's rules,
- * unchanged — pt sizes, mm rhythm, and the page-break guards that keep a
- * heading off the foot of a page and an entry from splitting across one.
- * Unscoped on purpose: it has to reach the layout chrome it hides.
- *
- * Colours are hardcoded rather than tokenised so a visitor printing in dark
- * mode still gets ink on white.
- */
-
-/*
- * The CV keeps the earlier serif typography on purpose: public/cv/*.pdf is
- * rendered from this page and must not change when the site restyles.
- * `.cv-page :where(h…)` has specificity (0,1,0): it beats the global h1–h4
- * rule in typography.css and loses, by source order, to the print rules
- * below — so the printed geometry is exactly what it was.
- */
+/* Print: scripts/cv/render.mjs turns this page into public/cv/*.pdf, so the print
+   rules must keep that PDF unchanged. Unscoped so it can hide the layout chrome. */
+/* `.cv-page :where(h…)` is (0,1,0): above typography.css's h1–h4 rule, below the
+   print rules by source order, so the printed geometry stays what it was. */
 .cv-page {
   --font-display: 'Fraunces Variable', georgia, 'Times New Roman', serif;
 }
@@ -300,6 +282,7 @@ const sections: { id: string; heading: string; entries: CvEntry[] }[] = [
     padding: 0 !important;
   }
 
+  /* Colours are hardcoded, not tokenised: printing from dark mode must stay ink on white. */
   .cv {
     max-width: none !important;
     font-family: georgia, 'Times New Roman', serif;
@@ -310,9 +293,7 @@ const sections: { id: string; heading: string; entries: CvEntry[] }[] = [
     print-color-adjust: exact;
   }
 
-  /* typography.css caps every <p> at the 65ch prose measure, which is right for
-     reading on screen and wrong for a document whose width is the A4 text
-     block: it re-wrapped the tagline, contact line, and skills paragraph. */
+  /* typography.css caps every <p> at the 65ch prose measure; the A4 text block is wider. */
   .cv p {
     max-width: none;
   }
