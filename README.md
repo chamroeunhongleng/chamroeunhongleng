@@ -28,13 +28,3 @@ PhsarOS is my own build. Chomkar is team work at [CHNAI LAB](https://github.com/
 - Author of six bilingual mathematics books, about 1,780 pages ([free download](https://github.com/chamroeunhongleng/chamroeunhongleng/releases/tag/scholar-series-2026))
 - Lead of the FounderOS Professional Circle, a small reading and practice group
 
-## This repository
-
-[![Quality](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/quality.yml/badge.svg)](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/quality.yml)
-[![Production gate](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/production-gate.yml/badge.svg)](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/production-gate.yml)
-[![CodeQL](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/codeql.yml/badge.svg)](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/codeql.yml)
-
-
-```
-
-More in [docs/repository.md](docs/repository.md). Code is [MIT](LICENSE); personal content is all rights reserved ([NOTICE](NOTICE)).
