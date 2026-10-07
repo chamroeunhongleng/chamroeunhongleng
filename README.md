@@ -4,8 +4,6 @@ Software Engineering Intern at **Angkor Byte** · computer science student in Ph
 
 I build web systems, decision engines, and bilingual product tooling, and I fine-tune Khmer speech models when a product needs one.
 
-[Portfolio](https://chamroeunhongleng.me) · [CV](https://chamroeunhongleng.me/cv/chamroeun-hongleng.pdf) · [Hugging Face](https://huggingface.co/Hongleng) · [LinkedIn](https://www.linkedin.com/in/chamroeun-hongleng-73b249375) · [Email](mailto:chamroeunhongleng825@gmail.com)
-
 ## Projects
 
 | Project | What it is | Status |
@@ -36,11 +34,7 @@ PhsarOS is my own build. Chomkar is team work at [CHNAI LAB](https://github.com/
 [![Production gate](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/production-gate.yml/badge.svg)](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/production-gate.yml)
 [![CodeQL](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/codeql.yml/badge.svg)](https://github.com/chamroeunhongleng/chamroeunhongleng/actions/workflows/codeql.yml)
 
-The source of [chamroeunhongleng.me](https://chamroeunhongleng.me), a Nuxt site. Content is JSON checked against schemas: a claim without an evidence label fails the build.
 
-```bash
-npm ci
-npm run verify
 ```
 
 More in [docs/repository.md](docs/repository.md). Code is [MIT](LICENSE); personal content is all rights reserved ([NOTICE](NOTICE)).
