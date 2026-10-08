@@ -15,9 +15,7 @@ I build web systems, decision engines, and bilingual product tooling, and I fine
 | [Bilingual LMS](https://lms-for-education-nine.vercel.app) | Courses and assessment in English and Khmer | Prototype |
 | [chamroeunhongleng.me](https://chamroeunhongleng.me) | A portfolio where every claim carries an evidence label | Deployed · this repository |
 
-¹ Measured on a validation split whose speakers were also in training, so it does not estimate accuracy on a new speaker. It replaced an earlier 17.48% caused by a decoding bug in my own evaluation. Details: [case study](https://chamroeunhongleng.me/projects/kaskor-asr).
 
-PhsarOS is my own build. Chomkar is team work at [CHNAI LAB](https://github.com/chnai-lab), a six-member student studio.
 
 ## Background
 
