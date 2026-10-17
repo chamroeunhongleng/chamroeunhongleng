@@ -220,6 +220,12 @@ const ringId = `stamp-ring-${useId()}`
     transform: rotate(-2deg);
   }
 
+  /* The photo is a desk scene; at avatar size, zoom to the head and shoulders. */
+  .portrait-img {
+    transform: scale(1.9);
+    transform-origin: 58% 22%;
+  }
+
   .portrait-fade,
   .stamp {
     display: none;
