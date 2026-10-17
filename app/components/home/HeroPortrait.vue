@@ -195,35 +195,27 @@ const ringId = `stamp-ring-${useId()}`
   }
 }
 
-/* Phones: a profile row. */
+/* Phones: the photo leads the hero as a wide banner; its labels sit underneath so they never cover him. */
 @media (max-width: 760px) {
   .portrait {
-    display: flex;
-    align-items: center;
-    gap: var(--space-4);
     max-width: none;
   }
 
   .portrait::before {
-    inset: 0 auto 0 0;
-    width: 6.25rem;
-    border-radius: var(--radius-l);
-    transform: translate(-0.35rem, 0.35rem) rotate(-5deg);
+    inset: 0 0 auto;
+    aspect-ratio: 4 / 3;
+    max-height: 26rem;
+    transform: translate(-0.5rem, 0.6rem) rotate(-1.5deg);
   }
 
   .portrait-frame {
-    flex: 0 0 auto;
-    width: 6.25rem;
-    aspect-ratio: 1;
-    border-radius: var(--radius-l);
-    box-shadow: var(--shadow-card);
-    transform: rotate(-2deg);
+    aspect-ratio: 4 / 3;
+    max-height: 26rem;
+    transform: rotate(-1deg);
   }
 
-  /* The photo is a desk scene; at avatar size, zoom to the head and shoulders. */
   .portrait-img {
-    transform: scale(1.9);
-    transform-origin: 58% 22%;
+    object-position: 50% 25%;
   }
 
   .portrait-fade,
@@ -233,8 +225,9 @@ const ringId = `stamp-ring-${useId()}`
 
   .portrait-meta {
     position: static;
-    justify-items: start;
-    min-width: 0;
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: var(--space-4);
   }
 
   .portrait-pill {

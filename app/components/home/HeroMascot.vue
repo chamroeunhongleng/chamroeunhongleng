@@ -138,7 +138,7 @@ function openAssistant() {
 
 @media (max-width: 760px) {
   .mascot {
-    width: 4.25rem;
+    width: 4rem;
     margin-top: var(--space-6);
   }
 
@@ -146,7 +146,7 @@ function openAssistant() {
      leftward instead of hanging past it and widening the page. */
   .mascot-bubble {
     left: auto;
-    right: 0;
+    right: -0.75rem;
     transform: rotate(3deg);
   }
 
@@ -155,6 +155,13 @@ function openAssistant() {
   }
 
   .mascot-note-more {
+    display: none;
+  }
+}
+
+/* Below 360px the tile wraps under the name, where the note would cover the role line. */
+@media (max-width: 359px) {
+  .mascot-note {
     display: none;
   }
 }

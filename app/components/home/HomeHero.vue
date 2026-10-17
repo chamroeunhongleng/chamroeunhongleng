@@ -20,7 +20,7 @@ const nameWords = profile.name.split(' ')
           <HeroMascot />
         </div>
 
-        <p class="hero-role">Software &amp; <span class="nowrap">applied-ML</span> student</p>
+        <p class="hero-role"><span class="hero-role-lead">Software &amp;</span> <span class="nowrap">applied-ML</span> student</p>
 
         <p class="hero-statement">{{ profile.headline }}</p>
 
@@ -109,6 +109,11 @@ const nameWords = profile.name.split(' ')
 
 .nowrap {
   white-space: nowrap;
+}
+
+/* Always two lines, so the mascot's note beside the first one never lands on text. */
+.hero-role-lead {
+  display: block;
 }
 
 .hero-role {
@@ -205,14 +210,16 @@ const nameWords = profile.name.split(' ')
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
-    gap: var(--space-2) var(--space-4);
+    gap: var(--space-2);
     width: auto;
   }
 
+  /* Right-aligned, so if it wraps under the name on a very narrow screen it stays clear of the text. */
   .hero-title-row .mascot {
     position: relative;
     top: auto;
     left: auto;
+    margin-left: auto;
   }
 
   .hero-role {
